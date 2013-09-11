@@ -71,9 +71,9 @@
         <url>https://maltcms.de/jenkins/job/Cross/</url>
     </ciManagement>
     <scm>
-        <developerConnection>scm:git:https://git.code.sf.net/p/maltcms/code</developerConnection>
-        <connection>scm:git:git://git.code.sf.net/p/maltcms/code</connection>
-        <url>https://git.code.sf.net/p/maltcms/code</url>
+        <developerConnection>scm:git:https://git.code.sf.net/p/maltcmscross/code</developerConnection>
+        <connection>scm:git:git://git.code.sf.net/p/maltcmscross/code</connection>
+        <url>https://git.code.sf.net/p/maltcmscross/code</url>
       <tag>HEAD</tag>
   </scm>
     <distributionManagement>
