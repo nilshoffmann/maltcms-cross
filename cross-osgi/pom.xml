@@ -69,7 +69,7 @@
 			<groupId>commons-lang</groupId>
 		</dependency>
 		<dependency>
-			<artifactId>ehcache-core-osgi</artifactId>
+			<artifactId>ehcache</artifactId>
 			<groupId>net.sf.ehcache</groupId>
 		</dependency>
 		<dependency>

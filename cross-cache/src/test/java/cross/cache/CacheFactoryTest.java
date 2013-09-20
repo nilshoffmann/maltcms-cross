@@ -69,7 +69,6 @@ public class CacheFactoryTest {
         int arraySize = 1000;
         ICacheDelegate<Integer, double[]> delegate = CacheFactory.createDefaultCache(
                 name);
-        CacheFactory.getCacheFor(name).setSampledStatisticsEnabled(true);
         indices = new Integer[narrays];
         for (int i = 0; i < narrays; i++) {
             double[] a = new double[arraySize];

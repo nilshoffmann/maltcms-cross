@@ -35,9 +35,12 @@ import cross.datastructures.cache.VariableFragmentArrayCache;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import ucar.ma2.Array;
 
@@ -51,6 +54,20 @@ public class Fragments {
     private static CacheType fragmentCacheType = CacheType.NONE;
     
     private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
+	
+	private static CacheManager defaultCacheManager=null;
+	
+	public static CacheManager getDefault() {
+		if(defaultCacheManager==null) {
+			cacheDirectory.mkdirs();
+			Configuration cacheManagerConfig = new Configuration()
+				.diskStore(new DiskStoreConfiguration()
+				.path(cacheDirectory.getAbsolutePath()));
+			defaultCacheManager = CacheManager.newInstance(cacheManagerConfig);
+			defaultCacheManager.setName("maltcms-fragments");
+		}
+		return defaultCacheManager;
+	}
 
     /**
      * Set the cache location for all NEWLY created caches.
@@ -95,16 +112,18 @@ public class Fragments {
     }
 
     public static ICacheDelegate<IVariableFragment, List<Array>> createDefaultFragmentCache(File cacheDir, String cacheName) {
-        CacheManager cm = CacheManager.getInstance();
-        Ehcache cache = cm.addCacheIfAbsent(cacheName);
+        CacheManager cm = getDefault();
+		if(cm.cacheExists(cacheName)) {
+			return new VariableFragmentArrayCache(cm.getCache(cacheName));
+		}
+		CacheConfiguration cc = new CacheConfiguration();
+		cc.name(cacheName).maxEntriesLocalHeap(100).
+        overflowToDisk(true).
+        maxElementsOnDisk(1000000000).
+        memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
+		Ehcache cache = new Cache(cc);
+		cm.addCache(cache);
         ICacheDelegate<IVariableFragment, List<Array>> ed = new VariableFragmentArrayCache(cache);
-        CacheConfiguration cc = cache.getCacheConfiguration();
-        cc.setMaxElementsInMemory(100);
-//        cc.setEternal(true);
-        cc.overflowToDisk(true);
-        cc.maxElementsOnDisk(1000000000);
-        cc.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
-//        DiskStore ds = DiskStore.create(cache, cacheDir.getAbsolutePath());
         return ed;
     }
 }

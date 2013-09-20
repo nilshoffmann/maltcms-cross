@@ -34,16 +34,22 @@ import cross.datastructures.fragments.Fragments;
 import cross.datastructures.fragments.IVariableFragment;
 import cross.datastructures.fragments.VariableFragment;
 import cross.test.SetupLogging;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.Assert;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,6 +86,17 @@ public class CacheDelegateTest {
 		logging.setLogLevel("log4j.category.net.sf.ehcache", "INFO");
 
 	}
+	
+	private File createCacheDir() {
+		File cacheLocation = null;
+		try {
+			cacheLocation = tf.newFolder("cacheLocation");
+			cacheLocation.mkdirs();
+		} catch (IOException ex) {
+			Logger.getLogger(CacheDelegateTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return cacheLocation;
+	}
 
 	/**
 	 *
@@ -90,11 +107,11 @@ public class CacheDelegateTest {
 
 		Fragments.setDefaultFragmentCacheType(CacheType.EHCACHE);
 		FileFragment ff = new FileFragment(tf.newFolder("cachedVariableFragmentTest"), "testfrag.cdf");
-		Ehcache cache = CacheManager.getInstance().getEhcache(ff.getCache().getName());
-		CacheConfiguration config = cache.getCacheConfiguration();
-		log.info("Storing cache on disk at {}", config.getDiskStorePath());
-		log.info("Using disk store size of {}", cache.getDiskStoreSize());
-		log.info("Overflowing to disk: {}", config.isOverflowToDisk());
+		Configuration cacheManagerConfig = new Configuration();
+		CacheManager manager = CacheManager.newInstance(cacheManagerConfig);
+		CacheConfiguration config = new CacheConfiguration(ff.getName() + "-variable-fragment-cache", 100);
+		Ehcache cache = new Cache(config);
+		manager.addCache(cache);
 		for (int j = 0; j < 100; j++) {
 			VariableFragment vf1 = new VariableFragment(ff, "a" + j);
 			vf1.setArray(new ArrayDouble.D2(10, 39));
@@ -131,18 +148,20 @@ public class CacheDelegateTest {
 		logging.setLogLevel("log4j.category.net.sf.ehcache", "DEBUG");
 		Fragments.setDefaultFragmentCacheType(CacheType.EHCACHE);
 		FileFragment ff = new FileFragment(tf.newFolder("cachedVariableFragmentTest"), "testfrag.cdf");
-		CacheManager manager = CacheManager.create();
-		CacheConfiguration config = new CacheConfiguration(ff.getName() + "-variable-fragment-cache", 100);
-		config.setDiskStorePath(tf.newFolder("cacheLocation").getAbsolutePath());
-		config.setMaxElementsInMemory(100);
+		File cacheLocation = createCacheDir();
+		Configuration cacheManagerConfig = new Configuration()
+				.diskStore(new DiskStoreConfiguration()
+				.path(cacheLocation.getAbsolutePath()));
+		CacheManager manager = CacheManager.newInstance(cacheManagerConfig);
+		CacheConfiguration config = new CacheConfiguration(ff.getName() + "-variable-fragment-cache-custom", 100);
+		config.persistence(new PersistenceConfiguration().strategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP));
+		config.setMaxElementsInMemory(10);
 		config.setMaxElementsOnDisk(1000);
-		config.setOverflowToDisk(true);
 		config.setDiskSpoolBufferSizeMB(10);
-		config.setEternal(false);
 		Ehcache cache = new Cache(config);
 		manager.addCache(cache);
 
-		log.info("Storing cache on disk at {}", config.getDiskStorePath());
+		log.info("Storing cache on disk at {}", cacheManagerConfig.getDiskStoreConfiguration().getPath());
 		log.info("Using disk store size of {}", cache.getDiskStoreSize());
 		log.info("Overflowing to disk: {}", config.isOverflowToDisk());
 		ff.setCache(new VariableFragmentArrayCache(cache));

@@ -49,27 +49,24 @@ import net.sf.ehcache.Element;
 public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
 
     private final Ehcache cache;
-    private final Set<K> keys;
 
     public EhcacheDelegate(final Ehcache cache) {
         this.cache = cache;
-        this.keys = new HashSet<K>();
     }
 
     @Override
     public Set<K> keys() {
-        return this.keys;
+		return new HashSet<K>(getCache().getKeys());
     }
 
     @Override
     public void put(final K key, final V value) {
         try {
-            getCache().put(new Element(key, value));
-            if (value == null) {
-                this.keys.remove(key);
-            } else {
-                this.keys.add(key);
-            }
+			if(value==null) {
+				getCache().remove(key);
+			}else{
+				getCache().put(new Element(key, value));
+			}
         } catch (IllegalStateException se) {
             log.warn("Failed to add element to cache: " + key, se);
         }

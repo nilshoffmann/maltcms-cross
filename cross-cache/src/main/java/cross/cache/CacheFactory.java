@@ -31,12 +31,16 @@ import cross.cache.ehcache.AutoRetrievalEhcacheDelegate;
 import cross.cache.ehcache.EhcacheDelegate;
 import java.io.File;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.CacheWriterConfiguration;
+import net.sf.ehcache.config.Configuration;
+import net.sf.ehcache.config.DiskStoreConfiguration;
+import net.sf.ehcache.config.MemoryUnit;
+import net.sf.ehcache.config.PersistenceConfiguration;
+import net.sf.ehcache.config.PersistenceConfiguration.Strategy;
 import net.sf.ehcache.event.CacheEventListener;
-import net.sf.ehcache.store.DiskStore;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 /**
@@ -49,7 +53,7 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 public class CacheFactory {
 
 	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
-
+	
 	/**
 	 * Set the cache location for all NEWLY created caches.
 	 *
@@ -66,21 +70,57 @@ public class CacheFactory {
 			log.warn("Failed to remove cache " + cacheName, ise.getLocalizedMessage());
 		}
 	}
+	
+	private static CacheManager defaultCacheManager=null;
+	
+	public static CacheManager getDefault() {
+		if(defaultCacheManager==null) {
+			cacheDirectory.mkdirs();
+			Configuration cacheManagerConfig = new Configuration()
+				.diskStore(new DiskStoreConfiguration()
+				.path(cacheDirectory.getAbsolutePath()));
+			defaultCacheManager = CacheManager.newInstance(cacheManagerConfig);
+			defaultCacheManager.setName("maltcms-default");
+		}
+		return defaultCacheManager;
+	}
+	
+	
+	public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName, int megaBytesLocalHeap, int megaBytesLocalDisk) {
+		CacheManager cacheManager = getDefault();
+		if(cacheManager.cacheExists(cacheName)) {
+			return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+		}
+		CacheConfiguration cacheConfig = new CacheConfiguration()
+				.name(cacheName)
+				.maxBytesLocalHeap(megaBytesLocalHeap, MemoryUnit.MEGABYTES)
+				.maxBytesLocalDisk(megaBytesLocalDisk, MemoryUnit.GIGABYTES)
+				.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU)
+				.persistence(new PersistenceConfiguration().strategy(Strategy.LOCALTEMPSWAP))
+				.transactionalMode(CacheConfiguration.TransactionalMode.OFF)
+				.diskSpoolBufferSizeMB(256);
+		Cache cache = new Cache(cacheConfig);
+		cacheManager.addCache(cache);
+		EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
+		return ed;
+	}
 
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(File cacheDir, String cacheName, int maxElementsInMemory) {
-		CacheManager cm = CacheManager.getInstance();
-		boolean preExists = cm.cacheExists(cacheName);
-		Ehcache cache = cm.addCacheIfAbsent(cacheName);
-		EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
-		if (!preExists) {
-			CacheConfiguration cc = cache.getCacheConfiguration();
-			cc.setMaxElementsInMemory(maxElementsInMemory);
-//        cc.setEternal(true);
-			cc.overflowToDisk(true);
-			cc.maxElementsOnDisk(Integer.MAX_VALUE);
-			cc.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
-			DiskStore ds = DiskStore.create(cache, cacheDir.getAbsolutePath());
+		CacheManager cacheManager = getDefault();
+		if(cacheManager.cacheExists(cacheName)) {
+			return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
 		}
+		CacheConfiguration cacheConfig = new CacheConfiguration()
+				.name(cacheName)
+				.maxBytesLocalHeap(10, MemoryUnit.MEGABYTES)
+				.maxBytesLocalDisk(1, MemoryUnit.GIGABYTES)
+				.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU)
+				.persistence(new PersistenceConfiguration().strategy(Strategy.LOCALTEMPSWAP))
+				.transactionalMode(CacheConfiguration.TransactionalMode.OFF)
+				.diskSpoolBufferSizeMB(256);
+		Cache cache = new Cache(cacheConfig);
+		cacheManager.addCache(cache);
+		EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
 		return ed;
 	}
 

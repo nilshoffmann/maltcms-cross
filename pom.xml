@@ -571,8 +571,8 @@
             </dependency>
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-core-osgi</artifactId>
-                <version>2.4.6</version>
+                <artifactId>ehcache</artifactId>
+                <version>2.7.2</version>
             </dependency>
             <dependency>
                 <artifactId>com.springsource.org.jdom</artifactId>
