@@ -1,0 +1,11 @@
+/cross-test/target/
+/cross-annotations/target/
+/cross-cache/target/
+/cross-tools/target/
+/cross-event/target/
+/cross-exception/target/
+/cross-math/target/
+/cross-main/target/
+/cross-osgi/target/
+/target/
+/cross-nbm-cluster/target/
