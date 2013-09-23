@@ -21,8 +21,8 @@
     </skin>
     <custom>
     	<fluidoSkin>
-      		<topBarEnabled>true</topBarEnabled>
-      		<sideBarEnabled>false</sideBarEnabled>
+      		<topBarEnabled>false</topBarEnabled>
+      		<sideBarEnabled>true</sideBarEnabled>
 		<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
     	</fluidoSkin>
     </custom>
@@ -33,13 +33,13 @@
     <version position="right"/>-->
     <body>
         <breadcrumbs>
-            <item name="Home" href="index.html" />
+            <item name="Home" href="landingPage/index.html" />
         </breadcrumbs>
         <links>
             <item name="Maltcms" href="http://maltcms.sf.net" />
         </links>
     	<menu name="Cross">
-            <item name="About Cross" href="about.html" />
+            <item name="About Cross" href="index.html" />
             <!--<item name="Getting Started" href="gettingStarted.html" />-->
 	    <item name="Release Notes" href="releaseNotes.html" />
       	    <item name="API" href="./apidocs/index.html" />
@@ -50,5 +50,15 @@
         <menu ref="modules" />
 
         <menu ref="reports"/>
+<!--        <footer>-->
+           <!-- <span>
+                Copyright 2008-2012,
+            </span>-->
+<!--	    <ul class="inline">
+    		<li><a title="Contact" href="http://maltcms.sf.net/info/contact.html">Nils Hoffmann</a></li>
+		<li>Maltcms is hosted by <a title="Hosting by sourceforge.net" href="http://sourceforge.net/">sourceforge.net</a></li>
+		<li><a href="http://maven.apache.org">Built by Maven 3</a></li>
+    	    </ul>
+        </footer>-->
     </body>
 </project>
