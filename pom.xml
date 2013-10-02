@@ -764,6 +764,6 @@
         <version.junit>4.11</version.junit>
         <version.netbeans>721RELEASE</version.netbeans>
         <version.lombok>0.12.0</version.lombok>
-        <!--<version.lombok.maven>0.11.8.0</version.lombok.maven>-->
+        <version.lombok.maven>0.12.0.0</version.lombok.maven>
     </properties>
 </project>
