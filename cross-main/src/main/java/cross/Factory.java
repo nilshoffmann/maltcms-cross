@@ -28,7 +28,6 @@
 package cross;
 
 import cross.annotations.Configurable;
-import cross.cache.CacheFactory;
 import cross.cache.CacheType;
 import cross.datastructures.fragments.Fragments;
 import cross.datastructures.fragments.IFileFragment;
@@ -50,7 +49,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

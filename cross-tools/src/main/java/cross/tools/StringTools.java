@@ -102,4 +102,27 @@ public class StringTools {
         }
         return al;
     }
+	
+	/**
+	 * Joins the elements of the given object array using the provided 
+	 * joinString. Each element is appended by calling its toString() method.
+	 * 
+	 * Returns an empty string if s is empty.
+	 * 
+	 * @param s
+	 * @param joinString
+	 * @return 
+	 */
+	public static String join(Object[] s, String joinString) {
+		if(s.length==0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i<s.length-1;i++) {
+			sb.append(s[i].toString());
+			sb.append(joinString);
+		}
+		sb.append(s[s.length-1]);
+		return sb.toString();
+	}
 }

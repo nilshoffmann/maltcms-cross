@@ -117,9 +117,9 @@ public class Fragments {
 			return new VariableFragmentArrayCache(cm.getCache(cacheName));
 		}
 		CacheConfiguration cc = new CacheConfiguration();
-		cc.name(cacheName).maxEntriesLocalHeap(100).
+		cc.name(cacheName).maxEntriesLocalHeap(1000).
         overflowToDisk(true).
-        maxElementsOnDisk(1000000000).
+        maxElementsOnDisk(Integer.MAX_VALUE).
         memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
 		Ehcache cache = new Cache(cc);
 		cm.addCache(cache);

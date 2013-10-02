@@ -735,26 +735,10 @@
     </dependencyManagement>
     
     <dependencies>
-        <!--        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency> 
-            <groupId>org.projectlombok</groupId> 
-            <artifactId>lombok</artifactId> 
-        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        <!--        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-        </dependency>-->
     </dependencies>
     
     <reporting>
@@ -779,7 +763,7 @@
         <version.slf4j>1.7.2</version.slf4j>
         <version.junit>4.11</version.junit>
         <version.netbeans>721RELEASE</version.netbeans>
-        <version.lombok>0.11.8</version.lombok>
-        <version.lombok.maven>0.11.8.0</version.lombok.maven>
+        <version.lombok>0.12.0</version.lombok>
+        <!--<version.lombok.maven>0.11.8.0</version.lombok.maven>-->
     </properties>
 </project>

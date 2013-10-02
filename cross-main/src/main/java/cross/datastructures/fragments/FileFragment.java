@@ -29,7 +29,6 @@ package cross.datastructures.fragments;
 
 import cross.Factory;
 import cross.datastructures.StatsMap;
-import cross.cache.CacheFactory;
 import cross.cache.ICacheDelegate;
 import cross.datastructures.tools.EvalTools;
 import cross.datastructures.tools.FileTools;
@@ -42,8 +41,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
 import ucar.ma2.Array;

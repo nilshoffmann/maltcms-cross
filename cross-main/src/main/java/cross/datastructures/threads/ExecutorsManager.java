@@ -44,9 +44,8 @@ public class ExecutorsManager implements ExecutorService {
 
         SINGLETON, CACHED, FIXED
     }
-    private ExecutorService es = null;// Executors.newFixedThreadPool(this.maxThreads);
+    private ExecutorService es = null;
     private int maxThreads = 1;
-    ;
 
 	private final ExecutorType type = ExecutorType.FIXED;
 

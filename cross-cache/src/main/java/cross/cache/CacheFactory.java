@@ -85,7 +85,15 @@ public class CacheFactory {
 		return defaultCacheManager;
 	}
 	
-	
+	/**
+	 * Creates a disk-backed cache below the default cacheDirectory. 
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param megaBytesLocalHeap the amount of memory to allocate on the local heap
+	 * @param megaBytesLocalDisk the amount of memory to allocate on the local disk
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName, int megaBytesLocalHeap, int megaBytesLocalDisk) {
 		CacheManager cacheManager = getDefault();
 		if(cacheManager.cacheExists(cacheName)) {
@@ -105,6 +113,16 @@ public class CacheFactory {
 		return ed;
 	}
 
+	/**
+	 * Creates a disk-backed cache below a custom cacheDir. Keeps a maximum of Integer.MAX_VALUE
+	 * entries on disk.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheDir custom base directory for on-disk cache storage
+	 * @param cacheName the name of the cache
+	 * @param maxElementsInMemory the maximum number of elements to keep in memory 
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(File cacheDir, String cacheName, int maxElementsInMemory) {
 		CacheManager cacheManager = getDefault();
 		if(cacheManager.cacheExists(cacheName)) {
@@ -112,8 +130,8 @@ public class CacheFactory {
 		}
 		CacheConfiguration cacheConfig = new CacheConfiguration()
 				.name(cacheName)
-				.maxBytesLocalHeap(10, MemoryUnit.MEGABYTES)
-				.maxBytesLocalDisk(1, MemoryUnit.GIGABYTES)
+				.maxEntriesLocalHeap(maxElementsInMemory)
+				.maxEntriesLocalDisk(Integer.MAX_VALUE)
 				.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU)
 				.persistence(new PersistenceConfiguration().strategy(Strategy.LOCALTEMPSWAP))
 				.transactionalMode(CacheConfiguration.TransactionalMode.OFF)
@@ -124,55 +142,159 @@ public class CacheFactory {
 		return ed;
 	}
 
+	/**
+	 * Creates a disk-backed cache with a default capacity of 1000 elements in 
+	 * memory, disk overflow is stored in a file below the provided cacheDir.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheDir custom base directory for on-disk cache storage
+	 * @param cacheName the name of the cache
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(File cacheDir, String cacheName) {
 		return createDefaultCache(cacheDir, cacheName, 100);
 	}
 
+	/**
+	 * Creates a disk-backed cache with a default capacity of 1000 elements in 
+	 * memory, disk overflow is stored in a file below the default cacheDirectory. 
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param maxElementsInMemory the maximum number of elements to keep in memory
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName) {
 		return createDefaultCache(cacheDirectory, cacheName);
 	}
 
+	/**
+	 * Creates a disk-backed cache, disk overflow is stored in a file below the default cacheDirectory. 
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param maxElementsInMemory the maximum number of elements to keep in memory
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName, int maxElementsInMemory) {
 		return createDefaultCache(cacheDirectory, cacheName, maxElementsInMemory);
 	}
-
-	public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName, long timeToIdle, long timeToLive) {
-		return createVolatileCache(cacheName, timeToIdle, timeToLive, 20, new CacheEventListener[0]);
+	
+	/**
+	 * Creates a volatile, non persistent cache with a default capacity of 1000 elements in 
+	 * memory. Default time to idle is 30 seconds, default time to live is 60 seconds.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @return a cache delegate representing the created cache
+	 */
+	public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName) {
+		return createVolatileCache(cacheName, 30, 60, 1000, new CacheEventListener[0]);
 	}
 
+	/**
+	 * Creates a volatile, non persistent cache with a default capacity of 1000 elements in 
+	 * memory.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param timeToIdle time until an entry is marked as idle
+	 * @param timeToLive time until an entry is removed from the cache
+	 * @return a cache delegate representing the created cache
+	 */
+	public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName, long timeToIdle, long timeToLive) {
+		return createVolatileCache(cacheName, timeToIdle, timeToLive, 1000, new CacheEventListener[0]);
+	}
+
+	/**
+	 * Creates a volatile, non persistent cache.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param timeToIdle time until an entry is marked as idle
+	 * @param timeToLive time until an entry is removed from the cache
+	 * @param maxElementsInMemory the maximum number of elements to keep in memory
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName, long timeToIdle, long timeToLive, int maxElementsInMemory) {
 		return createVolatileCache(cacheName, timeToIdle, timeToLive, maxElementsInMemory, new CacheEventListener[0]);
 	}
 
+	/**
+	 * Creates a volatile, non persistent cache.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param timeToIdle time until an entry is marked as idle
+	 * @param timeToLive time until an entry is removed from the cache
+	 * @param maxElementsInMemory the maximum number of elements to keep in memory
+	 * @param cacheEventListener a variable number of listeners
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName, long timeToIdle, long timeToLive, int maxElementsInMemory, CacheEventListener... cacheEventListener) {
-		CacheManager cm = CacheManager.getInstance();
-		Ehcache cache = cm.addCacheIfAbsent(cacheName);
+		CacheManager cacheManager = getDefault();
+		if(cacheManager.cacheExists(cacheName)) {
+			return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+		}
+		CacheConfiguration cacheConfig = new CacheConfiguration()
+				.name(cacheName)
+				.maxEntriesLocalHeap(maxElementsInMemory)
+				.eternal(false)
+				.timeToIdleSeconds(timeToIdle)
+				.timeToLiveSeconds(timeToLive)
+				.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU)
+				.persistence(new PersistenceConfiguration().strategy(Strategy.NONE))
+				.transactionalMode(CacheConfiguration.TransactionalMode.OFF);
+		Cache cache = new Cache(cacheConfig);
+		cacheManager.addCache(cache);
 		EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
-		CacheConfiguration cc = cache.getCacheConfiguration();
-		cc.setEternal(false);
-		cc.setMaxElementsInMemory(maxElementsInMemory);
-		cc.setTimeToIdleSeconds(timeToIdle);
-		cc.setTimeToLiveSeconds(timeToLive);
-		cc.overflowToDisk(false);
-		cc.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
 		for (CacheEventListener listener : cacheEventListener) {
 			cache.getCacheEventNotificationService().registerListener(listener);
 		}
 		return ed;
 	}
 
+	/**
+	 * Creates a volatile, non persistent auto retrieval cache (self populating), with a default capacity of 1000 elements in 
+	 * memory. Default time to idle is 30 seconds, default time to live is 60 seconds.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param provider the provider mapping keys to elements
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createAutoRetrievalCache(String cacheName, ICacheElementProvider<K, V> provider) {
-		CacheManager cm = CacheManager.getInstance();
-		return new AutoRetrievalEhcacheDelegate<K, V>(cm.addCacheIfAbsent(cacheName), provider);
+		return createVolatileAutoRetrievalCache(cacheName, provider, 30, 60);
 	}
 
+	/**
+	 * Creates a volatile, non persistent auto retrieval cache (self populating), with a default capacity of 1000 elements in 
+	 * memory.
+	 * @param <K> the key type to use, can be non-serializable
+	 * @param <V> the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
+	 * @param provider the provider mapping keys to elements
+	 * @param timeToIdle time until an entry is marked as idle
+	 * @param timeToLive time until an entry is removed from the cache
+	 * @return a cache delegate representing the created cache
+	 */
 	public static <K, V> ICacheDelegate<K, V> createVolatileAutoRetrievalCache(String cacheName, ICacheElementProvider<K, V> provider, long timeToIdle, long timeToLive) {
-		CacheManager cm = CacheManager.getInstance();
-		AutoRetrievalEhcacheDelegate<K, V> ared = new AutoRetrievalEhcacheDelegate<K, V>(cm.addCacheIfAbsent(cacheName), provider);
-		CacheConfiguration cc = ared.getCache().getCacheConfiguration();
-		cc.setEternal(false);
-		cc.setTimeToIdleSeconds(timeToIdle);
-		cc.setTimeToLiveSeconds(timeToLive);
+		CacheManager cacheManager = getDefault();
+		if(cacheManager.cacheExists(cacheName)) {
+			return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+		}
+		CacheConfiguration cacheConfig = new CacheConfiguration()
+				.name(cacheName)
+				.maxEntriesLocalHeap(1000)
+				.eternal(false)
+				.timeToIdleSeconds(timeToIdle)
+				.timeToLiveSeconds(timeToLive)
+				.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LRU)
+				.persistence(new PersistenceConfiguration().strategy(Strategy.NONE))
+				.transactionalMode(CacheConfiguration.TransactionalMode.OFF);
+		Cache cache = new Cache(cacheConfig);
+		cacheManager.addCache(cache);
+		AutoRetrievalEhcacheDelegate<K, V> ared = new AutoRetrievalEhcacheDelegate<K, V>(cache, provider);
 		return ared;
 	}
 

@@ -28,6 +28,7 @@
 package cross.cache.softReference;
 
 import cross.cache.ICacheDelegate;
+import cross.cache.ICacheElementProvider;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,6 +57,15 @@ public class SoftReferenceCacheManager{
         SoftReferenceCache<K, V> delegate = caches.get(name);
         if (delegate == null) {
             delegate = new SoftReferenceCache<K, V>(name);
+            caches.put(name, delegate);
+        }
+        return delegate;
+    }
+	
+	public <K, V> ICacheDelegate<K, V> getAutoRetrievalCache(String name, ICacheElementProvider<K, V> provider) {
+        SoftReferenceCache<K, V> delegate = caches.get(name);
+        if (delegate == null) {
+            delegate = new AutoRetrievalSoftReferenceCache<K, V>(name, provider);
             caches.put(name, delegate);
         }
         return delegate;

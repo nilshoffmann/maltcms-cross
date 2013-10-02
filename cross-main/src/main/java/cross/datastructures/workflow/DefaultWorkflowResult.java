@@ -31,7 +31,6 @@ import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.tools.EvalTools;
 import cross.exception.ResourceNotAvailableException;
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;

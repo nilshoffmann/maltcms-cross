@@ -47,7 +47,6 @@ public class ChoiceFactory {
      * backed by a {@link CombinationProvider} wrapping a {@link
      * CombinationIterator} to feed a {@link CachedLazyList}.
      *
-
      *
      * @param data
      * @return
@@ -66,7 +65,7 @@ public class ChoiceFactory {
         // partition/register is increased until its maximum is reached.
         // It then carries over to the next neighbor, who is also increased.
         // The counting continues until the maximum number of possible choices
-        // is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all parition
+        // is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all partition
         // sizes)
         for (int i = 0; i < data.size(); i++) {
             partitionSize[i] = data.get(i).length;
