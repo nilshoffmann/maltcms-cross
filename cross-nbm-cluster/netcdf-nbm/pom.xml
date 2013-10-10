@@ -47,6 +47,7 @@
 						<publicPackage>ucar.ma2.*</publicPackage>
 						<publicPackage>ucar.nc2.*</publicPackage>
 						<publicPackage>ucar.unidata.*</publicPackage>
+						<publicPackage>net.jcip.annotations.*</publicPackage>
 					</publicPackages>
 					<defaultCluster>maltcms</defaultCluster>
 				</configuration>
