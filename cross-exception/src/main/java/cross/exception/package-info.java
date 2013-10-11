@@ -25,27 +25,7 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.datastructures.pipeline;
-
-import cross.exception.ConstraintViolationException;
-import java.io.Serializable;
-
 /**
- * Interface definition for command sequence validation.
- *
- * @author Nils Hoffmann
+ * The cross exceptions package contains classes for custom exceptions.
  */
-public interface ICommandSequenceValidator extends Serializable {
-
-    /**
-     * Determines, whether a given commandSequence is valid or not. Returns true
-     * for a valid commandSequence and false for an invalid one. May throw a
-     * {@link ConstraintViolationException} if validation fails due to unmet
-     * constraints, e.g. for unavailable variables
-     * {@link cross.annotations.RequiresVariables}.
-     * @param commandSequence
-     * @throws ConstraintViolationException
-     * @return
-     */
-    boolean isValid(ICommandSequence commandSequence) throws ConstraintViolationException;
-}
+package cross.exception;

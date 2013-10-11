@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * Set
  *
- * @see checkInheritedVariables(false) if you do NOT want to check variables
+ * {@link #checkInheritedVariables} to false if you do NOT want to check variables
  * from previous, referenced pipeline result FileFragments. This will however
  * defeat the purpose of pipeline validation.
  *

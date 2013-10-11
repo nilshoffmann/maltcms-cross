@@ -36,9 +36,7 @@ import java.util.*;
  * Implementation of a read-only cached list for indexed data access.
  *
  * Backed by a soft-reference cache hash map using LRU cache eviction strategy.
- * All list-related modification methods throw {
- *
- * @see UnsupportedOperationException}.
+ * All list-related modification methods throw {@link UnsupportedOperationException}.
  *
  * @author Nils Hoffmann
  *

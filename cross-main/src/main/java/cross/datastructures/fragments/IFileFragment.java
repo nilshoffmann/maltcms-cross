@@ -108,7 +108,7 @@ public interface IFileFragment extends IGroupFragment, IFragment,
     /**
      * Return this FileFragment's storage location as string representation.
      *
-     * @deprecated please use @see getUri instead
+     * @deprecated please use {@link #getUri} instead
      * @return
      */
     @Deprecated
@@ -228,7 +228,7 @@ public interface IFileFragment extends IGroupFragment, IFragment,
     public abstract Iterator<IVariableFragment> iterator();
 
     /**
-     * Call the @see IDataSource for this FileFragment and load the structural 
+     * Call the {@link IDataSource} for this FileFragment and load the structural 
      * information for this fragment. This includes variable names and shapes
      * as well as attributes.
      */
@@ -255,7 +255,7 @@ public interface IFileFragment extends IGroupFragment, IFragment,
     public abstract void removeSourceFiles();
 
     /**
-     * Store this fragment using the @see IDataSource responsible for handling
+     * Store this fragment using the {@link IDataSource} responsible for handling
      * this fragment name's extension.
      * 
      * @return true if saving succeeded, false otherwise
@@ -265,7 +265,7 @@ public interface IFileFragment extends IGroupFragment, IFragment,
     /**
      * Set a Cache for variable fragment array data for this fragment.
      * 
-     * May throw an @see IllegalStateException if the cache was already 
+     * May throw an {@link IllegalStateException} if the cache was already 
      * initialized to avoid accidental modification or replacement.
      * 
      * @param cache

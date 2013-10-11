@@ -41,8 +41,8 @@ public class StringTools {
     /**
      * Replaces all whitespace with hyphens
      *
-     * @param s
-     * @return
+     * @param s the input string
+     * @return the replaced string
      */
     public static String deBlank(final String s) {
         return StringTools.deBlank(s, "-");
@@ -51,9 +51,9 @@ public class StringTools {
     /**
      * Replaces all whitespace with replacement.
      *
-     * @param s
-     * @param replacement
-     * @return
+     * @param s the input string
+     * @param replacement the replacement string
+     * @return the replaced string
      */
     public static String deBlank(final String s, final String replacement) {
         return s.replaceAll("\\s", replacement);
@@ -63,8 +63,8 @@ public class StringTools {
      * Returns the suffix of a file or s if no dot '.' is contained 
 	 * in s.
      *
-     * @param s
-     * @return
+     * @param s the input string
+     * @return the replaced string
      */
     public static String getFileExtension(final String s) {
         final int lastIndexOfDot = s.lastIndexOf(".");
@@ -78,8 +78,8 @@ public class StringTools {
      * Returns that part of a string before first occurrence of a dot, 
 	 * if a dot is contained in s, otherwise, s is returned.
      *
-     * @param deBlank
-     * @return
+     * @param s the input string
+     * @return the modified string
      */
     public static String removeFileExt(final String s) {
         final int lastIndexOfDot = s.lastIndexOf(".");
@@ -90,8 +90,8 @@ public class StringTools {
     /**
      * Convert an untyped list of Strings to a typed one.
      *
-     * @param list
-     * @return
+     * @param list the input list
+     * @return the typed list
      */
     public static ArrayList<String> toStringList(final List<?> list) {
         final ArrayList<String> al = new ArrayList<String>();

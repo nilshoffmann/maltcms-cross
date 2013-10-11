@@ -40,7 +40,7 @@ import org.apache.commons.configuration.Configuration;
 /**
  * Factory managing objects of type
  * <code>IDataSource</code>. Objects can be registered within cfg/io.properties,
- * key "cross.io.IDataSource". Or by defining them as service implementations of @code{cross.io.IDataSource} in a
+ * key "cross.io.IDataSource". Or by defining them as service implementations of {@link cross.io.IDataSource} in a
  * jar files manifest under META-INF/services/cross.io.IDataSource.
  *
  * @author Nils Hoffmann
