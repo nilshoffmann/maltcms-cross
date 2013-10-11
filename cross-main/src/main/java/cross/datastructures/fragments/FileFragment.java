@@ -167,9 +167,8 @@ public class FileFragment implements IFileFragment {
 
     /**
      * Sets the array cache of this FileFragment as specified if the current
-     * cache has not yet been initialized (is null). Throws an
-     *
-     * @see IllegalStateException otherwise to prevent loss of cached data.
+     * cache has not yet been initialized (is null). Throws an 
+	 * {@link IllegalStateException} otherwise to prevent loss of cached data.
      *
      * @throws IllegalStateException
      */
@@ -315,7 +314,7 @@ public class FileFragment implements IFileFragment {
     /*
      * (non-Javadoc)
      *
-     * @seecross.datastructures.fragments.IFileFragment#addSourceFile(cross.
+     * @see cross.datastructures.fragments.IFileFragment#addSourceFile(cross.
      * datastructures.fragments.FileFragment)
      */
     @Override
@@ -444,7 +443,7 @@ public class FileFragment implements IFileFragment {
 
     /**
      * @param a
-     * @return
+     * @return the attribute
      * @see
      * cross.datastructures.fragments.Fragment#getAttribute(ucar.nc2.Attribute)
      */
@@ -455,7 +454,7 @@ public class FileFragment implements IFileFragment {
 
     /**
      * @param name
-     * @return
+     * @return the named attribute
      * @see
      * cross.datastructures.fragments.Fragment#getAttribute(java.lang.String)
      */
@@ -465,7 +464,8 @@ public class FileFragment implements IFileFragment {
     }
 
     /**
-     * @return @see cross.datastructures.fragments.Fragment#getAttributes()
+     * @return the list of attributes
+	 * @see cross.datastructures.fragments.Fragment#getAttributes()
      */
     @Override
     public List<Attribute> getAttributes() {
@@ -473,7 +473,8 @@ public class FileFragment implements IFileFragment {
     }
 
     /**
-     * @return @see cross.datastructures.fragments.Fragment#getCache()
+     * @return the cache delegate
+	 * @see cross.datastructures.fragments.Fragment#getCache()
      */
     @Override
     public ICacheDelegate<IVariableFragment, List<Array>> getCache() {
@@ -486,7 +487,9 @@ public class FileFragment implements IFileFragment {
 
     /**
      * @param varname
+	 * @return the child fragment
      * @see cross.datastructures.fragments.IFileFragment#getChild(String)
+	 * @throws ResourceNotAvailableException
      */
     @Override
     public IVariableFragment getChild(final String varname)
@@ -495,7 +498,7 @@ public class FileFragment implements IFileFragment {
     }
 
     /**
-     * @param varnem
+     * @param varname
      * @param loadStructureOnly
      * @see cross.datastructures.fragments.IFileFragment#getChild(String,
      * boolean)
@@ -511,42 +514,6 @@ public class FileFragment implements IFileFragment {
             return getImmediateChild(varname);
         } else {
             String sourceFileVarName = Factory.getInstance().getConfiguration().getString("var.source_files", "source_files");
-//            if(this.sourcefiles.isEmpty() && !loadedSourceFiles) {
-//            addSourceFile(FragmentTools.getSourceFiles(this).values());
-//               return getImmediateChild(sourceFileVarName); 
-//            }
-//            IVariableFragment vf = new ImmutableVariableFragment2(this, varname);
-//            ((ImmutableVariableFragment2) vf).setUseCachedList(Factory.getInstance().getConfiguration().getBoolean(this.getClass().getName() + ".useCachedList",
-//                    false));
-//
-//            EvalTools.notNull(vf, this);
-//            //try to locate variable in stored file, if that exists
-//            try {
-//                if (loadStructureOnly) {
-//                    Factory.getInstance().getDataSourceFactory().getDataSourceFor(this).readStructure(vf);
-//                } else {
-//                    Factory.getInstance().getDataSourceFactory().getDataSourceFor(this).readSingle(vf);
-//                }
-//                EvalTools.notNull(vf, this);
-//                log.debug("Found {} as direct child of {} in file",
-//                        varname, this.getUri());
-//                return vf;
-//            } catch (final FileNotFoundException fnf) {
-//                log.debug(fnf.getLocalizedMessage());
-//            } catch (final ResourceNotAvailableException rna) {
-//                log.debug(rna.getLocalizedMessage());
-//            } catch (final IOException e) {
-//                log.debug(e.getLocalizedMessage());
-//            }
-//            this.children.remove(varname);
-//            vf = null;
-            // if we are not looking for variable source_files, which must be
-            // available
-            // in the immediately referenced file, we need to check those
-            // FileFragments
-            // referenced in source_files.
-            // if source_files has not been initialized yet, load it
-
             if (!varname.equals(sourceFileVarName)) {
                 log.info("Trying to load source files from file: {}", this.getUri());
                 // loop over all active source_files
@@ -671,7 +638,7 @@ public class FileFragment implements IFileFragment {
 
     /**
      * @param a
-     * @return
+     * @return whether the given attribute is known
      * @see
      * cross.datastructures.fragments.Fragment#hasAttribute(ucar.nc2.Attribute)
      */
@@ -682,7 +649,7 @@ public class FileFragment implements IFileFragment {
 
     /**
      * @param name
-     * @return
+     * @return whether the named attribute is known
      * @see
      * cross.datastructures.fragments.Fragment#hasAttribute(java.lang.String)
      */
@@ -835,7 +802,6 @@ public class FileFragment implements IFileFragment {
     }
 
     /**
-     *
      * @throws IllegalStateException if this fragment has been modified to
      * indicate possible loss of data.
      */
@@ -923,15 +889,6 @@ public class FileFragment implements IFileFragment {
     @Override
     public void removeSourceFile(final IFileFragment ff) {
         this.sourcefiles.remove(ff.getUri());
-//        getSourceFiles().remove(ff);
-//        Map<URI, IFileFragment> map = new LinkedHashMap<URI, IFileFragment>();
-//        for (IFileFragment f : getSourceFiles()) {
-//            map.put(f.getUri(), f);
-//        }
-//        setSourceFiles(map);
-//        if (getSourceFiles().isEmpty()) {
-//            removeChild(getChild("source_files"));
-//        }
     }
 
     /*

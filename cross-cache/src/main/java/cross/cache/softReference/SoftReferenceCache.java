@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Values are referenced using {@see java.lang.ref.SoftReference}. These may be
+ * Values are referenced using {@link java.lang.ref.SoftReference}. These may be
  * reclaimed by the garbage collector as soon as the virtual machine requires
  * additional free memory. The keys are strongly referenced.
  * 

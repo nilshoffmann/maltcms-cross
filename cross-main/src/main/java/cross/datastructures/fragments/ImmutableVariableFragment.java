@@ -377,7 +377,8 @@ public class ImmutableVariableFragment implements IVariableFragment {
     }
 
     /**
-     * @return @see cross.datastructures.fragments.IVariableFragment#toString()
+     * @return the string representation of this fragment
+	 * @see cross.datastructures.fragments.IVariableFragment#toString()
      */
     @Override
     public String toString() {
