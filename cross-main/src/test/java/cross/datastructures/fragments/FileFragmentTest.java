@@ -37,11 +37,16 @@ import cross.io.MockDatasource;
 import cross.test.LogMethodName;
 import cross.test.SetupLogging;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import junit.framework.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -320,9 +325,9 @@ public class FileFragmentTest {
 	}
 
 	@Test
-	public void testVariableFragmentEquality() {
+	public void testVariableFragmentEquality() throws IOException {
 		logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
-		IFileFragment f = createTestFragment();
+		IFileFragment f = createTestFragment(tf.newFolder());
 		//first check that all are there
 		Assert.assertNotNull(f.getChild("variable1"));
 		Assert.assertNotNull(f.getChild("variable2"));
@@ -350,8 +355,8 @@ public class FileFragmentTest {
 		Assert.assertTrue(plainName.endsWith(".D"));
 	}
 
-	public IFileFragment createTestFragment() {
-		IFileFragment f = new FileFragment();
+	public IFileFragment createTestFragment(File folder) {
+		IFileFragment f = new FileFragment(folder, "testFragment.cdf");
 		f.addChild("variable1").setIndex(f.addChild("indexVar1"));
 		List<Array> l1 = new ArrayList<Array>();
 		l1.add(Array.factory(new double[]{1.2, 1.5}));
@@ -367,5 +372,39 @@ public class FileFragmentTest {
 		f.addChild("variable3").setArray(Array.factory(new double[]{2, 3.3, 235.32, 352.3}));
 		f.getChild("indexVar1").setArray(Array.factory(new int[]{2, 3, 1}));
 		return f;
+	}
+
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
+		logging.setLogLevel("log4j.category.cross.io", "INFO");
+		IFileFragment f = createTestFragment(tf.newFolder());
+		List<IVariableFragment> originalChildren = new ArrayList<IVariableFragment>(f.getImmediateChildren());
+		File outputFile = new File(tf.newFolder(), "serializedFile.ser");
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile));
+		try {
+			f.writeExternal(oos);
+			f = new FileFragment(f.getUri());
+//			f.readStructure();
+			for(IVariableFragment vf:originalChildren) {
+				IVariableFragment revf = f.getChild(vf.getName());
+				Assert.assertEquals(vf.getName(), revf.getName());
+			}
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(outputFile));
+			try {
+				FileFragment des = new FileFragment();
+				des.readExternal(ois);
+				Assert.assertEquals(f, des);
+				for(IVariableFragment ivf:f) {
+					log.info("Variable fragment: {}", ivf.getName());
+					Assert.assertEquals(ivf.getName(), des.getChild(ivf.getName()).getName());
+				}
+			} finally {
+				ois.close();
+			}
+		} finally {
+			oos.close();
+		}
+
 	}
 }

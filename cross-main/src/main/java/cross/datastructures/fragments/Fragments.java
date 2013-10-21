@@ -99,10 +99,10 @@ public class Fragments {
                 log.debug("Using soft reference cache {}", cacheName);
                 return SoftReferenceCacheManager.getInstance().getCache(cacheName);
             case NONE:
-                log.debug("Using hash map cache {}", cacheName);
+                log.debug("Using no cache {}", cacheName);
                 return NoCacheManager.getInstance().getCache(cacheName);
             default:
-                log.debug("Using hash map cache {}", cacheName);
+                log.debug("Using no cache {}", cacheName);
                 return NoCacheManager.getInstance().getCache(cacheName);
         }
     }

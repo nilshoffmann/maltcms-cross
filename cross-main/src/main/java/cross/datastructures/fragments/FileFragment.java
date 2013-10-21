@@ -830,17 +830,17 @@ public class FileFragment implements IFileFragment {
      * @throws ClassNotFoundException
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException,
+    public synchronized void readExternal(final ObjectInput in) throws IOException,
             ClassNotFoundException {
-        Object o = in.readObject();
+		Object o = in.readObject();
         if (o instanceof Long) {
             this.fID = (Long) o;
         }
         o = in.readObject();
         if (o instanceof String) {
-            setFile((String) o);
+            setFile((String)o);
         }
-        in.close();
+//        in.close();
         this.sourcefiles = new HashMap<URI, IFileFragment>();
         this.children = Collections.synchronizedMap(new HashMap<String, IVariableFragment>());
         this.dims = new LinkedHashMap<String, Dimension>();
@@ -1152,7 +1152,7 @@ public class FileFragment implements IFileFragment {
      * @throws IOException
      */
     @Override
-    public void writeExternal(final ObjectOutput out) throws IOException {
+    public synchronized void writeExternal(final ObjectOutput out) throws IOException {
         if (isModified()) {
             // bring memory state into sync with storage representation
             save();
@@ -1162,7 +1162,7 @@ public class FileFragment implements IFileFragment {
         // store path to storage
         out.writeObject(this.u.toString());
         out.flush();
-        out.close();
+//        out.close();
     }
 
     /**

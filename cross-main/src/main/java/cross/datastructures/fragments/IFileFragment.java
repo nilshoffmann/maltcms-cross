@@ -44,249 +44,249 @@ import ucar.nc2.Dimension;
  * @author Nils Hoffmann
  *
  */
-public interface IFileFragment extends IGroupFragment, IFragment,
-        Externalizable {
+public interface IFileFragment extends IGroupFragment, IFragment, Externalizable {
 
-    /**
-     * Add a child of given name or return already existing one.
-     *
-     * @param name
-     * @return variableFragment
-     */
-    public abstract IVariableFragment addChild(String name);
-    
-    /**
-     * Add a number of children.
-     *
-     * @param fragments
-     */
-    @Override
-    public abstract void addChildren(IVariableFragment... fragments);
+	/**
+	 * Add a child of given name or return already existing one.
+	 *
+	 * @param name
+	 * @return variableFragment
+	 */
+	public abstract IVariableFragment addChild(String name);
 
-    /**
-     * Add dimensions to this IFileFragment.
-     *
-     * @param dims1
-     */
-    public abstract void addDimensions(Dimension... dims1);
+	/**
+	 * Add a number of children.
+	 *
+	 * @param fragments
+	 */
+	@Override
+	public abstract void addChildren(IVariableFragment... fragments);
 
-    /**
-     * Add source FileFragments contained in Collection c to this FileFragment.
-     *
-     * @param c
-     */
-    public abstract void addSourceFile(Collection<IFileFragment> c);
+	/**
+	 * Add dimensions to this IFileFragment.
+	 *
+	 * @param dims1
+	 */
+	public abstract void addDimensions(Dimension... dims1);
 
-    /**
-     * Add source FileFragments contained in ff to this FileFragment.
-     *
-     * @param ff
-     */
-    public abstract void addSourceFile(IFileFragment... ff);
+	/**
+	 * Add source FileFragments contained in Collection c to this FileFragment.
+	 *
+	 * @param c
+	 */
+	public abstract void addSourceFile(Collection<IFileFragment> c);
 
-    /**
-     * Append structural information of this FileFragment to Element e.
-     */
-    @Override
-    public abstract void appendXML(Element e);
+	/**
+	 * Add source FileFragments contained in ff to this FileFragment.
+	 *
+	 * @param ff
+	 */
+	public abstract void addSourceFile(IFileFragment... ff);
 
-    /**
-     * Iterates through all VariableFragments, clearing in memory arrays, except
-     * for source_files. Throws IllegalStateException if VariableData has been
-     * altered.
-     *
-     * @throws java.lang.IllegalStateException
-     */
-    public abstract void clearArrays() throws IllegalStateException;
+	/**
+	 * Append structural information of this FileFragment to Element e.
+	 */
+	@Override
+	public abstract void appendXML(Element e);
 
-    /**
-     * Resets all dimensions of this fragment. Does not set Dimensions to null
-     * in IVariableFragments having these Dimensions!
-     */
-    public abstract void clearDimensions();
+	/**
+	 * Iterates through all VariableFragments, clearing in memory arrays, except
+	 * for source_files. Throws IllegalStateException if VariableData has been
+	 * altered.
+	 *
+	 * @throws java.lang.IllegalStateException
+	 */
+	public abstract void clearArrays() throws IllegalStateException;
 
-    /**
-     * Return this FileFragment's storage location as string representation.
-     *
-     * @deprecated please use {@link #getUri} instead
-     * @return
-     */
-    @Deprecated
-    public abstract String getAbsolutePath();
+	/**
+	 * Resets all dimensions of this fragment. Does not set Dimensions to null
+	 * in IVariableFragments having these Dimensions!
+	 */
+	public abstract void clearDimensions();
 
-    /**
-     * Return a Cache for variable fragment array data for this fragment.
-     * @return 
-     */
-    public abstract ICacheDelegate<IVariableFragment, List<Array>> getCache();
-    
-    /**
-     * Returns the child with name varname. If varname is not found in local
-     * structure, try to locate it in sourcefiles. First hit wins. Otherwise
-     * throw IllegalArgumentException.
-     *
-     * @param varname
-     * @return
-     */
-    @Override
-    public abstract IVariableFragment getChild(String varname)
-            throws ResourceNotAvailableException;
+	/**
+	 * Return this FileFragment's storage location as string representation.
+	 *
+	 * @deprecated please use {@link #getUri} instead
+	 * @return
+	 */
+	@Deprecated
+	public abstract String getAbsolutePath();
 
-    /**
-     * Returns the child with name varname. If varname is not found in local
-     * structure, try to locate it in sourcefiles. First hit wins. Otherwise
-     * throw IllegalArgumentException. If
-     * <code>loadStructureOnly</code> is true, only the variable structure is
-     * retrieved, not the data.
-     *
-     * @param varname
-     * @param loadStructureOnly
-     * @return
-     */
-    public abstract IVariableFragment getChild(String varname,
-            boolean loadStructureOnly) throws ResourceNotAvailableException;
+	/**
+	 * Return a Cache for variable fragment array data for this fragment.
+	 *
+	 * @return
+	 */
+	public abstract ICacheDelegate<IVariableFragment, List<Array>> getCache();
 
-    /**
-     * Returns the immediate children of this fileFragment. Does not return 
-     * children that are only found in referenced source files.
-     * 
-     * @return 
-     */
-    public abstract List<IVariableFragment> getImmediateChildren();
-    
-    /**
-     * The registered dimensions of this FileFragment.
-     *
-     * @return
-     */
-    public abstract Set<Dimension> getDimensions();
+	/**
+	 * Returns the child with name varname. If varname is not found in local
+	 * structure, try to locate it in sourcefiles. First hit wins. Otherwise
+	 * throw IllegalArgumentException.
+	 *
+	 * @param varname
+	 * @return
+	 */
+	@Override
+	public abstract IVariableFragment getChild(String varname)
+			throws ResourceNotAvailableException;
 
-    /**
-     * The unique ID (between runs) of this FileFragment.
-     *
-     * @return
-     */
-    public abstract long getID();
+	/**
+	 * Returns the child with name varname. If varname is not found in local
+	 * structure, try to locate it in sourcefiles. First hit wins. Otherwise
+	 * throw IllegalArgumentException. If
+	 * <code>loadStructureOnly</code> is true, only the variable structure is
+	 * retrieved, not the data.
+	 *
+	 * @param varname
+	 * @param loadStructureOnly
+	 * @return
+	 */
+	public abstract IVariableFragment getChild(String varname,
+			boolean loadStructureOnly) throws ResourceNotAvailableException;
 
-    /**
-     * Return the name of this FileFragment, does not include directory or other
-     * prefixed information.
-     *
-     * @return
-     */
-    @Override
-    public abstract String getName();
+	/**
+	 * Returns the immediate children of this fileFragment. Does not return
+	 * children that are only found in referenced source files.
+	 *
+	 * @return
+	 */
+	public abstract List<IVariableFragment> getImmediateChildren();
 
-    @Override
-    public abstract IGroupFragment getParent();
+	/**
+	 * The registered dimensions of this FileFragment.
+	 *
+	 * @return
+	 */
+	public abstract Set<Dimension> getDimensions();
 
-    /**
-     * Return the number of children of this FileFragment.
-     *
-     * @return
-     */
-    @Override
-    public abstract int getSize();
+	/**
+	 * The unique ID (between runs) of this FileFragment.
+	 *
+	 * @return
+	 */
+	public abstract long getID();
 
-    /**
-     * Return all source FileFragments.
-     *
-     * @return
-     */
-    public abstract Collection<IFileFragment> getSourceFiles();
-    
-    /**
-     * Return the URI of this FileFragment.
-     *
-     * @return
-     */
-    public URI getUri();
+	/**
+	 * Return the name of this FileFragment, does not include directory or other
+	 * prefixed information.
+	 *
+	 * @return
+	 */
+	@Override
+	public abstract String getName();
 
-    /**
-     * Query FileFragment for the given VariableFragments.
-     *
-     * @param vf
-     * @return
-     */
-    public abstract boolean hasChildren(IVariableFragment... vf);
+	@Override
+	public abstract IGroupFragment getParent();
 
-    /**
-     * Query FileFragment for children with the given strings as names.
-     *
-     * @param s
-     * @return
-     */
-    public abstract boolean hasChildren(String... s);
+	/**
+	 * Return the number of children of this FileFragment.
+	 *
+	 * @return
+	 */
+	@Override
+	public abstract int getSize();
 
-    public boolean isModified();
+	/**
+	 * Return all source FileFragments.
+	 *
+	 * @return
+	 */
+	public abstract Collection<IFileFragment> getSourceFiles();
 
-    /**
-     * Creates an iterator over all children of this FileFragment by the time of
-     * creation of the iterator.
-     */
-    @Override
-    public abstract Iterator<IVariableFragment> iterator();
+	/**
+	 * Return the URI of this FileFragment.
+	 *
+	 * @return
+	 */
+	public URI getUri();
 
-    /**
-     * Call the {@link IDataSource} for this FileFragment and load the structural 
-     * information for this fragment. This includes variable names and shapes
-     * as well as attributes.
-     */
-    public abstract void readStructure();
-    
-    /**
-     * Remove the given IVariableFragment from the list of this FileFragment's
-     * children.
-     *
-     * @param variableFragment
-     */
-    public abstract void removeChild(IVariableFragment variableFragment);
+	/**
+	 * Query FileFragment for the given VariableFragments.
+	 *
+	 * @param vf
+	 * @return
+	 */
+	public abstract boolean hasChildren(IVariableFragment... vf);
 
-    /**
-     * Remove the given source file.
-     *
-     * @param ff
-     */
-    public abstract void removeSourceFile(IFileFragment ff);
+	/**
+	 * Query FileFragment for children with the given strings as names.
+	 *
+	 * @param s
+	 * @return
+	 */
+	public abstract boolean hasChildren(String... s);
 
-    /**
-     * Removes all currently associated source files.
-     */
-    public abstract void removeSourceFiles();
+	public boolean isModified();
 
-    /**
-     * Store this fragment using the {@link IDataSource} responsible for handling
-     * this fragment name's extension.
-     * 
-     * @return true if saving succeeded, false otherwise
-     */
-    public abstract boolean save();
-    
-    /**
-     * Set a Cache for variable fragment array data for this fragment.
-     * 
-     * May throw an {@link IllegalStateException} if the cache was already 
-     * initialized to avoid accidental modification or replacement.
-     * 
-     * @param cache
-     * @throws IllegalStateException
-     */
-    public abstract void setCache(ICacheDelegate<IVariableFragment, List<Array>> cache);
+	/**
+	 * Creates an iterator over all children of this FileFragment by the time of
+	 * creation of the iterator.
+	 */
+	@Override
+	public abstract Iterator<IVariableFragment> iterator();
 
-    /**
-     * Change the filename of this Fragment.
-     *
-     * @param f1
-     */
-    public abstract void setFile(File f1);
+	/**
+	 * Call the {@link IDataSource} for this FileFragment and load the
+	 * structural information for this fragment. This includes variable names
+	 * and shapes as well as attributes.
+	 */
+	public abstract void readStructure();
 
-    /**
-     * Change the filename of this Fragment.
-     *
-     * @param file
-     */
-    public abstract void setFile(String file);
+	/**
+	 * Remove the given IVariableFragment from the list of this FileFragment's
+	 * children.
+	 *
+	 * @param variableFragment
+	 */
+	public abstract void removeChild(IVariableFragment variableFragment);
 
-    @Override
-    public abstract String toString();
+	/**
+	 * Remove the given source file.
+	 *
+	 * @param ff
+	 */
+	public abstract void removeSourceFile(IFileFragment ff);
+
+	/**
+	 * Removes all currently associated source files.
+	 */
+	public abstract void removeSourceFiles();
+
+	/**
+	 * Store this fragment using the {@link IDataSource} responsible for
+	 * handling this fragment name's extension.
+	 *
+	 * @return true if saving succeeded, false otherwise
+	 */
+	public abstract boolean save();
+
+	/**
+	 * Set a Cache for variable fragment array data for this fragment.
+	 *
+	 * May throw an {@link IllegalStateException} if the cache was already
+	 * initialized to avoid accidental modification or replacement.
+	 *
+	 * @param cache
+	 * @throws IllegalStateException
+	 */
+	public abstract void setCache(ICacheDelegate<IVariableFragment, List<Array>> cache);
+
+	/**
+	 * Change the filename of this Fragment.
+	 *
+	 * @param f1
+	 */
+	public abstract void setFile(File f1);
+
+	/**
+	 * Change the filename of this Fragment.
+	 *
+	 * @param file
+	 */
+	public abstract void setFile(String file);
+
+	@Override
+	public abstract String toString();
 }

@@ -264,6 +264,7 @@ public class Factory implements ConfigurationListener {
     public ICommandSequence createCommandSequence(final TupleND<IFileFragment> t) {
         final ICommandSequence cd = getObjectFactory().instantiate(
                 CommandPipeline.class);
+		EvalTools.notNull(cd, this);
         //final IWorkflow iw = getObjectFactory().instantiate(IWorkflow.class);
         File outputDir = new File(getConfiguration().getString(
                 "output.basedir", System.getProperty("user.dir")));

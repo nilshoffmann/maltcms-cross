@@ -669,7 +669,7 @@ public class VariableFragment implements IVariableFragment {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + (this.fragment != null ? this.fragment.hashCode() : 0);
+//        hash = 83 * hash + (this.fragment != null ? this.fragment.hashCode() : 0);
         hash = 83 * hash + (this.varname != null ? this.varname.hashCode() : 0);
         hash = 83 * hash + (this.parent != null ? this.parent.hashCode() : 0);
         return hash;
@@ -689,9 +689,9 @@ public class VariableFragment implements IVariableFragment {
             return false;
         }
         final VariableFragment other = (VariableFragment) obj;
-        if (this.fragment != other.fragment && (this.fragment == null || !this.fragment.equals(other.fragment))) {
-            return false;
-        }
+//        if (this.fragment != other.fragment && (this.fragment == null || !this.fragment.equals(other.fragment))) {
+//            return false;
+//        }
         if ((this.varname == null) ? (other.varname != null) : !this.varname.equals(other.varname)) {
             return false;
         }

@@ -27,19 +27,18 @@
  */
 package cross.io;
 
-import cross.cache.ICacheDelegate;
-import cross.datastructures.fragments.Fragments;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IVariableFragment;
-import cross.datastructures.tools.ArrayTools;
+import cross.datastructures.fragments.VariableFragment;
 import cross.exception.ResourceNotAvailableException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
 import ucar.ma2.Array;
@@ -48,69 +47,65 @@ import ucar.ma2.Array;
  *
  * @author Nils Hoffmann
  */
+@Slf4j
 public class MockDatasource implements IDataSource {
 
-    Map<IFileFragment,ICacheDelegate<IVariableFragment,List<Array>>> persistentCache = new HashMap<IFileFragment,ICacheDelegate<IVariableFragment,List<Array>>>();
+    Map<URI,MockFile> persistentCache = new HashMap<URI,MockFile>();
     
     @Override
     public int canRead(IFileFragment ff) {
         return 1;
     }
 
-    private ICacheDelegate<IVariableFragment,List<Array>> getCache(IFileFragment f) {
-        if(persistentCache.containsKey(f)) {
-            return persistentCache.get(f);
+    private MockFile getCache(IFileFragment f) {
+        if(persistentCache.containsKey(f.getUri())) {
+            return persistentCache.get(f.getUri());
         }
-        ICacheDelegate<IVariableFragment,List<Array>> delegate = Fragments.createFragmentCache(UUID.randomUUID().toString());
-        persistentCache.put(f, delegate);
-        return delegate;
+		MockFile mf = new MockFile(f.getUri());
+        persistentCache.put(f.getUri(), mf);
+        return mf;
     }
     
     @Override
     public ArrayList<Array> readAll(IFileFragment f) throws IOException, ResourceNotAvailableException {
         ArrayList<Array> al = new ArrayList<Array>();
         for(IVariableFragment frag:f) {
-            al.add(ArrayTools.glue(getCache(f).get(frag)));
+            al.add(getCache(f).getChild(frag.getName()));
         }
         return al;
     }
 
     @Override
     public ArrayList<Array> readIndexed(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-        List<Array> l = getCache(f.getParent()).get(f);
-        if(f.getIndex()==null) {
-            throw new IllegalStateException("Variable Fragment has no index variable set!");
-        }
-        if(l== null || l.isEmpty()) {
-            throw new ResourceNotAvailableException("Could not read indexed arrays for "+f);
-        }
-        return new ArrayList<Array>(l);
+        return getCache(f.getParent()).getIndexedChild(f.getName()); 
     }
 
     @Override
     public Array readSingle(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-        List<Array> l = getCache(f.getParent()).get(f);
-        if(l== null || l.isEmpty()) {
-            throw new ResourceNotAvailableException("Could not read indexed arrays for "+f);
-        }
-        if(l.size()==1) {
-            return l.get(0);
-        }else{
-            return ArrayTools.glue(l);
-        }
+        return getCache(f.getParent()).getChild(f.getName());
     }
 
     @Override
     public ArrayList<IVariableFragment> readStructure(IFileFragment f) throws IOException {
-        return new ArrayList<IVariableFragment>(f.getImmediateChildren());
+		if(getCache(f).keys().isEmpty()) {
+			return new ArrayList<IVariableFragment>(0);
+		}
+		ArrayList<IVariableFragment> children = new ArrayList<IVariableFragment>();
+		for(String key: getCache(f).keys()) {
+			if(!f.hasChild(key)) {
+				VariableFragment vf = new VariableFragment(f, key);
+				vf.setArray(getCache(f).getChild(key));
+			}
+		}
+		return children;
     }
 
     @Override
     public IVariableFragment readStructure(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-//        if(getCache(f.getParent())!=null) {
-//            return f;
-//        }
-        throw new ResourceNotAvailableException("Variable "+f.getName()+" does not exist on file!");
+        if(getCache(f.getParent()).keys().contains(f.getName())) {
+            return f;
+        }
+		throw new ResourceNotAvailableException("Variable "+f.getName()+" does not exist on file!");
     }
 
     @Override
@@ -120,11 +115,14 @@ public class MockDatasource implements IDataSource {
 
     @Override
     public boolean write(IFileFragment f) {
+		log.info("Writing file fragment {}",f.getUri());
+		MockFile mf = getCache(f);
         for(IVariableFragment v:f.getImmediateChildren()) {
+			log.info("Writing variable fragment {}. Indexed: {}",v.getName(),v.getIndex()!=null);
             if(v.getIndex()!=null) {
-                getCache(f).put(v, v.getIndexedArray());
+				mf.addChild(v.getName(), new ArrayList<Array>(v.getIndexedArray()));
             }else{
-                getCache(f).put(v, new ArrayList<Array>(Arrays.asList(v.getArray())));
+                mf.addChild(v.getName(), new ArrayList<Array>(Arrays.asList(v.getArray())));
             }
         }
         return true;

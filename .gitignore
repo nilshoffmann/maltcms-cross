@@ -1,0 +1,9 @@
+/cross-annotations/target/
+/cross-test/target/
+/cross-cache/target/
+/cross-event/target/
+/cross-exception/target/
+/cross-tools/target/
+/cross-math/target/
+/cross-main/target/
+/cross-osgi/target/

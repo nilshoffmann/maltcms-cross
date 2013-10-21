@@ -424,7 +424,7 @@ public class ImmutableFileFragment implements IFileFragment {
      * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
      */
     @Override
-    public void readExternal(final ObjectInput in) throws IOException,
+    public synchronized void readExternal(final ObjectInput in) throws IOException,
             ClassNotFoundException {
         Object o = in.readObject();
         if (o instanceof Long) {
@@ -432,9 +432,9 @@ public class ImmutableFileFragment implements IFileFragment {
         }
         o = in.readObject();
         if (o instanceof String) {
-            this.frag.setFile(URI.create(FileTools.escapeUri((String) o)).toString());
+            this.frag.setFile((String) o);
         }
-        in.close();
+//        in.close();
     }
 
     /**
@@ -562,13 +562,13 @@ public class ImmutableFileFragment implements IFileFragment {
      * @throws IOException
      */
     @Override
-    public void writeExternal(final ObjectOutput out) throws IOException {
+    public synchronized void writeExternal(final ObjectOutput out) throws IOException {
         // store id
         out.writeObject(Long.valueOf(getID()));
         // store path to storage
-        out.writeObject(getUri());
+        out.writeObject(getUri().toString());
         out.flush();
-        out.close();
+//        out.close();
     }
 
     /**
