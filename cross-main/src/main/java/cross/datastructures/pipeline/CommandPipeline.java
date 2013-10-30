@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -41,18 +41,21 @@ import cross.event.IEvent;
 import cross.exception.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.mpaxs.api.ConfigurationKeys;
-import net.sf.mpaxs.api.ExecutionFactory;
 import net.sf.mpaxs.api.ExecutionType;
-import net.sf.mpaxs.api.ICompletionService;
 import net.sf.mpaxs.api.Impaxs;
-import net.sf.mpaxs.spi.concurrent.CompletionServiceFactory;
 import net.sf.mpaxs.spi.concurrent.ComputeServerFactory;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -110,12 +113,12 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 	@Override
 	public void configure(final Configuration cfg) {
 		log.debug(
-				"CommandPipeline does not support configuration via configure anylonger. Please use a Spring xml file!");
+			"CommandPipeline does not support configuration via configure anylonger. Please use a Spring xml file!");
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see maltcms.ucar.ma2.CommandSequence#hasNext()
 	 */
 	@Override
@@ -132,7 +135,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				return valid;
 			} catch (ConstraintViolationException cve) {
 				log.warn("Pipeline validation failed: " + cve.
-						getLocalizedMessage());
+					getLocalizedMessage());
 				return valid;
 			}
 		}
@@ -152,20 +155,20 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 	 */
 	@Deprecated
 	protected IFragmentCommand loadCommand(final String clsname,
-			final String propertiesFileName) {
+		final String propertiesFileName) {
 		EvalTools.notNull(clsname, this);
 		final IFragmentCommand clazz = Factory.getInstance().getObjectFactory().
-				instantiate(clsname, IFragmentCommand.class,
+			instantiate(clsname, IFragmentCommand.class,
 				propertiesFileName);
 		clazz.addListener(this);
 		EvalTools.notNull(clazz, "Could not load class " + clsname
-				+ ". Check package and classname for possible typos!", this);
+			+ ". Check package and classname for possible typos!", this);
 		return clazz;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see maltcms.ucar.ma2.CommandSequence#next()
 	 */
 	@Override
@@ -186,9 +189,9 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 //exit to console when master server shuts down
 				cfg.setProperty(ConfigurationKeys.KEY_MASTER_SERVER_EXIT_ON_SHUTDOWN, true);
 //limit the number of used compute hosts
-				cfg.setProperty(ConfigurationKeys.KEY_MAX_NUMBER_OF_CHOSTS, Factory.getInstance().getConfiguration().getInt("maltcms.pipelinethreads",1));
+				cfg.setProperty(ConfigurationKeys.KEY_MAX_NUMBER_OF_CHOSTS, Factory.getInstance().getConfiguration().getInt("maltcms.pipelinethreads", 1));
 //native specs for the drmaa api
-				cfg.setProperty(ConfigurationKeys.KEY_NATIVE_SPEC, Factory.getInstance().getConfiguration().getString("mpaxs.nativeSpec",""));
+				cfg.setProperty(ConfigurationKeys.KEY_NATIVE_SPEC, Factory.getInstance().getConfiguration().getString("mpaxs.nativeSpec", ""));
 				executionServer.startMasterServer(cfg);
 			}
 			if (this.iter.hasNext()) {
@@ -200,13 +203,13 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				iw.save();
 				// log.info("Next ICommand: {}",cmd.getClass().getName());
 				log.info(
-						"#############################################################################");
+					"#############################################################################");
 				log.info("# Running {}/{}: {}",
-						new Object[]{(this.cnt + 1),
-					this.commands.size(), cmd.getClass().getSimpleName()});
+					new Object[]{(this.cnt + 1),
+						this.commands.size(), cmd.getClass().getSimpleName()});
 				log.debug("# Package: {}", cmd.getClass().getPackage().getName());
 				log.info(
-						"#############################################################################");
+					"#############################################################################");
 				// set output dir to currently active command
 				getWorkflow().getOutputDirectory(cmd);
 				long start = System.nanoTime();
@@ -215,8 +218,8 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				for (IFileFragment f : this.tmp) {
 					if (f.isModified()) {
 						log.warn("FileFragment {} has modifications after fragment command {}!"
-								+ " Please call clearArrays() or save a modified FileFragment before returning it!",
-								f.getName(), cmd.getClass().getCanonicalName());
+							+ " Please call clearArrays() or save a modified FileFragment before returning it!",
+							f.getName(), cmd.getClass().getCanonicalName());
 						if (throwExceptionOnUnsavedModification) {
 							throw new ConstraintViolationException("FileFragment " + f.getName() + " has modifications after fragment command " + cmd.getClass().getCanonicalName() + "! Please call clearArrays() or save a modified FileFragment before returning it!");
 						}
@@ -248,15 +251,15 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				executionServer.stopMasterServer();
 			} catch (Exception e) {
 				log.warn(
-						"Exception occured while shutting down MasterServer!",
-						e);
+					"Exception occured while shutting down MasterServer!",
+					e);
 			} finally {
 				try {
 					executionServer.stopMasterServer();
 				} catch (Exception e) {
 					log.warn(
-							"Exception occured while shutting down MasterServer!",
-							e);
+						"Exception occured while shutting down MasterServer!",
+						e);
 				}
 			}
 		}
@@ -264,7 +267,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see maltcms.ucar.ma2.CommandSequence#remove()
 	 */
 	@Override
@@ -294,7 +297,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom.Element)
 	 */
 	/**
@@ -310,7 +313,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		for (final IFileFragment ifrg : getInput()) {
 			final Element ifrge0 = new Element("workflowInput");
 			ifrge0.setAttribute("uri", ifrg.getUri().normalize().
-					toString());
+				toString());
 			ifrge.addContent(ifrge0);
 		}
 		e.addContent(ifrge);
@@ -319,7 +322,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		for (final IFileFragment ofrg : tmp) {
 			final Element ofrge0 = new Element("workflowOutput");
 			ofrge0.setAttribute("uri", ofrg.getUri().normalize().
-					toString());
+				toString());
 			ofrge.addContent(ofrge0);
 		}
 		e.addContent(ofrge);
@@ -339,8 +342,8 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		final Formatter formatter = new Formatter(sb);
 		formatter.format(CommandPipeline.NUMBERFORMAT, (seconds));
 		log.info("Runtime of command {}: {} sec",
-				cmd.getClass().getSimpleName(),
-				sb.toString());
+			cmd.getClass().getSimpleName(),
+			sb.toString());
 		Map<String, Object> statsMap = new HashMap<String, Object>();
 		statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(start / 1000000.f));
 		DefaultWorkflowStatisticsResult dwsr = new DefaultWorkflowStatisticsResult();

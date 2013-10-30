@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -32,12 +32,17 @@ import org.apache.commons.configuration.Configuration;
 
 /**
  * Interface for objects which are configurable. Configuration will be performed
- * by a Spring ApplicationContext instance.
+ * by a Spring application context's <code>BeanPostProcessor</code> instance.
  *
  * @author Nils Hoffmann
- *
+ * @see cross.applicationContext.ConfiguringBeanPostProcessor
  */
 public interface IConfigurable extends Serializable {
 
-    public void configure(Configuration cfg);
+	/**
+	 * Apply the configuration.
+	 *
+	 * @param cfg the configuration
+	 */
+	public void configure(Configuration cfg);
 }

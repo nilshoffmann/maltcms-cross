@@ -33,7 +33,7 @@ will be detected and monitoring, via the Developer Console, will be enabled. Oth
 are "on" and "off".  The default is "autodetect". This setting does not perform any function when
 used with JMX monitors.
 -->
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false" monitoring="autodetect" dynamicConfig="true">
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false" monitoring="autodetect" dynamicConfig="true" maxBytesLocalHeap="50%" maxBytesLocalOffHeap="50g" maxBytesLocalDisk="100g">
 
     <!--
     DiskStore configuration
@@ -74,5 +74,5 @@ used with JMX monitors.
 
     The defaultCache has an implicit name "default" which is a reserved cache name.
     -->
-    <defaultCache maxElementsInMemory="10000" eternal="true" overflowToDisk="true" memoryStoreEvictionPolicy="LFU" statistics="false"/>
+    <defaultCache eternal="true" overflowToDisk="true" memoryStoreEvictionPolicy="LFU"/>
 </ehcache>

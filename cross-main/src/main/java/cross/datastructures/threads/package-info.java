@@ -25,25 +25,12 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.datastructures.workflow;
-
-import cross.io.xml.IXMLSerializable;
-import java.io.Serializable;
-
 /**
- * A result of a {@link cross.datastructures.workflow.IWorkflowElement}, linking
- * to a created file or immediate resources (e.g. statistics).
+ * <p>
+ * (Deprecated) Base package for threading. Now deprecated in favor of Mpaxs.
+ * </p>
  *
- * @author Nils Hoffmann
  *
  */
-public interface IWorkflowResult extends IXMLSerializable, Serializable {
-
-	public IWorkflowElement getWorkflowElement();
-
-	public WorkflowSlot getWorkflowSlot();
-
-	public void setWorkflowElement(IWorkflowElement iwe);
-
-	public void setWorkflowSlot(WorkflowSlot ws);
-}
+@Deprecated
+package cross.datastructures.threads;

@@ -12,7 +12,7 @@
 	<version>1.3.1-SNAPSHOT</version>
 	<packaging>nbm</packaging>
 
-	<name>slf4j-nbm</name>
+	<name>Lib Slf4j</name>
 
 	<dependencies>
 		<dependency>

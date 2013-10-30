@@ -25,25 +25,11 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.datastructures.workflow;
-
-import cross.io.xml.IXMLSerializable;
-import java.io.Serializable;
-
 /**
- * A result of a {@link cross.datastructures.workflow.IWorkflowElement}, linking
- * to a created file or immediate resources (e.g. statistics).
- *
- * @author Nils Hoffmann
+ * <p>
+ * Workflow interfaces and implementations. A workflow manages the lifecycle
+ * of a pipeline.
+ * </p>
  *
  */
-public interface IWorkflowResult extends IXMLSerializable, Serializable {
-
-	public IWorkflowElement getWorkflowElement();
-
-	public WorkflowSlot getWorkflowSlot();
-
-	public void setWorkflowElement(IWorkflowElement iwe);
-
-	public void setWorkflowSlot(WorkflowSlot ws);
-}
+package cross.datastructures.workflow;

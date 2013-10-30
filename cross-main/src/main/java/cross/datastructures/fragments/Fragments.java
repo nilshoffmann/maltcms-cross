@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -39,8 +39,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.DiskStoreConfiguration;
+import net.sf.ehcache.config.MemoryUnit;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import ucar.ma2.Array;
 
@@ -50,80 +49,77 @@ import ucar.ma2.Array;
  */
 @Slf4j
 public class Fragments {
-    
-    private static CacheType fragmentCacheType = CacheType.NONE;
-    
-    private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
-	
-	private static CacheManager defaultCacheManager=null;
-	
+
+	private static CacheType fragmentCacheType = CacheType.NONE;
+
+	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
+
+	private static CacheManager defaultCacheManager = null;
+
 	public static CacheManager getDefault() {
-		if(defaultCacheManager==null) {
+		if (defaultCacheManager == null) {
 			cacheDirectory.mkdirs();
-			Configuration cacheManagerConfig = new Configuration()
-				.diskStore(new DiskStoreConfiguration()
-				.path(cacheDirectory.getAbsolutePath()));
-			defaultCacheManager = CacheManager.newInstance(cacheManagerConfig);
-			defaultCacheManager.setName("maltcms-fragments");
+			defaultCacheManager = CacheManager.getInstance();
 		}
 		return defaultCacheManager;
 	}
 
-    /**
-     * Set the cache location for all NEWLY created caches.
-     *
-     * @param f
-     */
-    public static void setCacheDirectory(File f) {
-        Fragments.cacheDirectory = f;
-    }
-    
-    public static void setDefaultFragmentCacheType(CacheType fragmentCacheType) {
-        Fragments.fragmentCacheType = fragmentCacheType;
-    }
-    
-    public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName) {
-        return createFragmentCache(cacheDir, cacheName, fragmentCacheType);
-    }
+	/**
+	 * Set the cache location for all NEWLY created caches.
+	 *
+	 * @param f
+	 */
+	public static void setCacheDirectory(File f) {
+		Fragments.cacheDirectory = f;
+	}
 
-    public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName) {
-        return createFragmentCache(cacheDirectory, cacheName);
-    }
+	public static void setDefaultFragmentCacheType(CacheType fragmentCacheType) {
+		Fragments.fragmentCacheType = fragmentCacheType;
+	}
 
-    public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName, CacheType cacheType) {
-        switch (cacheType) {
-            case EHCACHE:
-                log.debug("Using ehcache {}", cacheName);
-                return createDefaultFragmentCache(cacheDir, cacheName);
-            case SOFT:
-                log.debug("Using soft reference cache {}", cacheName);
-                return SoftReferenceCacheManager.getInstance().getCache(cacheName);
-            case NONE:
-                log.debug("Using no cache {}", cacheName);
-                return NoCacheManager.getInstance().getCache(cacheName);
-            default:
-                log.debug("Using no cache {}", cacheName);
-                return NoCacheManager.getInstance().getCache(cacheName);
-        }
-    }
+	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName) {
+		return createFragmentCache(cacheDir, cacheName, fragmentCacheType);
+	}
 
-    public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName, CacheType cacheType) {
-        return createFragmentCache(cacheDirectory, cacheName, cacheType);
-    }
+	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName) {
+		return createFragmentCache(cacheDirectory, cacheName);
+	}
 
-    public static ICacheDelegate<IVariableFragment, List<Array>> createDefaultFragmentCache(File cacheDir, String cacheName) {
-        CacheManager cm = getDefault();
-		if(cm.cacheExists(cacheName)) {
+	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName, CacheType cacheType) {
+		switch (cacheType) {
+			case EHCACHE:
+				log.debug("Using ehcache {}", cacheName);
+				return createDefaultFragmentCache(cacheDir, cacheName);
+			case SOFT:
+				log.debug("Using soft reference cache {}", cacheName);
+				return SoftReferenceCacheManager.getInstance().getCache(cacheName);
+			case NONE:
+				log.debug("Using no cache {}", cacheName);
+				return NoCacheManager.getInstance().getCache(cacheName);
+			default:
+				log.debug("Using no cache {}", cacheName);
+				return NoCacheManager.getInstance().getCache(cacheName);
+		}
+	}
+
+	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName, CacheType cacheType) {
+		return createFragmentCache(cacheDirectory, cacheName, cacheType);
+	}
+
+	public static ICacheDelegate<IVariableFragment, List<Array>> createDefaultFragmentCache(File cacheDir, String cacheName) {
+		CacheManager cm = getDefault();
+		if (cm.cacheExists(cacheName)) {
 			return new VariableFragmentArrayCache(cm.getCache(cacheName));
 		}
 		CacheConfiguration cc = new CacheConfiguration();
-		cc.name(cacheName).maxEntriesLocalHeap(1000).
-        overflowToDisk(true).
-        maxElementsOnDisk(Integer.MAX_VALUE).
-        memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
+		cc.name(cacheName).
+			overflowToDisk(true).
+			maxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4), MemoryUnit.BYTES).
+			maxElementsOnDisk(Integer.MAX_VALUE).
+			memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
 		Ehcache cache = new Cache(cc);
 		cm.addCache(cache);
-        ICacheDelegate<IVariableFragment, List<Array>> ed = new VariableFragmentArrayCache(cache);
-        return ed;
-    }
+		ICacheDelegate<IVariableFragment, List<Array>> ed = new VariableFragmentArrayCache(cache);
+		return ed;
+	}
 }

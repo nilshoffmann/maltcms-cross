@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,8 +27,8 @@
  */
 package cross.datastructures.cache;
 
-import cross.cache.ICacheDelegate;
 import cross.cache.CacheType;
+import cross.cache.ICacheDelegate;
 import cross.datastructures.collections.CachedReadWriteList;
 import cross.datastructures.fragments.IVariableFragment;
 import java.io.Serializable;
@@ -108,8 +108,9 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
 
 	@Override
 	public List<Array> get(final IVariableFragment key) {
-		if (keys.get(key) != null) {
-			return keys.get(key);
+		List<Array> values = keys.get(key);
+		if (values != null) {
+			return values;
 		} else {
 			try {
 				Element element = getCache().get(getVariableFragmentId(key));
@@ -134,7 +135,7 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
 
 	@Override
 	public void close() {
-		for(IVariableFragment key:keys.keySet()) {
+		for (IVariableFragment key : keys.keySet()) {
 			cache.remove(key);
 		}
 //		cache.dispose();
@@ -143,7 +144,7 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
 	public Ehcache getCache() {
 		if (cache.getStatus() != Status.STATUS_ALIVE) {
 			cache.dispose();
-			if(cache.getStatus() == Status.STATUS_UNINITIALISED) {
+			if (cache.getStatus() == Status.STATUS_UNINITIALISED) {
 				cache.initialise();
 			}
 		}

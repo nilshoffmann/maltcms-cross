@@ -25,25 +25,20 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.datastructures.workflow;
-
-import cross.io.xml.IXMLSerializable;
-import java.io.Serializable;
-
 /**
- * A result of a {@link cross.datastructures.workflow.IWorkflowElement}, linking
- * to a created file or immediate resources (e.g. statistics).
- *
- * @author Nils Hoffmann
+ * <p>
+ * Base package for Cross, the Common Runtime Object Support System.</p>
+ * <p>
+ * Cross provides a number of interfaces and implementations to set up
+ * a modular, configurable, pipeline-based light-weight workflow system.</p>
+ * <p>
+ * It uses the unintrusive
+ * <a href="http://docs.spring.io/spring/docs/3.2.4.RELEASE/spring-framework-reference/html/" target="_blank">
+ * Spring application context</a> at its core for configuration and
+ * <a href="http://ehcache.org/" target="_blank">Ehcache</a> for object caching. It furthermore
+ * supports parallel execution of {@link java.lang.Runnable} and
+ * {@link java.util.concurrent.Callable} objects on local or cluster systems via
+ * <a href="http://sf.net/p/mpaxs" target="_blank">Mpaxs</a>.</p>
  *
  */
-public interface IWorkflowResult extends IXMLSerializable, Serializable {
-
-	public IWorkflowElement getWorkflowElement();
-
-	public WorkflowSlot getWorkflowSlot();
-
-	public void setWorkflowElement(IWorkflowElement iwe);
-
-	public void setWorkflowSlot(WorkflowSlot ws);
-}
+package cross;

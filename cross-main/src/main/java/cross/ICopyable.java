@@ -25,25 +25,26 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.datastructures.workflow;
-
-import cross.io.xml.IXMLSerializable;
-import java.io.Serializable;
+package cross;
 
 /**
- * A result of a {@link cross.datastructures.workflow.IWorkflowElement}, linking
- * to a created file or immediate resources (e.g. statistics).
+ * Interface for objects which are copyable. Objects implementing this interface
+ * are expected to create a deep copy of their current state if the <code>copy</code>
+ * method is called.
  *
  * @author Nils Hoffmann
- *
+ * @param <T> the target type of the copyable
+ * @since 1.3.1
  */
-public interface IWorkflowResult extends IXMLSerializable, Serializable {
+public interface ICopyable<T> {
 
-	public IWorkflowElement getWorkflowElement();
+	/**
+	 * Create a deep copy of the object implementing ICopyable.
+	 * The result may need to be cast to the appropriate type.
+	 *
+	 * @param <T> the target type of this object
+	 * @return the deep copy of this object
+	 */
+	<T> T copy();
 
-	public WorkflowSlot getWorkflowSlot();
-
-	public void setWorkflowElement(IWorkflowElement iwe);
-
-	public void setWorkflowSlot(WorkflowSlot ws);
 }
