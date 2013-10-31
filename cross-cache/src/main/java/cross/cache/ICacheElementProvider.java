@@ -32,6 +32,7 @@ package cross.cache;
  * to keys in a custom cache implementation.
  *
  * @author Nils Hoffmann
+ * @param <K>
  */
 public interface ICacheElementProvider<K, V> {
 

@@ -56,6 +56,12 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
 	private final Ehcache cache;
 	private final Set<K> keys;
 
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param cache    the backing cache to use
+	 * @param provider the provider for key -> value
+	 */
 	public AutoRetrievalEhcacheDelegate(Ehcache cache,
 		ICacheElementProvider<K, V> provider) {
 		this.provider = provider;

@@ -64,6 +64,11 @@ public class CacheFactory {
 		CacheFactory.cacheDirectory = f;
 	}
 
+	/**
+	 * Remove the cache from the ehcache cache manager.
+	 *
+	 * @param cacheName
+	 */
 	public static void removeCache(String cacheName) {
 		try {
 			CacheManager.getInstance().removeCache(cacheName);
@@ -74,6 +79,12 @@ public class CacheFactory {
 
 	private static CacheManager defaultCacheManager = null;
 
+	/**
+	 * Returns the default cache manager implementation for ehcache. Creates
+	 * it, if it has not yet been created.
+	 *
+	 * @return the cache manager instance
+	 */
 	public static CacheManager getDefault() {
 		if (defaultCacheManager == null) {
 			cacheDirectory.mkdirs();
@@ -166,10 +177,9 @@ public class CacheFactory {
 	 * Creates a disk-backed cache with a default capacity of 1000 elements in
 	 * memory, disk overflow is stored in a file below the default cacheDirectory.
 	 *
-	 * @param <K>                 the key type to use, can be non-serializable
-	 * @param <V>                 the value type to use, can be non-serializable
-	 * @param cacheName           the name of the cache
-	 * @param maxElementsInMemory the maximum number of elements to keep in memory
+	 * @param <K>       the key type to use, can be non-serializable
+	 * @param <V>       the value type to use, can be non-serializable
+	 * @param cacheName the name of the cache
 	 * @return a cache delegate representing the created cache
 	 */
 	public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName) {
@@ -313,6 +323,13 @@ public class CacheFactory {
 		return ared;
 	}
 
+	/**
+	 * Returns the ehcache instance associated to the cacheName, or creates it
+	 * if it does not exist.
+	 *
+	 * @param cacheName the cache name
+	 * @return the ehcache instance
+	 */
 	public static Ehcache getCacheFor(String cacheName) {
 		return CacheManager.getInstance().getEhcache(cacheName);
 	}

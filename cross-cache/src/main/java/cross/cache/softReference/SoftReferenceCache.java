@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -37,38 +37,43 @@ import java.util.Set;
  * Values are referenced using {@link java.lang.ref.SoftReference}. These may be
  * reclaimed by the garbage collector as soon as the virtual machine requires
  * additional free memory. The keys are strongly referenced.
- * 
+ *
  * @author Nils Hoffmann
+ * @param <K>
+ * @param <V>
  */
 public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
 
-    private final HashMap<K, SoftReference<? extends V>> map;
-    private final String name;
-//    private final ReferenceQueue<V> referenceQueue;
+	private final HashMap<K, SoftReference<? extends V>> map;
+	private final String name;
 
-    public SoftReferenceCache(String name) {
-        this.name = name;
-        this.map = new HashMap<K, SoftReference<? extends V>>();
-//        this.referenceQueue = new ReferenceQueue<V>();
-    }
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param name the cache name
+	 */
+	public SoftReferenceCache(String name) {
+		this.name = name;
+		this.map = new HashMap<K, SoftReference<? extends V>>();
+	}
 
-    @Override
-    public Set<K> keys() {
-        return this.map.keySet();
-    }
-    
-    @Override
-    public void put(K key, V value) {
-        if (value == null) {
-            map.remove(key);
-        } else {
-            map.put(key, new SoftReference<V>(value));//,this.referenceQueue));
-        }
-    }
+	@Override
+	public Set<K> keys() {
+		return this.map.keySet();
+	}
 
-    @Override
-    public V get(K key) {
-		if(map.containsKey(key)) {
+	@Override
+	public void put(K key, V value) {
+		if (value == null) {
+			map.remove(key);
+		} else {
+			map.put(key, new SoftReference<V>(value));//,this.referenceQueue));
+		}
+	}
+
+	@Override
+	public V get(K key) {
+		if (map.containsKey(key)) {
 			SoftReference<? extends V> softReference = map.get(key);
 			//soft reference is null, no entry for key
 			if (softReference == null) {
@@ -82,20 +87,23 @@ public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
 			return value;
 		}
 		return null;
-    }
+	}
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
+	@Override
+	public String getName() {
+		return this.name;
+	}
 
-    @Override
-    public void close() {
-        this.map.clear();
-    }
+	/**
+	 * Clears the map of all keys and values.
+	 */
+	@Override
+	public void close() {
+		this.map.clear();
+	}
 
-    @Override
-    public CacheType getCacheType() {
-        return CacheType.SOFT;
-    }
+	@Override
+	public CacheType getCacheType() {
+		return CacheType.SOFT;
+	}
 }
