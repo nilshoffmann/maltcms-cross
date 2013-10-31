@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,14 +27,19 @@
  */
 package cross.annotations;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * <p>Marker annotation for member variables, which should be made available to
+ * <p>
+ * Marker annotation for member variables, which should be made available to
  * Configuration.</p>
  *
  * @author Nils Hoffmann
- * @version $Id$
  */
 @Documented
 @Target(value = {ElementType.FIELD})
@@ -42,36 +47,36 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Configurable {
 
-    /**
-     * The name of the annotated object. Returns an empty String by default.
-     *
-     * @return
-     */
-    String name() default "";
+	/**
+	 * The name of the annotated object. Returns an empty String by default.
+	 *
+	 * @return the name
+	 */
+	String name() default "";
 
-    /**
-     * The value of the annotated object. Returns an empty String by default.
-     *
-     * @return
-     */
-    String value() default "";
+	/**
+	 * The value of the annotated object. Returns an empty String by default.
+	 *
+	 * @return the value
+	 */
+	String value() default "";
 
-    /**
-     * The class of the annotated object. Returns Object.class by default.
-     *
-     * {@link AnnotationInspector} will now retrieve the type information directly
-     * from the annotated field.
-     *
-     * @return
-     */
-    @Deprecated
-    Class<?> type() default Object.class;
+	/**
+	 * The class of the annotated object. Returns Object.class by default.
+	 *
+	 * {@link AnnotationInspector} will now retrieve the type information directly
+	 * from the annotated field.
+	 *
+	 * @return the class type
+	 */
+	@Deprecated
+	Class<?> type() default Object.class;
 
-    /**
-     * The description of the annotated object. Returns an empty String by
-     * default.
-     *
-     * @return
-     */
-    String description() default "";
+	/**
+	 * The description of the annotated object. Returns an empty String by
+	 * default.
+	 *
+	 * @return the description
+	 */
+	String description() default "";
 }
