@@ -35,8 +35,11 @@ import static org.junit.Assert.*;
  * @author Nils Hoffmann
  */
 public class StringToolsTest {
-    
-    public StringToolsTest() {
+
+	/**
+	 *
+	 */
+	public StringToolsTest() {
     }
 
     /**

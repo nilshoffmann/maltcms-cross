@@ -37,7 +37,10 @@ import static org.junit.Assert.*;
  */
 public class MathToolsTest {
 
-    public MathToolsTest() {
+	/**
+	 *
+	 */
+	public MathToolsTest() {
     }
 
     /**
