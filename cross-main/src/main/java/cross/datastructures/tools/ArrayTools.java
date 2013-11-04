@@ -48,6 +48,11 @@ public class ArrayTools {
 	private static HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
 	private static Random random;
 
+	/**
+	 * Returns the sum of lengths of all individual arrays in <code>l</code>.
+	 * @param l the list of arrays
+	 * @return the shape array for a row compressed storage representation of l
+	 */
 	public static int[] getShapeForIndexedArrays(List<Array> l) {
 		int length = 0;
 		for (Array a : l) {
@@ -61,6 +66,11 @@ public class ArrayTools {
 		return new int[]{length};
 	}
 
+	/**
+	 * Return default dimension for an indexed array.
+	 * @param l the list of arrays
+	 * @return the dimension array for row compressed storage representation of l
+	 */
 	public static Dimension[] getDefaultDimensionsForIndexedArray(List<Array> l) {
 		EvalTools.notNull(l, ArrayTools.class);
 		int[] shape = getShapeForIndexedArrays(l);
@@ -83,6 +93,12 @@ public class ArrayTools {
 		return d;
 	}
 
+	/**
+	 * Create a string array.
+	 * @param numstrings the number of strings
+	 * @param maxlength the maximum length of any string in the array
+	 * @return a string array
+	 */
 	public static ArrayChar.D2 createStringArray(final int numstrings,
 			final int maxlength) {
 		final ArrayChar.D2 d = new ArrayChar.D2(numstrings, maxlength);
@@ -92,8 +108,8 @@ public class ArrayTools {
 	/**
 	 * Return default dimensions for input array.
 	 *
-	 * @param a
-	 * @return
+	 * @param a the array
+	 * @return the default dimensions for <code>a</code>
 	 */
 	public static Dimension[] getDefaultDimensions(final Array a) {
 		EvalTools.notNull(a, ArrayTools.class);
@@ -108,8 +124,8 @@ public class ArrayTools {
 	/**
 	 * Get names of default dimensions for input array.
 	 *
-	 * @param a
-	 * @return
+	 * @param a the input array
+	 * @return the default dimension names for <code>a</code>
 	 */
 	public static String[] getDefaultDimnames(final Array a) {
 		final String[] s = new String[a.getShape().length];
@@ -130,8 +146,8 @@ public class ArrayTools {
 	/**
 	 * Compute total number of elements for all arrays in list.
 	 *
-	 * @param scans
-	 * @return
+	 * @param scans the list of arrays
+	 * @return the sum of the size of all arrays in scans
 	 */
 	public static int getSizeForFlattenedArrays(final List<Array> scans) {
 		int size = 0;
@@ -148,6 +164,11 @@ public class ArrayTools {
 		return size;
 	}
 
+	/**
+	 * Return strings from array.
+	 * @param a the string array
+	 * @return the strings contained in a
+	 */
 	public static Collection<String> getStringsFromArray(final Array a) {
 		ArrayTools.log.debug("Retrieved Array: {}", a);
 		EvalTools.notNull(a, FragmentTools.class);
@@ -177,8 +198,8 @@ public class ArrayTools {
 	 * Access to the list is synchronized within the method, so access will be
 	 * exclusive to this method while executing it.
 	 *
-	 * @param al
-	 * @return
+	 * @param al the list of arrays
+	 * @return the concatenated array
 	 */
 	public static Array glue(final List<Array> al) {
 		synchronized (al) {
@@ -226,10 +247,33 @@ public class ArrayTools {
 
 	}
 
+	/**
+	 * Create a random numeric array with the given element type and shape.
+	 * Values will be between zero and one.
+	 * 
+	 * @param random the random generator
+	 * @param elementType the element type 
+	 * @param shape the target shape
+	 * @return the random array
+	 */
 	public static Array random(Random random, Class<?> elementType, int[] shape) {
 		return random(random, 0, 1, elementType, shape);
 	}
-
+	
+	/**
+	 * Create a random numeric array with the given element type and shape.
+	 * Values will be between zero and one.
+	 * 
+	 * The random numbers are created with the following formula:
+	 * <code>(random.nextDouble()*scale) - offset</code>
+	 * 
+	 * @param random the random generator
+	 * @param offset the offset for the generated random numbers
+	 * @param scale the scale of the generated random numbers
+	 * @param elementType the element type 
+	 * @param shape the target shape
+	 * @return the random array
+	 */
 	public static Array random(Random random, double offset, double scale, Class<?> elementType, int[] shape) {
 		Array a = Array.factory(elementType, shape);
 		IndexIterator iter = a.getIndexIterator();

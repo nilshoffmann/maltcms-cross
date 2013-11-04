@@ -60,10 +60,10 @@ public class FragmentTools {
 	 * Creates a one-dimensional double array and adds it as to the
 	 * automatically created IVariableFragment with varname.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param size
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable name
+	 * @param size the array size (one-dimensional)
+	 * @return the new variable fragment with empty array set
 	 */
 	public static IVariableFragment createDoubleArrayD1(
 			final IFileFragment parent, final String varname, final int size) {
@@ -82,11 +82,11 @@ public class FragmentTools {
 	 * Creates an array of given shape and type as array of varname as child of
 	 * parent.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param type
-	 * @param shape
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable name
+	 * @param type the array type
+	 * @param shape the shape of the array to create
+	 * @return the new variable fragment with empty array set
 	 */
 	public static IVariableFragment createArray(final IFileFragment parent,
 			final String varname, final DataType type, final int... shape) {
@@ -105,9 +105,16 @@ public class FragmentTools {
 	 * Creates a new Fragment with default name. Both original FileFragments
 	 * files are stored as variables below the newly created fragment.
 	 *
-	 * @param f1
-	 * @param f2
-	 * @return
+	 * @param f1 the left-hand-side file fragment
+	 * @param f2 the right-hand-side file fragment
+	 * @return a file fragment that contains both file fragments linked in
+	 * variables
+	 * @see
+	 * FragmentTools#setLHSFile(cross.datastructures.fragments.IFileFragment,
+	 * cross.datastructures.fragments.IFileFragment)
+	 * @see
+	 * FragmentTools#setRHSFile(cross.datastructures.fragments.IFileFragment,
+	 * cross.datastructures.fragments.IFileFragment)
 	 */
 	public static IFileFragment createFragment(final IFileFragment f1,
 			final IFileFragment f2, final File outputdir) {
@@ -125,10 +132,10 @@ public class FragmentTools {
 	 * <code>name</code> and
 	 * <code>size</code> elements.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param size
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable fragment name
+	 * @param size the size of the integer array to create (one-dimensional)
+	 * @return the new variable fragment with empty array set
 	 */
 	public static IVariableFragment createIntArrayD1(
 			final IFileFragment parent, final String varname, final int size) {
@@ -149,10 +156,10 @@ public class FragmentTools {
 	 * <code>varname</code> and contents as given in string
 	 * <code>value</code>.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param value
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable fragment name
+	 * @param value the string value to set
+	 * @return the new variable fragment with string array set (ArrayChar.D1)
 	 */
 	public static IVariableFragment createString(final IFileFragment parent,
 			final String varname, final String value) {
@@ -174,10 +181,10 @@ public class FragmentTools {
 	 * <code>varname</code> and contents as given in string collection
 	 * <code>c</code>.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param c
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable fragment name
+	 * @param c the collection of strings to set
+	 * @return the new variable fragment with string array set
 	 */
 	public static IVariableFragment createStringArray(
 			final IFileFragment parent, final String varname,
@@ -194,15 +201,15 @@ public class FragmentTools {
 	}
 
 	/**
-	 * Create a {@link IVariableFragment} as a child of
+	 * Create or return a {@link IVariableFragment} as a child of
 	 * <code>parent</code>, with name
 	 * <code>varname</code> and index fragment
 	 * <code>ifrg</code>.
 	 *
-	 * @param parent
-	 * @param varname
-	 * @param ifrg
-	 * @return
+	 * @param parent the parent file fragment
+	 * @param varname the variable fragment name
+	 * @param ifrg the index fragment to set
+	 * @return the variable fragment with set index
 	 */
 	public static IVariableFragment createVariable(final IFileFragment parent,
 			final String varname, final IVariableFragment ifrg) {
@@ -226,7 +233,7 @@ public class FragmentTools {
 	 * Returns a list of variable names as defined in
 	 * <code>default.vars</code>.
 	 *
-	 * @return
+	 * @return a list of default variable names
 	 */
 	public static ArrayList<String> getDefaultVars() {
 		final List<?> l = Factory.getInstance().getConfiguration().getList("default.vars");
@@ -237,6 +244,16 @@ public class FragmentTools {
 		return al;
 	}
 
+	/**
+	 * Returns the i'th indexed array of an indexed variable fragment.
+	 *
+	 * @param iff the parent file fragment
+	 * @param var the variable name
+	 * @param indexVar the index variable name
+	 * @param i the index to retrieve
+	 * @return the i'th indexed array
+	 * @throws ConstraintViolationException
+	 */
 	public static Array getIndexed(final IFileFragment iff, final String var,
 			final String indexVar, final int i)
 			throws ConstraintViolationException {
@@ -246,6 +263,13 @@ public class FragmentTools {
 		return variable.getIndexedArray().get(i);
 	}
 
+	/**
+	 * Returns the i'th indexed array of an indexed variable fragment.
+	 *
+	 * @param ivf the variable fragment with non-null index variable fragment
+	 * @param i the index to retrieve
+	 * @return the i'th indexed array
+	 */
 	public static Array getIndexed(final IVariableFragment ivf, final int i) {
 		EvalTools.notNull(
 				new Object[]{ivf, ivf.getParent(), ivf.getIndex()},
@@ -254,10 +278,10 @@ public class FragmentTools {
 	}
 
 	/**
-	 * Returns the left hand side of a pairwise alignment.
+	 * Returns the left hand side of a pairwise alignment (reference).
 	 *
-	 * @param ff
-	 * @return
+	 * @param ff the file fragment containing the 'reference_file' variable
+	 * @return the file fragment corresponding to the reference file
 	 */
 	public static IFileFragment getLHSFile(final IFileFragment ff) {
 		final String s = FragmentTools.getStringVar(
@@ -267,10 +291,10 @@ public class FragmentTools {
 	}
 
 	/**
-	 * Returns the right hand side of a pairwise alignment.
+	 * Returns the right hand side of a pairwise alignment (query).
 	 *
-	 * @param ff
-	 * @return
+	 * @param ff the file fragment containing the 'query_file' variable
+	 * @return the file fragment corresponding to the query file
 	 */
 	public static IFileFragment getRHSFile(final IFileFragment ff) {
 		final String s = FragmentTools.getStringVar(ff, Factory.getInstance().getConfiguration().getString("var.query_file", "query_file"));
@@ -280,8 +304,9 @@ public class FragmentTools {
 	/**
 	 * Returns all immediate source files of a {@link IFileFragment}.
 	 *
-	 * @param ff
-	 * @return
+	 * @param ff the file fragment whose source files should be retrieved from
+	 * disk
+	 * @return a map from URI to file fragment instance of source files
 	 */
 	public static Map<URI, IFileFragment> getSourceFiles(
 			final IFileFragment ff) {
@@ -334,8 +359,8 @@ public class FragmentTools {
 	/**
 	 * Returns true if the given parent file has no further source files.
 	 *
-	 * @param parentFile
-	 * @return
+	 * @param parentFile the file fragment to check
+	 * @return true if this parentFile has no source files, false otherwise
 	 */
 	public static boolean isRootFile(IFileFragment parentFile) {
 		try {
@@ -357,9 +382,9 @@ public class FragmentTools {
 	 * <code>childFile</code> is a direct child of
 	 * <code>parentFile</code>.
 	 *
-	 * @param parentFile
-	 * @param childFile
-	 * @return
+	 * @param parentFile the parent file fragment
+	 * @param childFile the child to check against parentFile
+	 * @return true if childFile is a direct child of parentFile, false otherwise
 	 */
 	public static boolean isChild(IFileFragment parentFile, IFileFragment childFile) {
 		if (!parentFile.getUri().getScheme().equals(childFile.getUri().getScheme())) {
@@ -373,6 +398,12 @@ public class FragmentTools {
 		return true;
 	}
 
+	/**
+	 * Relativize the URI of targetFile against baseFile.
+	 * @param targetFile the target file fragment to retrieve a relative path for
+	 * @param baseFile the base file fragment against which targetFile should be relativized
+	 * @return the relative URI from baseFile to targetFile
+	 */
 	public static URI resolve(IFileFragment targetFile, IFileFragment baseFile) {
 		boolean relativize = false;
 		if (isChild(baseFile, targetFile)) {
@@ -389,6 +420,12 @@ public class FragmentTools {
 		return relativePath;
 	}
 
+	/**
+	 * Returns the source files in array format.
+	 * @param root the file fragment containing the source files
+	 * @param files the source file fragments
+	 * @return an array containing the source file (relative) URIs
+	 */
 	public static ArrayChar.D2 createSourceFilesArray(final IFileFragment root, Collection<IFileFragment> files) {
 		int ml = 128;
 		List<String> names = new ArrayList<String>();
@@ -414,9 +451,9 @@ public class FragmentTools {
 	/**
 	 * Returns a collection of strings from a char array.
 	 *
-	 * @param ff
-	 * @param variableName
-	 * @return
+	 * @param ff the file fragment
+	 * @param variableName the variable fragment name
+	 * @return the strings retrieved from the array described by variableName
 	 */
 	public static Collection<String> getStringArray(final IFileFragment ff,
 			final String variableName) {
@@ -437,10 +474,10 @@ public class FragmentTools {
 	}
 
 	/**
-	 *
-	 * @param ff
-	 * @param variableName
-	 * @return
+	 * Returns a single string.
+	 * @param ff the file fragment
+	 * @param variableName the variable fragment name
+	 * @return the string value
 	 * @deprecated
 	 */
 	@Deprecated
@@ -459,11 +496,11 @@ public class FragmentTools {
 	}
 
 	/**
-	 *
-	 * @param parent
-	 * @param varname
-	 * @param indexname
-	 * @return
+	 * Returns the variable fragment given the parent, varname and indexname.
+	 * @param parent the parent file fragment
+	 * @param varname the variable fragment name
+	 * @param indexname the index variable name
+	 * @return the variable fragment
 	 * @throws ResourceNotAvailableException
 	 * @deprecated
 	 */
@@ -490,7 +527,7 @@ public class FragmentTools {
 	 * <code>ff</code>, using
 	 * <code>additional.vars</code>.
 	 *
-	 * @param ff
+	 * @param ff the file fragment
 	 */
 	public static void loadAdditionalVars(final IFileFragment ff) {
 		FragmentTools.loadAdditionalVars(ff, null);
@@ -503,8 +540,9 @@ public class FragmentTools {
 	 * <code>additional.vars</code> if
 	 * <code>configKey</code> is null.
 	 *
-	 * @param ff
-	 * @param configKey
+	 * @param ff the file fragment
+	 * @param configKey the configuration key to use
+	 * @see Factory#getConfiguration() 
 	 */
 	public static void loadAdditionalVars(final IFileFragment ff,
 			final String configKey) {
@@ -543,7 +581,8 @@ public class FragmentTools {
 	 * <code>ff</code>, using
 	 * <code>default.vars</code>.
 	 *
-	 * @param ff
+	 * @param ff the file fragment
+	 * @see Factory#getConfiguration() 
 	 */
 	public static void loadDefaultVars(final IFileFragment ff) {
 		FragmentTools.loadDefaultVars(ff, null);
@@ -556,8 +595,9 @@ public class FragmentTools {
 	 * <code>default.vars</code> if
 	 * <code>configKey</code> is null.
 	 *
-	 * @param ff
-	 * @param configKey
+	 * @param ff the file fragment
+	 * @param configKey the configuration key to use
+	 * @see Factory#getConfiguration()
 	 */
 	public static void loadDefaultVars(final IFileFragment ff,
 			final String configKey) {
@@ -580,8 +620,8 @@ public class FragmentTools {
 	 * <code>var.reference_file</code>, left hand side (lhs) for pairwise
 	 * alignments.
 	 *
-	 * @param ff
-	 * @param lhs
+	 * @param ff the file fragment storing the pairwise alignment
+	 * @param lhs the reference file fragment
 	 */
 	public static void setLHSFile(final IFileFragment ff,
 			final IFileFragment lhs) {
@@ -594,8 +634,8 @@ public class FragmentTools {
 	 * <code>var.query_file</code>, right hand side (rhs) for pairwise
 	 * alignments.
 	 *
-	 * @param ff
-	 * @param rhs
+	 * @param ff the file fragment storing the pairwise alignment
+	 * @param rhs the query file fragment
 	 */
 	public static void setRHSFile(final IFileFragment ff,
 			final IFileFragment rhs) {
@@ -607,9 +647,9 @@ public class FragmentTools {
 	 * Returns those variables, which share <em>at least one</em> of the
 	 * dimensions given in the second argument.
 	 *
-	 * @param variables
-	 * @param dimensions
-	 * @return
+	 * @param variables the variable fragments to check
+	 * @param dimensions the dimensions to check
+	 * @return the list of variables fragments sharing at least on of the given dimensions
 	 */
 	public static List<IVariableFragment> getVariablesSharingAnyDimensions(
 			List<IVariableFragment> variables, String... dimensions) {
@@ -632,9 +672,9 @@ public class FragmentTools {
 	 * Returns those variables, which share <em>all</em> of the dimensions given
 	 * in the second argument.
 	 *
-	 * @param variables
-	 * @param dimensions
-	 * @return
+	 * @param variables the variable fragments to check
+	 * @param dimensions the dimensions to check
+	 * @return the list of variables fragments sharing all of the given dimensions
 	 */
 	public static List<IVariableFragment> getVariablesSharingAllDimensions(
 			List<IVariableFragment> variables, String... dimensions) {
@@ -666,8 +706,8 @@ public class FragmentTools {
 	 * instances to the list first, before exploring the next ancestor as given
 	 * by <em>source_files</em>.
 	 *
-	 * @param fragment
-	 * @return
+	 * @param fragment the file fragment to explore
+	 * @return a list of all aggregated variable fragments, may contain variable fragments with identical name from different ancestors
 	 */
 	public static List<IVariableFragment> getAggregatedVariables(
 			IFileFragment fragment) {
@@ -732,8 +772,8 @@ public class FragmentTools {
 	 * any until the deepest such source file is found. Multiple IFileFragments
 	 * on the same level are reported in no particular order.
 	 *
-	 * @param fragment
-	 * @return
+	 * @param fragment the file fragment to explore
+	 * @return a list of file fragments at the deepest level from this fragment, multiple file fragments are returned, if they are discovered at the same level
 	 */
 	public static List<IFileFragment> getDeepestAncestor(IFileFragment fragment) {
 		List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
@@ -792,8 +832,8 @@ public class FragmentTools {
 	 * the given file fragment. Any errors encountered by the DataSource are
 	 * thrown as an {@link IOException}.
 	 *
-	 * @param fragment
-	 * @return
+	 * @param fragment the file fragment to explore
+	 * @return a list of variable fragments available for the given file fragment
 	 * @throws IOException
 	 */
 	public static List<IVariableFragment> getVariablesFor(IFileFragment fragment)
@@ -806,8 +846,8 @@ public class FragmentTools {
 	 * Returns a {@link TupleND} of {@link ImmutableFileFragment}s from the
 	 * given files.
 	 *
-	 * @param files
-	 * @return
+	 * @param files the files to be returned as immutable file fragments
+	 * @return an n-tuple of immutable file fragments
 	 */
 	public static TupleND<IFileFragment> immutable(File... files) {
 		TupleND<IFileFragment> t = new TupleND<IFileFragment>();
@@ -821,8 +861,8 @@ public class FragmentTools {
 	 * Returns a {@link TupleND} of {@link ImmutableFileFragment}s from the
 	 * given files.
 	 *
-	 * @param files
-	 * @return
+	 * @param files the files to be returned as immutable file fragments
+	 * @return an n-tuple of immutable file fragments
 	 */
 	public static TupleND<IFileFragment> immutable(Collection<File> files) {
 		TupleND<IFileFragment> t = new TupleND<IFileFragment>();
@@ -835,8 +875,8 @@ public class FragmentTools {
 	/**
 	 * Returns a {@link TupleND} of {@link FileFragment}s from the given files.
 	 *
-	 * @param files
-	 * @return
+	 * @param files the files to be returned as mutable file fragments
+	 * @return an n-tuple of mutable file fragments
 	 */
 	public static TupleND<IFileFragment> mutable(Collection<File> files) {
 		TupleND<IFileFragment> t = new TupleND<IFileFragment>();

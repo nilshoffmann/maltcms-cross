@@ -33,6 +33,8 @@ import java.io.Serializable;
  * Class representing a tuple of two elements with Types T and U.
  *
  * @author Nils Hoffmann
+ * @param T the left hand side type
+ * @param U the right hand side type
  *
  */
 public class Tuple2D<T, U> implements Serializable {
