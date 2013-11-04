@@ -30,40 +30,49 @@ package cross.datastructures.combinations;
 import java.util.Iterator;
 
 /**
+ * Iterator over parameter combinations that supports lazy instantiation of
+ * object from each parameter combination.
  *
  * @author Nils Hoffmann
  */
 public class CombinationIterator<T> implements Iterator<T> {
 
-    private final CombinationProvider provider;
-    
-    private final ITypeFactory<T> factory;
-    
-    private long element = 0;
-    
-    public CombinationIterator(CombinationProvider provider, ITypeFactory<T> factory) {
-        this.provider = provider;
-        this.factory = factory;
-    }
-    
-    @Override
-    public boolean hasNext() {
-        return element<provider.size();
-    }
+	private final CombinationProvider provider;
+	private final ITypeFactory<T> factory;
+	private long element = 0;
 
-    @Override
-    public T next() {
-        return factory.create(provider.get(element++));
-    }
+	/**
+	 * Creates a new combination iterator given a combination provider and type
+	 * factory.
+	 *
+	 * @param provider the combination provider providing parameter combinations
+	 * @param factory the factory to create new instances of type T
+	 */
+	public CombinationIterator(CombinationProvider provider, ITypeFactory<T> factory) {
+		this.provider = provider;
+		this.factory = factory;
+	}
 
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    public void reset() {
-        this.element = 0;
-        this.provider.reset();
-    }
-    
+	@Override
+	public boolean hasNext() {
+		return element < provider.size();
+	}
+
+	@Override
+	public T next() {
+		return factory.create(provider.get(element++));
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	/**
+	 * Reset this iterator to initial conditions for re-use.
+	 */
+	public void reset() {
+		this.element = 0;
+		this.provider.reset();
+	}
 }

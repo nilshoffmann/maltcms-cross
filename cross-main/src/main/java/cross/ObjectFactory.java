@@ -46,6 +46,31 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * <p>Implementation of {@link IObjectFactory}, backed by a Spring application
+ * context. The resource location of the context xml file is referenced in the
+ * provided configuration file by the key
+ * <code>pipeline.xml = file:path/to/myPipeline.xml</code>.</p>
+ *
+ * <p>The location can be combined with an environment variable, so that
+ * pipelines can be placed below a common base directory:
+ * <code>pipeline.xml = file:${config.basedir}/path/to/myPipeline.xml</code>,
+ * where
+ * <code>${config.basedir}</code> is a system property that can be set when
+ * cross is invoked:
+ * <code>-Dconfig.basedir=/path/to/my/configuration</code>.</p>
+ * 
+ * <p>Multiple locations can be defined, by appending them as values for key pipeline.xml, separated 
+ * by a ',' (comma): <code>pipeline.xml = file:path/to/component1.xml,file:path/to/component2.xml,file:path/to/myPipeline.xml</code></p>
+ * 
+ * <p>Beans in any of these configurations can reference other beans in other or the same configuration by id</p>
+ *
+ * <p>The default workflow xml file is expected at
+ * <code>file:${maltcms.home}/cfg/pipelines/xml/workflowDefaults.xml</code>.
+ * That file is used to set up defaults for the workflow.</p>
+ * 
+ * <p>The property <code>cross.applicationContext.defaultLocations=location1,location2,location3</code>, 
+ * holds a list of default application context xml resources to load, apart from the one for the current pipeline.
+ * The default locations are added before the user-defined context locations.</p>
  *
  * @author Nils Hoffmann
  */
@@ -62,7 +87,7 @@ public class ObjectFactory implements IObjectFactory {
 		this.cfg = cfg;
 		String[] contextLocations = null;
 		if (this.cfg.containsKey(CONTEXT_LOCATION_KEY)) {
-			log.debug("Using user-defined location: {}", this.cfg.getStringArray(CONTEXT_LOCATION_KEY));
+			log.debug("Using user-defined location: {}", (Object[]) this.cfg.getStringArray(CONTEXT_LOCATION_KEY));
 			contextLocations = cfg.getStringArray(CONTEXT_LOCATION_KEY);
 		}
 		if (contextLocations == null) {
@@ -70,7 +95,7 @@ public class ObjectFactory implements IObjectFactory {
 			return;
 		}
 		log.debug("Using context locations: {}",
-			Arrays.toString(contextLocations));
+				Arrays.toString(contextLocations));
 		try {
 			if (cfg.containsKey("maltcms.home")) {
 				File f = new File(new File(cfg.getString("maltcms.home")), "cfg/pipelines/xml/workflowDefaults.xml");
@@ -86,7 +111,7 @@ public class ObjectFactory implements IObjectFactory {
 			LinkedList<String> applicationContextLocations = new LinkedList<String>(Arrays.asList(defaultLocations));
 			applicationContextLocations.addAll(Arrays.asList(contextLocations));
 			context = new DefaultApplicationContextFactory(applicationContextLocations, this.cfg).
-				createApplicationContext();
+					createApplicationContext();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -101,14 +126,14 @@ public class ObjectFactory implements IObjectFactory {
 		if (t instanceof IConfigurable) {
 			if (cfg == null || cfg.isEmpty()) {
 				log.warn(
-					"ObjectFactory's configuration is null or empty! Skipping configuration of {}",
-					t.getClass().getName());
+						"ObjectFactory's configuration is null or empty! Skipping configuration of {}",
+						t.getClass().getName());
 				return t;
 			}
 			log.debug("Instance of type {} is configurable!", t.getClass().
-				toString());
+					toString());
 			final Collection<String> requiredKeys = AnnotationInspector.
-				getRequiredConfigKeys(t);
+					getRequiredConfigKeys(t);
 			log.debug("Required keys for class {}", t.getClass());
 			log.debug("{}", requiredKeys);
 			log.debug("Configuring with full configuration!");
@@ -119,18 +144,17 @@ public class ObjectFactory implements IObjectFactory {
 
 	@Override
 	public <T> T instantiate(final Class<T> c) {
-		T t = null;
 		if (context != null) {
 			try {
-				t = context.getBean(c);
+				T t = context.getBean(c);
 				log.info("Retrieved bean {} from context!", t.getClass().getName());
 				return t;
 			} catch (NoSuchBeanDefinitionException nsbde) {
 				log.debug("Could not create bean {} from context! Reason:\n {}",
-					c.getName(), nsbde.getLocalizedMessage());
+						c.getName(), nsbde.getLocalizedMessage());
 			} catch (BeansException be) {
 				log.debug("Could not create bean {} from context! Reason:\n {}",
-					c.getName(), be.getLocalizedMessage());
+						c.getName(), be.getLocalizedMessage());
 			}
 		}
 		log.info("Using regular configuration mechanism on instance of type " + c.getName());
@@ -146,13 +170,13 @@ public class ObjectFactory implements IObjectFactory {
 			log.error(e.getLocalizedMessage());
 		}
 		throw new IllegalArgumentException("Could not instantiate class "
-			+ c.getName());
+				+ c.getName());
 	}
 
 	@Override
 	public <T> T instantiate(final String classname, final Class<T> cls) {
 		EvalTools.notNull(classname, "Class name of type " + cls.getName()
-			+ " was null!", Factory.class);
+				+ " was null!", Factory.class);
 		final Class<?> c = loadClass(classname);
 		final Class<? extends T> t = c.asSubclass(cls);
 		return instantiate(t);
@@ -160,12 +184,12 @@ public class ObjectFactory implements IObjectFactory {
 
 	@Override
 	public <T> T instantiate(final String classname, final Class<T> cls,
-		final String configurationFile) {
+			final String configurationFile) {
 		CompositeConfiguration cc = new CompositeConfiguration();
 		try {
 			File configFileLocation = new File(configurationFile);
 			cc.addConfiguration(new PropertiesConfiguration(configFileLocation.
-				getAbsolutePath()));
+					getAbsolutePath()));
 		} catch (ConfigurationException e) {
 			log.warn(e.getLocalizedMessage());
 		}
@@ -176,7 +200,7 @@ public class ObjectFactory implements IObjectFactory {
 
 	@Override
 	public <T> T instantiate(final String classname, final Class<T> cls,
-		final Configuration config) {
+			final Configuration config) {
 		return configureType(instantiate(classname, cls), config);
 	}
 
@@ -199,7 +223,7 @@ public class ObjectFactory implements IObjectFactory {
 				return cls;
 			} catch (final NullPointerException npe) {
 				log.error("Could not load class with name " + name
-					+ "! Check for typos!");
+						+ "! Check for typos!");
 			}
 		} catch (final ClassNotFoundException e) {
 			log.error(e.getLocalizedMessage());
@@ -214,7 +238,7 @@ public class ObjectFactory implements IObjectFactory {
 
 	@Override
 	public <T> T getNamedObject(String name,
-		Class<T> cls) {
+			Class<T> cls) {
 		return context.getBean(name, cls);
 	}
 }

@@ -38,8 +38,6 @@ import cross.vocabulary.ICvResolver;
 /**
  * Base interface for commands that can be part of a processing pipeline.
  *
- *
- *
  * @author Nils Hoffmann
  * @see AFragmentCommand
  * @see IWorkflowElement
@@ -48,7 +46,15 @@ public interface IFragmentCommand extends
 	ICommand<TupleND<IFileFragment>, TupleND<IFileFragment>>,
 	IEventSource<IWorkflowResult>, IWorkflowElement {
 
+	/**
+	 * Returns the resolver for controlled vocabularies associated to this command.
+	 * @return the controlled vocabulary resolver
+	 */
 	ICvResolver getCvResolver();
 
+	/**
+	 * Set the controlled vocabulary resolver.
+	 * @param resolver the cv resolver
+	 */
 	void setCvResolver(ICvResolver resolver);
 }

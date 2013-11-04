@@ -39,7 +39,16 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
+ * Implementation of a read/write cached list for indexed data access.
  *
+ * Backed by a soft-reference cache hash map using LRU cache eviction strategy.
+ * 
+ * A {@link ISerializationProxy} can be supplied at construction to allow for otherwise
+ * non-serializable objects to be efficiently serialized and deserialized.
+ * 
+ * This implementation currently only supports single element operations of the implemented
+ * List interface. All unsupported methods throw {@link UnsupportedOperationException}.
+ * 
  * @author Nils Hoffmann
  */
 public class CachedReadWriteList<T> implements List<T> {

@@ -43,9 +43,9 @@ public interface ICommandSequenceValidator extends Serializable {
      * {@link ConstraintViolationException} if validation fails due to unmet
      * constraints, e.g. for unavailable variables
      * {@link cross.annotations.RequiresVariables}.
-     * @param commandSequence
+     * @param commandSequence the command sequence to validate
      * @throws ConstraintViolationException
-     * @return
+     * @return true, if the command sequence is valid, false otherwise
      */
     boolean isValid(ICommandSequence commandSequence) throws ConstraintViolationException;
 }

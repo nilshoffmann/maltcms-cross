@@ -87,8 +87,10 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	private ICvResolver cvResolver = new CvResolver();
 
 	/**
+	 * Initialize a fragment command as a child command of this one.
 	 *
-	 * @param fragmentCommand
+	 * @param fragmentCommand the fragment command to initalize to use the
+	 * current workflow and configuration
 	 */
 	public void initSubCommand(AFragmentCommand fragmentCommand) {
 		fragmentCommand.setWorkflow(workflow);
@@ -96,10 +98,12 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Post process the results in the completion service and map them by name
+	 * to the input.
 	 *
-	 * @param ics
-	 * @param t
-	 * @return
+	 * @param ics the completion service returning Files to wait on
+	 * @param t the input to map to
+	 * @return the result file fragments linking processing results and input
 	 */
 	public TupleND<IFileFragment> postProcess(ICompletionService<File> ics,
 			final TupleND<IFileFragment> t) {
@@ -118,12 +122,14 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 		}
 		return ret;
 	}
-	
-		/**
+
+	/**
+	 * Post process the results in the completion service and map them by name
+	 * to the input.
 	 *
-	 * @param ics
-	 * @param t
-	 * @return
+	 * @param ics the completion service returning URIs to wait on
+	 * @param t the input to map to
+	 * @return the result file fragments linking processing results and input
 	 */
 	public TupleND<IFileFragment> postProcessUri(ICompletionService<URI> ics,
 			final TupleND<IFileFragment> t) {
@@ -143,21 +149,11 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 		return ret;
 	}
 
-	/**
-	 * @param l
-	 * @see
-	 * cross.event.IEventSource#addListener(cross.event.IListener<cross.event
-	 * .IEvent<V>>[])
-	 */
 	@Override
 	public void addListener(final IListener<IEvent<IWorkflowResult>> l) {
 		this.eventSource.addListener(l);
 	}
 
-	/**
-	 *
-	 * @param e
-	 */
 	@Override
 	public void appendXML(final Element e) {
 	}
@@ -175,18 +171,15 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	public void configure(final Configuration cfg) {
 	}
 
-	/**
-	 * @param e
-	 * @see cross.event.IEventSource#fireEvent(cross.event.IEvent)
-	 */
 	@Override
 	public void fireEvent(final IEvent<IWorkflowResult> e) {
 		this.eventSource.fireEvent(e);
 	}
 
 	/**
+	 * Returns a description of this fragment command and what it does.
 	 *
-	 * @return
+	 * @return the description
 	 */
 	public abstract String getDescription();
 
@@ -194,8 +187,9 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	 * Utility method to create mutable FileFragments from a given tuple of
 	 * FileFragments.
 	 *
-	 * @param t
-	 * @return
+	 * @param t the input fragments
+	 * @return the new work fragments, referencing the input fragments
+	 * (one-to-one)
 	 */
 	public TupleND<IFileFragment> createWorkFragments(TupleND<IFileFragment> t) {
 		TupleND<IFileFragment> wt = new TupleND<IFileFragment>();
@@ -208,8 +202,8 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	/**
 	 * Utility method to create a mutable FileFragment to work on.
 	 *
-	 * @param iff
-	 * @return
+	 * @param iff the file fragment to use as input / source fragment
+	 * @return the mutable work fragment
 	 */
 	public IFileFragment createWorkFragment(IFileFragment iff) {
 		URI uri = new File(getWorkflow().getOutputDirectory(this), iff.getName()).toURI();
@@ -220,12 +214,13 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
-	 * Maps a list of Files which resemble processing results of input file
-	 * fragments to the input file fragments in the right order.
+	 * Maps a list of URIs, which resemble processing results of input file
+	 * fragments to the input file fragments, mainting the order of the input
+	 * fragments.
 	 *
-	 * @param files
-	 * @param inputFragments
-	 * @return
+	 * @param files the file URIs to map
+	 * @param inputFragments the input fragments
+	 * @return the mapped file fragments
 	 */
 	public TupleND<IFileFragment> mapToInputUri(List<URI> files,
 			TupleND<IFileFragment> inputFragments) {
@@ -258,12 +253,13 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
-	 * Maps a list of Files which resemble processing results of input file
-	 * fragments to the input file fragments in the right order.
+	 * Maps a list of Files, which resemble processing results of input file
+	 * fragments to the input file fragments, mainting the order of the input
+	 * fragments.
 	 *
-	 * @param files
-	 * @param inputFragments
-	 * @return
+	 * @param files the file URIs to map
+	 * @param inputFragments the input fragments
+	 * @return the mapped file fragments
 	 */
 	public TupleND<IFileFragment> mapToInput(List<File> files,
 			TupleND<IFileFragment> inputFragments) {
@@ -276,10 +272,13 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Create a non-blocking completion service for the given service object
+	 * type.
 	 *
-	 * @param <T>
-	 * @param serviceObjectType
-	 * @return
+	 * @param <T> the serializable result type
+	 * @param serviceObjectType the service object type
+	 * @return a new completion service with 1000 milliseconds time out for
+	 * non-blocking wait
 	 */
 	public <T extends Serializable> ICompletionService<T> createCompletionService(
 			Class<? extends T> serviceObjectType) {
@@ -288,10 +287,11 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Create a blocking completion service for the given service object type.
 	 *
-	 * @param <T>
-	 * @param serviceObjectType
-	 * @return
+	 * @param <T> the serializable result type
+	 * @param serviceObjectType the service object type
+	 * @return a new completion service with blocking wait
 	 */
 	public <T extends Serializable> ICompletionService<T> createBlockingCompletionService(
 			Class<? extends T> serviceObjectType) {
@@ -310,12 +310,15 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Create a non-blocking completion service for the given service object
+	 * type and time out parameters.
 	 *
-	 * @param <T>
-	 * @param serviceObjectType
-	 * @param timeOut
-	 * @param timeUnit
-	 * @return
+	 * @param <T> the serializable result type
+	 * @param serviceObjectType the service object type
+	 * @param timeOut the time out to wait for results
+	 * @param timeUnit the time out unit
+	 * @return a new completion service with the specified time out for
+	 * non-blocking wait
 	 */
 	public <T extends Serializable> ICompletionService<T> createNonBlockingCompletionService(
 			Class<? extends T> serviceObjectType, long timeOut,
@@ -336,8 +339,9 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragments as workflow results.
 	 *
-	 * @param fragments
+	 * @param fragments the file fragments
 	 */
 	public void addWorkflowResults(IFileFragment... fragments) {
 		for (IFileFragment fragment : fragments) {
@@ -346,8 +350,9 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragments as workflow results.
 	 *
-	 * @param fragments
+	 * @param fragments the file fragments
 	 */
 	public void addWorkflowResults(TupleND<IFileFragment> fragments) {
 		for (IFileFragment fragment : fragments) {
@@ -356,8 +361,9 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragment as workflow result.
 	 *
-	 * @param fragment
+	 * @param fragment the file fragment
 	 */
 	public void addWorkflowResult(IFileFragment fragment) {
 		getWorkflow().append(
@@ -366,9 +372,11 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragment as workflow result, referencing the given
+	 * resources.
 	 *
-	 * @param fragment
-	 * @param resources
+	 * @param fragment the file fragment
+	 * @param resources the additional resources referenced by the fragment
 	 */
 	public void addWorkflowResult(IFileFragment fragment,
 			IFileFragment... resources) {
@@ -378,10 +386,12 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragment as workflow result, referencing the given
+	 * resources under the category given by slot.
 	 *
-	 * @param fragment
-	 * @param slot
-	 * @param resources
+	 * @param fragment the file fragment
+	 * @param slot the workflow slot for the result
+	 * @param resources the additional resources referenced by the fragment
 	 */
 	public void addWorkflowResult(IFileFragment fragment, WorkflowSlot slot,
 			IFileFragment... resources) {
@@ -391,11 +401,13 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Append the given file fragment as workflow result, referencing the given
+	 * resources under the category given by slot.
 	 *
-	 * @param fragment
-	 * @param producer
-	 * @param slot
-	 * @param resources
+	 * @param fragment the file fragment
+	 * @param producer the workflow element that created the result
+	 * @param slot the workflow slot for the result
+	 * @param resources the additional resources referenced by the fragment
 	 */
 	public void addWorkflowResult(IFileFragment fragment,
 			IWorkflowElement producer, WorkflowSlot slot,
@@ -406,8 +418,10 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 	}
 
 	/**
+	 * Initialize a {@link DefaultWorkflowProgressResult} object with the given
+	 * total step size.
 	 *
-	 * @param size
+	 * @param size the number of steps to complete the progress
 	 */
 	public void initProgress(int size) {
 		EvalTools.isNull(progress, this);
@@ -416,16 +430,18 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 				size, this, getWorkflowSlot()));
 	}
 
-	/**
-	 * @param l
-	 * @see cross.event.IEventSource#removeListener(cross.event.IListener<cross.
-	 * event.IEvent<V>>[])
-	 */
 	@Override
 	public void removeListener(final IListener<IEvent<IWorkflowResult>> l) {
 		this.eventSource.removeListener(l);
 	}
 
+	/**
+	 * Resolve the given variable name against the cvResolver.
+	 *
+	 * @param varname the variable name to resolve, e.g. var.total_intensity ->
+	 * total_intensity
+	 * @return the resolved variable name
+	 */
 	public String resolve(String varname) {
 		try {
 			String resolved = cvResolver.translate(varname);
@@ -435,17 +451,24 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 			return varname;
 		}
 	}
-	
+
+	/**
+	 * Save the given file fragments. Should only be called, if
+	 * <code>fileFragments</code> have not been saved yet.
+	 *
+	 * @param fileFragments
+	 * @return the saved (immutable) file fragments
+	 */
 	public TupleND<IFileFragment> save(TupleND<IFileFragment> fileFragments) {
-		for(IFileFragment f:fileFragments) {
+		for (IFileFragment f : fileFragments) {
 			f.save();
 		}
 		return fileFragments;
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the name of this class.
+	 * @return the name of this class
 	 */
 	@Override
 	public String toString() {

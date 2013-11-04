@@ -28,11 +28,17 @@
 package cross.datastructures.combinations;
 
 /**
+ * Creates a typed object from the given values.
  *
  * @author Nils Hoffmann
+ * @param T the target type
  */
 public interface ITypeFactory<T> {
-    
-    T create(Object[] values);
-    
+
+	/**
+	 * Create a new object from the given values.
+	 * @param values the values for the object, e.g. parameters
+	 * @return the new object
+	 */
+	T create(Object[] values);
 }

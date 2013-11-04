@@ -35,7 +35,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- *
+ * <p>Calls <code>configure</code> on a passed in bean after construction by an 
+ * application context.</p>
+ * 
+ * <p>Will be deprecated in the future.</p>
+ * 
  * @author Nils Hoffmann
  */
 @Slf4j

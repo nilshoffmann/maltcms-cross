@@ -28,6 +28,7 @@
 package cross;
 
 import cross.annotations.Configurable;
+import cross.applicationContext.DefaultApplicationContextFactory;
 import cross.cache.CacheType;
 import cross.datastructures.fragments.Fragments;
 import cross.datastructures.fragments.IFileFragment;
@@ -71,37 +72,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Factory for the creation of processing chains. It must be configured prior to
- * any call to <code>createCommandSequence</code>. The factory will try to figure out
- * what your intention is, by inspecting the configuration and the command-line
- * input. Alternatively, you can set up the pipeline completely on your own, but
+ * <p>Factory for the creation of processing chains.</p>
+ *
+ * <p>It should be configured prior to any call to
+ * <code>createCommandSequence</code>.
+ *
+ * <p>Alternatively, you can set up the pipeline completely on your own, but
  * beware, there is only partial requirements checking between pipeline stages
  * as of now. You have to ensure, that commands early in the chain provide the
  * data needed by those commands later in the chain. If you need branching
  * behaviour, consider setting named properties for later pipeline elements to
  * use, or set up multiple instances of Maltcms with different configurations.
+ * </p>
  *
  * @author Nils Hoffmann
- *
+ * @see DefaultCommandSequenceValidator for command sequence validation
+ * @see DefaultApplicationContextFactory for configuration of the pipeline and
+ * workflow
  */
-public class Factory implements ConfigurationListener {
+public final class Factory implements ConfigurationListener {
 
-	private static Factory factory;
+	private static final Factory factory = new Factory();
+
+	private Factory() {
+	}
 
 	/**
 	 * NEVER SYNCHRONIZE THIS METHOD, IT WILL BLOCK EVERYHTING WITHIN THE QUEUE!
 	 *
 	 * @param time to wait until termination of each ThreadPool
-	 * @param u    the unit of time
+	 * @param u the unit of time
 	 * @throws InterruptedException thrown if interruption of waiting on
-	 *                              termination occurs
+	 * termination occurs
 	 */
 	public static void awaitTermination(final long time, final TimeUnit u)
-		throws InterruptedException {
+			throws InterruptedException {
 		if ((Factory.getInstance().es == null)
-			|| (Factory.getInstance().auxPool == null)) {
+				|| (Factory.getInstance().auxPool == null)) {
 			throw new IllegalArgumentException(
-				"ExecutorService not initialized!");
+					"ExecutorService not initialized!");
 		}
 		Factory.getInstance().auxPool.awaitTermination(time, u);
 		Factory.getInstance().es.awaitTermination(time, u);
@@ -115,7 +124,7 @@ public class Factory implements ConfigurationListener {
 	 * Write current configuration to file.
 	 *
 	 * @param filename the filename to use
-	 * @param d        the date stamp to use
+	 * @param d the date stamp to use
 	 */
 	public static void dumpConfig(final String filename, final Date d) {
 		//retrieve global, joint configuration
@@ -133,7 +142,7 @@ public class Factory implements ConfigurationListener {
 				pipelineXml = new File(pipelineLocation);
 				//setup output location
 				final File location = new File(FileTools.prependDefaultDirsWithPrefix(
-					"", Factory.class, d), filename);
+						"", Factory.class, d), filename);
 				//location for pipeline.properties dump
 				final File pipelinePropertiesFileDump = new File(location.getParentFile(), pipelinePropertiesFile.getName());
 
@@ -167,25 +176,22 @@ public class Factory implements ConfigurationListener {
 	}
 
 	/**
-	 * Return an instance of the factory or create a new one.
+	 * Return an instance of the factory.
 	 *
 	 * @return the factory
 	 */
 	public static Factory getInstance() {
-		if (Factory.factory == null) {
-			Factory.factory = new Factory();
-		}
 		return Factory.factory;
 	}
 
 	/**
 	 * Save the current configuration to file.
 	 *
-	 * @param cfg      the configuration to save
+	 * @param cfg the configuration to save
 	 * @param location the file to write to
 	 */
 	public static void saveConfiguration(final Configuration cfg,
-		final File location) {
+			final File location) {
 		if (cfg instanceof FileConfiguration) {
 			try {
 				((FileConfiguration) cfg).save(location);
@@ -217,8 +223,8 @@ public class Factory implements ConfigurationListener {
 	@Override
 	public void configurationChanged(final ConfigurationEvent arg0) {
 		Factory.getInstance().log.debug("Configuration changed for property: "
-			+ arg0.getPropertyName() + " to value "
-			+ arg0.getPropertyValue());
+				+ arg0.getPropertyName() + " to value "
+				+ arg0.getPropertyValue());
 
 	}
 
@@ -254,9 +260,9 @@ public class Factory implements ConfigurationListener {
 		this.maxthreads = cfg.getInt("cross.Factory.maxthreads", 1);
 		final int numProcessors = Runtime.getRuntime().availableProcessors();
 		this.log.debug("{} processors available to current runtime",
-			numProcessors);
+				numProcessors);
 		this.maxthreads = (this.maxthreads < numProcessors) ? this.maxthreads
-			: numProcessors;
+				: numProcessors;
 		cfg.setProperty("cross.Factory.maxthreads", this.maxthreads);
 		cfg.setProperty("maltcms.pipelinethreads", this.maxthreads);
 		this.log.debug("Starting with Thread-Pool of size: " + this.maxthreads);
@@ -280,42 +286,42 @@ public class Factory implements ConfigurationListener {
 	 */
 	public ICommandSequence createCommandSequence(final TupleND<IFileFragment> t) {
 		final ICommandSequence cd = getObjectFactory().instantiate(
-			CommandPipeline.class);
+				CommandPipeline.class);
 		EvalTools.notNull(cd, this);
 		//final IWorkflow iw = getObjectFactory().instantiate(IWorkflow.class);
 		File outputDir = new File(getConfiguration().getString(
-			"output.basedir", System.getProperty("user.dir")));
+				"output.basedir", System.getProperty("user.dir")));
 		//add username and timestamp as subdirectories
 		if (!getConfiguration().getBoolean("omitUserTimePrefix", false)) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"MM-dd-yyyy_HH-mm-ss", Locale.US);
+					"MM-dd-yyyy_HH-mm-ss", Locale.US);
 			String userName = System.getProperty("user.name", "default");
 			outputDir = new File(outputDir, userName);
 			outputDir = new File(outputDir, dateFormat.format(
-				cd.getWorkflow().getStartupDate()));
+					cd.getWorkflow().getStartupDate()));
 		} else if (outputDir.exists()) {
 			if (outputDir.listFiles().length != 0 && getConfiguration().
-				getBoolean("output.overwrite", false)) {
+					getBoolean("output.overwrite", false)) {
 				log.warn(
-					"Output in location {} already exists. Option output.overwrite=true, removing previous output!");
+						"Output in location {} already exists. Option output.overwrite=true, removing previous output!");
 				try {
 					FileUtils.deleteDirectory(outputDir);
 				} catch (IOException ex) {
 					throw new RuntimeException(
-						"Deletion of directory " + outputDir + " failed!",
-						ex);
+							"Deletion of directory " + outputDir + " failed!",
+							ex);
 				}
 				outputDir.mkdirs();
 			} else {
 				throw new ConstraintViolationException(
-					"Output exists in " + outputDir + " but output.overwrite=false. Call maltcms with -Doutput.overwrite=true to override!");
+						"Output exists in " + outputDir + " but output.overwrite=false. Call maltcms with -Doutput.overwrite=true to override!");
 			}
 		}
 		outputDir.mkdirs();
 		cd.getWorkflow().setOutputDirectory(outputDir);
 		if (t == null) {
 			cd.setInput(getInputDataFactory().prepareInputData(getConfiguration().
-				getStringArray("input.dataInfo")));
+					getStringArray("input.dataInfo")));
 		} else {
 			cd.setInput(t);
 		}
@@ -354,15 +360,15 @@ public class Factory implements ConfigurationListener {
 	public IDataSourceFactory getDataSourceFactory() {
 		if (this.dsf == null) {
 			this.dsf = getObjectFactory().instantiate(
-				"cross.io.DataSourceFactory", DataSourceFactory.class,
-				getConfiguration());
+					"cross.io.DataSourceFactory", DataSourceFactory.class,
+					getConfiguration());
 		}
 		return this.dsf;
 	}
 
 	/**
-	 * Return the current input data factory, responsible for handling of
-	 * input data.
+	 * Return the current input data factory, responsible for handling of input
+	 * data.
 	 *
 	 * @return the input data factory
 	 * @see cross.io.IInputDataFactory
@@ -371,12 +377,12 @@ public class Factory implements ConfigurationListener {
 	public IInputDataFactory getInputDataFactory() {
 		if (this.idf == null) {
 			InputDataFactory idf = getObjectFactory().instantiate(
-				"cross.io.InputDataFactory", InputDataFactory.class,
-				getConfiguration());
+					"cross.io.InputDataFactory", InputDataFactory.class,
+					getConfiguration());
 			idf.setBasedir(getConfiguration().getString("input.basedir"));
 			idf.setInput(getConfiguration().getStringArray("input.dataInfo"));
 			idf.setRecurse(getConfiguration().getBoolean("input.basedir.recurse",
-				false));
+					false));
 			idf.setBasedir(System.getProperty("user.dir"));
 			this.idf = idf;
 		}
@@ -410,7 +416,7 @@ public class Factory implements ConfigurationListener {
 	public void shutdown() {
 		if ((this.es == null) || (this.auxPool == null)) {
 			throw new IllegalArgumentException(
-				"ExecutorService not initialized!");
+					"ExecutorService not initialized!");
 		}
 
 		this.es.shutdown();
@@ -419,18 +425,17 @@ public class Factory implements ConfigurationListener {
 	}
 
 	/**
-	 *
+	 * Attempts to shutdown all executing threads immediately, and returns a
+	 * list of all {@link Runnable} instances that were executing or were
+	 * waiting to be executed when
+	 * <code>shutdownNow</code> was called.
 	 */
 	public List<Runnable> shutdownNow() {
 		if ((this.es == null) || (this.auxPool == null)) {
 			throw new IllegalArgumentException(
-				"ExecutorService not initialized!");
+					"ExecutorService not initialized!");
 		}
 		final List<Runnable> l = new ArrayList<Runnable>();
-		// NetcdfFileCache.clearCache(true);
-		// NetcdfFileCache.exit();
-//        FileFragment.clearFragments();
-		// resetDate();
 		l.addAll(this.es.shutdownNow());
 		l.addAll(this.auxPool.shutdownNow());
 		return l;

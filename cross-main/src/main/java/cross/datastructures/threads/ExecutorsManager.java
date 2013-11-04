@@ -50,8 +50,8 @@ public class ExecutorsManager implements ExecutorService {
 	private final ExecutorType type = ExecutorType.FIXED;
 
     /**
-     *
-     * @param et
+     * Create a new instance given the specified executor type.
+     * @param et the executor type
      */
     public ExecutorsManager(final ExecutorType et) {
         if (this.type.equals(ExecutorType.SINGLETON)) {
@@ -64,7 +64,8 @@ public class ExecutorsManager implements ExecutorService {
     }
 
     /**
-     * @param nthreads
+	 * Create a new instance with a fixed number of threads.
+     * @param nthreads the number of threads
      */
     public ExecutorsManager(final int nthreads) {
         this.maxThreads = nthreads;

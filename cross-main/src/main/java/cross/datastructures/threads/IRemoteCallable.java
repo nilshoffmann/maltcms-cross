@@ -32,8 +32,11 @@ import java.rmi.RemoteException;
 import java.util.concurrent.Callable;
 
 /**
+ * Interface for a remote callable instance.
+ * 
+ * Currently unused.
+ * 
  * @author Nils Hoffmann
- *
  *
  */
 public interface IRemoteCallable extends Remote {

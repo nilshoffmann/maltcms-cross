@@ -38,35 +38,83 @@ import java.util.Collection;
  */
 public interface IFileFragmentFactory extends IConfigurable {
 
+	/**
+	 * Create a new file fragment from the given file.
+	 * @param f the file
+	 * @return the new file fragment
+	 */
     IFileFragment create(final File f);
 
+	/**
+	 * Create a new file fragment from the given file and source files.
+	 * @param f the file
+	 * @param sourceFiles the source files
+	 * @return the new file fragment
+	 */
     IFileFragment create(final File f, final IFileFragment... sourceFiles);
 
+	/**
+	 * Create a new file fragment from the given directory name and file name.
+	 * @param dirname the directory name
+	 * @param filename the file name
+	 * @return the new file fragment
+	 */
     IFileFragment create(final String dirname, final String filename);
 
+	/**
+	 * Create a new file fragment from the given directory name, file name and source files.
+	 * @param dirname the directory name
+	 * @param filename the file name
+	 * @param sourceFiles the source files
+	 * @return the new file fragment
+	 */
     IFileFragment create(final String dirname, final String filename, final IFileFragment... sourceFiles);
 
+	/**
+	 * Create a new file fragment from the given directory, file name and source files.
+	 * @param dir the directory
+	 * @param filename the file name
+	 * @param sourceFiles the source files
+	 * @return the new file fragment
+	 */
     IFileFragment create(final File dir, final String filename, final IFileFragment... sourceFiles);
 
-    IFileFragment create(final String dirname, final String filename, final Collection<IFileFragment> resourceFiles) throws IllegalArgumentException;
+	/**
+	 * Create a new file fragment from the given directory name, file name and source files.
+	 * @param dirname the directory name
+	 * @param filename the file name
+	 * @param sourceFiles the source files
+	 * @return the new file fragment
+	 */
+    IFileFragment create(final String dirname, final String filename, final Collection<IFileFragment> sourceFiles) throws IllegalArgumentException;
 
     /**
-     * Creates a new AFragment with default name. Both original FileFragments
-     * files are stored as variables below the newly created fragment.
+     * Creates a new file fragment with default name. Both original file fragments
+     * are added as source files to the new file fragment. The name of the created file fragment
+	 * will be derived from the two given file fragments.
      *
-     * @param f1
-     * @param f2
-     * @return
+     * @param f1 the first source file fragment
+     * @param f2 the second source file fragment
+	 * @param outputdir the outputdir where to store the file
+     * @return the new file fragment
      */
     IFileFragment create(final IFileFragment f1, final IFileFragment f2, final File outputdir);
 
+	/**
+	 * Create a new file fragment from the given file path.
+	 * @param s the file path
+	 * @return the new file fragment
+	 */
     IFileFragment create(final String s);
 
     /**
-     * Create a FileFragment and possibly associated VariableFragments.
+     * Create a FileFragment and possibly associated VariableFragments by 
+	 * passing the structure encoded in the <code>dataInfo</code> string.
      *
-     * @param dataInfo
-     * @return
+     * @param dataInfo the one-line file fragment structure
+     * @return the new file fragment
+	 * 
+	 * @see cross.io.misc.FragmentStringParser
      */
     IFileFragment fromString(final String dataInfo);
 }

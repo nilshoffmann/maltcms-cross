@@ -30,22 +30,24 @@ package cross.datastructures.collections;
 import java.util.List;
 
 /**
+ * Interface for classes that provide an indexed, lazy construction of objects,
+ * e.g. for self-populating caches on immutable data.
  *
  * @author Nils Hoffmann
  */
 public interface IElementProvider<T> {
 
-    int size();
-    
-    long sizeLong();
+	int size();
 
-    T get(int i);
+	long sizeLong();
 
-    List<T> get(int start, int stop);
+	T get(int i);
 
-    void reset();
-    
-    T get(long l);
-    
-    List<T> get(long start, long stop);
+	List<T> get(int start, int stop);
+
+	void reset();
+
+	T get(long l);
+
+	List<T> get(long start, long stop);
 }

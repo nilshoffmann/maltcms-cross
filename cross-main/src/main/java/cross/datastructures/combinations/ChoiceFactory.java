@@ -35,54 +35,55 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Choice factory to create a list of unique object parameter combinations from
+ * the given list of parameter arrays.
  *
  * @author Nils Hoffmann
  */
 @Slf4j
 public class ChoiceFactory {
-    /**
-     * Returns a lazily instantiated list (allows for an almost arbitrary number
-     * of combinations< {@link Integer.maxValue()}) of all unique object
-     * combinations, s.t. for (a,b)=(b,a) only (a,b) is returned. The list is
-     * backed by a {@link CombinationProvider} wrapping a {@link
-     * CombinationIterator} to feed a {@link CachedLazyList}.
-     *
-     *
-     * @param data
-     * @return
-     */
-    public static List<Object[]> getKPartiteChoices(List<Object[]> data) {
-        //element counter
-//        int nelements = 0;
-        int[] partitionSize = new int[data.size()];
-        Partition[] parts = new Partition[data.size()];
-        // store partition size
-        // and partition
-        // allowed combinations are enumerated by
-        // treating each individual partition p as a 
-        // base |p| number register. 
-        // While enumerating, the current value of the right-most
-        // partition/register is increased until its maximum is reached.
-        // It then carries over to the next neighbor, who is also increased.
-        // The counting continues until the maximum number of possible choices
-        // is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all partition
-        // sizes)
-        for (int i = 0; i < data.size(); i++) {
-            partitionSize[i] = data.get(i).length;
-//            nelements += partitionSize[i];
-            if (i > 0) {
-                parts[i] = new Partition(parts[i - 1], partitionSize[i]);
-            } else {
-                parts[i] = new Partition(partitionSize[i]);
-            }
-//            ChoiceFactory.log.debug("|Partition {}| = {}; contents = {}", new Object[]{i, partitionSize[i], Arrays.toString(data.get(i))});
-        }
 
-        CombinationIterator pi = new CombinationIterator(parts);
-//        ChoiceFactory.log.info("No. of choices: {}", pi.size());
-        // list holding returned choices
-        IElementProvider<Object[]> iep = new CombinationProvider(pi, data);
-        List<Object[]> l = CachedLazyList.getList(iep);//new ArrayList<Object[]>();
-        return l;
-    }
+	/**
+	 * Returns a lazily instantiated list (allows for an almost arbitrary number
+	 * of combinations {@link Integer.maxValue()}) of all unique object
+	 * combinations, s.t. for (a,b)=(b,a) only (a,b) is returned. The list is
+	 * backed by a {@link CombinationProvider} wrapping a {@link
+	 * CombinationIterator} to feed a {@link CachedLazyList}.
+	 *
+	 * @param data the list of parameters, each parameter's values are contained
+	 * in one object arrray
+	 * @return the list of unique parameter combinations, each in one object
+	 * array
+	 */
+	public static List<Object[]> getKPartiteChoices(List<Object[]> data) {
+		//element counter
+//        int nelements = 0;
+		int[] partitionSize = new int[data.size()];
+		Partition[] parts = new Partition[data.size()];
+		// store partition size
+		// and partition
+		// allowed combinations are enumerated by
+		// treating each individual partition p as a 
+		// base |p| number register. 
+		// While enumerating, the current value of the right-most
+		// partition/register is increased until its maximum is reached.
+		// It then carries over to the next neighbor, who is also increased.
+		// The counting continues until the maximum number of possible choices
+		// is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all partition
+		// sizes)
+		for (int i = 0; i < data.size(); i++) {
+			partitionSize[i] = data.get(i).length;
+			if (i > 0) {
+				parts[i] = new Partition(parts[i - 1], partitionSize[i]);
+			} else {
+				parts[i] = new Partition(partitionSize[i]);
+			}
+		}
+
+		CombinationIterator pi = new CombinationIterator(parts);
+		// list holding returned choices
+		IElementProvider<Object[]> iep = new CombinationProvider(pi, data);
+		List<Object[]> l = CachedLazyList.getList(iep);//new ArrayList<Object[]>();
+		return l;
+	}
 }

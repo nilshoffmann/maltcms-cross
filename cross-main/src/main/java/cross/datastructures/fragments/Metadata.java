@@ -27,7 +27,6 @@
  */
 package cross.datastructures.fragments;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,9 +47,16 @@ public class Metadata implements Iterable<Attribute> {
      */
     protected HashMap<String, Attribute> hm = new HashMap<String, Attribute>();
 
+	/**
+	 * Create new empty Metadata.
+	 */
     public Metadata() {
     }
 
+	/**
+	 * Create new Metadata from the given attributes.
+	 * @param l the attributes
+	 */
     public Metadata(final List<Attribute> l) {
         this();
         for (final Attribute a : l) {
@@ -59,8 +65,8 @@ public class Metadata implements Iterable<Attribute> {
     }
 
     /**
-     *
-     * @param a
+     * Add an attribute.
+     * @param a the attribute
      */
     public void add(final Attribute a) {
         final Attribute b = new Attribute(a.getName(), a);
@@ -68,44 +74,40 @@ public class Metadata implements Iterable<Attribute> {
     }
 
     /**
-     *
-     * @return
+     * Return the attributes as a collection.
+     * @return the attributes as a collection
      */
     public Collection<Attribute> asCollection() {
         return this.hm.values();
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Return the given attribute by name, or null.
+     * @param name the attribute to query for
+     * @return the attribute, or null if <code>name</code> is unknown
      */
     public Attribute get(final String name) {
         return this.hm.get(name);
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Returns true, if the given attribute name is contained in this metadata, false otherwise.
+     * @param name the attribute name
+     * @return true if name is known, false otherwise
      */
     public boolean has(final String name) {
         return this.hm.containsKey(name);
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Iterator<Attribute> iterator() {
         return this.hm.values().iterator();
     }
 
-    /**
-     *
-     * @return
-     */
+	/**
+	 * Returns a collection of known attribute names.
+	 * @return the collection of known attribute names
+	 */
     public Collection<String> keySet() {
         return this.hm.keySet();
     }

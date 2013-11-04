@@ -28,7 +28,6 @@
 package cross.datastructures.fragments;
 
 import cross.datastructures.StatsMap;
-import cross.datastructures.fragments.IFragment;
 import cross.datastructures.tools.EvalTools;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class Fragment implements IFragment {
     /**
      * Append attributes to Element e.
      *
-     * @param e
+     * @param e the element
      */
     protected void appendAttributes(final Element e) {
         // log.debug("Appending xml for named group "+getName());
@@ -79,8 +78,8 @@ public class Fragment implements IFragment {
      * @see cross.io.misc.IXMLSerializable#appendXML(org.jdom.Element)
      */
     /**
-     *
-     * @param e
+     * Appends this fragment's attributes to the xml element.
+     * @param e the element 
      */
     @Override
     public void appendXML(final Element e) {
@@ -89,6 +88,8 @@ public class Fragment implements IFragment {
 
     /**
      * Compare Fragments by comparing their string representations.
+	 * @param arg0 the first fragment
+	 * @param arg1 the second fragment
      */
     @Override
     public int compare(final IFragment arg0, final IFragment arg1) {
@@ -217,10 +218,6 @@ public class Fragment implements IFragment {
         this.attributes.add(a);
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -228,11 +225,6 @@ public class Fragment implements IFragment {
         return hash;
     }
 
-    /**
-     *
-     * @param obj
-     * @return
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

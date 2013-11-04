@@ -41,23 +41,28 @@ import ucar.ma2.Array;
 import ucar.nc2.Dimension;
 
 /**
- * @author Nils Hoffmann
+ * Interface for partially in-memory files. Supports one-level hierarchy, a file
+ * fragment can have instances of {@link IVariableFragment} as children. This is
+ * a simplified view of the CDM model used in netcdf without support for groups or 
+ * nested datastructures.
  *
+ * @author Nils Hoffmann
  */
 public interface IFileFragment extends IGroupFragment, IFragment, Externalizable {
 
 	/**
 	 * Add a child of given name or return already existing one.
 	 *
-	 * @param name
-	 * @return variableFragment
+	 * @param name the child to add
+	 * @return variableFragment the newly created variable fragment, child of
+	 * this fragment
 	 */
 	public abstract IVariableFragment addChild(String name);
 
 	/**
 	 * Add a number of children.
 	 *
-	 * @param fragments
+	 * @param fragments the children to add
 	 */
 	@Override
 	public abstract void addChildren(IVariableFragment... fragments);
@@ -65,27 +70,24 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	/**
 	 * Add dimensions to this IFileFragment.
 	 *
-	 * @param dims1
+	 * @param dims1 the dimensions to add
 	 */
 	public abstract void addDimensions(Dimension... dims1);
 
 	/**
 	 * Add source FileFragments contained in Collection c to this FileFragment.
 	 *
-	 * @param c
+	 * @param c the source file fragments to add
 	 */
 	public abstract void addSourceFile(Collection<IFileFragment> c);
 
 	/**
 	 * Add source FileFragments contained in ff to this FileFragment.
 	 *
-	 * @param ff
+	 * @param ff the source file fragments to add
 	 */
 	public abstract void addSourceFile(IFileFragment... ff);
 
-	/**
-	 * Append structural information of this FileFragment to Element e.
-	 */
 	@Override
 	public abstract void appendXML(Element e);
 
@@ -108,7 +110,7 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * Return this FileFragment's storage location as string representation.
 	 *
 	 * @deprecated please use {@link #getUri} instead
-	 * @return
+	 * @return the absolute path string
 	 */
 	@Deprecated
 	public abstract String getAbsolutePath();
@@ -116,17 +118,19 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	/**
 	 * Return a Cache for variable fragment array data for this fragment.
 	 *
-	 * @return
+	 * @return the cache delegate
 	 */
 	public abstract ICacheDelegate<IVariableFragment, List<Array>> getCache();
 
 	/**
 	 * Returns the child with name varname. If varname is not found in local
 	 * structure, try to locate it in sourcefiles. First hit wins. Otherwise
-	 * throw IllegalArgumentException.
+	 * throws {@link ResourceNotAvailableException}.
 	 *
 	 * @param varname
-	 * @return
+	 * @return the variable fragment
+	 * @throws ResourceNotAvailableException if the variable with the given name
+	 * could not be found
 	 */
 	@Override
 	public abstract IVariableFragment getChild(String varname)
@@ -139,9 +143,12 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * <code>loadStructureOnly</code> is true, only the variable structure is
 	 * retrieved, not the data.
 	 *
-	 * @param varname
-	 * @param loadStructureOnly
-	 * @return
+	 * @param varname the name of the variable
+	 * @param loadStructureOnly whether only the structure (true) or also the
+	 * data (false) should be loaded
+	 * @return the variable fragment
+	 * @throws ResourceNotAvailableException if the variable with the given name
+	 * could not be found
 	 */
 	public abstract IVariableFragment getChild(String varname,
 			boolean loadStructureOnly) throws ResourceNotAvailableException;
@@ -150,21 +157,22 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * Returns the immediate children of this fileFragment. Does not return
 	 * children that are only found in referenced source files.
 	 *
-	 * @return
+	 * @return the list of immediate children (not persistent before
+	 * calling <code>save()</code>)
 	 */
 	public abstract List<IVariableFragment> getImmediateChildren();
 
 	/**
 	 * The registered dimensions of this FileFragment.
 	 *
-	 * @return
+	 * @return the dimensions
 	 */
 	public abstract Set<Dimension> getDimensions();
 
 	/**
 	 * The unique ID (between runs) of this FileFragment.
 	 *
-	 * @return
+	 * @return the id
 	 */
 	public abstract long getID();
 
@@ -172,7 +180,7 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * Return the name of this FileFragment, does not include directory or other
 	 * prefixed information.
 	 *
-	 * @return
+	 * @return the name
 	 */
 	@Override
 	public abstract String getName();
@@ -183,7 +191,7 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	/**
 	 * Return the number of children of this FileFragment.
 	 *
-	 * @return
+	 * @return the number of children
 	 */
 	@Override
 	public abstract int getSize();
@@ -191,30 +199,31 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	/**
 	 * Return all source FileFragments.
 	 *
-	 * @return
+	 * @return the list of source file fragment
 	 */
 	public abstract Collection<IFileFragment> getSourceFiles();
 
 	/**
 	 * Return the URI of this FileFragment.
 	 *
-	 * @return
+	 * @return the uri
 	 */
 	public URI getUri();
 
 	/**
 	 * Query FileFragment for the given VariableFragments.
 	 *
-	 * @param vf
-	 * @return
+	 * @param vf the variable fragments to query for
+	 * @return true if all of the given variables are children of this fragment
 	 */
 	public abstract boolean hasChildren(IVariableFragment... vf);
 
 	/**
 	 * Query FileFragment for children with the given strings as names.
 	 *
-	 * @param s
-	 * @return
+	 * @param s the variable fragment names to query for
+	 * @return true if all of the given variable names are children of this
+	 * fragment
 	 */
 	public abstract boolean hasChildren(String... s);
 
@@ -238,14 +247,14 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * Remove the given IVariableFragment from the list of this FileFragment's
 	 * children.
 	 *
-	 * @param variableFragment
+	 * @param variableFragment the child to remove
 	 */
 	public abstract void removeChild(IVariableFragment variableFragment);
 
 	/**
 	 * Remove the given source file.
 	 *
-	 * @param ff
+	 * @param ff the source file to remove
 	 */
 	public abstract void removeSourceFile(IFileFragment ff);
 
@@ -268,7 +277,7 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * May throw an {@link IllegalStateException} if the cache was already
 	 * initialized to avoid accidental modification or replacement.
 	 *
-	 * @param cache
+	 * @param cache the cache
 	 * @throws IllegalStateException
 	 */
 	public abstract void setCache(ICacheDelegate<IVariableFragment, List<Array>> cache);
@@ -276,17 +285,24 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	/**
 	 * Change the filename of this Fragment.
 	 *
-	 * @param f1
+	 * @param f1 the file
 	 */
 	public abstract void setFile(File f1);
 
 	/**
 	 * Change the filename of this Fragment.
 	 *
-	 * @param file
+	 * @param file the file
 	 */
 	public abstract void setFile(String file);
 
+	/**
+	 * Returns a String representation of this Fragment, containing all it's
+	 * children with indices and ranges. Can directly be used as input string to
+	 * the command-line-interface.
+	 *
+	 * @return the string representation of this fragment
+	 */
 	@Override
 	public abstract String toString();
 }

@@ -44,19 +44,18 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import ucar.ma2.Array;
 
 /**
+ * Utility class for access to fragment data caches.
  *
  * @author Nils Hoffmann
  */
 @Slf4j
-public class Fragments {
+public final class Fragments {
 
 	private static CacheType fragmentCacheType = CacheType.NONE;
-
 	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
-
 	private static CacheManager defaultCacheManager = null;
 
-	public static CacheManager getDefault() {
+	public static final CacheManager getDefault() {
 		if (defaultCacheManager == null) {
 			cacheDirectory.mkdirs();
 			defaultCacheManager = CacheManager.getInstance();
@@ -67,24 +66,58 @@ public class Fragments {
 	/**
 	 * Set the cache location for all NEWLY created caches.
 	 *
-	 * @param f
+	 * @param f the cache directory
 	 */
 	public static void setCacheDirectory(File f) {
 		Fragments.cacheDirectory = f;
 	}
 
+	/**
+	 * Set the default cache type for new fragment caches.
+	 *
+	 * @param fragmentCacheType
+	 * @see CacheType
+	 */
 	public static void setDefaultFragmentCacheType(CacheType fragmentCacheType) {
 		Fragments.fragmentCacheType = fragmentCacheType;
 	}
 
+	/**
+	 * Create a new cache delegate, possibly returning an existing one for the
+	 * same
+	 * <code>cacheName</code>.
+	 *
+	 * @param cacheDir the cache directory to use
+	 * @param cacheName the cache name
+	 * @return the cache delegate
+	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName) {
 		return createFragmentCache(cacheDir, cacheName, fragmentCacheType);
 	}
 
+	/**
+	 * Create a new cache delegate, possibly returning an existing one for the
+	 * same
+	 * <code>cacheName</code>, using the default cache directory.
+	 *
+	 * @param cacheName the cache name
+	 * @return the cache delegate
+	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName) {
 		return createFragmentCache(cacheDirectory, cacheName);
 	}
 
+	/**
+	 * Create a new cache delegate, possibly returning an existing one for the
+	 * same
+	 * <code>cacheName</code>, using the provided cache directory and cache
+	 * type.
+	 *
+	 * @param cacheDir the cache directory
+	 * @param cacheName the cache name
+	 * @param cacheType the cache type
+	 * @return the cache delegate
+	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(File cacheDir, String cacheName, CacheType cacheType) {
 		switch (cacheType) {
 			case EHCACHE:
@@ -102,10 +135,29 @@ public class Fragments {
 		}
 	}
 
+	/**
+	 * Create a new cache delegate, possibly returning an existing one for the
+	 * same
+	 * <code>cacheName</code>, using the provided cache type.
+	 *
+	 * @param cacheName the cache name
+	 * @param cacheType the cache type
+	 * @return the cache delegate
+	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createFragmentCache(String cacheName, CacheType cacheType) {
 		return createFragmentCache(cacheDirectory, cacheName, cacheType);
 	}
 
+	/**
+	 * Create a new, default cache delegate, backed by ehcache, possibly
+	 * returning an existing one for the same
+	 * <code>cacheName</code>, using the provided cache type. This cache is configured to overflow to disk, if the 
+	 * local capacity is exceeded (minimum = 128 MBytes, maximum = Runtime.getRuntime().maxMemory()/4).
+	 *
+	 * @param cacheDir the cache directory
+	 * @param cacheName the cache name
+	 * @return the cache delegate
+	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createDefaultFragmentCache(File cacheDir, String cacheName) {
 		CacheManager cm = getDefault();
 		if (cm.cacheExists(cacheName)) {
@@ -113,10 +165,10 @@ public class Fragments {
 		}
 		CacheConfiguration cc = new CacheConfiguration();
 		cc.name(cacheName).
-			overflowToDisk(true).
-			maxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4), MemoryUnit.BYTES).
-			maxElementsOnDisk(Integer.MAX_VALUE).
-			memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
+				overflowToDisk(true).
+				maxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4), MemoryUnit.BYTES).
+				maxElementsOnDisk(Integer.MAX_VALUE).
+				memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
 		Ehcache cache = new Cache(cc);
 		cm.addCache(cache);
 		ICacheDelegate<IVariableFragment, List<Array>> ed = new VariableFragmentArrayCache(cache);

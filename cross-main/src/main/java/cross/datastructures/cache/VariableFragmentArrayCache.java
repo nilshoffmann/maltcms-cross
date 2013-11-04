@@ -51,6 +51,9 @@ import ucar.ma2.Array;
  * Please note that Ehcache only allows Serializable objects to be externalized
  * to disk, should the in-memory cache overflow.
  *
+ * This implementation automatically wraps Arrays as necessary in
+ * {@link SerializableArray}.
+ *
  * @author Nils Hoffmann
  */
 @Slf4j

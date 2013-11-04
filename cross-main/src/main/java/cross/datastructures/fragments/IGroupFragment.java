@@ -52,16 +52,28 @@ public interface IGroupFragment extends IIterableFragment {
      */
     public abstract IVariableFragment getChild(String varname);
 
+	/**
+	 * Returns the name of this group fragment
+	 * @return the name
+	 */
     public abstract String getName();
 
+	/**
+	 * Returns the parent group of this fragment.
+	 * @return the parent group or null if this group fragment is the root
+	 */
     public abstract IGroupFragment getParent();
 
+	/**
+	 * Returns the number of children this group fragment has.
+	 * @return the number of children
+	 */
     public abstract int getSize();
 
     /**
      * Query this fragment for knowledge of a given VariableFragment.
      *
-     * @param vf
+     * @param vf the variable to query for
      * @return true if a child vf is attached to this FileFragment, else false.
      */
     public abstract boolean hasChild(IVariableFragment vf);
@@ -70,13 +82,21 @@ public interface IGroupFragment extends IIterableFragment {
      * Query this fragment for knowledge of a child variable with the given
      * name.
      *
-     * @param varname
+     * @param varname the variable name to query for
      * @return true if a child of this name is attached to this FileFragment,
      * false else.
      */
     public abstract boolean hasChild(String varname);
 
+	/**
+	 * Returns the next unused group id.
+	 * @return the next unused group id
+	 */
     public abstract long nextGID();
 
+	/**
+	 * Sets the group id.
+	 * @param id the group id
+	 */
     public abstract void setID(long id);
 }

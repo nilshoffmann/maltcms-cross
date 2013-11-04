@@ -47,10 +47,15 @@ import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 
 /**
- * A class representing immutable Variables. A Variable is a meta-info container
+ * <p>A class representing immutable Variables. A Variable is a meta-info container
  * for existing data stored in an array for example. VariableFragment objects
  * belong to a parent FileFragment, which corresponds to a virtual file
- * structure.
+ * structure.</p>
+ * 
+ * <p>Objects of this type are returned for disk-persistent variable array data 
+ * retrieved by {@see BfsVariableSearcher}. If you want to avoid accidental modification 
+ * of unsaved <code>IVariableFragment</code> instances, please use {@see ImmutableVariableFragment},
+ * which achieves a weaker form of immutability through delegation.</p>
  *
  * @author Nils Hoffmann
  *
@@ -110,9 +115,9 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
     }
 
     /**
-     *
-     * @param parent2
-     * @param varname2
+     * Creates a new immutable variable fragment with the given name as a child of parent.
+     * @param parent2 the parent of this variable fragment
+     * @param varname2 the name
      */
     public ImmutableVariableFragment2(final IFileFragment parent2,
             final String varname2) {
@@ -123,8 +128,8 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
      * Creates a VariableFragment compatible in type, name and dimensions to vf.
      * Does not copy Range or array data!
      *
-     * @param ff
-     * @param vf
+     * @param ff the parent fragment of the new variable fragment, must be distinct from <code>vf.getParent()</code>
+     * @param vf the variable fragment to copy in structure
      */
     public static IVariableFragment createCompatible(IFileFragment ff,
             IVariableFragment vf) {
@@ -147,10 +152,11 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
     }
 
     /**
-     *
-     * @param parent2
-     * @param varname2
-     * @param ifrg
+     * Create a new immutable variable fragment with the given name, as a child of the given parent 
+	 * and with the provided index variable fragment.
+     * @param parent2 the parent
+     * @param varname2 the name
+     * @param ifrg the index variable fragment
      */
     public ImmutableVariableFragment2(final IFileFragment parent2,
             final String varname2, final IVariableFragment ifrg) {
@@ -158,13 +164,6 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         setIndex(ifrg);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#appendXML(org.jdom.Element
-     * )
-     */
     @Override
     public void appendXML(final Element e) {
         log.debug("Appending xml for variable " + getName());
@@ -221,29 +220,13 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
 
     @Override
     public void clear() {
-//        this.parent = null;
-//        this.volatileCache.put(this, null);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#compare(cross.datastructures
-     * .fragments.Fragment, cross.datastructures.fragments.Fragment)
-     */
     @Override
     public int compare(final IFragment o1, final IFragment o2) {
         return o1.toString().compareTo(o2.toString());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#compareTo(java.lang.
-     * Object)
-     */
     @Override
     public int compareTo(final Object o) {
         if (o instanceof ImmutableVariableFragment2) {
@@ -255,11 +238,6 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return -1;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getArray()
-     */
     @Override
     public Array getArray() {
         log.debug("Ranges of {}={}", getName(), Arrays.deepToString(getRange()));
@@ -289,86 +267,41 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         }
     }
 
-    /**
-     * @param a
-     * @return
-     * @see
-     * cross.datastructures.fragments.Fragment#getAttribute(ucar.nc2.Attribute)
-     */
     @Override
     public Attribute getAttribute(final Attribute a) {
         return this.fragment.getAttribute(a);
     }
 
-    /**
-     * @param name
-     * @return
-     * @see
-     * cross.datastructures.fragments.Fragment#getAttribute(java.lang.String)
-     */
     @Override
     public Attribute getAttribute(final String name) {
         return this.fragment.getAttribute(name);
     }
 
-    /**
-     * @return @see cross.datastructures.fragments.Fragment#getAttributes()
-     */
     @Override
     public List<Attribute> getAttributes() {
         return this.fragment.getAttributes();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getChunkIterator()
-     */
-    /**
-     *
-     * @param chunksize
-     * @return
-     */
+	}
+	
     @Override
     public ArrayChunkIterator getChunkIterator(final int chunksize) {
         return new ArrayChunkIterator(this, chunksize);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getDataType()
-     */
     @Override
     public DataType getDataType() {
         return this.dataType;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getDimensions()
-     */
     @Override
     public Dimension[] getDimensions() {
         return this.dims;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getIndex()
-     */
     @Override
     public IVariableFragment getIndex() {
         return this.index;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getIndexedArray()
-     */
     @Override
     public List<Array> getIndexedArray() {
         if (getIndex() == null) {
@@ -384,116 +317,62 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
                     return l;
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
-//                    log.error(e.getLocalizedMessage());
-//                    return Collections.emptyList();
                 } catch (final ResourceNotAvailableException e) {
-//                    log.error(e.getLocalizedMessage());
-//                    return Collections.emptyList();
                     throw new RuntimeException(e);
                 }
             }
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getParent()
-     */
     @Override
     public IFileFragment getParent() {
         return this.parent;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getRange()
-     */
     @Override
     public Range[] getRange() {
         return this.ranges;
     }
 
-    /**
-     * @return @see cross.datastructures.fragments.Fragment#getStats()
-     */
     @Override
     public StatsMap getStats() {
         return this.fragment.getStats();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getVarname()
-     */
     @Override
     public String getVarname() {
         return this.varname;
     }
 
-    /**
-     * This method will always return true!
-     *
-     * @return
-     */
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#hasArray()
-     */
     @Override
     public boolean hasArray() {
         return true;
     }
 
-    /**
-     * @param a
-     * @return
-     * @see
-     * cross.datastructures.fragments.Fragment#hasAttribute(ucar.nc2.Attribute)
-     */
     @Override
     public boolean hasAttribute(final Attribute a) {
         return this.fragment.hasAttribute(a);
     }
 
-    /**
-     * @param name
-     * @return
-     * @see
-     * cross.datastructures.fragments.Fragment#hasAttribute(java.lang.String)
-     */
     @Override
     public boolean hasAttribute(final String name) {
         return this.fragment.hasAttribute(name);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#isModified()
-     */
     @Override
     public boolean isModified() {
         return this.isModified;
     }
 
-    /**
-     *
-     * @return
-     */
+	/**
+	 * Whether this variable fragment uses a cached list for lazy array 
+	 * retrieval (only applies, if index variable is not null).
+	 * @return true if this variable fragment uses a cached list, false otherwise
+	 */
     public boolean isUseCachedList() {
         return this.useCachedList;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setArray(ucar.ma2.Array)
-     */
     @Override
     public void setArray(final Array a1) {
         throw new UnsupportedOperationException();
@@ -504,36 +383,17 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         this.fragment.addAttribute(a);
     }
 
-    /**
-     * @param a
-     * @see
-     * cross.datastructures.fragments.Fragment#setAttributes(ucar.nc2.Attribute[])
-     */
     @Override
     public void setAttributes(final Attribute... a) {
         this.fragment.setAttributes(a);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setDataType(ucar.ma2
-     * .DataType)
-     */
     @Override
     public void setDataType(final DataType dataType1) {
         EvalTools.notNull(dataType1, this);
         this.dataType = dataType1;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setDimensions(ucar.nc2
-     * .Dimension[])
-     */
     @Override
     public void setDimensions(final Dimension[] dims1) {
         EvalTools.notNull(dims1, this);
@@ -541,12 +401,6 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         getParent().addDimensions(dims1);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @seecross.datastructures.fragments.IVariableFragment#setIndex(cross.
-     * datastructures.fragments.IVariableFragment)
-     */
     @Override
     public void setIndex(final IVariableFragment index1) {
         if ((index1 != null) && (this.index != null)) {
@@ -556,69 +410,36 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         // this.al = null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setIndexedArray(java
-     * .util.ArrayList)
-     */
     @Override
     public void setIndexedArray(final List<Array> al1) {
         throw new UnsupportedOperationException();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setIsModified(boolean)
-     */
     @Override
     public void setIsModified(final boolean b) {
         throw new UnsupportedOperationException();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * cross.datastructures.fragments.IVariableFragment#setRange(ucar.ma2.Range
-     * [])
-     */
     @Override
     public void setRange(final Range[] ranges1) {
         // EvalTools.notNull(range);
         this.ranges = ranges1;
     }
 
-    /**
-     * @param stats1
-     * @see
-     * cross.datastructures.fragments.Fragment#setStats(cross.datastructures.StatsMap)
-     */
     @Override
     public void setStats(final StatsMap stats1) {
         this.fragment.setStats(stats1);
     }
 
-    /**
-     *
-     * @param b
-     */
+	/**
+	 * Whether to use cached list for array retrieval (true) or load array data 
+	 * eagerly (false).
+	 * @param b whether to use the cached list or not
+	 */
     public void setUseCachedList(final boolean b) {
         this.useCachedList = b;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#toString()
-     */
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         // if (this.rep == null) {
@@ -641,20 +462,11 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return this.rep;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see cross.datastructures.fragments.IVariableFragment#getName()
-     */
     @Override
     public String getName() {
         return this.varname;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -664,11 +476,6 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return hash;
     }
 
-    /**
-     *
-     * @param obj
-     * @return
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

@@ -66,7 +66,7 @@ import org.openide.util.lookup.ServiceProvider;
  * Implementation of ICommandSequence for a linear sequence of commands.
  *
  * @author Nils Hoffmann
- *
+ * @see ICommandSequence
  */
 @Slf4j
 @Data
@@ -107,20 +107,18 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 	@Setter(AccessLevel.NONE)
 	private int cnt;
 
+	/**
+	 * Create a new command pipeline instance.
+	 */
 	public CommandPipeline() {
 	}
 
 	@Override
 	public void configure(final Configuration cfg) {
 		log.debug(
-			"CommandPipeline does not support configuration via configure anylonger. Please use a Spring xml file!");
+				"CommandPipeline does not support configuration via configure any longer. Please use a Spring xml file!");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see maltcms.ucar.ma2.CommandSequence#hasNext()
-	 */
 	@Override
 	public boolean hasNext() {
 		return this.iter.hasNext();
@@ -135,7 +133,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				return valid;
 			} catch (ConstraintViolationException cve) {
 				log.warn("Pipeline validation failed: " + cve.
-					getLocalizedMessage());
+						getLocalizedMessage());
 				return valid;
 			}
 		}
@@ -150,27 +148,22 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 	/**
 	 * Load and configure a given command.
 	 *
-	 * @param clsname
-	 * @return
+	 * @param clsname the fragment command clazz to load and configure
+	 * @return the fragment command instance
 	 */
 	@Deprecated
 	protected IFragmentCommand loadCommand(final String clsname,
-		final String propertiesFileName) {
+			final String propertiesFileName) {
 		EvalTools.notNull(clsname, this);
 		final IFragmentCommand clazz = Factory.getInstance().getObjectFactory().
-			instantiate(clsname, IFragmentCommand.class,
+				instantiate(clsname, IFragmentCommand.class,
 				propertiesFileName);
 		clazz.addListener(this);
 		EvalTools.notNull(clazz, "Could not load class " + clsname
-			+ ". Check package and classname for possible typos!", this);
+				+ ". Check package and classname for possible typos!", this);
 		return clazz;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see maltcms.ucar.ma2.CommandSequence#next()
-	 */
 	@Override
 	public TupleND<IFileFragment> next() {
 		try {
@@ -203,13 +196,13 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				iw.save();
 				// log.info("Next ICommand: {}",cmd.getClass().getName());
 				log.info(
-					"#############################################################################");
+						"#############################################################################");
 				log.info("# Running {}/{}: {}",
-					new Object[]{(this.cnt + 1),
-						this.commands.size(), cmd.getClass().getSimpleName()});
+						new Object[]{(this.cnt + 1),
+					this.commands.size(), cmd.getClass().getSimpleName()});
 				log.debug("# Package: {}", cmd.getClass().getPackage().getName());
 				log.info(
-					"#############################################################################");
+						"#############################################################################");
 				// set output dir to currently active command
 				getWorkflow().getOutputDirectory(cmd);
 				long start = System.nanoTime();
@@ -218,8 +211,8 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 				for (IFileFragment f : this.tmp) {
 					if (f.isModified()) {
 						log.warn("FileFragment {} has modifications after fragment command {}!"
-							+ " Please call clearArrays() or save a modified FileFragment before returning it!",
-							f.getName(), cmd.getClass().getCanonicalName());
+								+ " Please call clearArrays() or save a modified FileFragment before returning it!",
+								f.getName(), cmd.getClass().getCanonicalName());
 						if (throwExceptionOnUnsavedModification) {
 							throw new ConstraintViolationException("FileFragment " + f.getName() + " has modifications after fragment command " + cmd.getClass().getCanonicalName() + "! Please call clearArrays() or save a modified FileFragment before returning it!");
 						}
@@ -245,31 +238,29 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		return this.tmp;
 	}
 
+	/**
+	 * Shut down the master server, if we are running in distributed mode.
+	 */
 	protected void shutdownMasterServer() {
 		if (executionServer != null) {
 			try {
 				executionServer.stopMasterServer();
 			} catch (Exception e) {
 				log.warn(
-					"Exception occured while shutting down MasterServer!",
-					e);
+						"Exception occured while shutting down MasterServer!",
+						e);
 			} finally {
 				try {
 					executionServer.stopMasterServer();
 				} catch (Exception e) {
 					log.warn(
-						"Exception occured while shutting down MasterServer!",
-						e);
+							"Exception occured while shutting down MasterServer!",
+							e);
 				}
 			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see maltcms.ucar.ma2.CommandSequence#remove()
-	 */
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
@@ -295,17 +286,6 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		this.workflow = iw1;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom.Element)
-	 */
-	/**
-	 * Appends workflowInputs, workflowOutputs and workflowCommands elements to
-	 * given Element parameter.
-	 *
-	 * @param e
-	 */
 	@Override
 	public void appendXML(Element e) {
 		log.debug("Appending xml for CommandPipeline");
@@ -313,7 +293,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		for (final IFileFragment ifrg : getInput()) {
 			final Element ifrge0 = new Element("workflowInput");
 			ifrge0.setAttribute("uri", ifrg.getUri().normalize().
-				toString());
+					toString());
 			ifrge.addContent(ifrge0);
 		}
 		e.addContent(ifrge);
@@ -322,7 +302,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		for (final IFileFragment ofrg : tmp) {
 			final Element ofrge0 = new Element("workflowOutput");
 			ofrge0.setAttribute("uri", ofrg.getUri().normalize().
-				toString());
+					toString());
 			ofrge.addContent(ofrge0);
 		}
 		e.addContent(ofrge);
@@ -336,16 +316,22 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
 		e.addContent(cmds);
 	}
 
-	protected void storeCommandRuntime(long start, final IFragmentCommand cmd, final IWorkflow workflow) {
-		final float seconds = ((float) start) / ((float) 1000000000);
+	/**
+	 * Store the runtime of the last command.
+	 * @param runtime wall clock execution time runtime of the command
+	 * @param cmd the command
+	 * @param workflow the current workflow
+	 */
+	protected void storeCommandRuntime(long runtime, final IFragmentCommand cmd, final IWorkflow workflow) {
+		final float seconds = ((float) runtime) / ((float) 1000000000);
 		final StringBuilder sb = new StringBuilder();
 		final Formatter formatter = new Formatter(sb);
 		formatter.format(CommandPipeline.NUMBERFORMAT, (seconds));
 		log.info("Runtime of command {}: {} sec",
-			cmd.getClass().getSimpleName(),
-			sb.toString());
+				cmd.getClass().getSimpleName(),
+				sb.toString());
 		Map<String, Object> statsMap = new HashMap<String, Object>();
-		statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(start / 1000000.f));
+		statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(runtime / 1000000.f));
 		DefaultWorkflowStatisticsResult dwsr = new DefaultWorkflowStatisticsResult();
 		dwsr.setWorkflowElement(cmd);
 		dwsr.setWorkflowSlot(WorkflowSlot.STATISTICS);

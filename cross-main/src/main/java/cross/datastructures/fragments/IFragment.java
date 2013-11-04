@@ -34,90 +34,91 @@ import java.util.List;
 import ucar.nc2.Attribute;
 
 /**
- *
+ * Top-level interface for fragment hierarchies.
  *
  * @author Nils Hoffmann
  *
  */
 public interface IFragment extends Comparable<Object>, Comparator<IFragment>,
-        IXMLSerializable {
+		IXMLSerializable {
 
-    /**
-     * Compare Fragments by comparing their string representations.
-     */
-    @Override
-    public int compare(IFragment arg0, IFragment arg1);
+	/**
+	 * Compare Fragments by comparing their string representations.
+	 */
+	@Override
+	public int compare(IFragment arg0, IFragment arg1);
 
-    /**
-     * Only perform comparison on instances of Fragment.
-     */
-    @Override
-    public int compareTo(Object arg0);
+	/**
+	 * Only perform comparison on instances of Fragment.
+	 */
+	@Override
+	public int compareTo(Object arg0);
 
-    /**
-     * Return a given Attribute.
-     *
-     * @param a
-     * @return
-     */
-    public abstract Attribute getAttribute(Attribute a);
+	/**
+	 * Return a given Attribute.
+	 *
+	 * @param a the attribute
+	 * @return the attribute 
+	 */
+	public abstract Attribute getAttribute(Attribute a);
 
-    /**
-     * Return a given Attribute by name.
-     *
-     * @param name
-     * @return
-     */
-    public abstract Attribute getAttribute(String name);
+	/**
+	 * Return a given Attribute by name.
+	 *
+	 * @param name the attribute name
+	 * @return the attribute 
+	 */
+	public abstract Attribute getAttribute(String name);
 
-    /**
-     * Return attributes of Fragment.
-     *
-     * @return
-     */
-    public abstract List<Attribute> getAttributes();
+	/**
+	 * Return attributes of Fragment.
+	 *
+	 * @return the list of attributes of this fragment.
+	 */
+	public abstract List<Attribute> getAttributes();
 
-    /**
-     * Retrieve statistics from a Fragment.
-     *
-     * @return
-     */
-    public abstract StatsMap getStats();
+	/**
+	 * Retrieve statistics from a Fragment.
+	 *
+	 * @return the statsmap of this fragment
+	 * @see StatsMap
+	 */
+	public abstract StatsMap getStats();
 
-    /**
-     * Query for an Attribute.
-     *
-     * @param a
-     * @return
-     */
-    public abstract boolean hasAttribute(Attribute a);
+	/**
+	 * Query for an Attribute.
+	 *
+	 * @param a the attribute
+	 * @return true if the fragment has the given attribute, false otherwise
+	 */
+	public abstract boolean hasAttribute(Attribute a);
 
-    /**
-     * Query for an Attribute by name.
-     *
-     * @param name
-     * @return
-     */
-    public abstract boolean hasAttribute(String name);
+	/**
+	 * Query for an Attribute by name.
+	 *
+	 * @param name the attribute name
+	 * @return true if the fragment has the given attribute, false otherwise
+	 */
+	public abstract boolean hasAttribute(String name);
 
-    /**
-     * Add an attribute
-     *
-     * @param a
-     */
-    public abstract void addAttribute(Attribute a);
+	/**
+	 * Add an attribute.
+	 *
+	 * @param a the attribute to add
+	 */
+	public abstract void addAttribute(Attribute a);
 
-    /**
-     * Set attributes on a fragment.
-     *
-     * @param a
-     */
-    public abstract void setAttributes(Attribute... a);
+	/**
+	 * Set attributes on a fragment.
+	 *
+	 * @param a the attributes to add
+	 */
+	public abstract void setAttributes(Attribute... a);
 
-    /**
-     * Set statistics on a Fragment.
-     *
-     * @param stats1
-     */
-    public abstract void setStats(StatsMap stats1);
+	/**
+	 * Set statistics on a Fragment.
+	 *
+	 * @param stats1 the stats map to set
+	 */
+	public abstract void setStats(StatsMap stats1);
 }

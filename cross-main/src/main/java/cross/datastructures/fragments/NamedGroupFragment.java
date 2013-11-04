@@ -27,8 +27,6 @@
  */
 package cross.datastructures.fragments;
 
-import cross.datastructures.fragments.IGroupFragment;
-import cross.datastructures.fragments.IVariableFragment;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +47,11 @@ public class NamedGroupFragment extends Fragment implements IGroupFragment {
     private long id = -1;
     private final IGroupFragment parentGroup;
 
+	/**
+	 * Create a named group fragment with the given parent and name.
+	 * @param parent the parent
+	 * @param name1 the name
+	 */
     public NamedGroupFragment(final IGroupFragment parent, final String name1) {
         this.children = new ConcurrentHashMap<String, IVariableFragment>();
         this.parentGroup = parent;
@@ -56,11 +59,6 @@ public class NamedGroupFragment extends Fragment implements IGroupFragment {
         this.name = (name1 == null) ? "" + this.id : name1;
     }
 
-    /**
-     * Add a number of children.
-     *
-     * @param fragments
-     */
     @Override
     public synchronized void addChildren(final IVariableFragment... fragments) {
         for (final IVariableFragment vf : fragments) {

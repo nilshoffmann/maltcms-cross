@@ -47,15 +47,23 @@ import java.util.List;
 public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
         IListener<IEvent<IWorkflowResult>>, IXMLSerializable {
 
+	/**
+	 * Return the list of commands to be executed by this command sequence.
+	 * @return the list of commands
+	 */
     public abstract List<IFragmentCommand> getCommands();
 
     /**
      * Return input to this ICommandSequence.
      *
-     * @return
+     * @return the tuple of input file fragments
      */
     public abstract TupleND<IFileFragment> getInput();
 
+	/**
+	 * Return the workflow associated to this command sequence
+	 * @return the workflow
+	 */
     public abstract IWorkflow getWorkflow();
 
     /**
@@ -64,6 +72,10 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
     @Override
     public abstract boolean hasNext();
 
+	/**
+	 * Validate the command sequence.
+	 * @return true if this command sequence is valid, false otherwise
+	 */
     public abstract boolean validate();
 
     /**
@@ -75,14 +87,34 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
     @Override
     public abstract void remove();
 
+	/**
+	 * Set the commands to be executed by this command sequence.
+	 * @param c the list of commands
+	 */
     public abstract void setCommands(List<IFragmentCommand> c);
 
+	/**
+	 * Set the input file fragments of this command sequence.
+	 * @param t the input file fragmentss
+	 */
     public abstract void setInput(TupleND<IFileFragment> t);
 
+	/**
+	 * Set the workflow of this command sequence.
+	 * @param iw the workflow
+	 */
     public abstract void setWorkflow(IWorkflow iw);
 
+	/**
+	 * Return whether this command sequence checks its command dependencies.
+	 * @return true if command dependencies will be checked, false otherwise
+	 */
     public abstract boolean isCheckCommandDependencies();
 
+	/**
+	 * Set whether command dependencies should be checked before execution.
+	 * @param checkCommandDependencies true if command dependencies should be checke, false otherwise
+	 */
     public abstract void setCheckCommandDependencies(boolean checkCommandDependencies);
     
     /**
@@ -90,9 +122,14 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
      * if any {@link IFileFragment} has unsaved changes, as determined by calling
      * <code>f.isModified()</code>. Otherwise, a warning is logged. 
      * 
-     * @param b
+     * @param b true if an exception should be thrown, false otherwise
      */
     public abstract void setThrowExceptionOnUnsavedModification(boolean b);
     
+	/**
+	 * Return whether an exception will be thrown when unsaved modifications are 
+	 * encountered.
+	 * @return true if an exception will be thrown, false otherwise
+	 */
     public abstract boolean isThrowExceptionOnUnsavedModification();
 }
