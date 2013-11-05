@@ -13,6 +13,7 @@
 	<packaging>nbm</packaging>
 
 	<name>Lib Apache Commons</name>
+	<description>NetBeans module bundling the Apache commons libraries for Maltcms.</description>
 
 	<dependencies>
 		<dependency>

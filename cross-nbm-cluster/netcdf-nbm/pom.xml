@@ -13,6 +13,8 @@
 	<packaging>nbm</packaging>
 
 	<name>Lib Netcdf</name>
+	
+	<description>NetBeans module bundling the netCDF java libraries.</description>
 
 	<dependencies>
 		<dependency>

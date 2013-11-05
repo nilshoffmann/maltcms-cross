@@ -11,6 +11,8 @@
 	<packaging>nbm</packaging>
 
 	<name>Lib Mpaxs</name>
+	
+	<description>NetBeans module bundling the Modular Parallel Execution System libraries.</description>
 
 	<dependencies>
 		<dependency>

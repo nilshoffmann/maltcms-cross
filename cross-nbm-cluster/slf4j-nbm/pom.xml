@@ -13,6 +13,7 @@
 	<packaging>nbm</packaging>
 
 	<name>Lib Slf4j</name>
+	<description>NetBeans module bundling the slf4j libraries for Maltcms.</description>
 
 	<dependencies>
 		<dependency>

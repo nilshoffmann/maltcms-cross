@@ -13,6 +13,7 @@
 	<packaging>nbm</packaging>
 
 	<name>Lib Cross</name>
+	<description>NetBeans module bundling the Common Runtime Object Support System libraries.</description>
 
 	<dependencies>
 		<dependency>
