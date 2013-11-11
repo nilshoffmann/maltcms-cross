@@ -27,6 +27,7 @@
  */
 package cross.tools;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,7 +59,7 @@ public class MathTools {
 		for (int k = ii; k <= jj; k++) {
 			average += d[k];
 		}
-		return average / (jj - ii);
+		return average / (jj - ii + 1);
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class MathTools {
 		for (int k = ii; k <= jj; k++) {
 			average += Math.pow(d[k], 2.0d);
 		}
-		return average / (jj - ii);
+		return average / (jj - ii + 1);
 	}
 
 	/**
@@ -106,8 +107,8 @@ public class MathTools {
 	 * @return the value of the binomial coefficient
 	 */
 	public static double binomial(final int n, final int k) {
-		final double b = (MathTools.faculty(k) * MathTools.faculty(n - k));
-		return MathTools.faculty(n) / b;
+		final double b = (MathTools.factorial(k) * MathTools.factorial(n - k));
+		return MathTools.factorial(n) / b;
 	}
 
 //	/**
@@ -131,17 +132,33 @@ public class MathTools {
 //		}
 //		return diffs;
 //	}
+	
 	/**
-	 * Returns exact faculty for n<=170. Above, the approximation of the gamma
-	 * function by Gergő Nemes (2007) is used.
-	 * Throws an illegal argument exception if n is smaller than 0.
-	 * @param n the
-	 * @return the faculty value
+	 * Returns exact faculty for n<=170. 
+	 * Throws an illegal argument exception if n is smaller than 0 or larger 
+	 * than 170.
+	 * @param n the value
+	 * @return the factorial value
+	 * @throws IllegalArgumentException
+	 */
+	public static double factorial(final int n) {
+		return faculty(n);
+	}
+	
+	/**
+	 * Returns exact factorial for n<=170. 
+	 * Throws an illegal argument exception if n is smaller than 0 or larger 
+	 * than 170.
+	 * @param n the value
+	 * @return the factorial value
 	 * @throws IllegalArgumentException
 	 */
 	public static double faculty(final int n) {
 		if (n < 0) {
 			throw new IllegalArgumentException("Argument must be greater or equal to 0!");
+		}
+		if( n>170) {
+			throw new IllegalArgumentException("Argument must be smaller or equal to 170!");
 		}
 		if (MathTools.faculty == null) {
 			MathTools.faculty = new double[171];
@@ -149,10 +166,6 @@ public class MathTools {
 			for (int i = 1; i < MathTools.faculty.length; i++) {
 				MathTools.faculty[i] = MathTools.faculty[i - 1] * i;
 			}
-		}
-		if (n > 170) {
-			double z = n + 1;
-			return (0.5d * (Math.log(2.0d * Math.PI) - Math.log(z))) + (z * (Math.log(z + (1 / ((12.0d * z) - (1.0d / 10.0d * z)))) - 1.0d));
 		}
 
 		return MathTools.faculty[n];
@@ -294,7 +307,7 @@ public class MathTools {
 	public static double median(final double[] d, final int i, final int j) {
 		final int ii = Math.max(0, i);
 		final int jj = Math.min(d.length - 1, j);
-		final double median = MathTools.median(Arrays.copyOfRange(d, ii, jj));
+		final double median = MathTools.median(Arrays.copyOfRange(d, ii, jj+1));
 		return median;
 	}
 

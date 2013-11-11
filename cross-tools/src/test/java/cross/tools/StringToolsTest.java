@@ -27,8 +27,13 @@
  */
 package cross.tools;
 
+import cross.test.LogMethodName;
+import cross.test.SetupLogging;
+import java.util.ArrayList;
+import java.util.List;
+import junit.framework.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.Rule;
 
 /**
  *
@@ -36,44 +41,75 @@ import static org.junit.Assert.*;
  */
 public class StringToolsTest {
 
+	@Rule
+	public LogMethodName logMethodName = new LogMethodName();
+	@Rule
+	public SetupLogging logging = new SetupLogging();
+
 	/**
-	 *
+	 * Test of deBlank method, of class StringTools.
 	 */
-	public StringToolsTest() {
-    }
+	@Test
+	public void testDeBlank_String() {
+		Assert.assertEquals("has-two-blanks", StringTools.deBlank("has two blanks"));
+	}
 
-    /**
-     * Test of deBlank method, of class StringTools.
-     */
-    @Test
-    public void testDeBlank_String() {
-    }
+	/**
+	 * Test of deBlank method, of class StringTools.
+	 */
+	@Test
+	public void testDeBlank_String_String() {
+		Assert.assertEquals("hasMtwoMblanks", StringTools.deBlank("has two blanks","M"));
+	}
 
-    /**
-     * Test of deBlank method, of class StringTools.
-     */
-    @Test
-    public void testDeBlank_String_String() {
-    }
+	/**
+	 * Test of getFileExtension method, of class StringTools.
+	 */
+	@Test
+	public void testGetFileExtension() {
+		String singleEx = "blabla.cdf";
+		Assert.assertEquals("cdf", StringTools.getFileExtension(singleEx));
+		String doubleEx = "blabla.cdf.gz";
+		Assert.assertEquals("cdf.gz", StringTools.getFileExtension(doubleEx));
+		String tripleEx = "blabla.great.cdf.gz";
+		Assert.assertEquals("great.cdf.gz", StringTools.getFileExtension(tripleEx));
+	}
 
-    /**
-     * Test of getFileExtension method, of class StringTools.
-     */
-    @Test
-    public void testGetFileExtension() {
-    }
+	/**
+	 * Test of removeFileExt method, of class StringTools.
+	 */
+	@Test
+	public void testRemoveFileExt() {
+		String singleEx = "blabla.cdf";
+		Assert.assertEquals("blabla", StringTools.removeFileExt(singleEx));
+		String doubleEx = "blabla.cdf.gz";
+		Assert.assertEquals("blabla", StringTools.removeFileExt(doubleEx));
+		String tripleEx = "blabla.great.cdf.gz";
+		Assert.assertEquals("blabla", StringTools.removeFileExt(tripleEx));
+	}
 
-    /**
-     * Test of removeFileExt method, of class StringTools.
-     */
-    @Test
-    public void testRemoveFileExt() {
-    }
-
-    /**
-     * Test of toStringList method, of class StringTools.
-     */
-    @Test
-    public void testToStringList() {
-    }
+	/**
+	 * Test of toStringList method, of class StringTools.
+	 */
+	@Test
+	public void testToStringList() {
+		List<Object> l = new ArrayList<Object>();
+		l.add("one");
+		l.add("two");
+		l.add("three");
+		ArrayList<String> al = StringTools.toStringList(l);
+		Assert.assertEquals("one",al.get(0));
+		Assert.assertEquals("two",al.get(1));
+		Assert.assertEquals("three",al.get(2));
+	}
+	
+	/**
+	 * Test of join method, of class StringTools.
+	 */
+	@Test
+	public void testJoin() {
+		Object[] o = new Object[]{"one","two","three"};
+		String result = StringTools.join(o, "-");
+		Assert.assertEquals("one-two-three", result);
+	}
 }
