@@ -71,7 +71,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     /**
      * Adds IDataSource to internal HashMap
      *
-     * @param ids
+     * @param ids the data source to add
      */
     private void addToHashMap(final IDataSource ids) {
         EvalTools.notNull(ids, this);
@@ -92,12 +92,13 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
-     * Returns a compatible IDataSource for given IFileFragment. First hit wins,
+     * Returns a compatible {@link IDataSource} for given {@link IFileFragment}. First hit wins,
      * if multiple DataSource implementations are registered for the same file
      * type.
      *
-     * @param ff
-     * @return
+     * @param ff the file fragment
+     * @return the data source for the given file fragment
+	 * @throws IllegalArgumentException if no data source could be found for the given file fragment
      */
     @Override
     public IDataSource getDataSourceFor(final IFileFragment ff) {
@@ -138,6 +139,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
+	 * Returns the registered data source class names.
      * @return the dataSources
      */
     @Override
@@ -146,9 +148,9 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
-     * Returns a list of supported file extensions
+     * Returns a list of supported file extensions.
      *
-     * @return
+     * @return the file extensions
      */
     @Override
     public List<String> getSupportedFormats() {
@@ -158,6 +160,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
+	 * Sets the data sources as fully qualified class names.
      * @param dataSources the dataSources to set
      */
     @Override

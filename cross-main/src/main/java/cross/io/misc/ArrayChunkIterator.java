@@ -58,9 +58,9 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
     private boolean loadFromFile = false;
 
     /**
-     *
-     * @param ivf1
-     * @param chunksize1
+     * Creates a new chunked iterator for the given variable fragment, using the defined chunksize.
+     * @param ivf1 the variable fragment
+     * @param chunksize1 the chunksize
      */
     public ArrayChunkIterator(final IVariableFragment ivf1, final int chunksize1) {
         this.chunksize = chunksize1;

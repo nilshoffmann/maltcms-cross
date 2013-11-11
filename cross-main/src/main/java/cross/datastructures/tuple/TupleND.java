@@ -108,6 +108,11 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return getSize() * (getSize() - 1) / 2;
     }
 
+	/**
+	 * Returns all unique pairs without repetition. For example the collection
+	 * [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D],[B,C],[B,D],[C,D].
+	 * @return the unique pairs without repetition
+	 */
     public List<Tuple2D<T, T>> getPairs() {
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(
                 getNumberOfPairs());
@@ -124,6 +129,11 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return Collections.unmodifiableList(al);
     }
 
+	/**
+	 * Returns all pairs of elements with the first element, excluding the first element.
+	 * For example the collection [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D].
+	 * @return the unique pairs without repetition
+	 */
     public List<Tuple2D<T, T>> getPairsWithFirstElement() {
         final T first = this.c.get(0);
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
@@ -137,6 +147,11 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return Collections.unmodifiableList(al);
     }
 
+	/**
+	 * Returns all pairs of elements with the first element, excluding the first element.
+	 * For example the collection [A,B,C,D] will return the following pairs: [D,A],[D,B],[D,C].
+	 * @return the unique pairs without repetition
+	 */
     public List<Tuple2D<T, T>> getPairsWithLastElement() {
         final T last = this.c.get(this.c.size() - 1);
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
@@ -183,6 +198,12 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return this.c.retainAll(c1);
     }
 
+	/**
+	 * Adds the pair elements contained in <code>coll</code> to this 
+	 * n-tuple in the order that they appear in. For example the collection [[A,B],[A,C],[A,D]]
+	 * will create the following elements in order: [A,B,C,D].
+	 * @param coll the pair collection 
+	 */
     public void setPairs(final Collection<Tuple2D<T, T>> coll) {
 //		System.out.println("Clearing collection!");
         this.c.clear();

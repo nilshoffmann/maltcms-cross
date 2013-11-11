@@ -48,6 +48,9 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     @Configurable
     private List<String> fragmentCommands = Collections.emptyList();
 
+	/**
+	 * Comparator for {@link AFragmentCommand}, using lexical order on class names.
+	 */
     public static class ClassNameLexicalComparator implements
             Comparator<AFragmentCommand> {
 
@@ -58,11 +61,12 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     }
 
     /**
-     * Returns the available implementations of {@link IFragmentCommand}. 
+     * Returns the available implementations of {@link AFragmentCommand} as provided 
+	 * by the Java {@link java.util.ServiceLoader} infrastructure.
      * 
      * Elements are sorted according to lexical order on their classnames.
      *
-     * @return
+     * @return the list of available fragment commands
      */
     public List<AFragmentCommand> getAvailableCommands() {
         ServiceLoader<AFragmentCommand> sl = ServiceLoader
@@ -74,6 +78,11 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
         return createSortedListFromSet(s, new ClassNameLexicalComparator());
     }
 
+	/**
+	 * Returns the list of available user commands, given by class names in the <code>fragmentCommands</code> collection.
+	 * @param of the object factory
+	 * @return the list of user commands
+	 */
     public List<AFragmentCommand> getAvailableUserCommands(ObjectFactory of) {
         HashSet<AFragmentCommand> s = new HashSet<AFragmentCommand>();
         for (String uc : fragmentCommands) {
@@ -88,6 +97,12 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
         return createSortedListFromSet(s, new ClassNameLexicalComparator());
     }
 
+	/**
+	 * Creates a sorted list of fragment commands, given the provided comparator.
+	 * @param s the set of fragment commands
+	 * @param comp the comparator
+	 * @return a sorted list of fragment commands
+	 */
     public List<AFragmentCommand> createSortedListFromSet(
             Set<AFragmentCommand> s, Comparator<AFragmentCommand> comp) {
         ArrayList<AFragmentCommand> al = new ArrayList<AFragmentCommand>();

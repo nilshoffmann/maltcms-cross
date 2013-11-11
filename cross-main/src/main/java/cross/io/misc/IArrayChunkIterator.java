@@ -31,6 +31,7 @@ import java.util.Iterator;
 import ucar.ma2.Array;
 
 /**
+ * An interface for array chunk iterators.
  *
  * @author Nils Hoffmann
  */

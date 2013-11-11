@@ -38,5 +38,9 @@ import org.jdom.Element;
  */
 public interface IXMLSerializable {
 
+	/**
+	 * Append xml representation to the given xml element.
+	 * @param e the xml element to append to
+	 */
     public void appendXML(Element e);
 }

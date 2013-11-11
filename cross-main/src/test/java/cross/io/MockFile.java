@@ -38,6 +38,7 @@ import lombok.Data;
 import ucar.ma2.Array;
 
 /**
+ * Mock file for testing of datasources.
  *
  * @author Nils Hoffmann
  */
@@ -45,30 +46,30 @@ import ucar.ma2.Array;
 public class MockFile {
 
 	private final URI uri;
-	private final Map<String,ArrayList<Array>> variableToDataMap = new LinkedHashMap<String,ArrayList<Array>>();
+	private final Map<String, ArrayList<Array>> variableToDataMap = new LinkedHashMap<String, ArrayList<Array>>();
 
 	public MockFile(URI uri) {
 		this.uri = uri;
 	}
-	
+
 	public Set<String> keys() {
 		return variableToDataMap.keySet();
 	}
-	
+
 	public Array getChild(String name) {
-		if(variableToDataMap.containsKey(name)) {
+		if (variableToDataMap.containsKey(name)) {
 			return ArrayTools.glue(variableToDataMap.get(name));
 		}
-		throw new ResourceNotAvailableException("Could not find variable "+name+" for file "+uri);
+		throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
 	}
-	
+
 	public ArrayList<Array> getIndexedChild(String name) {
-		if(variableToDataMap.containsKey(name)) {
+		if (variableToDataMap.containsKey(name)) {
 			return variableToDataMap.get(name);
 		}
-		throw new ResourceNotAvailableException("Could not find variable "+name+" for file "+uri);
+		throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
 	}
-	
+
 	public void addChild(String name, ArrayList<Array> c) {
 		variableToDataMap.put(name, c);
 	}

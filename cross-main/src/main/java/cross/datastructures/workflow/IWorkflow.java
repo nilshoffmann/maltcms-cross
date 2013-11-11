@@ -28,6 +28,7 @@
 package cross.datastructures.workflow;
 
 import cross.IConfigurable;
+import cross.commands.fragments.AFragmentCommand;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.pipeline.ICommandSequence;
 import cross.datastructures.tuple.TupleND;
@@ -55,61 +56,61 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	/**
 	 * Append IWorkflowResult to this IWorkflow instance.
 	 *
-	 * @param iwr
+	 * @param iwr the workflow result to append to this workflow
 	 */
 	public abstract void append(IWorkflowResult iwr);
 
 	/**
 	 * Return the active ICommandSequence instance.
 	 *
-	 * @return
+	 * @return the active command sequence
 	 */
 	public abstract ICommandSequence getCommandSequence();
 
 	/**
 	 * Returns the currently active configuration for this workflow.
 	 *
-	 * @return
+	 * @return the active configuration
 	 */
 	public abstract Configuration getConfiguration();
 
 	/**
 	 * Returns the name of this IWorkflow.
 	 *
-	 * @return
+	 * @return the name of the workflow
 	 */
 	public abstract String getName();
 
 	/**
 	 * Returns an iterator over all currently available results.
 	 *
-	 * @return
+	 * @return an iterator over all workflow results
 	 */
 	public abstract Iterator<IWorkflowResult> getResults();
 
 	/**
-	 * Returns the results for a specific IFileFragment.
+	 * Returns the results for a specific {@link IFileFragment}.
 	 *
-	 * @param iff
-	 * @return
+	 * @param iff the file fragment connected to the result
+	 * @return a list of workflow results, may be empty
 	 */
 	public abstract List<IWorkflowResult> getResultsFor(IFileFragment iff);
 
 	/**
-	 * Returns the results created by a specific IWorkflowElement.
+	 * Returns the results created by a specific {@link IWorkflowElement}.
 	 *
-	 * @param afc
-	 * @return
+	 * @param afc the workflow element that created the objects
+	 * @return a list of workflow results, may be empty
 	 */
 	public abstract List<IWorkflowResult> getResultsFor(IWorkflowElement afc);
 
 	/**
-	 * Returns the results created by a specific IWorkflowElement for a given
-	 * IFileFragment.
+	 * Returns the results created by a specific {@link IWorkflowElement} for a given
+	 * {@link IFileFragment}.
 	 *
-	 * @param afc
-	 * @param iff
-	 * @return
+	 * @param afc the workflow element that created the objects
+	 * @param iff the file fragment connected to the result
+	 * @return a list of workflow results, may be empty
 	 */
 	public abstract List<IWorkflowResult> getResultsFor(IWorkflowElement afc,
 		IFileFragment iff);
@@ -117,8 +118,8 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	/**
 	 * Returns the list of results matching a given file extension pattern.
 	 *
-	 * @param fileExtension
-	 * @return
+	 * @param fileExtension the file extension of the desired file objects
+	 * @return a list of workflow results, may be empty
 	 */
 	public abstract List<IWorkflowResult> getResultsOfType(String fileExtension);
 
@@ -126,8 +127,9 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	 * Returns the list of results matching a given file extension pattern
 	 * created by a given IWorkflowElement implementation.
 	 *
-	 * @param fileExtension
-	 * @return
+	 * @param afc the workflow element that created the objects
+	 * @param fileExtension the file extension of the desired file objects
+	 * @return a list of workflow results, may be empty
 	 */
 	public abstract List<IWorkflowResult> getResultsOfType(
 		IWorkflowElement afc, String fileExtension);
@@ -136,22 +138,24 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	 * Returns the list of results matching a given class created by a given
 	 * IWorkflowElement implementation.
 	 *
-	 * @param fileExtension
-	 * @return
+	 * @param <T> the generic type of result objects
+	 * @param afc the workflow element that created the objects
+	 * @param c the desired generic class type of the result objects
+	 * @return a list of workflow object results, may be empty
 	 */
 	public abstract <T> List<IWorkflowObjectResult> getResultsOfType(IWorkflowElement afc, Class<? extends T> c);
 
 	/**
 	 * Return the startup data of this IWorkflow.
 	 *
-	 * @return
+	 * @return the startup date
 	 */
 	public abstract Date getStartupDate();
 
 	/**
 	 * Restore state of this IWorkflow instance from an XML document.
 	 *
-	 * @param e
+	 * @param e the xml element to decode
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
@@ -166,35 +170,36 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	/**
 	 * Set ics to be the active ICommandSequence instance.
 	 *
-	 * @param ics
+	 * @param ics the command sequence
+	 * @see AFragmentCommand
 	 */
 	public abstract void setCommandSequence(ICommandSequence ics);
 
 	/**
 	 * Set the currently active configuration.
 	 *
-	 * @param configuration
+	 * @param configuration the active configuration
 	 */
 	public abstract void setConfiguration(Configuration configuration);
 
 	/**
 	 * Set the name of this IWorkflow instance.
 	 *
-	 * @param name
+	 * @param name the name of this workflow
 	 */
 	public abstract void setName(String name);
 
 	/**
 	 * Set the startup date of this IWorkflow instance.
 	 *
-	 * @param date
+	 * @param date the startup date
 	 */
 	public abstract void setStartupDate(Date date);
 
 	/**
 	 * Write the state of this object to XML.
 	 *
-	 * @return
+	 * @return the xml element representing this workflow and its members
 	 * @throws IOException
 	 */
 	public abstract Element writeXML() throws IOException;
@@ -202,22 +207,50 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
 	/**
 	 * Returns the output directory for the given object.
 	 *
-	 * @param iwe
-	 * @return
+	 * @param iwe the workflow element or an arbitray object
+	 * @return the output directory for the given file
 	 */
 	public abstract File getOutputDirectory(Object iwe);
 
+	/**
+	 * Returns the base output directory of this workflow.
+	 * @return the base output directory
+	 */
 	public abstract File getOutputDirectory();
 
+	/**
+	 * Returns the file location of the workflow's xml file.
+	 * @return the file location
+	 */
 	public abstract File getWorkflowXmlFile();
 
+	/**
+	 * Returns the state of execution.
+	 * @return true if this workflow is running within the local vm, false if it is running in distributed RMI mode
+	 */
 	public abstract boolean isExecuteLocal();
 
+	/**
+	 * Sets whether this workflow should execute locally or in distributed mode.
+	 * @param b true if this workflow should run locally, false otherwise
+	 */
 	public abstract void setExecuteLocal(boolean b);
 
+	/**
+	 * Sets the default output directory of this workflow.
+	 * @param f the output directory
+	 */
 	public abstract void setOutputDirectory(File f);
 
+	/**
+	 * Sets the workflow postprocessors which are executed after the workflow has finished.
+	 * @param workflowPostProcessors the collection of workflow post processors
+	 */
 	public abstract void setWorkflowPostProcessors(List<IWorkflowPostProcessor> workflowPostProcessors);
 
+	/**
+	 * Returns the list of workflow post processors. These will be run after the workflow has finished execution.
+	 * @return the list of workflow post processors
+	 */
 	public List<IWorkflowPostProcessor> getWorkflowPostProcessors();
 }

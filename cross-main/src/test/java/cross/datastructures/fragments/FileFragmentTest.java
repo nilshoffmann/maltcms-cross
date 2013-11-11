@@ -374,6 +374,11 @@ public class FileFragmentTest {
 		return f;
 	}
 
+	/**
+	 * Tests equality of serialized and deserialized file fragments.
+	 * @throws IOException
+	 * @throws ClassNotFoundException 
+	 */
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -398,6 +403,7 @@ public class FileFragmentTest {
 				for(IVariableFragment ivf:f) {
 					log.info("Variable fragment: {}", ivf.getName());
 					Assert.assertEquals(ivf.getName(), des.getChild(ivf.getName()).getName());
+					Assert.assertEquals(Arrays.toString(ivf.getArray().getShape()),Arrays.toString(des.getChild(ivf.getName()).getArray().getShape()));
 				}
 			} finally {
 				ois.close();

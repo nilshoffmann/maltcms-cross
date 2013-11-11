@@ -32,37 +32,41 @@ import cross.datastructures.fragments.IFileFragment;
 import java.util.List;
 
 /**
+ * Interface for data source factory implementations.
  *
  * @author Nils Hoffmann
  */
 public interface IDataSourceFactory extends IConfigurable {
 
-    /**
-     * Returns a compatible IDataSource for given IFileFragment. First hit wins,
-     * if multiple DataSource implementations are registered for the same file
-     * type.
-     *
-     * @param ff
-     * @return a specific datasource for the given IFileFragment
+	/**
+	 * Returns a compatible IDataSource for given IFileFragment. First hit wins,
+	 * if multiple DataSource implementations are registered for the same file
+	 * type.
+	 *
+	 * @param ff the file fragment
+	 * @return a specific datasource for the given IFileFragment
 	 * @throws IllegalArgumentException if no data source is available for ff
-     */
-    IDataSource getDataSourceFor(final IFileFragment ff);
+	 */
+	IDataSource getDataSourceFor(final IFileFragment ff);
 
-    /**
-     * @return the list of complete class names used as data sources
-     */
-    List<String> getDataSources();
+	/**
+	 * Returns the list of fully qualified class names used as data sources.
+	 *
+	 * @return the list of complete class names used as data sources
+	 */
+	List<String> getDataSources();
 
-    /**
-     * Returns a list of supported file extensions
-     *
-     * @return
-     */
-    List<String> getSupportedFormats();
+	/**
+	 * Returns a list of supported file extensions.
+	 *
+	 * @return the list of supported file formats
+	 */
+	List<String> getSupportedFormats();
 
-    /**
-	 * 
-     * @param dataSources a list of complete class names
-     */
-    void setDataSources(final List<String> dataSources);
+	/**
+	 * Sets the fully qualified class names of data sources to use.
+	 *
+	 * @param dataSources a list of complete class names
+	 */
+	void setDataSources(final List<String> dataSources);
 }

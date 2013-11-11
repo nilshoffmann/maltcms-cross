@@ -95,6 +95,11 @@ public class InputDataFactory implements IInputDataFactory {
 		return this.initialFiles;
 	}
 
+	/**
+	 * Create a collection of files from the given string resource paths.
+	 * @param input the string resource paths
+	 * @return a collection of files
+	 */
 	public Collection<File> getInputFiles(String[] input) {
 		LinkedHashSet<File> files = new LinkedHashSet<File>();
 		for (String inputString : input) {
@@ -138,12 +143,7 @@ public class InputDataFactory implements IInputDataFactory {
 		}
 		return files;
 	}
-
-	/**
-	 * Preprocess input data (files and variables).
-	 *
-	 * @return
-	 */
+	
 	@Override
 	public TupleND<IFileFragment> prepareInputData(String[] input) {
 		if (input == null || input.length == 0) {

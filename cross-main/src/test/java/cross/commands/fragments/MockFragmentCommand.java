@@ -32,20 +32,21 @@ import cross.datastructures.tuple.TupleND;
 import cross.datastructures.workflow.WorkflowSlot;
 
 /**
+ * Mock fragment command for testing.
  *
  * @author Nils Hoffmann
  */
 public class MockFragmentCommand extends AFragmentCommand {
 
-    @Override
-    public String getDescription() {
-        return "Just a mock fragment command";
-    }
+	@Override
+	public String getDescription() {
+		return "Just a mock fragment command";
+	}
 
-    @Override
-    public TupleND<IFileFragment> apply(TupleND<IFileFragment> in) {
-        TupleND<IFileFragment> out = createWorkFragments(in);
-        for (IFileFragment iFileFragment : out) {
+	@Override
+	public TupleND<IFileFragment> apply(TupleND<IFileFragment> in) {
+		TupleND<IFileFragment> out = createWorkFragments(in);
+		for (IFileFragment iFileFragment : out) {
 //            Random r = new Random(System.nanoTime());
 //            VariableFragment vf1 = new VariableFragment(iFileFragment, "vf1");
 //            int length = 121;
@@ -59,12 +60,12 @@ public class MockFragmentCommand extends AFragmentCommand {
 //            Dimension d2 = new Dimension("vf2-2dimension", 24, false);
 //            Array a2 = ArrayTools.random(r, int.class, new int[]{d.getLength(), d2.getLength()});
 //            iFileFragment.save();
-        }
-        return out;
-    }
+		}
+		return out;
+	}
 
-    @Override
-    public WorkflowSlot getWorkflowSlot() {
-        return WorkflowSlot.GENERAL_PREPROCESSING;
-    }
+	@Override
+	public WorkflowSlot getWorkflowSlot() {
+		return WorkflowSlot.GENERAL_PREPROCESSING;
+	}
 }

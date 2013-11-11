@@ -30,11 +30,63 @@ package cross.datastructures.workflow;
 import java.io.Serializable;
 
 /**
+ * Categories for workflow commands and workflow results.
  *
  * @author Nils Hoffmann
  *
  */
 public enum WorkflowSlot implements Serializable {
 
-	FILEIO, STATISTICS, FILECONVERSION, WARPING, NOISEREDUCTION, GENERAL_PREPROCESSING, PEAKFINDING, PEAKMATCHING, IDENTIFICATION, VALIDATION, VISUALIZATION, ALIGNMENT, CLUSTERING;
+	/**
+	 * General unspecific File IO.
+	 */
+	FILEIO, 
+	/**
+	 * Statistics generation.
+	 */
+	STATISTICS, 
+	/**
+	 * Specific File IO for format conversion.
+	 */
+	FILECONVERSION, 
+	/**
+	 * Temporal readjustment of discrete signals.
+	 */
+	WARPING, 
+	/**
+	 * Signal filtering with the target of increasing signal-to-noise ratio.
+	 */
+	NOISEREDUCTION, 
+	/**
+	 * Unspecified preprocessing.
+	 */
+	GENERAL_PREPROCESSING, 
+	/**
+	 * Detection and integration of signal peaks.
+	 */
+	PEAKFINDING, 
+	/**
+	 * Synonym for ALIGNMENT on peaks
+	 */
+	PEAKMATCHING, 
+	/**
+	 * Unspecified identification, e.g. of peaks, mass spectra, ion traces.
+	 */
+	IDENTIFICATION, 
+	/**
+	 * Validation of data formats.
+	 */
+	VALIDATION, 
+	/**
+	 * Unspecified visualization results.
+	 */
+	VISUALIZATION, 
+	/**
+	 * General alignment of signals.
+	 */
+	ALIGNMENT, 
+	/**
+	 * Clustering as a means of statistics, meaning grouping of similar signals.
+	 */
+	CLUSTERING;
 }

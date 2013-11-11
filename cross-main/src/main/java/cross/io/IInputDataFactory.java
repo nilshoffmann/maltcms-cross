@@ -39,12 +39,16 @@ import java.util.List;
  */
 public interface IInputDataFactory extends IConfigurable {
 
+	/**
+	 * Returns the list of initial file fragments.
+	 * @return 
+	 */
     List<IFileFragment> getInitialFiles();
 
     /**
      * Preprocess input data (files and variables).
      *
-     * @return
+     * @return the input file fragment tuple
      */
     TupleND<IFileFragment> prepareInputData(String[] input);
 }

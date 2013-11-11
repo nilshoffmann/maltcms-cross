@@ -138,14 +138,18 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-     * @return the deleteOnExit
+	 * Returns, whether the workflow output directory will be deleted when the application 
+	 * exits.
+	 * 
+     * @return true if workflow output directory will be deleted on termination, false otherwise
      */
     public boolean isDeleteOnExit() {
         return this.deleteOnExit;
     }
 
     /**
-     * @return the zipWorkflow
+	 * Returns, whether the workflow will be zipped by the workflow zipper.
+     * @return true if workflow output will be zipped, false otherwise
      */
     public boolean isZipWorkflow() {
         return this.zipWorkflow;
@@ -155,8 +159,9 @@ public class WorkflowZipper implements IConfigurable {
      * Saves the currently assigned workflow elements, matching currently
      * assigned FileFilter to File. Marks all files for deletion on exit.
      *
-     * @param f
-     * @return
+     * @param f the file to save to
+     * @return true if the workflow was zipped, false otherwise
+	 * @throws RuntimeException if IOExceptions are encountered
      */
     public boolean save(final File f) {
         if (this.zipWorkflow) {
@@ -260,19 +265,27 @@ public class WorkflowZipper implements IConfigurable {
         }
     }
 
+	/**
+	 * Save to file below <code>parentDir</code> and with name <code>filename</code>.
+	 * @param parentDir the parent directory
+	 * @param filename the filename
+	 * @return true if the workflow was zipped, false otherwise
+	 */
     public boolean save(final File parentDir, final String filename) {
         return save(new File(parentDir, filename));
     }
 
     /**
-     * @param deleteOnExit the deleteOnExit to set
+	 * Sets whether workflow output directory is deleted on exit.
+     * @param deleteOnExit true if output directory should be deleted, false otherwise
      */
     public void setDeleteOnExit(final boolean deleteOnExit) {
         this.deleteOnExit = deleteOnExit;
     }
 
     /**
-     * @param fileFilter
+	 * Sets the file filter to select files included in the result directory.
+     * @param fileFilter the file filter
      */
     public void setFileFilter(final FileFilter fileFilter) {
         this.ff = fileFilter;
@@ -280,22 +293,24 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-     * @param workflow
+	 * Sets the workflow.
+     * @param workflow the workflow
      */
     public void setIWorkflow(final IWorkflow workflow) {
         this.iw = workflow;
     }
 
     /**
-     * @param zipWorkflow the zipWorkflow to set
+	 * Sets whether the workflow output directory should be zipped.
+     * @param zipWorkflow true if output directory should be zipped, false otherwise
      */
     public void setZipWorkflow(final boolean zipWorkflow) {
         this.zipWorkflow = zipWorkflow;
     }
 
     /**
-     *
-     * @param flatten the flatten to set
+     * Sets whether the file hierarchy in workflow output directory should be reduced or not.
+     * @param flatten true if the output directory should be flattened, false if the file/directory hierarchy should be maintained
      */
     public void setFlatten(boolean flatten) {
         this.flatten = flatten;

@@ -27,7 +27,6 @@
  */
 package cross.io;
 
-import cross.io.IDataSource;
 import cross.Factory;
 import java.util.*;
 

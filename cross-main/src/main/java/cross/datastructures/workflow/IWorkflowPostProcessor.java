@@ -27,7 +27,6 @@
  */
 package cross.datastructures.workflow;
 
-import cross.event.IEvent;
 import cross.event.IListener;
 import java.io.Serializable;
 
@@ -43,8 +42,8 @@ public interface IWorkflowPostProcessor extends Serializable {
 	 *
 	 * For intermediate processing results, consider to use {@link IListener<IEvent<IWorkflowResult>>}.
 	 *
-	 * @param workflow
+	 * @param workflow the workflow
+	 * @see IWorkflow
 	 */
 	public void process(IWorkflow workflow);
-
 }

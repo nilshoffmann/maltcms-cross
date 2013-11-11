@@ -42,8 +42,8 @@ public class BinaryFileBase64Wrapper {
     /**
      * Decode base64 encoded file in to file out.
      *
-     * @param in
-     * @param out
+     * @param in the input file
+     * @param out the output file
      */
     public static void base64Decode(final File in, final File out) {
         Base64.decodeFileToFile(in.getAbsolutePath(), out.getAbsolutePath());
@@ -53,8 +53,8 @@ public class BinaryFileBase64Wrapper {
     /**
      * Encode file in to file out using base64 encoding.
      *
-     * @param in
-     * @param out
+     * @param in the input file
+     * @param out the output file
      */
     public static void base64Encode(final File in, final File out) {
         Base64.encodeFileToFile(in.getAbsolutePath(), out.getAbsolutePath());
@@ -64,9 +64,9 @@ public class BinaryFileBase64Wrapper {
     /**
      * Calculates a checksum on File.
      *
-     * @param a
-     * @param c , if null use CRC32 as default checksum algorithm
-     * @return
+     * @param a the input file
+     * @param c the checksum method object , if null use CRC32 as default checksum algorithm
+     * @return the checksum
      * @throws IOException
      */
     public static long calcChecksum(final File a, final Checksum c)
@@ -80,25 +80,12 @@ public class BinaryFileBase64Wrapper {
         return cis.getChecksum().getValue();
     }
 
-    // public static void gunzip(File in, File out) throws
-    // FileNotFoundException, IOException {
-    // GZIPInputStream gis = new GZIPInputStream(new FileInputStream(out));
-    // BufferedOutputStream bos = new BufferedOutputStream(new
-    // FileOutputStream(in));
-    // while(gis.available()!=-1) {
-    // bos.write(gis.read());
-    // }
-    // bos.flush();
-    // bos.close();
-    // gis.close();
-    // printCompressionRatio(in, out);
-    // }
     /**
      * Applies gunzip on in file and writes decompressed result to file out.
      *
-     * @param in
-     * @param out
-     * @throws FileNotFoundException
+     * @param in the input file
+     * @param out the output file
+     * @throws FileNotFoundException if input or output file file does not exist
      * @throws IOException
      */
     public static void gunzip(final File in, final File out)
@@ -117,6 +104,13 @@ public class BinaryFileBase64Wrapper {
         gzi.close();
     }
 
+	/**
+	 * Compress the given input file to the given output file.
+	 * @param in the input file
+	 * @param out the output file
+	 * @throws FileNotFoundException if input or output file file does not exist
+	 * @throws IOException 
+	 */
     public static void gzip(final File in, final File out)
             throws FileNotFoundException, IOException {
         final GZIPOutputStream gos = new GZIPOutputStream(new FileOutputStream(
@@ -206,8 +200,8 @@ public class BinaryFileBase64Wrapper {
     /**
      * Print the compression ration between uncompressed and compressed file.
      *
-     * @param unc
-     * @param comp
+     * @param unc the uncompressed file
+     * @param comp the compressed file
      */
     public static void printCompressionRatio(final File unc, final File comp) {
         double unclen = unc.length();
@@ -226,8 +220,8 @@ public class BinaryFileBase64Wrapper {
     /**
      * Remove file extension ".b64" if existent.
      *
-     * @param filename
-     * @return
+     * @param filename the filename
+     * @return the filename with ".b64" removed
      */
     public static String removeB64FileExtension(final String filename) {
         String s = filename;
@@ -241,8 +235,8 @@ public class BinaryFileBase64Wrapper {
     /**
      * Remove file extension ".gz" if existent.
      *
-     * @param filename
-     * @return
+     * @param filename the filename
+     * @return the filename with ".gz" removed
      */
     public static String removeGZFileExtension(final String filename) {
         String s = filename;
@@ -256,9 +250,9 @@ public class BinaryFileBase64Wrapper {
     /**
      * Calculates checksums for both files and compares, whether they match.
      *
-     * @param a
-     * @param b
-     * @return
+     * @param a the first file
+     * @param b the second file
+     * @return true if checksums match, false otherwise
      */
     public static boolean verifyChecksum(final File a, final File b) {
         try {
@@ -279,9 +273,9 @@ public class BinaryFileBase64Wrapper {
     /**
      * Write bytes from byte array to file using a buffer.
      *
-     * @param bytes
-     * @param out
-     * @throws FileNotFoundException
+     * @param bytes the byte array to write
+     * @param out the output file to write to
+     * @throws FileNotFoundException if input or output file file does not exist 
      * @throws IOException
      */
     public static void writeBytes(final byte[] bytes, final File out)

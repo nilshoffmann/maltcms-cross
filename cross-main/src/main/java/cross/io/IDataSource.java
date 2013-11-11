@@ -54,24 +54,83 @@ import ucar.ma2.Array;
  */
 public interface IDataSource extends IConfigurable, ConfigurationListener {
 
+	/**
+	 * Checks, whether the given file fragment can be handled by this
+	 * datasource.
+	 *
+	 * @param ff the file fragment to check
+	 * @return 1 if the given file fragment can be handled by this datasource, 0
+	 * otherwise
+	 */
 	public int canRead(IFileFragment ff);
 
-    public ArrayList<Array> readAll(IFileFragment f) throws IOException,
-            ResourceNotAvailableException;
+	/**
+	 * Read all data from the given file fragment as a flat list of arrays.
+	 *
+	 * @param f the file fragment to read
+	 * @return a list of arrays
+	 * @throws IOException
+	 * @throws ResourceNotAvailableException
+	 * @see ucar.ma2.Array
+	 */
+	public ArrayList<Array> readAll(IFileFragment f) throws IOException,
+			ResourceNotAvailableException;
 
-    public ArrayList<Array> readIndexed(IVariableFragment f)
-            throws IOException, ResourceNotAvailableException;
+	/**
+	 * Read array data in row-compressed storage format. Requires that <code>f</code> 
+	 * has an index variable set.
+	 * @param f the variable fragment to read
+	 * @return a list of arrays for the variable fragment
+	 * @throws IOException if the URI identifying f's parent file fragment does not exist
+	 * @throws ResourceNotAvailableException if the given variable fragment was not found in f's parent or source files
+	 * @see ucar.ma2.Array
+	 * @see IVariableFragment
+	 */
+	public ArrayList<Array> readIndexed(IVariableFragment f)
+			throws IOException, ResourceNotAvailableException;
 
-    public Array readSingle(IVariableFragment f) throws IOException,
-            ResourceNotAvailableException;
+	/**
+	 * Read array data for f.
+	 * @param f the variable fragment
+	 * @return the array for f
+	 * @throws IOException if the URI identifying f's parent file fragment does not exist
+	 * @throws ResourceNotAvailableException if the given variable fragment was not found in f's parent or source files 
+	 * @see ucar.ma2.Array
+	 * @see IVariableFragment
+	 */
+	public Array readSingle(IVariableFragment f) throws IOException,
+			ResourceNotAvailableException;
 
-    public ArrayList<IVariableFragment> readStructure(IFileFragment f)
-            throws IOException;
+	/**
+	 * Read the dimensions and data type of all variables stored in <code>f</code>.
+	 * @param f the file fragment to check
+	 * @return a list of all variable fragments contained in f on disk
+	 * @throws IOException if the URI identifying f's parent file fragment does not exist 
+	 */
+	public ArrayList<IVariableFragment> readStructure(IFileFragment f)
+			throws IOException;
 
-    public IVariableFragment readStructure(IVariableFragment f)
-            throws IOException, ResourceNotAvailableException;
+	/**
+	 * Read the dimensions and data type of the given variable.
+	 * @param f the variable fragment to check
+	 * @return the initialized variable fragment
+	 * @throws IOException if the URI identifying f's parent file fragment does not exist
+	 * @throws ResourceNotAvailableException if the given variable fragment was not found in f's parent or source files  
+	 */
+	public IVariableFragment readStructure(IVariableFragment f)
+			throws IOException, ResourceNotAvailableException;
 
-    public List<String> supportedFormats();
+	/**
+	 * Returns the list of formats supported by this datasource.
+	 * @return the list of supported formats
+	 */
+	public List<String> supportedFormats();
 
-    public boolean write(IFileFragment f);
+	/**
+	 * Save the current structure of <code>f</code> to disk. Should clear all variable data 
+	 * from <code>f</code>.
+	 * @param f the file fragment to save
+	 * @return true if writing was successful, false otherwise
+	 */
+	public boolean write(IFileFragment f);
 }

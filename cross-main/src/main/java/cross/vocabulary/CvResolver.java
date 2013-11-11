@@ -39,6 +39,9 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Resolver for {@link IControlledVocabularyProvider} implementations. Uses
+ * ServiceLoader / NetBeans Lookup api to retrieve service implementations registered
+ * under <code>META-INF/services</code>
  *
  * @author Nils Hoffmann
  */
@@ -76,7 +79,7 @@ public class CvResolver implements ICvResolver {
 				throw new ConstraintViolationException("Variable has no valid namespace declaration: " + variable);
 			}
 			return s[0];
-		}else if(variable.contains(":")) {
+		} else if (variable.contains(":")) {
 			String[] s = variable.split(":");
 			log.info("Splits of variable: {}", Arrays.toString(s));
 			if (s.length < 2) {
@@ -84,7 +87,7 @@ public class CvResolver implements ICvResolver {
 			}
 			return s[0];
 		}
-		throw new IllegalArgumentException("Can not process namespace of "+variable+"! Unknown delimiter!");
+		throw new IllegalArgumentException("Can not process namespace of " + variable + "! Unknown delimiter!");
 	}
 
 	@Override

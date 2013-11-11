@@ -42,24 +42,24 @@ public interface ICvResolver {
      * providers. Throws a {@link MappingNotAvailableException} if no provider
      * handles the namespace.
      * 
-     * @param variable
-     * @return
-     * @throws MappingNotAvailableException 
+     * @param variable the variable to translate
+     * @return the translated string
+     * @throws MappingNotAvailableException if the string could not be mapped to any registered cv provider
      */
     String translate(String variable) throws MappingNotAvailableException;
     /**
-     * Returns the list of available providers.
-     * @return 
+     * Returns the collection of available providers.
+     * @return collection of available providers
      */
     Collection<? extends IControlledVocabularyProvider> getCvProviders();
     /**
      * Adds the given provider.
-     * @param provider 
+     * @param provider the provider
      */
     void add(IControlledVocabularyProvider provider);
     /**
      * Removes the given provider.
-     * @param provider 
+     * @param provider the provider
      */
     void remove(IControlledVocabularyProvider provider);
 }

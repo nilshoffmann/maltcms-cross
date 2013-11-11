@@ -37,5 +37,9 @@ import cross.datastructures.fragments.IFileFragment;
  */
 public interface IFileFragmentProvider {
 
+	/**
+	 * The file fragment created by this provider.
+	 * @return the file fragment
+	 */
     public IFileFragment provideFileFragment();
 }

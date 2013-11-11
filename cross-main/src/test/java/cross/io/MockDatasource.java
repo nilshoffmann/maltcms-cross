@@ -44,98 +44,110 @@ import org.apache.commons.configuration.event.ConfigurationEvent;
 import ucar.ma2.Array;
 
 /**
+ * Mock Datasource implementation using {@link MockFile} as an in-memory
+ * datastore.
  *
  * @author Nils Hoffmann
  */
 @Slf4j
 public class MockDatasource implements IDataSource {
 
-    Map<URI,MockFile> persistentCache = new HashMap<URI,MockFile>();
-    
-    @Override
-    public int canRead(IFileFragment ff) {
-        return 1;
-    }
+	Map<URI, MockFile> persistentCache = new HashMap<URI, MockFile>();
+	private String[] fileEnding = new String[]{"nc", "nc.gz", "nc.z", "nc.zip", "nc.gzip", "nc.bz2", "cdf", "cdf.gz", "cdf.z", "cdf.zip", "cdf.gzip", "cdf.bz2"};
 
-    private MockFile getCache(IFileFragment f) {
-        if(persistentCache.containsKey(f.getUri())) {
-            return persistentCache.get(f.getUri());
-        }
+	@Override
+	public int canRead(IFileFragment ff) {
+		final int dotindex = ff.getName().lastIndexOf(".");
+		if (dotindex == -1) {
+			throw new RuntimeException("Could not determine File extension of "
+					+ ff);
+		}
+		final String filename = ff.getName().toLowerCase();
+		for (final String s : this.fileEnding) {
+			if (filename.endsWith(s)) {
+				return 1;
+			}
+		}
+		log.debug("no!");
+		return 0;
+	}
+
+	private MockFile getCache(IFileFragment f) {
+		if (persistentCache.containsKey(f.getUri())) {
+			return persistentCache.get(f.getUri());
+		}
 		MockFile mf = new MockFile(f.getUri());
-        persistentCache.put(f.getUri(), mf);
-        return mf;
-    }
-    
-    @Override
-    public ArrayList<Array> readAll(IFileFragment f) throws IOException, ResourceNotAvailableException {
-        ArrayList<Array> al = new ArrayList<Array>();
-        for(IVariableFragment frag:f) {
-            al.add(getCache(f).getChild(frag.getName()));
-        }
-        return al;
-    }
+		persistentCache.put(f.getUri(), mf);
+		return mf;
+	}
 
-    @Override
-    public ArrayList<Array> readIndexed(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-        return getCache(f.getParent()).getIndexedChild(f.getName()); 
-    }
+	@Override
+	public ArrayList<Array> readAll(IFileFragment f) throws IOException, ResourceNotAvailableException {
+		ArrayList<Array> al = new ArrayList<Array>();
+		for (IVariableFragment frag : f) {
+			al.add(getCache(f).getChild(frag.getName()));
+		}
+		return al;
+	}
 
-    @Override
-    public Array readSingle(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-        return getCache(f.getParent()).getChild(f.getName());
-    }
+	@Override
+	public ArrayList<Array> readIndexed(IVariableFragment f) throws IOException, ResourceNotAvailableException {
+		return getCache(f.getParent()).getIndexedChild(f.getName());
+	}
 
-    @Override
-    public ArrayList<IVariableFragment> readStructure(IFileFragment f) throws IOException {
-		if(getCache(f).keys().isEmpty()) {
+	@Override
+	public Array readSingle(IVariableFragment f) throws IOException, ResourceNotAvailableException {
+		return getCache(f.getParent()).getChild(f.getName());
+	}
+
+	@Override
+	public ArrayList<IVariableFragment> readStructure(IFileFragment f) throws IOException {
+		if (getCache(f).keys().isEmpty()) {
 			return new ArrayList<IVariableFragment>(0);
 		}
 		ArrayList<IVariableFragment> children = new ArrayList<IVariableFragment>();
-		for(String key: getCache(f).keys()) {
-			if(!f.hasChild(key)) {
+		for (String key : getCache(f).keys()) {
+			if (!f.hasChild(key)) {
 				VariableFragment vf = new VariableFragment(f, key);
 				vf.setArray(getCache(f).getChild(key));
 			}
 		}
 		return children;
-    }
+	}
 
-    @Override
-    public IVariableFragment readStructure(IVariableFragment f) throws IOException, ResourceNotAvailableException {
-        if(getCache(f.getParent()).keys().contains(f.getName())) {
-            return f;
-        }
-		throw new ResourceNotAvailableException("Variable "+f.getName()+" does not exist on file!");
-    }
+	@Override
+	public IVariableFragment readStructure(IVariableFragment f) throws IOException, ResourceNotAvailableException {
+		if (getCache(f.getParent()).keys().contains(f.getName())) {
+			return f;
+		}
+		throw new ResourceNotAvailableException("Variable " + f.getName() + " does not exist on file!");
+	}
 
-    @Override
-    public List<String> supportedFormats() {
-        return Arrays.asList("nc", "nc.gz", "nc.z", "nc.zip", "nc.gzip", "nc.bz2", "cdf", "cdf.gz", "cdf.z", "cdf.zip", "cdf.gzip", "cdf.bz2");
-    }
+	@Override
+	public List<String> supportedFormats() {
+		return Arrays.asList(this.fileEnding);
+	}
 
-    @Override
-    public boolean write(IFileFragment f) {
-		log.info("Writing file fragment {}",f.getUri());
+	@Override
+	public boolean write(IFileFragment f) {
+		log.info("Writing file fragment {}", f.getUri());
 		MockFile mf = getCache(f);
-        for(IVariableFragment v:f.getImmediateChildren()) {
-			log.info("Writing variable fragment {}. Indexed: {}",v.getName(),v.getIndex()!=null);
-            if(v.getIndex()!=null) {
+		for (IVariableFragment v : f.getImmediateChildren()) {
+			log.info("Writing variable fragment {}. Indexed: {}", v.getName(), v.getIndex() != null);
+			if (v.getIndex() != null) {
 				mf.addChild(v.getName(), new ArrayList<Array>(v.getIndexedArray()));
-            }else{
-                mf.addChild(v.getName(), new ArrayList<Array>(Arrays.asList(v.getArray())));
-            }
-        }
-        return true;
-    }
+			} else {
+				mf.addChild(v.getName(), new ArrayList<Array>(Arrays.asList(v.getArray())));
+			}
+		}
+		return true;
+	}
 
-    @Override
-    public void configure(Configuration cfg) {
-        
-    }
+	@Override
+	public void configure(Configuration cfg) {
+	}
 
-    @Override
-    public void configurationChanged(ConfigurationEvent ce) {
-        
-    }
-    
+	@Override
+	public void configurationChanged(ConfigurationEvent ce) {
+	}
 }

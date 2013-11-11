@@ -28,8 +28,6 @@
 package cross.vocabulary;
 
 import cross.exception.MappingNotAvailableException;
-import java.util.List;
-import lombok.NonNull;
 
 /**
  * Maps an external variable name to an canonical, internal common name.
@@ -43,25 +41,25 @@ public interface IControlledVocabularyProvider {
     
     /**
      * Tries to resolve the given variable to a canonical, internal name.
-     * @param variable
-     * @return
-     * @throws MappingNotAvailableException 
+     * @param variable the string variable to translate/resolve
+     * @return the translated string
+     * @throws MappingNotAvailableException if the string could not be mapped to any registered cv provider
      */
     String translate(String variable) throws MappingNotAvailableException;
     /**
-     * The (lowercase) name of the this provider's ontology. E.g. andims
-     * @return 
+     * The (lowercase) name of the this provider's ontology. E.g. <code>andims</code>
+     * @return the provider name
      */
     String getName();
     /**
-     * The namespace prefix of this ontology, e.g. maltcms in maltcms.scan_index.
+     * The namespace prefix of this ontology, e.g. maltcms in <code>maltcms.scan_index</code>.
      * The namespace separator is by default a dot '.'.
-     * @return 
+     * @return the namespace prefix
      */
     String getNamespace();
     /**
      * The version of the ontology used.
-     * @return 
+     * @return the version
      */
     String getVersion();
 }

@@ -30,16 +30,33 @@ package cross.datastructures.workflow;
 import cross.datastructures.fragments.IFileFragment;
 
 /**
- *
+ * A workflow result that is represented by an object.
  * @author Nils Hoffmann
+ * @param <T> the generic type of the object result
  */
 public interface IWorkflowObjectResult<T> extends IWorkflowResult {
 
+	/**
+	 * The typed object associated to this result.
+	 * @return the typed object
+	 */
     public T getObject();
 
+	/**
+	 * Set the typed object associated to this result.
+	 * @param t the typed object
+	 */
     public void setObject(T t);
 
-    public IFileFragment[] getResources();
+	/**
+	 * Returns the file fragments associated to this result.
+	 * @return the file fragments
+	 */
+	public IFileFragment[] getResources();
 
-    public void setResources(IFileFragment... resources);
+	/**
+	 * Sets the file fragments associated to this result.
+	 * @param resources the file fragments
+	 */
+	public void setResources(IFileFragment... resources);
 }

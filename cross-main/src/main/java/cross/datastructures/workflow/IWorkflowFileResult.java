@@ -31,17 +31,33 @@ import cross.datastructures.fragments.IFileFragment;
 import java.io.File;
 
 /**
+ * A workflow result that was persisted to file.
+ *
  * @author Nils Hoffmann
- *
- *
  */
 public interface IWorkflowFileResult extends IWorkflowResult {
 
-    public File getFile();
+	/**
+	 * Returns the file associated to this result.
+	 * @return the file
+	 */
+	public File getFile();
 
-    public void setFile(File iff);
+	/**
+	 * Sets the file associated to this result.
+	 * @param iff the file
+	 */
+	public void setFile(File iff);
 
-    public IFileFragment[] getResources();
+	/**
+	 * Returns the file fragments associated to this result.
+	 * @return the file fragments
+	 */
+	public IFileFragment[] getResources();
 
-    public void setResources(IFileFragment... resources);
+	/**
+	 * Sets the file fragments associated to this result.
+	 * @param resources the file fragments
+	 */
+	public void setResources(IFileFragment... resources);
 }
