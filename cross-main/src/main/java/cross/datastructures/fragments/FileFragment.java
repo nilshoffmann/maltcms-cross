@@ -126,14 +126,14 @@ public final class FileFragment implements IFileFragment {
 	private long fID = 0;
 	private long nextGID = 0;
 	private long gID = 0;
-	private LinkedHashMap<String, Dimension> dims = null;
-	private Map<String, IVariableFragment> children = null;
-	private Map<URI, IFileFragment> sourcefiles = null;
+	private final LinkedHashMap<String, Dimension> dims;
+	private final Map<String, IVariableFragment> children;
+	private final Map<URI, IFileFragment> sourcefiles;
 	private final String fileExtension = ".cdf";
 	private final Fragment fragment = new Fragment();
+	private final BfsVariableSearcher bvs;
 	private ICacheDelegate<IVariableFragment, List<Array>> persistentCache = null;
 	private URI u;
-	private BfsVariableSearcher bvs = null;
 
 	/**
 	 * Create a FileFragment
@@ -647,9 +647,9 @@ public final class FileFragment implements IFileFragment {
 			setFile((String) o);
 		}
 //        in.close();
-		this.sourcefiles = new HashMap<URI, IFileFragment>();
-		this.children = Collections.synchronizedMap(new HashMap<String, IVariableFragment>());
-		this.dims = new LinkedHashMap<String, Dimension>();
+		this.sourcefiles.clear();
+		this.children.clear();
+		this.dims.clear();
 	}
 
 	@Override

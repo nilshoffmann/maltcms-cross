@@ -35,10 +35,10 @@ import cross.datastructures.cache.VariableFragmentArrayCache;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.MemoryUnit;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import ucar.ma2.Array;
@@ -55,10 +55,35 @@ public final class Fragments {
 	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
 	private static CacheManager defaultCacheManager = null;
 
-	public static final CacheManager getDefault() {
+	/**
+	 * The cache manager for variable fragments is called
+	 * 'maltcms-fragments-manager', the cache for fragments is called
+	 * 'maltcms-fragments'.
+	 * 
+	 * Defaults are at least 128 MBytes of local heap up to a maximum of one quarter of the 
+	 * available maximum heap memory.
+	 * 
+	 * Disk storage is currently limited to at most 100GBytes.
+	 * 
+	 * The default configuration for fragments is to overflow to disk, least frequently 
+	 * accessed elements will be evicted from the heap first.
+	 *
+	 * @return the singleton cache manager for variable fragment caching
+	 */
+	public static CacheManager getDefault() {
 		if (defaultCacheManager == null) {
 			cacheDirectory.mkdirs();
-			defaultCacheManager = CacheManager.getInstance();
+			CacheConfiguration cc = new CacheConfiguration();
+			cc.name("maltcms-fragments").
+					overflowToDisk(true).
+					memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
+			Configuration config = new Configuration();
+			config.setDynamicConfig(true);
+			config.setMaxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4));
+			config.setMaxBytesLocalDisk(MemoryUnit.parseSizeInBytes("100G"));
+			config.setDefaultCacheConfiguration(cc);
+			config.setName("maltcms-fragments-manager");
+			defaultCacheManager = CacheManager.create(config);
 		}
 		return defaultCacheManager;
 	}
@@ -151,26 +176,20 @@ public final class Fragments {
 	/**
 	 * Create a new, default cache delegate, backed by ehcache, possibly
 	 * returning an existing one for the same
-	 * <code>cacheName</code>, using the provided cache type. This cache is configured to overflow to disk, if the 
-	 * local capacity is exceeded (minimum = 128 MBytes, maximum = Runtime.getRuntime().maxMemory()/4).
+	 * <code>cacheName</code>, using the provided cache type. This cache is
+	 * configured to overflow to disk, if the local capacity is exceeded
+	 * (minimum = 128 MBytes, maximum = Runtime.getRuntime().maxMemory()/4).
 	 *
 	 * @param cacheDir the cache directory
 	 * @param cacheName the cache name
 	 * @return the cache delegate
 	 */
 	public static ICacheDelegate<IVariableFragment, List<Array>> createDefaultFragmentCache(File cacheDir, String cacheName) {
-		CacheManager cm = getDefault();
+		CacheManager cm = Fragments.getDefault();
 		if (cm.cacheExists(cacheName)) {
 			return new VariableFragmentArrayCache(cm.getCache(cacheName));
 		}
-		CacheConfiguration cc = new CacheConfiguration();
-		cc.name(cacheName).
-				overflowToDisk(true).
-				maxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4), MemoryUnit.BYTES).
-				maxElementsOnDisk(Integer.MAX_VALUE).
-				memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
-		Ehcache cache = new Cache(cc);
-		cm.addCache(cache);
+		Ehcache cache = cm.addCacheIfAbsent(cacheName);
 		ICacheDelegate<IVariableFragment, List<Array>> ed = new VariableFragmentArrayCache(cache);
 		return ed;
 	}
