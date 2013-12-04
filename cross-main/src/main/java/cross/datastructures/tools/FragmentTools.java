@@ -336,7 +336,7 @@ public class FragmentTools {
 		final Map<URI, IFileFragment> al = new LinkedHashMap<URI, IFileFragment>(
 				c.size());
 		log.info("Found the following source files:");
-		URI baseUri = ff.getUri();
+		URI baseUri = ff.getUri().normalize();
 		StringBuilder uris = new StringBuilder();
 		for (final String s : c) {
 			log.info("Resource: {}", s);
@@ -384,14 +384,17 @@ public class FragmentTools {
 	 *
 	 * @param parentFile the parent file fragment
 	 * @param childFile the child to check against parentFile
-	 * @return true if childFile is a direct child of parentFile, false otherwise
+	 * @return true if childFile is a direct child of parentFile, false
+	 * otherwise
 	 */
 	public static boolean isChild(IFileFragment parentFile, IFileFragment childFile) {
-		if (!parentFile.getUri().getScheme().equals(childFile.getUri().getScheme())) {
-			log.warn("Trying to compare file fragments with different schemes: {} vs. {}", parentFile.getUri(), childFile.getUri());
+		URI parent = parentFile.getUri().normalize();
+		URI child = childFile.getUri().normalize();
+		if (!parent.getScheme().equals(child.getScheme())) {
+			log.warn("Trying to compare file fragments with different schemes: {} vs. {}", parent, child);
 			return false;
 		}
-		URI relativePath = FileTools.getRelativeUri(parentFile.getUri(), childFile.getUri());
+		URI relativePath = FileTools.getRelativeUri(parent, child);
 		if (relativePath.getPath().contains("..")) {
 			return false;
 		}
@@ -400,28 +403,35 @@ public class FragmentTools {
 
 	/**
 	 * Relativize the URI of targetFile against baseFile.
-	 * @param targetFile the target file fragment to retrieve a relative path for
-	 * @param baseFile the base file fragment against which targetFile should be relativized
+	 *
+	 * @param targetFile the target file fragment to retrieve a relative path
+	 * for
+	 * @param baseFile the base file fragment against which targetFile should be
+	 * relativized
 	 * @return the relative URI from baseFile to targetFile
 	 */
 	public static URI resolve(IFileFragment targetFile, IFileFragment baseFile) {
+		URI target = targetFile.getUri().normalize();
+		URI base = baseFile.getUri().normalize();
 		boolean relativize = false;
 		if (isChild(baseFile, targetFile)) {
-			log.info("targetFile {} is below baseFile {}", targetFile.getUri(), baseFile.getUri());
+			log.info("targetFile {} is below baseFile {}", target, base);
 			relativize = true;
 		}
 		if (isRootFile(targetFile) && !relativize) {
-			log.debug("targetFile {} is a root file!", targetFile.getUri());
-			return targetFile.getUri();
+			log.debug("targetFile {} is a root file!", target);
+			return target;
 		}
-		URI relativePath = FileTools.getRelativeUri(baseFile.getUri(), targetFile.getUri());
-		log.debug("Relative path from {} to {} = {}", new Object[]{baseFile.getUri(), targetFile.getUri(), relativePath});
-		EvalTools.eq(targetFile.getUri().toString(), baseFile.getUri().resolve(relativePath).toString());
+		URI relativePath = FileTools.getRelativeUri(base, target);
+		log.debug("Relative path from {} to {} = {}", new Object[]{base, target, relativePath});
+		log.debug("Target: {}; Resolved: {}", target, base.resolve(relativePath));
+		EvalTools.eq(target.toString(), base.resolve(relativePath).toString());
 		return relativePath;
 	}
 
 	/**
 	 * Returns the source files in array format.
+	 *
 	 * @param root the file fragment containing the source files
 	 * @param files the source file fragments
 	 * @return an array containing the source file (relative) URIs
@@ -475,6 +485,7 @@ public class FragmentTools {
 
 	/**
 	 * Returns a single string.
+	 *
 	 * @param ff the file fragment
 	 * @param variableName the variable fragment name
 	 * @return the string value
@@ -497,6 +508,7 @@ public class FragmentTools {
 
 	/**
 	 * Returns the variable fragment given the parent, varname and indexname.
+	 *
 	 * @param parent the parent file fragment
 	 * @param varname the variable fragment name
 	 * @param indexname the index variable name
@@ -542,7 +554,7 @@ public class FragmentTools {
 	 *
 	 * @param ff the file fragment
 	 * @param configKey the configuration key to use
-	 * @see Factory#getConfiguration() 
+	 * @see Factory#getConfiguration()
 	 */
 	public static void loadAdditionalVars(final IFileFragment ff,
 			final String configKey) {
@@ -582,7 +594,7 @@ public class FragmentTools {
 	 * <code>default.vars</code>.
 	 *
 	 * @param ff the file fragment
-	 * @see Factory#getConfiguration() 
+	 * @see Factory#getConfiguration()
 	 */
 	public static void loadDefaultVars(final IFileFragment ff) {
 		FragmentTools.loadDefaultVars(ff, null);
@@ -649,7 +661,8 @@ public class FragmentTools {
 	 *
 	 * @param variables the variable fragments to check
 	 * @param dimensions the dimensions to check
-	 * @return the list of variables fragments sharing at least on of the given dimensions
+	 * @return the list of variables fragments sharing at least on of the given
+	 * dimensions
 	 */
 	public static List<IVariableFragment> getVariablesSharingAnyDimensions(
 			List<IVariableFragment> variables, String... dimensions) {
@@ -674,7 +687,8 @@ public class FragmentTools {
 	 *
 	 * @param variables the variable fragments to check
 	 * @param dimensions the dimensions to check
-	 * @return the list of variables fragments sharing all of the given dimensions
+	 * @return the list of variables fragments sharing all of the given
+	 * dimensions
 	 */
 	public static List<IVariableFragment> getVariablesSharingAllDimensions(
 			List<IVariableFragment> variables, String... dimensions) {
@@ -707,7 +721,8 @@ public class FragmentTools {
 	 * by <em>source_files</em>.
 	 *
 	 * @param fragment the file fragment to explore
-	 * @return a list of all aggregated variable fragments, may contain variable fragments with identical name from different ancestors
+	 * @return a list of all aggregated variable fragments, may contain variable
+	 * fragments with identical name from different ancestors
 	 */
 	public static List<IVariableFragment> getAggregatedVariables(
 			IFileFragment fragment) {
@@ -725,32 +740,16 @@ public class FragmentTools {
 					log.debug("Processing file {}", s);
 					URI path = URI.create(FileTools.escapeUri(s));
 					if (path.getScheme() == null || !path.getPath().startsWith("/")) {
-						URI resolved = FileTools.resolveRelativeUri(fragment.getUri(), path);
+						URI resolved = FileTools.resolveRelativeUri(fragment.getUri().normalize(), path);
 						log.debug("Adding resolved relative path: {} to {}", path, resolved);
 						parentsToExplore.add(new FileFragment(resolved));
 					} else {
 						log.debug("Adding absolute path: {}", path);
 						parentsToExplore.add(new FileFragment(path));
 					}
-
-//                    File file = new File(s);
-//                    if (file.isAbsolute()) {
-//                        parentsToExplore.add(new FileFragment(file));
-//                    } else {
-//                        try {
-//                            file = new File(
-//                                    cross.datastructures.tools.FileTools.resolveRelativeFile(new File(
-//                                    fragment.getAbsolutePath()).getParentFile(), new File(
-//                                    s)));
-//                            parentsToExplore.add(new FileFragment(file.getCanonicalFile()));
-//                        } catch (IOException ex) {
-//                            log.error("{}", ex);
-//                        }
-//                    }
 				}
 			} catch (ResourceNotAvailableException rnae) {
 			}
-			// System.out.println("Parent files " + parentsToExplore);
 			try {
 				for (IVariableFragment ivf : getVariablesFor(parent)) {
 					if (!ivf.getName().equals("source_files")) {
@@ -773,7 +772,9 @@ public class FragmentTools {
 	 * on the same level are reported in no particular order.
 	 *
 	 * @param fragment the file fragment to explore
-	 * @return a list of file fragments at the deepest level from this fragment, multiple file fragments are returned, if they are discovered at the same level
+	 * @return a list of file fragments at the deepest level from this fragment,
+	 * multiple file fragments are returned, if they are discovered at the same
+	 * level
 	 */
 	public static List<IFileFragment> getDeepestAncestor(IFileFragment fragment) {
 		List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
@@ -796,7 +797,7 @@ public class FragmentTools {
 					URI path = URI.create(FileTools.escapeUri(s));
 					IFileFragment frag = null;
 					if (path.getScheme() == null || !path.getPath().startsWith("/")) {
-						URI resolved = FileTools.resolveRelativeUri(fragment.getUri(), path);
+						URI resolved = FileTools.resolveRelativeUri(fragment.getUri().normalize(), path);
 						log.debug("Adding resolved relative path: {} to {}", path, resolved);
 						frag = new FileFragment(resolved);
 					} else {
@@ -833,7 +834,8 @@ public class FragmentTools {
 	 * thrown as an {@link IOException}.
 	 *
 	 * @param fragment the file fragment to explore
-	 * @return a list of variable fragments available for the given file fragment
+	 * @return a list of variable fragments available for the given file
+	 * fragment
 	 * @throws IOException
 	 */
 	public static List<IVariableFragment> getVariablesFor(IFileFragment fragment)
@@ -873,6 +875,21 @@ public class FragmentTools {
 	}
 
 	/**
+	 * Returns a {@link TupleND} of {@link ImmutableFileFragment}s from the
+	 * given uris.
+	 *
+	 * @param uris the URIs to be returned as immutable file fragments
+	 * @return an n-tuple of immutable file fragments
+	 */
+	public static TupleND<IFileFragment> immutableURIs(Collection<URI> uris) {
+		TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+		for (URI uri : uris) {
+			t.add(new ImmutableFileFragment(uri));
+		}
+		return t;
+	}
+
+	/**
 	 * Returns a {@link TupleND} of {@link FileFragment}s from the given files.
 	 *
 	 * @param files the files to be returned as mutable file fragments
@@ -882,6 +899,20 @@ public class FragmentTools {
 		TupleND<IFileFragment> t = new TupleND<IFileFragment>();
 		for (File f : files) {
 			t.add(new FileFragment(f));
+		}
+		return t;
+	}
+
+	/**
+	 * Returns a {@link TupleND} of {@link FileFragment}s from the given uris.
+	 *
+	 * @param uris the uris to be returned as mutable file fragments
+	 * @return an n-tuple of mutable file fragments
+	 */
+	public static TupleND<IFileFragment> mutableURIs(Collection<URI> uris) {
+		TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+		for (URI u : uris) {
+			t.add(new FileFragment(u));
 		}
 		return t;
 	}

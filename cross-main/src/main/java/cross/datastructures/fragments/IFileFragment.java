@@ -43,8 +43,8 @@ import ucar.nc2.Dimension;
 /**
  * Interface for partially in-memory files. Supports one-level hierarchy, a file
  * fragment can have instances of {@link IVariableFragment} as children. This is
- * a simplified view of the CDM model used in netcdf without support for groups or 
- * nested datastructures.
+ * a simplified view of the CDM model used in netcdf without support for groups
+ * or nested datastructures.
  *
  * @author Nils Hoffmann
  */
@@ -157,8 +157,7 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * Returns the immediate children of this fileFragment. Does not return
 	 * children that are only found in referenced source files.
 	 *
-	 * @return the list of immediate children (not persistent before
-	 * calling <code>save()</code>)
+	 * @return the list of immediate children (not persistent before 	 * calling <code>save()</code>)
 	 */
 	public abstract List<IVariableFragment> getImmediateChildren();
 
@@ -248,6 +247,8 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
 	 * children.
 	 *
 	 * @param variableFragment the child to remove
+	 * @throws ConstraintViolationException to indicate attempted removal of a
+	 * variable that either is an index variable or uses one
 	 */
 	public abstract void removeChild(IVariableFragment variableFragment);
 

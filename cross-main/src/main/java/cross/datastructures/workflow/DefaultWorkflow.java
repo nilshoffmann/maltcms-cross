@@ -722,16 +722,24 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
 		ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 		long[] allThreadIds = threadMXBean.getAllThreadIds();
 		long time = 0L;
+		long userTime = 0L;
+		long systemTime = 0L;
 		for (long id : allThreadIds) {
 			time += threadMXBean.getThreadCpuTime(id);
+			userTime += threadMXBean.getThreadUserTime(id);
+			systemTime += (threadMXBean.getThreadCpuTime(id) - threadMXBean.getThreadUserTime(id));
 		}
 
 		log.info("Total cpu time: {} sec, ", String.format("%.2f", (time / 1E9f)));
+		log.info("Total user time: {} sec, ", String.format("%.2f", (userTime / 1E9f)));
+		log.info("Total system time: {} sec, ", String.format("%.2f", (systemTime / 1E9f)));
 		File workflowStats = new File(new File(outputDirectory, "Factory"), "workflowStats.properties");
 
 		PropertiesConfiguration pc;
 		try {
 			pc = new PropertiesConfiguration(workflowStats);
+			pc.setProperty("usertime_nanoseconds", userTime);
+			pc.setProperty("systemtime_nanoseconds", systemTime);
 			pc.setProperty("cputime_nanoseconds", time);
 			pc.setProperty("memory_pools", nmemoryPools);
 			pc.setProperty("maxUsedMemory_bytes", maxUsedHeap + maxUsedNonHeap);
