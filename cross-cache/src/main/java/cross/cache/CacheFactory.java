@@ -53,7 +53,7 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 @Slf4j
 public class CacheFactory {
 
-	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
+	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"), "maltcms-default");
 
 	/**
 	 * Set the cache location for all NEWLY created caches.

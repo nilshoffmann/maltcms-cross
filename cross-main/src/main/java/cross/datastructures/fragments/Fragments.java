@@ -52,20 +52,20 @@ import ucar.ma2.Array;
 public final class Fragments {
 
 	private static CacheType fragmentCacheType = CacheType.NONE;
-	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"));
+	private static File cacheDirectory = new File(System.getProperty("java.io.tmpdir"), "maltcms-fragments-manager");
 	private static CacheManager defaultCacheManager = null;
 
 	/**
 	 * The cache manager for variable fragments is called
 	 * 'maltcms-fragments-manager', the cache for fragments is called
 	 * 'maltcms-fragments'.
-	 * 
-	 * Defaults are at least 128 MBytes of local heap up to a maximum of one quarter of the 
+	 *
+	 * Defaults are at least 128 MBytes of local heap up to a maximum of one quarter of the
 	 * available maximum heap memory.
-	 * 
+	 *
 	 * Disk storage is currently limited to at most 100GBytes.
-	 * 
-	 * The default configuration for fragments is to overflow to disk, least frequently 
+	 *
+	 * The default configuration for fragments is to overflow to disk, least frequently
 	 * accessed elements will be evicted from the heap first.
 	 *
 	 * @return the singleton cache manager for variable fragment caching
@@ -75,8 +75,8 @@ public final class Fragments {
 			cacheDirectory.mkdirs();
 			CacheConfiguration cc = new CacheConfiguration();
 			cc.name("maltcms-fragments").
-					overflowToDisk(true).
-					memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
+				overflowToDisk(true).
+				memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
 			Configuration config = new Configuration();
 			config.setDynamicConfig(true);
 			config.setMaxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4));
@@ -112,7 +112,7 @@ public final class Fragments {
 	 * same
 	 * <code>cacheName</code>.
 	 *
-	 * @param cacheDir the cache directory to use
+	 * @param cacheDir  the cache directory to use
 	 * @param cacheName the cache name
 	 * @return the cache delegate
 	 */
@@ -138,7 +138,7 @@ public final class Fragments {
 	 * <code>cacheName</code>, using the provided cache directory and cache
 	 * type.
 	 *
-	 * @param cacheDir the cache directory
+	 * @param cacheDir  the cache directory
 	 * @param cacheName the cache name
 	 * @param cacheType the cache type
 	 * @return the cache delegate
@@ -180,7 +180,7 @@ public final class Fragments {
 	 * configured to overflow to disk, if the local capacity is exceeded
 	 * (minimum = 128 MBytes, maximum = Runtime.getRuntime().maxMemory()/4).
 	 *
-	 * @param cacheDir the cache directory
+	 * @param cacheDir  the cache directory
 	 * @param cacheName the cache name
 	 * @return the cache delegate
 	 */

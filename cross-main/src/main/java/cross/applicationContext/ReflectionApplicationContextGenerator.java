@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,6 +27,8 @@
  */
 package cross.applicationContext;
 
+import cross.annotations.AnnotationInspector;
+import cross.commands.fragments.AFragmentCommand;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,10 +46,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +58,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import lombok.extern.slf4j.Slf4j;
-
 import org.openide.util.Lookup;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -87,10 +86,10 @@ public class ReflectionApplicationContextGenerator {
 	 * Creates a stub application context xml file for the given classes. The
 	 * default bean scope is 'prototype'.
 	 *
-	 * @param outputFile the output file for the generated xml file
+	 * @param outputFile    the output file for the generated xml file
 	 * @param springVersion the spring version to use for validation
-	 * @param defaultScope the default scope
-	 * @param classes the classes to generate stubs for
+	 * @param defaultScope  the default scope
+	 * @param classes       the classes to generate stubs for
 	 */
 	public static void createContextXml(File outputFile, String springVersion, String defaultScope, String... classes) {
 		//generate the application context XML
@@ -121,7 +120,7 @@ public class ReflectionApplicationContextGenerator {
 		}
 		Document document = generator.getDocument();
 		Element element = document.getDocumentElement();
-		Comment comment = document.createComment("In order to transform this template into a runnable pipeline, please ");
+		Comment comment = document.createComment("In order to use this template in a runnable pipeline, please include it from another application context xml file.");
 		element.getParentNode().insertBefore(comment, element);
 		writeToFile(document, outputFile);
 	}
@@ -129,7 +128,7 @@ public class ReflectionApplicationContextGenerator {
 	/**
 	 * Write the given xml document to the outputFile.
 	 *
-	 * @param document the xml document
+	 * @param document   the xml document
 	 * @param outputFile the output file
 	 */
 	public static void writeToFile(Document document, File outputFile) {
@@ -259,7 +258,7 @@ public class ReflectionApplicationContextGenerator {
 	 * public classes are added.
 	 *
 	 * @param reader the input stream to the Java source file (this is closed
-	 * after it is read)
+	 *               after it is read)
 	 * @return this
 	 * @throws IOException if there's a problem reading the file
 	 */
@@ -281,7 +280,7 @@ public class ReflectionApplicationContextGenerator {
 	 * Returns the known service providers for the given service interface name.
 	 *
 	 * @param serviceInterfaceName the fully qualified service interface class
-	 * name
+	 *                             name
 	 * @return the list of service providers
 	 */
 	public List<?> getServiceProviders(String serviceInterfaceName) {
@@ -298,7 +297,7 @@ public class ReflectionApplicationContextGenerator {
 	 *
 	 * @param clazz the target class
 	 * @return the bean element or a list of beans for each service provider
-	 * available
+	 *         available
 	 */
 	public List<?> createElement(Class<?> clazz) {
 		if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
@@ -327,9 +326,9 @@ public class ReflectionApplicationContextGenerator {
 	 * serviceInterface.
 	 *
 	 * @param serviceInterface the service interface to look for service
-	 * providers
+	 *                         providers
 	 * @return the list of protype beans created by calling each service
-	 * provider
+	 *         provider
 	 */
 	public List<?> createServiceProviderElements(Class<?> serviceInterface) {
 		if (classToObject.containsKey(serviceInterface)) {
@@ -369,6 +368,12 @@ public class ReflectionApplicationContextGenerator {
 			BeanDescriptor bd = new BeanDescriptor(this, obj, defaultScope, id);
 			Element beanElement = bd.createElement(document);
 			if (beanElement != null) {
+				Comment beanCommentElement = null;
+				if (obj instanceof AFragmentCommand) {
+					AFragmentCommand afc = (AFragmentCommand) obj;
+					beanCommentElement = document.createComment(afc.getDescription());
+					root.appendChild(beanCommentElement);
+				}
 				root.appendChild(beanElement);
 				System.out.println("Adding class " + obj.getClass().getCanonicalName());
 				classToObject.put(obj.getClass(), Arrays.asList(obj));
@@ -384,9 +389,9 @@ public class ReflectionApplicationContextGenerator {
 	 * Checks and adds type information for the given method, class and object
 	 * to the properties list.
 	 *
-	 * @param method the method to check for a property
-	 * @param javaClass the class to check for settable property
-	 * @param obj the stub / default object of type javaClass
+	 * @param method     the method to check for a property
+	 * @param javaClass  the class to check for settable property
+	 * @param obj        the stub / default object of type javaClass
 	 * @param properties the properties list
 	 */
 	public void checkMutableProperties(Method method, Class<?> javaClass, Object obj, List<ObjectProperty> properties) {
@@ -491,6 +496,7 @@ public class ReflectionApplicationContextGenerator {
 
 		/**
 		 * Creates an xml element using the given document for element creation.
+		 *
 		 * @param document the document use for element creation
 		 * @return the modified element
 		 */
@@ -522,35 +528,37 @@ public class ReflectionApplicationContextGenerator {
 					return t.name.compareTo(t1.name);
 				}
 			});
-
+			List<String> blackList = Arrays.asList("workflow", "progress", "cvResolver");
 			//add all properties as <property /> elements
 			for (ObjectProperty p : properties) {
-				Element propertyElement = document.createElement("property");
-				propertyElement.setAttribute("name", p.name);
-				boolean append = true;
-				if (p.type.startsWith("java.lang.")) {
-					String shortType = p.type.substring("java.lang.".length());
-					if (primitives.contains(shortType) || wrappers.contains(shortType)) {
+				if (!blackList.contains(p.name)) {
+					Element propertyElement = document.createElement("property");
+					propertyElement.setAttribute("name", p.name);
+					Comment propertyCommentElement = document.createComment(AnnotationInspector.getDescriptionFor(javaClass, p.name));
+					boolean append = true;
+					if (p.type.startsWith("java.lang.")) {
+						String shortType = p.type.substring("java.lang.".length());
+						if (primitives.contains(shortType) || wrappers.contains(shortType)) {
+							propertyElement.setAttribute("value", p.value);
+						}
+					} else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
 						propertyElement.setAttribute("value", p.value);
-					}
-				} else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
-					propertyElement.setAttribute("value", p.value);
-				} else if ("Array".equals(p.type)
+					} else if ("Array".equals(p.type)
 						|| "List".equals(p.type) || "java.util.List".equals(p.type)) {
-					Element listElement = document.createElement("list");
-					propertyElement.appendChild(listElement);
-				} else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
-					Element listElement = document.createElement("set");
-					propertyElement.appendChild(listElement);
-				} else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
-					Element listElement = document.createElement("map");
-					propertyElement.appendChild(listElement);
-				} else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
-					Element listElement = document.createElement("props");
-					propertyElement.appendChild(listElement);
-				} else {
+						Element listElement = document.createElement("list");
+						propertyElement.appendChild(listElement);
+					} else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
+						Element listElement = document.createElement("set");
+						propertyElement.appendChild(listElement);
+					} else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
+						Element listElement = document.createElement("map");
+						propertyElement.appendChild(listElement);
+					} else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
+						Element listElement = document.createElement("props");
+						propertyElement.appendChild(listElement);
+					} else {
 //                    System.err.println("Skipping ref!");
-					append = false;
+						append = false;
 //                    try {
 //                        generator.addBean(p.type);
 //                        Class<?> c = Class.forName(p.type);
@@ -564,12 +572,15 @@ public class ReflectionApplicationContextGenerator {
 //                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
 //                    }
 
-				}
-				if (append) {
-					beanElement.appendChild(propertyElement);
-				} else {
-					Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
-					beanElement.appendChild(comment);
+					}
+					if (append) {
+						beanElement.appendChild(propertyCommentElement);
+						beanElement.appendChild(propertyElement);
+					} else {
+						beanElement.appendChild(propertyCommentElement);
+						Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
+						beanElement.appendChild(comment);
+					}
 				}
 			}
 			return beanElement;
