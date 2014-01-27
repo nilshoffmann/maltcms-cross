@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -43,7 +43,7 @@ import ucar.nc2.Dimension;
 
 /**
  * Implementation for chunked array iteration of large on-disk arrays.
- * 
+ *
  * @author Nils Hoffmann
  */
 @Slf4j
@@ -59,7 +59,8 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
 
     /**
      * Creates a new chunked iterator for the given variable fragment, using the defined chunksize.
-     * @param ivf1 the variable fragment
+     *
+     * @param ivf1       the variable fragment
      * @param chunksize1 the chunksize
      */
     public ArrayChunkIterator(final IVariableFragment ivf1, final int chunksize1) {
@@ -68,7 +69,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
         if (!this.ivf.hasArray()) {
             try {
                 Factory.getInstance().getDataSourceFactory().getDataSourceFor(
-                        this.ivf.getParent()).readStructure(ivf1);
+                    this.ivf.getParent()).readStructure(ivf1);
                 loadFromFile = true;
             } catch (final IOException iex) {
                 log.warn(iex.getLocalizedMessage());
@@ -78,7 +79,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#hasNext()
      */
     /**
@@ -93,11 +94,11 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
             } else {
                 length = ivf.getArray().getShape()[0];
             }
-            log.info("Length: {}",length);
+            log.info("Length: {}", length);
             int mod = length % chunksize;
-            nchunks = (mod==0?0:1) + (length / chunksize);
-            log.info("Chunksize: {}",chunksize);
-            log.info("#of chunks: {}",nchunks);
+            nchunks = (mod == 0 ? 0 : 1) + (length / chunksize);
+            log.info("Chunksize: {}", chunksize);
+            log.info("#of chunks: {}", nchunks);
         }
         return chunk < nchunks;
     }
@@ -108,10 +109,10 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
         Range[] r = null;
         Array a = null;
         int activeChunkSize = Math.min(chunksize, length - offset);
-        int lastIndex = Math.max(offset, offset+activeChunkSize-1);
-        log.info("Active chunk: {} with size {}",chunk,activeChunkSize);
+        int lastIndex = Math.max(offset, offset + activeChunkSize - 1);
+        log.info("Active chunk: {} with size {}", chunk, activeChunkSize);
         try {
-            r = new Range[]{new Range(offset,lastIndex)};
+            r = new Range[]{new Range(offset, lastIndex)};
         } catch (InvalidRangeException ex) {
             Logger.getLogger(ArrayChunkIterator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,7 +120,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
             ivf.setRange(r);
             try {
                 a = Factory.getInstance().getDataSourceFactory()
-                        .getDataSourceFor(this.ivf.getParent()).readSingle(
+                    .getDataSourceFor(this.ivf.getParent()).readSingle(
                         this.ivf);
             } catch (IOException ex) {
                 Logger.getLogger(ArrayChunkIterator.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,13 +135,13 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
             }
         }
         this.ivf.setRange(oldRange);
-        offset+=activeChunkSize;
+        offset += activeChunkSize;
         return a;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#next()
      */
     /**
@@ -154,7 +155,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Iterator#remove()
      */
     /**

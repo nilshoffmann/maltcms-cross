@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -38,15 +38,15 @@ import cross.datastructures.workflow.WorkflowSlot;
  */
 public class MockFragmentCommand extends AFragmentCommand {
 
-	@Override
-	public String getDescription() {
-		return "Just a mock fragment command";
-	}
+    @Override
+    public String getDescription() {
+        return "Just a mock fragment command";
+    }
 
-	@Override
-	public TupleND<IFileFragment> apply(TupleND<IFileFragment> in) {
-		TupleND<IFileFragment> out = createWorkFragments(in);
-		for (IFileFragment iFileFragment : out) {
+    @Override
+    public TupleND<IFileFragment> apply(TupleND<IFileFragment> in) {
+        TupleND<IFileFragment> out = createWorkFragments(in);
+        for (IFileFragment iFileFragment : out) {
 //            Random r = new Random(System.nanoTime());
 //            VariableFragment vf1 = new VariableFragment(iFileFragment, "vf1");
 //            int length = 121;
@@ -60,12 +60,12 @@ public class MockFragmentCommand extends AFragmentCommand {
 //            Dimension d2 = new Dimension("vf2-2dimension", 24, false);
 //            Array a2 = ArrayTools.random(r, int.class, new int[]{d.getLength(), d2.getLength()});
 //            iFileFragment.save();
-		}
-		return out;
-	}
+        }
+        return out;
+    }
 
-	@Override
-	public WorkflowSlot getWorkflowSlot() {
-		return WorkflowSlot.GENERAL_PREPROCESSING;
-	}
+    @Override
+    public WorkflowSlot getWorkflowSlot() {
+        return WorkflowSlot.GENERAL_PREPROCESSING;
+    }
 }

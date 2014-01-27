@@ -417,43 +417,43 @@
                                 <!--                                <sourcepath>${basedir}/src/main/java</sourcepath>
                                 <sourcepath>target/generated-sources/delombok</sourcepath>-->
                                 <groups>
-                            <group>
-                                <title>Cross Annotations</title>
-                                <packages>cross.annotations.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Cache</title>
-                                <packages>cross.cache.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Events</title>
-                                <packages>cross.events.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Exceptions</title>
-                                <packages>cross.exceptions.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Main</title>
-                                <packages>cross.applicationContext.*:cross.commands.*:cross.datastructures.*:cross.io.*:cross.vocabulary.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Math</title>
-                                <packages>cross.math.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Test</title>
-                                <packages>cross.test.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross Tools</title>
-                                <packages>cross.tools.*</packages>
-                            </group>
-                            <group>
-                                <title>Cross OSGI</title>
-                                <packages>cross.osgi.*</packages>
-                            </group>
-                        </groups>
+                                    <group>
+                                        <title>Cross Annotations</title>
+                                        <packages>cross.annotations.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Cache</title>
+                                        <packages>cross.cache.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Events</title>
+                                        <packages>cross.events.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Exceptions</title>
+                                        <packages>cross.exceptions.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Main</title>
+                                        <packages>cross.applicationContext.*:cross.commands.*:cross.datastructures.*:cross.io.*:cross.vocabulary.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Math</title>
+                                        <packages>cross.math.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Test</title>
+                                        <packages>cross.test.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross Tools</title>
+                                        <packages>cross.tools.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Cross OSGI</title>
+                                        <packages>cross.osgi.*</packages>
+                                    </group>
+                                </groups>
                             </configuration>
                         </plugin>
                     </reportPlugins>

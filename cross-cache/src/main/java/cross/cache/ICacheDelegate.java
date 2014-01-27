@@ -41,48 +41,48 @@ import java.util.Set;
  */
 public interface ICacheDelegate<K, V> {
 
-	/**
-	 * Place a value in the cache, identified by the key.
-	 *
-	 * @param key   the key
-	 * @param value the value
-	 */
-	void put(K key, V value);
+    /**
+     * Place a value in the cache, identified by the key.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    void put(K key, V value);
 
-	/**
-	 * Returns the associated value for the key, or null if the key
-	 * has no association.
-	 *
-	 * @param key the key
-	 * @return the value associated to the key, or null
-	 */
-	V get(K key);
+    /**
+     * Returns the associated value for the key, or null if the key
+     * has no association.
+     *
+     * @param key the key
+     * @return the value associated to the key, or null
+     */
+    V get(K key);
 
-	/**
-	 * Returns the name of the cache.
-	 *
-	 * @return the name of the cache
-	 */
-	String getName();
+    /**
+     * Returns the name of the cache.
+     *
+     * @return the name of the cache
+     */
+    String getName();
 
-	/**
-	 * Returns the set of currently cached keys.
-	 *
-	 * @return the key set
-	 */
-	Set<K> keys();
+    /**
+     * Returns the set of currently cached keys.
+     *
+     * @return the key set
+     */
+    Set<K> keys();
 
-	/**
-	 * Removes all keys in the cache and initiates an orderly shutdown / release
-	 * of any resources.
-	 */
-	void close();
+    /**
+     * Removes all keys in the cache and initiates an orderly shutdown / release
+     * of any resources.
+     */
+    void close();
 
-	/**
-	 * Returns the type of the cache.
-	 *
-	 * @return the type of the cache
-	 * @see CacheType
-	 */
-	CacheType getCacheType();
+    /**
+     * Returns the type of the cache.
+     *
+     * @return the type of the cache
+     * @see CacheType
+     */
+    CacheType getCacheType();
 }

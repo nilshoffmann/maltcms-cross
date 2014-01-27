@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -28,15 +28,8 @@
 package cross.datastructures.workflow;
 
 import cross.datastructures.fragments.IFileFragment;
-import cross.datastructures.workflow.IWorkflowElement;
-import cross.datastructures.workflow.IWorkflowObjectResult;
-import cross.datastructures.workflow.WorkflowSlot;
 import cross.datastructures.tools.EvalTools;
 import cross.io.xml.IXMLSerializable;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
@@ -58,7 +51,7 @@ public class DefaultWorkflowObjectResult<T> implements IWorkflowObjectResult<T> 
     }
 
     public DefaultWorkflowObjectResult(final T t, final IWorkflowElement iwe1,
-            final WorkflowSlot ws1, IFileFragment... resources) {
+        final WorkflowSlot ws1, IFileFragment... resources) {
         this();
         EvalTools.notNull(new Object[]{t, iwe1, ws1, resources}, this);
         this.object = t;

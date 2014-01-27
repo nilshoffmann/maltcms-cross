@@ -48,66 +48,66 @@ import net.sf.ehcache.Element;
 @Slf4j
 public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
 
-	private final Ehcache cache;
+    private final Ehcache cache;
 
-	/**
-	 * Creates a new instance.
-	 *
-	 * @param cache the backing cache to use
-	 */
-	public EhcacheDelegate(final Ehcache cache) {
-		this.cache = cache;
-	}
+    /**
+     * Creates a new instance.
+     *
+     * @param cache the backing cache to use
+     */
+    public EhcacheDelegate(final Ehcache cache) {
+        this.cache = cache;
+    }
 
-	@Override
-	public Set<K> keys() {
-		return new HashSet<K>(getCache().getKeys());
-	}
+    @Override
+    public Set<K> keys() {
+        return new HashSet<K>(getCache().getKeys());
+    }
 
-	@Override
-	public void put(final K key, final V value) {
-		try {
-			if (value == null) {
-				getCache().remove(key);
-			} else {
-				getCache().put(new Element(key, value));
-			}
-		} catch (IllegalStateException se) {
-			log.warn("Failed to add element to cache: " + key, se);
-		}
-	}
+    @Override
+    public void put(final K key, final V value) {
+        try {
+            if (value == null) {
+                getCache().remove(key);
+            } else {
+                getCache().put(new Element(key, value));
+            }
+        } catch (IllegalStateException se) {
+            log.warn("Failed to add element to cache: " + key, se);
+        }
+    }
 
-	@Override
-	public V get(final K key) {
-		try {
-			Element element = getCache().get(key);
-			if (element != null) {
-				element.getObjectValue();
-				return (V) element.getObjectValue();
-			}
-			return null;
-		} catch (IllegalStateException se) {
-			log.warn("Failed to get element from cache: " + key, se);
-			return null;
-		}
-	}
+    @Override
+    public V get(final K key) {
+        try {
+            Element element = getCache().get(key);
+            if (element != null) {
+                element.getObjectValue();
+                return (V) element.getObjectValue();
+            }
+            return null;
+        } catch (IllegalStateException se) {
+            log.warn("Failed to get element from cache: " + key, se);
+            return null;
+        }
+    }
 
-	@Override
-	public void close() {
-		cache.dispose();
-	}
+    @Override
+    public void close() {
+        cache.dispose();
+    }
 
-	public Ehcache getCache() {
-		return cache;
-	}
+    public Ehcache getCache() {
+        return cache;
+    }
 
-	@Override
-	public String getName() {
-		return cache.getName();
-	}
+    @Override
+    public String getName() {
+        return cache.getName();
+    }
 
-	@Override
-	public CacheType getCacheType() {
-		return CacheType.EHCACHE;
-	}
+    @Override
+    public CacheType getCacheType() {
+        return CacheType.EHCACHE;
+    }
 }

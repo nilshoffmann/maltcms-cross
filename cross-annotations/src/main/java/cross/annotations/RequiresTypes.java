@@ -45,10 +45,10 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface RequiresTypes {
 
-	/**
-	 * Returns the array of required classes.
-	 *
-	 * @return the array of required classes
-	 */
-	Class[] values();
+    /**
+     * Returns the array of required classes.
+     *
+     * @return the array of required classes
+     */
+    Class[] values();
 }

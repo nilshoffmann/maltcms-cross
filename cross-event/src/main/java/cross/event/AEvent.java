@@ -36,53 +36,53 @@ package cross.event;
  */
 public class AEvent<V> implements IEvent<V> {
 
-	public static final String DEFAULT_EVENT_NAME = "EVENT_DEFAULT";
+    public static final String DEFAULT_EVENT_NAME = "EVENT_DEFAULT";
 
-	private final long ts = System.currentTimeMillis();
-	private final V v;
-	private final IEventSource<V> ies;
-	private final String eventName;
+    private final long ts = System.currentTimeMillis();
+    private final V v;
+    private final IEventSource<V> ies;
+    private final String eventName;
 
-	/**
-	 * Creates a new event instance.
-	 *
-	 * @param v         the transmitted type
-	 * @param ies       the typed event source
-	 * @param eventName the name of the event
-	 */
-	public AEvent(final V v, final IEventSource<V> ies, final String eventName) {
-		this.v = v;
-		this.ies = ies;
-		this.eventName = eventName;
-	}
+    /**
+     * Creates a new event instance.
+     *
+     * @param v         the transmitted type
+     * @param ies       the typed event source
+     * @param eventName the name of the event
+     */
+    public AEvent(final V v, final IEventSource<V> ies, final String eventName) {
+        this.v = v;
+        this.ies = ies;
+        this.eventName = eventName;
+    }
 
-	/**
-	 * Creates a new event instance. The event name will be "EVENT_DEFAULT".
-	 *
-	 * @param v   the transmitted type
-	 * @param ies the typed event source
-	 */
-	public AEvent(final V v, final IEventSource<V> ies) {
-		this(v, ies, DEFAULT_EVENT_NAME);
-	}
+    /**
+     * Creates a new event instance. The event name will be "EVENT_DEFAULT".
+     *
+     * @param v   the transmitted type
+     * @param ies the typed event source
+     */
+    public AEvent(final V v, final IEventSource<V> ies) {
+        this(v, ies, DEFAULT_EVENT_NAME);
+    }
 
-	@Override
-	public V get() {
-		return this.v;
-	}
+    @Override
+    public V get() {
+        return this.v;
+    }
 
-	@Override
-	public String getEventName() {
-		return this.eventName;
-	}
+    @Override
+    public String getEventName() {
+        return this.eventName;
+    }
 
-	@Override
-	public IEventSource<V> getSource() {
-		return this.ies;
-	}
+    @Override
+    public IEventSource<V> getSource() {
+        return this.ies;
+    }
 
-	@Override
-	public long getWhen() {
-		return this.ts;
-	}
+    @Override
+    public long getWhen() {
+        return this.ts;
+    }
 }

@@ -37,56 +37,56 @@ import java.io.Serializable;
  */
 public enum WorkflowSlot implements Serializable {
 
-	/**
-	 * General unspecific File IO.
-	 */
-	FILEIO, 
-	/**
-	 * Statistics generation.
-	 */
-	STATISTICS, 
-	/**
-	 * Specific File IO for format conversion.
-	 */
-	FILECONVERSION, 
-	/**
-	 * Temporal readjustment of discrete signals.
-	 */
-	WARPING, 
-	/**
-	 * Signal filtering with the target of increasing signal-to-noise ratio.
-	 */
-	NOISEREDUCTION, 
-	/**
-	 * Unspecified preprocessing.
-	 */
-	GENERAL_PREPROCESSING, 
-	/**
-	 * Detection and integration of signal peaks.
-	 */
-	PEAKFINDING, 
-	/**
-	 * Synonym for ALIGNMENT on peaks
-	 */
-	PEAKMATCHING, 
-	/**
-	 * Unspecified identification, e.g. of peaks, mass spectra, ion traces.
-	 */
-	IDENTIFICATION, 
-	/**
-	 * Validation of data formats.
-	 */
-	VALIDATION, 
-	/**
-	 * Unspecified visualization results.
-	 */
-	VISUALIZATION, 
-	/**
-	 * General alignment of signals.
-	 */
-	ALIGNMENT, 
-	/**
-	 * Clustering as a means of statistics, meaning grouping of similar signals.
-	 */
-	CLUSTERING;
+    /**
+     * General unspecific File IO.
+     */
+    FILEIO,
+    /**
+     * Statistics generation.
+     */
+    STATISTICS,
+    /**
+     * Specific File IO for format conversion.
+     */
+    FILECONVERSION,
+    /**
+     * Temporal readjustment of discrete signals.
+     */
+    WARPING,
+    /**
+     * Signal filtering with the target of increasing signal-to-noise ratio.
+     */
+    NOISEREDUCTION,
+    /**
+     * Unspecified preprocessing.
+     */
+    GENERAL_PREPROCESSING,
+    /**
+     * Detection and integration of signal peaks.
+     */
+    PEAKFINDING,
+    /**
+     * Synonym for ALIGNMENT on peaks
+     */
+    PEAKMATCHING,
+    /**
+     * Unspecified identification, e.g. of peaks, mass spectra, ion traces.
+     */
+    IDENTIFICATION,
+    /**
+     * Validation of data formats.
+     */
+    VALIDATION,
+    /**
+     * Unspecified visualization results.
+     */
+    VISUALIZATION,
+    /**
+     * General alignment of signals.
+     */
+    ALIGNMENT,
+    /**
+     * Clustering as a means of statistics, meaning grouping of similar signals.
+     */
+    CLUSTERING;
 }

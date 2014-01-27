@@ -45,11 +45,11 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ProvidesVariables {
 
-	/**
-	 *
-	 * Returns the array of provided variable names.
-	 *
-	 * @return the array of provided variable names
-	 */
-	String[] names();
+    /**
+     *
+     * Returns the array of provided variable names.
+     *
+     * @return the array of provided variable names
+     */
+    String[] names();
 }

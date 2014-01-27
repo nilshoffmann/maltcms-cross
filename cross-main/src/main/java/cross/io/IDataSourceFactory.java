@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -38,35 +38,35 @@ import java.util.List;
  */
 public interface IDataSourceFactory extends IConfigurable {
 
-	/**
-	 * Returns a compatible IDataSource for given IFileFragment. First hit wins,
-	 * if multiple DataSource implementations are registered for the same file
-	 * type.
-	 *
-	 * @param ff the file fragment
-	 * @return a specific datasource for the given IFileFragment
-	 * @throws IllegalArgumentException if no data source is available for ff
-	 */
-	IDataSource getDataSourceFor(final IFileFragment ff);
+    /**
+     * Returns a compatible IDataSource for given IFileFragment. First hit wins,
+     * if multiple DataSource implementations are registered for the same file
+     * type.
+     *
+     * @param ff the file fragment
+     * @return a specific datasource for the given IFileFragment
+     * @throws IllegalArgumentException if no data source is available for ff
+     */
+    IDataSource getDataSourceFor(final IFileFragment ff);
 
-	/**
-	 * Returns the list of fully qualified class names used as data sources.
-	 *
-	 * @return the list of complete class names used as data sources
-	 */
-	List<String> getDataSources();
+    /**
+     * Returns the list of fully qualified class names used as data sources.
+     *
+     * @return the list of complete class names used as data sources
+     */
+    List<String> getDataSources();
 
-	/**
-	 * Returns a list of supported file extensions.
-	 *
-	 * @return the list of supported file formats
-	 */
-	List<String> getSupportedFormats();
+    /**
+     * Returns a list of supported file extensions.
+     *
+     * @return the list of supported file formats
+     */
+    List<String> getSupportedFormats();
 
-	/**
-	 * Sets the fully qualified class names of data sources to use.
-	 *
-	 * @param dataSources a list of complete class names
-	 */
-	void setDataSources(final List<String> dataSources);
+    /**
+     * Sets the fully qualified class names of data sources to use.
+     *
+     * @param dataSources a list of complete class names
+     */
+    void setDataSources(final List<String> dataSources);
 }

@@ -45,10 +45,10 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ProvidesTypes {
 
-	/**
-	 * Returns the array of provided type classes.
-	 *
-	 * @return the array of provided type classes
-	 */
-	Class[] values();
+    /**
+     * Returns the array of provided type classes.
+     *
+     * @return the array of provided type classes
+     */
+    Class[] values();
 }

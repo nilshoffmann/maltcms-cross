@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,8 +27,19 @@
  */
 package cross.io.misc;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedInputStream;
+import java.util.zip.Checksum;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Provides static utility methods for base64 encoding/decoding, checksum
@@ -42,7 +53,7 @@ public class BinaryFileBase64Wrapper {
     /**
      * Decode base64 encoded file in to file out.
      *
-     * @param in the input file
+     * @param in  the input file
      * @param out the output file
      */
     public static void base64Decode(final File in, final File out) {
@@ -53,7 +64,7 @@ public class BinaryFileBase64Wrapper {
     /**
      * Encode file in to file out using base64 encoding.
      *
-     * @param in the input file
+     * @param in  the input file
      * @param out the output file
      */
     public static void base64Encode(final File in, final File out) {
@@ -70,10 +81,10 @@ public class BinaryFileBase64Wrapper {
      * @throws IOException
      */
     public static long calcChecksum(final File a, final Checksum c)
-            throws IOException {
+        throws IOException {
         final FileInputStream fis = new FileInputStream(a);
         final CheckedInputStream cis = new CheckedInputStream(fis,
-                (c == null) ? new CRC32() : c);
+            (c == null) ? new CRC32() : c);
         final BufferedInputStream bis = new BufferedInputStream(cis);
         while (bis.read() != -1) {
         }
@@ -83,17 +94,17 @@ public class BinaryFileBase64Wrapper {
     /**
      * Applies gunzip on in file and writes decompressed result to file out.
      *
-     * @param in the input file
+     * @param in  the input file
      * @param out the output file
      * @throws FileNotFoundException if input or output file file does not exist
      * @throws IOException
      */
     public static void gunzip(final File in, final File out)
-            throws FileNotFoundException, IOException {
+        throws FileNotFoundException, IOException {
         System.out.println("Unzipping to " + out);
         final GZIPInputStream gzi = new GZIPInputStream(new FileInputStream(in));
         final BufferedOutputStream bos = new BufferedOutputStream(
-                new FileOutputStream(out));
+            new FileOutputStream(out));
         int b;
         final byte[] data = new byte[1024];
         while ((b = gzi.read(data, 0, data.length)) != -1) {
@@ -104,19 +115,20 @@ public class BinaryFileBase64Wrapper {
         gzi.close();
     }
 
-	/**
-	 * Compress the given input file to the given output file.
-	 * @param in the input file
-	 * @param out the output file
-	 * @throws FileNotFoundException if input or output file file does not exist
-	 * @throws IOException 
-	 */
+    /**
+     * Compress the given input file to the given output file.
+     *
+     * @param in  the input file
+     * @param out the output file
+     * @throws FileNotFoundException if input or output file file does not exist
+     * @throws IOException
+     */
     public static void gzip(final File in, final File out)
-            throws FileNotFoundException, IOException {
+        throws FileNotFoundException, IOException {
         final GZIPOutputStream gos = new GZIPOutputStream(new FileOutputStream(
-                out));
+            out));
         final BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(in));
+            new FileInputStream(in));
         int b;
         final byte[] data = new byte[1024];
         while ((b = bis.read(data, 0, data.length)) != -1) {
@@ -157,7 +169,7 @@ public class BinaryFileBase64Wrapper {
         // // TODO Auto-generated catch block
         // e.printStackTrace();
         // }
-        //	    
+        //
         // } else {
         // System.err.println("Unsupported input parameter " + args[0]);
         // }
@@ -184,10 +196,10 @@ public class BinaryFileBase64Wrapper {
                 BinaryFileBase64Wrapper.gunzip(b64dec, gunzipped);
                 if (BinaryFileBase64Wrapper.verifyChecksum(input, gunzipped)) {
                     System.out
-                            .println("Conversion successful for file " + file);
+                        .println("Conversion successful for file " + file);
                 } else {
                     System.out.println("Verification of checksums for " + file
-                            + " failed!");
+                        + " failed!");
                 }
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
@@ -200,7 +212,7 @@ public class BinaryFileBase64Wrapper {
     /**
      * Print the compression ration between uncompressed and compressed file.
      *
-     * @param unc the uncompressed file
+     * @param unc  the uncompressed file
      * @param comp the compressed file
      */
     public static void printCompressionRatio(final File unc, final File comp) {
@@ -209,12 +221,12 @@ public class BinaryFileBase64Wrapper {
         unclen /= (Math.pow(2.0d, 20.0d));
         complen /= (Math.pow(2.0d, 20.0d));
         System.out.printf("%s : %1.2f %s\n", "Size of input file  " + unc,
-                unclen, " MBytes");
+            unclen, " MBytes");
         System.out.printf("%s : %1.2f %s\n", "Size of output file  " + comp,
-                complen, " MBytes");
+            complen, " MBytes");
         final float compressionRatio = (float) complen / (float) unclen;
         System.out.printf("%s = %1.2f\n", "Compression ratio (output/input)",
-                compressionRatio);
+            compressionRatio);
     }
 
     /**
@@ -274,14 +286,14 @@ public class BinaryFileBase64Wrapper {
      * Write bytes from byte array to file using a buffer.
      *
      * @param bytes the byte array to write
-     * @param out the output file to write to
-     * @throws FileNotFoundException if input or output file file does not exist 
+     * @param out   the output file to write to
+     * @throws FileNotFoundException if input or output file file does not exist
      * @throws IOException
      */
     public static void writeBytes(final byte[] bytes, final File out)
-            throws FileNotFoundException, IOException {
+        throws FileNotFoundException, IOException {
         final BufferedOutputStream bos = new BufferedOutputStream(
-                new FileOutputStream(out));
+            new FileOutputStream(out));
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         int b;
         final byte[] data = new byte[1024];

@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -59,7 +59,8 @@ import ucar.ma2.Range;
  */
 @Slf4j
 public class ArrayChunkIteratorTest {
-	@Rule
+
+    @Rule
     public LogMethodName logMethodName = new LogMethodName();
     @Rule
     public SetupLogging logging = new SetupLogging();
@@ -78,51 +79,51 @@ public class ArrayChunkIteratorTest {
      */
     @Test
     public void testHasNext() {
-        int[] lengths = new int[]{41,28,30};
-        int[] chunksizes = new int[]{3,5,10,20};
+        int[] lengths = new int[]{41, 28, 30};
+        int[] chunksizes = new int[]{3, 5, 10, 20};
         for (int i = 0; i < lengths.length; i++) {
             for (int j = 0; j < chunksizes.length; j++) {
                 testChunkIterator(lengths[i], chunksizes[j]);
             }
         }
     }
-    
+
     private void testChunkIterator(int length, int chunksize) {
         Array ref = ArrayTools.random(new Random(System.nanoTime()), double.class, new int[]{length});
         int activeChunkSize;
         List<Array> refChunks = new ArrayList<Array>();
         int mod = ref.getShape()[0] % chunksize;
-        int chunks = (mod==0?0:1)+ (ref.getShape()[0]/chunksize);
+        int chunks = (mod == 0 ? 0 : 1) + (ref.getShape()[0] / chunksize);
         int offset = 0;
         for (int i = 0; i < chunks; i++) {
-            activeChunkSize = Math.min(chunksize,length-offset);
-            log.info("Creating chunk {} with size {}",i,chunksize);
-            int lastIndex = Math.max(offset, offset+activeChunkSize-1);
+            activeChunkSize = Math.min(chunksize, length - offset);
+            log.info("Creating chunk {} with size {}", i, chunksize);
+            int lastIndex = Math.max(offset, offset + activeChunkSize - 1);
             try {
-                Range r = new Range(offset,lastIndex);
+                Range r = new Range(offset, lastIndex);
                 Array chunkArray = ref.sectionNoReduce(Arrays.asList(r));
                 refChunks.add(chunkArray);
             } catch (InvalidRangeException ex) {
                 Logger.getLogger(ArrayChunkIteratorTest.class.getName()).log(Level.SEVERE, null, ex);
             }
-            offset+=activeChunkSize;
+            offset += activeChunkSize;
         }
         IFileFragment f = new FileFragment();
         IVariableFragment testVar = f.addChild("testVar");
         testVar.setArray(ref);
         ArrayChunkIterator aci = new ArrayChunkIterator(testVar, chunksize);//21 chunks, 20 of size 10 and one of size 5
         int idx = 0;
-        Array reconstructedRef = Array.factory(DataType.getType(ref.getElementType()),ref.getShape());
+        Array reconstructedRef = Array.factory(DataType.getType(ref.getElementType()), ref.getShape());
         List<Array> arrayChunks = new ArrayList<Array>();
-        while(aci.hasNext()) {
+        while (aci.hasNext()) {
             Array chunk = aci.next();
             arrayChunks.add(chunk);
-            log.info("RefChunks shape: {}, chunk shape: {}",Arrays.toString(refChunks.get(idx).getShape()),Arrays.toString(chunk.getShape()));
+            log.info("RefChunks shape: {}, chunk shape: {}", Arrays.toString(refChunks.get(idx).getShape()), Arrays.toString(chunk.getShape()));
             Assert.assertTrue(Arrays.equals(refChunks.get(idx).getShape(), chunk.getShape()));
-            Assert.assertTrue(Arrays.equals((double[])refChunks.get(idx).get1DJavaArray(double.class), (double[])chunk.get1DJavaArray(double.class)));
+            Assert.assertTrue(Arrays.equals((double[]) refChunks.get(idx).get1DJavaArray(double.class), (double[]) chunk.get1DJavaArray(double.class)));
             idx++;
         }
-        Assert.assertTrue(Arrays.equals((double[])ref.get1DJavaArray(double.class), (double[])ArrayTools.glue(arrayChunks).get1DJavaArray(double.class)));
+        Assert.assertTrue(Arrays.equals((double[]) ref.get1DJavaArray(double.class), (double[]) ArrayTools.glue(arrayChunks).get1DJavaArray(double.class)));
     }
 
 }

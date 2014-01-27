@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -48,26 +48,29 @@ public interface IGroupFragment extends IIterableFragment {
      *
      * @param varname
      * @return the VariableFragment given by name, if known to this
-     * FileFragment, else null.
+     *         FileFragment, else null.
      */
     public abstract IVariableFragment getChild(String varname);
 
-	/**
-	 * Returns the name of this group fragment
-	 * @return the name
-	 */
+    /**
+     * Returns the name of this group fragment
+     *
+     * @return the name
+     */
     public abstract String getName();
 
-	/**
-	 * Returns the parent group of this fragment.
-	 * @return the parent group or null if this group fragment is the root
-	 */
+    /**
+     * Returns the parent group of this fragment.
+     *
+     * @return the parent group or null if this group fragment is the root
+     */
     public abstract IGroupFragment getParent();
 
-	/**
-	 * Returns the number of children this group fragment has.
-	 * @return the number of children
-	 */
+    /**
+     * Returns the number of children this group fragment has.
+     *
+     * @return the number of children
+     */
     public abstract int getSize();
 
     /**
@@ -84,19 +87,21 @@ public interface IGroupFragment extends IIterableFragment {
      *
      * @param varname the variable name to query for
      * @return true if a child of this name is attached to this FileFragment,
-     * false else.
+     *         false else.
      */
     public abstract boolean hasChild(String varname);
 
-	/**
-	 * Returns the next unused group id.
-	 * @return the next unused group id
-	 */
+    /**
+     * Returns the next unused group id.
+     *
+     * @return the next unused group id
+     */
     public abstract long nextGID();
 
-	/**
-	 * Sets the group id.
-	 * @param id the group id
-	 */
+    /**
+     * Sets the group id.
+     *
+     * @param id the group id
+     */
     public abstract void setID(long id);
 }

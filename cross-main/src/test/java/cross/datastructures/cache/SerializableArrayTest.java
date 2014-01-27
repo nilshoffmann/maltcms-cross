@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,7 +27,6 @@
  */
 package cross.datastructures.cache;
 
-import cross.datastructures.cache.SerializableArray;
 import cross.test.SetupLogging;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,7 +48,7 @@ import ucar.ma2.IndexIterator;
  */
 @Slf4j
 public class SerializableArrayTest {
-    
+
     @Rule
     public SetupLogging logging = new SetupLogging();
 
@@ -58,21 +57,21 @@ public class SerializableArrayTest {
      */
     @Test
     public void testReadWriteExternal() throws Exception {
-        DataType[] types = new DataType[]{DataType.BOOLEAN, DataType.BYTE, 
+        DataType[] types = new DataType[]{DataType.BOOLEAN, DataType.BYTE,
             DataType.CHAR, DataType.DOUBLE, DataType.FLOAT, DataType.INT,
             DataType.LONG, DataType.SHORT, DataType.STRING};
-        
-        List<int[]> shapes = Arrays.asList(new int[]{10},new int[]{5,39},new int[]{8,21,4},new int[]{87,221,3,23});
-        for(DataType dt:types) {
-            log.info("Checking arrays of type {}",dt);
-            for(int[] shape:shapes) {
-                Array a = createArray(dt,shape);
+
+        List<int[]> shapes = Arrays.asList(new int[]{10}, new int[]{5, 39}, new int[]{8, 21, 4}, new int[]{87, 221, 3, 23});
+        for (DataType dt : types) {
+            log.info("Checking arrays of type {}", dt);
+            for (int[] shape : shapes) {
+                Array a = createArray(dt, shape);
                 SerializableArray sa = writeAndRestore(new SerializableArray(a));
                 checkArraysEqual(a, sa.getArray());
             }
         }
     }
-    
+
     public SerializableArray writeAndRestore(SerializableArray sa) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -116,7 +115,7 @@ public class SerializableArrayTest {
                     obj = ((short) (Math.random() * Short.MAX_VALUE));
                     break;
                 case STRING:
-                    obj = "a"+((char) (Math.random() * 255));
+                    obj = "a" + ((char) (Math.random() * 255));
                     break;
             }
             ii.setObjectNext(obj);

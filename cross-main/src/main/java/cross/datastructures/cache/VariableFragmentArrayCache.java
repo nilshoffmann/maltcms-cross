@@ -59,108 +59,108 @@ import ucar.ma2.Array;
 @Slf4j
 public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragment, List<Array>> {
 
-	private final String cacheName;
-	private final Ehcache cache;
-	private final Map<IVariableFragment, List<Array>> keys;
+    private final String cacheName;
+    private final Ehcache cache;
+    private final Map<IVariableFragment, List<Array>> keys;
 
-	public VariableFragmentArrayCache(final Ehcache cache) {
-		this.cache = cache;
-		this.cacheName = cache.getName();
-		this.keys = new HashMap<IVariableFragment, List<Array>>();
-	}
+    public VariableFragmentArrayCache(final Ehcache cache) {
+        this.cache = cache;
+        this.cacheName = cache.getName();
+        this.keys = new HashMap<IVariableFragment, List<Array>>();
+    }
 
-	@Override
-	public Set<IVariableFragment> keys() {
-		return this.keys.keySet();
-	}
+    @Override
+    public Set<IVariableFragment> keys() {
+        return this.keys.keySet();
+    }
 
-	@Override
-	public void put(final IVariableFragment key, final List<Array> value) {
-		if (key instanceof Serializable) {
-			log.debug("key {} is serializable", key);
-		}
-		if (value == null) {
-			getCache().put(new Element(getVariableFragmentId(key), null));
-		} else if (value instanceof CachedReadWriteList) {
-			//store this seperately, since it maintains its own cache
-			keys.put(key, (List<Array>) value);
-		} else {
-			if (!(value instanceof Serializable)) {
-				throw new IllegalArgumentException("Value must be serializable!");
-			}
-			try {
-				List c = (List) value;
-				if (c.size() > 0) {
-					//System.out.println("Converting array to serializable array for " + key);
-					List l = new ArrayList<SerializableArray>(c.size());
-					for (Object object : c) {
-						l.add(new SerializableArray((Array) object));
-					}
-					getCache().put(new Element(getVariableFragmentId(key), (Serializable) l));
-				}
-				keys.put(key, null);
-			} catch (IllegalStateException se) {
-				log.warn("Failed to add element to cache: " + getVariableFragmentId(key), se);
-			}
-		}
-	}
+    @Override
+    public void put(final IVariableFragment key, final List<Array> value) {
+        if (key instanceof Serializable) {
+            log.debug("key {} is serializable", key);
+        }
+        if (value == null) {
+            getCache().put(new Element(getVariableFragmentId(key), null));
+        } else if (value instanceof CachedReadWriteList) {
+            //store this seperately, since it maintains its own cache
+            keys.put(key, (List<Array>) value);
+        } else {
+            if (!(value instanceof Serializable)) {
+                throw new IllegalArgumentException("Value must be serializable!");
+            }
+            try {
+                List c = (List) value;
+                if (c.size() > 0) {
+                    //System.out.println("Converting array to serializable array for " + key);
+                    List l = new ArrayList<SerializableArray>(c.size());
+                    for (Object object : c) {
+                        l.add(new SerializableArray((Array) object));
+                    }
+                    getCache().put(new Element(getVariableFragmentId(key), (Serializable) l));
+                }
+                keys.put(key, null);
+            } catch (IllegalStateException se) {
+                log.warn("Failed to add element to cache: " + getVariableFragmentId(key), se);
+            }
+        }
+    }
 
-	public String getVariableFragmentId(IVariableFragment key) {
-		return key.getParent().getName() + ">" + key.getName();
-	}
+    public String getVariableFragmentId(IVariableFragment key) {
+        return key.getParent().getName() + ">" + key.getName();
+    }
 
-	@Override
-	public List<Array> get(final IVariableFragment key) {
-		List<Array> values = keys.get(key);
-		if (values != null) {
-			return values;
-		} else {
-			try {
-				Element element = getCache().get(getVariableFragmentId(key));
-				if (element != null) {
-					List<SerializableArray> c = (List<SerializableArray>) element.getValue();
-					if (c != null && c.size() > 0) {
-						//System.out.println("Converting serializable array to array for " + key);
-						List<Array> l = new ArrayList<Array>(c.size());
-						for (Object object : c) {
-							l.add(((SerializableArray) object).getArray());
-						}
-						return l;
-					}
-				}
-				return null;
-			} catch (IllegalStateException se) {
-				log.warn("Failed to get element from cache: " + getVariableFragmentId(key), se);
-				return null;
-			}
-		}
-	}
+    @Override
+    public List<Array> get(final IVariableFragment key) {
+        List<Array> values = keys.get(key);
+        if (values != null) {
+            return values;
+        } else {
+            try {
+                Element element = getCache().get(getVariableFragmentId(key));
+                if (element != null) {
+                    List<SerializableArray> c = (List<SerializableArray>) element.getValue();
+                    if (c != null && c.size() > 0) {
+                        //System.out.println("Converting serializable array to array for " + key);
+                        List<Array> l = new ArrayList<Array>(c.size());
+                        for (Object object : c) {
+                            l.add(((SerializableArray) object).getArray());
+                        }
+                        return l;
+                    }
+                }
+                return null;
+            } catch (IllegalStateException se) {
+                log.warn("Failed to get element from cache: " + getVariableFragmentId(key), se);
+                return null;
+            }
+        }
+    }
 
-	@Override
-	public void close() {
-		for (IVariableFragment key : keys.keySet()) {
-			cache.remove(key);
-		}
+    @Override
+    public void close() {
+        for (IVariableFragment key : keys.keySet()) {
+            cache.remove(key);
+        }
 //		cache.dispose();
-	}
+    }
 
-	public Ehcache getCache() {
-		if (cache.getStatus() != Status.STATUS_ALIVE) {
-			cache.dispose();
-			if (cache.getStatus() == Status.STATUS_UNINITIALISED) {
-				cache.initialise();
-			}
-		}
-		return cache;
-	}
+    public Ehcache getCache() {
+        if (cache.getStatus() != Status.STATUS_ALIVE) {
+            cache.dispose();
+            if (cache.getStatus() == Status.STATUS_UNINITIALISED) {
+                cache.initialise();
+            }
+        }
+        return cache;
+    }
 
-	@Override
-	public String getName() {
-		return cacheName;
-	}
+    @Override
+    public String getName() {
+        return cacheName;
+    }
 
-	@Override
-	public CacheType getCacheType() {
-		return CacheType.EHCACHE;
-	}
+    @Override
+    public CacheType getCacheType() {
+        return CacheType.EHCACHE;
+    }
 }

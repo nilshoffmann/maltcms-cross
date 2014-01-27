@@ -1,5 +1,5 @@
 /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -50,58 +50,58 @@ import org.openide.util.lookup.ServiceProvider;
 @Data
 public class CvResolver implements ICvResolver {
 
-	private Map<String, IControlledVocabularyProvider> providers = new ConcurrentHashMap<String, IControlledVocabularyProvider>();
+    private Map<String, IControlledVocabularyProvider> providers = new ConcurrentHashMap<String, IControlledVocabularyProvider>();
 
-	public CvResolver() {
-		for (IControlledVocabularyProvider provider : Lookup.getDefault().lookupAll(IControlledVocabularyProvider.class)) {
-			String namespace = provider.getNamespace();
-			if (namespace == null || namespace.isEmpty()) {
-				throw new ConstraintViolationException("Namespace must not be null!");
-			}
-			providers.put(provider.getNamespace(), provider);
-		}
-	}
+    public CvResolver() {
+        for (IControlledVocabularyProvider provider : Lookup.getDefault().lookupAll(IControlledVocabularyProvider.class)) {
+            String namespace = provider.getNamespace();
+            if (namespace == null || namespace.isEmpty()) {
+                throw new ConstraintViolationException("Namespace must not be null!");
+            }
+            providers.put(provider.getNamespace(), provider);
+        }
+    }
 
-	@Override
-	public String translate(String variable) throws MappingNotAvailableException {
-		String ns = getNamespacePrefix(variable);
-		if (providers.containsKey(ns)) {
-			return providers.get(ns).translate(variable);
-		}
-		throw new MappingNotAvailableException("No provider known for namespace " + ns + " and variable " + variable);
-	}
+    @Override
+    public String translate(String variable) throws MappingNotAvailableException {
+        String ns = getNamespacePrefix(variable);
+        if (providers.containsKey(ns)) {
+            return providers.get(ns).translate(variable);
+        }
+        throw new MappingNotAvailableException("No provider known for namespace " + ns + " and variable " + variable);
+    }
 
-	protected String getNamespacePrefix(String variable) {
-		if (variable.contains(".")) {
-			String[] s = variable.split("\\.");
-			log.info("Splits of variable: {}", Arrays.toString(s));
-			if (s.length < 2) {
-				throw new ConstraintViolationException("Variable has no valid namespace declaration: " + variable);
-			}
-			return s[0];
-		} else if (variable.contains(":")) {
-			String[] s = variable.split(":");
-			log.info("Splits of variable: {}", Arrays.toString(s));
-			if (s.length < 2) {
-				throw new ConstraintViolationException("Variable has no valid namespace declaration: " + variable);
-			}
-			return s[0];
-		}
-		throw new IllegalArgumentException("Can not process namespace of " + variable + "! Unknown delimiter!");
-	}
+    protected String getNamespacePrefix(String variable) {
+        if (variable.contains(".")) {
+            String[] s = variable.split("\\.");
+            log.info("Splits of variable: {}", Arrays.toString(s));
+            if (s.length < 2) {
+                throw new ConstraintViolationException("Variable has no valid namespace declaration: " + variable);
+            }
+            return s[0];
+        } else if (variable.contains(":")) {
+            String[] s = variable.split(":");
+            log.info("Splits of variable: {}", Arrays.toString(s));
+            if (s.length < 2) {
+                throw new ConstraintViolationException("Variable has no valid namespace declaration: " + variable);
+            }
+            return s[0];
+        }
+        throw new IllegalArgumentException("Can not process namespace of " + variable + "! Unknown delimiter!");
+    }
 
-	@Override
-	public Collection<? extends IControlledVocabularyProvider> getCvProviders() {
-		return providers.values();
-	}
+    @Override
+    public Collection<? extends IControlledVocabularyProvider> getCvProviders() {
+        return providers.values();
+    }
 
-	@Override
-	public void add(IControlledVocabularyProvider provider) {
-		providers.put(provider.getNamespace(), provider);
-	}
+    @Override
+    public void add(IControlledVocabularyProvider provider) {
+        providers.put(provider.getNamespace(), provider);
+    }
 
-	@Override
-	public void remove(IControlledVocabularyProvider provider) {
-		providers.remove(provider.getNamespace());
-	}
+    @Override
+    public void remove(IControlledVocabularyProvider provider) {
+        providers.remove(provider.getNamespace());
+    }
 }

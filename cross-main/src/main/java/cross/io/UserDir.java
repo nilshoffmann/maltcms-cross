@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -30,9 +30,9 @@ package cross.io;
 import java.io.File;
 
 /**
- * Abstraction of a user dir for an application given an application name and 
+ * Abstraction of a user dir for an application given an application name and
  * a version.
- * 
+ *
  * @author Nils Hoffmann
  */
 public class UserDir {
@@ -45,7 +45,8 @@ public class UserDir {
      * application name and version. Use this object, if you want to retrieve a
      * common location for application configuration data storage.
      *
-     * <p>The parameter
+     * <p>
+     * The parameter
      * <code>appname</code> should be rather short and should not contain any
      * characters, which are incompatible with the underlying filesystem
      * implementation. Usually, all alphanumeric symbols plus
@@ -106,7 +107,7 @@ public class UserDir {
      * @param basedir
      * @param name
      * @return the subdirectory of name <code>name</code> below the given
-     * basedir.
+     *         basedir.
      */
     public File getSubdirectory(File basedir, String name) {
         File sd = new File(basedir, name);
@@ -131,11 +132,11 @@ public class UserDir {
      * implementation.
      *
      * @param serviceInterface the class defining the service interface.
-     * @param serviceName the class defining the service implementation.
+     * @param serviceName      the class defining the service implementation.
      * @throws IllegalArgumentException if <code>serviceName</code> does not
-     * implement <code>serviceInterface</code>
+     *                                  implement <code>serviceInterface</code>
      * @return the File object representing the subdirectory for the specific
-     * service implementation.
+     *         service implementation.
      */
     public File getDirectoryForService(Class<?> serviceInterface, Class<?> serviceName) throws IllegalArgumentException {
         if (serviceInterface.isAssignableFrom(serviceName)) {

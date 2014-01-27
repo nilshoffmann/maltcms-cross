@@ -52,81 +52,81 @@ import net.sf.ehcache.exceptionhandler.CacheExceptionHandler;
 @Slf4j
 public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
 
-	private final ICacheElementProvider<K, V> provider;
-	private final Ehcache cache;
-	private final Set<K> keys;
+    private final ICacheElementProvider<K, V> provider;
+    private final Ehcache cache;
+    private final Set<K> keys;
 
-	/**
-	 * Creates a new instance.
-	 *
-	 * @param cache    the backing cache to use
-	 * @param provider the provider for key -> value
-	 */
-	public AutoRetrievalEhcacheDelegate(Ehcache cache,
-		ICacheElementProvider<K, V> provider) {
-		this.provider = provider;
-		this.cache = cache;
-		cache.setCacheExceptionHandler(new CacheExceptionHandler() {
+    /**
+     * Creates a new instance.
+     *
+     * @param cache    the backing cache to use
+     * @param provider the provider for key -> value
+     */
+    public AutoRetrievalEhcacheDelegate(Ehcache cache,
+        ICacheElementProvider<K, V> provider) {
+        this.provider = provider;
+        this.cache = cache;
+        cache.setCacheExceptionHandler(new CacheExceptionHandler() {
 
-			@Override
-			public void onException(Ehcache ehcache, Object key, Exception exception) {
-				if (exception instanceof java.io.NotSerializableException) {
-					//ignore
+            @Override
+            public void onException(Ehcache ehcache, Object key, Exception exception) {
+                if (exception instanceof java.io.NotSerializableException) {
+                    //ignore
 //					log.error("Exception occured on cache " + ehcache.getName() + ": ", exception);
-				} else {
-					throw new RuntimeException("Exception occured on cache " + ehcache.getName() + ": ", exception);
-				}
-			}
-		});
-		this.keys = new HashSet<K>();
-	}
+                } else {
+                    throw new RuntimeException("Exception occured on cache " + ehcache.getName() + ": ", exception);
+                }
+            }
+        });
+        this.keys = new HashSet<K>();
+    }
 
-	@Override
-	public Set<K> keys() {
-		return this.keys;
-	}
+    @Override
+    public Set<K> keys() {
+        return this.keys;
+    }
 
-	@Override
-	public void put(final K key, final V value) {
-		getCache().put(new Element((Object) key, (Object) value));
-		if (value == null) {
-			this.keys.remove(key);
-		} else {
-			this.keys.add(key);
-		}
-	}
+    @Override
+    public void put(final K key, final V value) {
+        getCache().put(new Element((Object) key, (Object) value));
+        if (value == null) {
+            this.keys.remove(key);
+        } else {
+            this.keys.add(key);
+        }
+    }
 
-	@Override
-	public V get(final K key) {
-		Element element = getCache().get((Object) key);
-		V v = null;
-		if (element != null) {
-			v = (V) element.getObjectValue();
-			if (v != null) {
-				return v;
-			}
-		}
-		v = provider.provide(key);
-		put(key, v);
-		return v;
-	}
+    @Override
+    public V get(final K key) {
+        Element element = getCache().get((Object) key);
+        V v = null;
+        if (element != null) {
+            v = (V) element.getObjectValue();
+            if (v != null) {
+                return v;
+            }
+        }
+        v = provider.provide(key);
+        put(key, v);
+        return v;
+    }
 
-	public Ehcache getCache() {
-		return cache;
-	}
+    public Ehcache getCache() {
+        return cache;
+    }
 
-	@Override
-	public String getName() {
-		return cache.getName();
-	}
+    @Override
+    public String getName() {
+        return cache.getName();
+    }
 
-	@Override
-	public void close() {
-		getCache().dispose();
-	}
+    @Override
+    public void close() {
+        getCache().dispose();
+    }
 
-	@Override
-	public CacheType getCacheType() {
-		return CacheType.EHCACHE;
-	}
+    @Override
+    public CacheType getCacheType() {
+        return CacheType.EHCACHE;
+    }
 }

@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -47,16 +47,17 @@ public class Metadata implements Iterable<Attribute> {
      */
     protected HashMap<String, Attribute> hm = new HashMap<String, Attribute>();
 
-	/**
-	 * Create new empty Metadata.
-	 */
+    /**
+     * Create new empty Metadata.
+     */
     public Metadata() {
     }
 
-	/**
-	 * Create new Metadata from the given attributes.
-	 * @param l the attributes
-	 */
+    /**
+     * Create new Metadata from the given attributes.
+     *
+     * @param l the attributes
+     */
     public Metadata(final List<Attribute> l) {
         this();
         for (final Attribute a : l) {
@@ -66,6 +67,7 @@ public class Metadata implements Iterable<Attribute> {
 
     /**
      * Add an attribute.
+     *
      * @param a the attribute
      */
     public void add(final Attribute a) {
@@ -75,6 +77,7 @@ public class Metadata implements Iterable<Attribute> {
 
     /**
      * Return the attributes as a collection.
+     *
      * @return the attributes as a collection
      */
     public Collection<Attribute> asCollection() {
@@ -83,6 +86,7 @@ public class Metadata implements Iterable<Attribute> {
 
     /**
      * Return the given attribute by name, or null.
+     *
      * @param name the attribute to query for
      * @return the attribute, or null if <code>name</code> is unknown
      */
@@ -92,6 +96,7 @@ public class Metadata implements Iterable<Attribute> {
 
     /**
      * Returns true, if the given attribute name is contained in this metadata, false otherwise.
+     *
      * @param name the attribute name
      * @return true if name is known, false otherwise
      */
@@ -104,10 +109,11 @@ public class Metadata implements Iterable<Attribute> {
         return this.hm.values().iterator();
     }
 
-	/**
-	 * Returns a collection of known attribute names.
-	 * @return the collection of known attribute names
-	 */
+    /**
+     * Returns a collection of known attribute names.
+     *
+     * @return the collection of known attribute names
+     */
     public Collection<String> keySet() {
         return this.hm.keySet();
     }

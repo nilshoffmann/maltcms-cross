@@ -34,16 +34,16 @@ package cross.cache;
  */
 public enum CacheType {
 
-	/**
-	 * Cache backed by ehcache implementation.
-	 */
-	EHCACHE,
-	/**
-	 * Cache backed by soft reference hash map.
-	 */
-	SOFT,
-	/**
-	 * Cache backed by standard hash map.
-	 */
-	NONE;
+    /**
+     * Cache backed by ehcache implementation.
+     */
+    EHCACHE,
+    /**
+     * Cache backed by soft reference hash map.
+     */
+    SOFT,
+    /**
+     * Cache backed by standard hash map.
+     */
+    NONE;
 }

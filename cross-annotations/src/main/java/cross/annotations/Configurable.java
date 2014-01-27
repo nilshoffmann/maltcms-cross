@@ -47,36 +47,36 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Configurable {
 
-	/**
-	 * The name of the annotated object. Returns an empty String by default.
-	 *
-	 * @return the name
-	 */
-	String name() default "";
+    /**
+     * The name of the annotated object. Returns an empty String by default.
+     *
+     * @return the name
+     */
+    String name() default "";
 
-	/**
-	 * The value of the annotated object. Returns an empty String by default.
-	 *
-	 * @return the value
-	 */
-	String value() default "";
+    /**
+     * The value of the annotated object. Returns an empty String by default.
+     *
+     * @return the value
+     */
+    String value() default "";
 
-	/**
-	 * The class of the annotated object. Returns Object.class by default.
-	 *
-	 * {@link AnnotationInspector} will now retrieve the type information directly
-	 * from the annotated field.
-	 *
-	 * @return the class type
-	 */
-	@Deprecated
-	Class<?> type() default Object.class;
+    /**
+     * The class of the annotated object. Returns Object.class by default.
+     *
+     * {@link AnnotationInspector} will now retrieve the type information directly
+     * from the annotated field.
+     *
+     * @return the class type
+     */
+    @Deprecated
+    Class<?> type() default Object.class;
 
-	/**
-	 * The description of the annotated object. Returns an empty String by
-	 * default.
-	 *
-	 * @return the description
-	 */
-	String description() default "";
+    /**
+     * The description of the annotated object. Returns an empty String by
+     * default.
+     *
+     * @return the description
+     */
+    String description() default "";
 }

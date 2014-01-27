@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -98,7 +98,7 @@ public class DataSourceFactory implements IDataSourceFactory {
      *
      * @param ff the file fragment
      * @return the data source for the given file fragment
-	 * @throws IllegalArgumentException if no data source could be found for the given file fragment
+     * @throws IllegalArgumentException if no data source could be found for the given file fragment
      */
     @Override
     public IDataSource getDataSourceFor(final IFileFragment ff) {
@@ -111,14 +111,14 @@ public class DataSourceFactory implements IDataSourceFactory {
             while (cnt >= 0) {
                 if (hasDataSourceFor(tmp)) {
                     for (final IDataSource ids : this.formatToIDataSource.get(tmp.
-                            toLowerCase())) {
-						try{
-							if (ids.canRead(ff) == 1) {
-								return ids;
-							}
-						}catch(Exception e) {
-							log.warn("Caught exception while querying IDataSource "+ids.getClass().getName()+"! IDataSource.canRead should not throw Exceptions: Please fix!");
-						}
+                        toLowerCase())) {
+                        try {
+                            if (ids.canRead(ff) == 1) {
+                                return ids;
+                            }
+                        } catch (Exception e) {
+                            log.warn("Caught exception while querying IDataSource " + ids.getClass().getName() + "! IDataSource.canRead should not throw Exceptions: Please fix!");
+                        }
                     }
                 }
                 if (cnt > 0) {
@@ -127,7 +127,7 @@ public class DataSourceFactory implements IDataSourceFactory {
                 cnt--;
             }
         }
-        throw new IllegalArgumentException("Unsupported file type '" + fname+"'");
+        throw new IllegalArgumentException("Unsupported file type '" + fname + "'");
     }
 
     private boolean hasDataSourceFor(String fileExtension) {
@@ -139,7 +139,8 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
-	 * Returns the registered data source class names.
+     * Returns the registered data source class names.
+     *
      * @return the dataSources
      */
     @Override
@@ -155,12 +156,13 @@ public class DataSourceFactory implements IDataSourceFactory {
     @Override
     public List<String> getSupportedFormats() {
         final List<String> l = new ArrayList<String>(this.formatToIDataSource.
-                keySet());
+            keySet());
         return l;
     }
 
     /**
-	 * Sets the data sources as fully qualified class names.
+     * Sets the data sources as fully qualified class names.
+     *
      * @param dataSources the dataSources to set
      */
     @Override
@@ -168,10 +170,10 @@ public class DataSourceFactory implements IDataSourceFactory {
         this.dataSources = dataSources;
         for (final String s : this.dataSources) {
             log.debug(
-                    "Trying to load IDataSource {}", s);
+                "Trying to load IDataSource {}", s);
             EvalTools.notNull(s, this);
             final IDataSource ids = Factory.getInstance().getObjectFactory().
-                    instantiate(s, IDataSource.class);
+                instantiate(s, IDataSource.class);
             addToHashMap(ids);
         }
     }

@@ -37,12 +37,12 @@ import org.junit.Test;
  */
 public class CombinatoricsTest {
 
-	/**
-	 * Test of faculty method, of class Combinatorics.
-	 */
-	@Test
-	public void testFaculty() {
-		double f = 1 * 2 * 3 * 4 * 5 * 6 * 7;
-		Assert.assertEquals(Combinatorics.faculty(7), f, 0.0f);
-	}
+    /**
+     * Test of faculty method, of class Combinatorics.
+     */
+    @Test
+    public void testFaculty() {
+        double f = 1 * 2 * 3 * 4 * 5 * 6 * 7;
+        Assert.assertEquals(Combinatorics.faculty(7), f, 0.0f);
+    }
 }

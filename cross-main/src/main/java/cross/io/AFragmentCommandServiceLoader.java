@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -32,12 +32,18 @@ import cross.ObjectFactory;
 import cross.annotations.Configurable;
 import cross.commands.fragments.AFragmentCommand;
 import cross.tools.StringTools;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.Configuration;
 
 /**
- * Loads available implementations of {@link cross.commands.fragments.AFragmentCommand} 
+ * Loads available implementations of {@link cross.commands.fragments.AFragmentCommand}
  * from classpath resources using the {@link java.util.ServiceLoader}.
  *
  * @author Nils Hoffmann
@@ -48,11 +54,11 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     @Configurable
     private List<String> fragmentCommands = Collections.emptyList();
 
-	/**
-	 * Comparator for {@link AFragmentCommand}, using lexical order on class names.
-	 */
+    /**
+     * Comparator for {@link AFragmentCommand}, using lexical order on class names.
+     */
     public static class ClassNameLexicalComparator implements
-            Comparator<AFragmentCommand> {
+        Comparator<AFragmentCommand> {
 
         @Override
         public int compare(AFragmentCommand o1, AFragmentCommand o2) {
@@ -61,16 +67,16 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     }
 
     /**
-     * Returns the available implementations of {@link AFragmentCommand} as provided 
-	 * by the Java {@link java.util.ServiceLoader} infrastructure.
-     * 
+     * Returns the available implementations of {@link AFragmentCommand} as provided
+     * by the Java {@link java.util.ServiceLoader} infrastructure.
+     *
      * Elements are sorted according to lexical order on their classnames.
      *
      * @return the list of available fragment commands
      */
     public List<AFragmentCommand> getAvailableCommands() {
         ServiceLoader<AFragmentCommand> sl = ServiceLoader
-                .load(AFragmentCommand.class);
+            .load(AFragmentCommand.class);
         HashSet<AFragmentCommand> s = new HashSet<AFragmentCommand>();
         for (AFragmentCommand ifc : sl) {
             s.add(ifc);
@@ -78,17 +84,18 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
         return createSortedListFromSet(s, new ClassNameLexicalComparator());
     }
 
-	/**
-	 * Returns the list of available user commands, given by class names in the <code>fragmentCommands</code> collection.
-	 * @param of the object factory
-	 * @return the list of user commands
-	 */
+    /**
+     * Returns the list of available user commands, given by class names in the <code>fragmentCommands</code> collection.
+     *
+     * @param of the object factory
+     * @return the list of user commands
+     */
     public List<AFragmentCommand> getAvailableUserCommands(ObjectFactory of) {
         HashSet<AFragmentCommand> s = new HashSet<AFragmentCommand>();
         for (String uc : fragmentCommands) {
             try {
                 AFragmentCommand af = of
-                        .instantiate(uc, AFragmentCommand.class);
+                    .instantiate(uc, AFragmentCommand.class);
                 s.add(af);
             } catch (IllegalArgumentException iae) {
                 log.warn(iae.getLocalizedMessage());
@@ -97,14 +104,15 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
         return createSortedListFromSet(s, new ClassNameLexicalComparator());
     }
 
-	/**
-	 * Creates a sorted list of fragment commands, given the provided comparator.
-	 * @param s the set of fragment commands
-	 * @param comp the comparator
-	 * @return a sorted list of fragment commands
-	 */
+    /**
+     * Creates a sorted list of fragment commands, given the provided comparator.
+     *
+     * @param s    the set of fragment commands
+     * @param comp the comparator
+     * @return a sorted list of fragment commands
+     */
     public List<AFragmentCommand> createSortedListFromSet(
-            Set<AFragmentCommand> s, Comparator<AFragmentCommand> comp) {
+        Set<AFragmentCommand> s, Comparator<AFragmentCommand> comp) {
         ArrayList<AFragmentCommand> al = new ArrayList<AFragmentCommand>();
         al.addAll(s);
         Collections.sort(al, comp);
@@ -113,7 +121,7 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * cross.IConfigurable#configure(org.apache.commons.configuration.Configuration
      * )
@@ -121,7 +129,7 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     @Override
     public void configure(Configuration cfg) {
         fragmentCommands = StringTools.toStringList(cfg.getList(getClass()
-                .getName()
-                + ".fragmentCommands"));
+            .getName()
+            + ".fragmentCommands"));
     }
 }

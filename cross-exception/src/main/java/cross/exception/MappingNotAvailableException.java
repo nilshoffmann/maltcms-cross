@@ -36,36 +36,36 @@ package cross.exception;
  */
 public class MappingNotAvailableException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -2775065713984704248L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -2775065713984704248L;
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message the message
-	 */
-	public MappingNotAvailableException(final String message) {
-		super(message);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message the message
+     */
+    public MappingNotAvailableException(final String message) {
+        super(message);
+    }
 
-	/**
-	 * Creates a new instance with the given message and cause.
-	 *
-	 * @param message the message
-	 * @param cause   the cause
-	 */
-	public MappingNotAvailableException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Creates a new instance with the given message and cause.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public MappingNotAvailableException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Creates a new instance with the given cause.
-	 *
-	 * @param cause the cause
-	 */
-	public MappingNotAvailableException(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance with the given cause.
+     *
+     * @param cause the cause
+     */
+    public MappingNotAvailableException(final Throwable cause) {
+        super(cause);
+    }
 }

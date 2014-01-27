@@ -36,31 +36,31 @@ package cross.event;
  */
 public interface IEvent<V> {
 
-	/**
-	 * Returns the transmitted type
-	 *
-	 * @return the transmitted type
-	 */
-	public V get();
+    /**
+     * Returns the transmitted type
+     *
+     * @return the transmitted type
+     */
+    public V get();
 
-	/**
-	 * Returns the event name
-	 *
-	 * @return the event name
-	 */
-	public String getEventName();
+    /**
+     * Returns the event name
+     *
+     * @return the event name
+     */
+    public String getEventName();
 
-	/**
-	 * Returns the typed event source.
-	 *
-	 * @return the event source
-	 */
-	public IEventSource<V> getSource();
+    /**
+     * Returns the typed event source.
+     *
+     * @return the event source
+     */
+    public IEventSource<V> getSource();
 
-	/**
-	 * Returns the time stamp when this event was created.
-	 *
-	 * @return the time stamp
-	 */
-	public long getWhen();
+    /**
+     * Returns the time stamp when this event was created.
+     *
+     * @return the time stamp
+     */
+    public long getWhen();
 }

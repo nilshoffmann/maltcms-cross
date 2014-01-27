@@ -37,21 +37,24 @@ import cross.io.xml.IXMLSerializable;
  */
 public interface IWorkflowElement extends IXMLSerializable {
 
-	/**
-	 * Returns the {@link IWorkflow} object associated to this element.
-	 * @return the workflow
-	 */
-	public abstract IWorkflow getWorkflow();
+    /**
+     * Returns the {@link IWorkflow} object associated to this element.
+     *
+     * @return the workflow
+     */
+    public abstract IWorkflow getWorkflow();
 
-	/**
-	 * Returns the workflow slot / category of this workflow element.
-	 * @return the workflow slot
-	 */
-	public abstract WorkflowSlot getWorkflowSlot();
+    /**
+     * Returns the workflow slot / category of this workflow element.
+     *
+     * @return the workflow slot
+     */
+    public abstract WorkflowSlot getWorkflowSlot();
 
-	/**
-	 * Set the workflow.
-	 * @param iw the workflow
-	 */
-	public abstract void setWorkflow(IWorkflow iw);
+    /**
+     * Set the workflow.
+     *
+     * @param iw the workflow
+     */
+    public abstract void setWorkflow(IWorkflow iw);
 }

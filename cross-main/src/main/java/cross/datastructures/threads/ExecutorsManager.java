@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -29,7 +29,13 @@ package cross.datastructures.threads;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Proxy for different ExecutorService implementations.
@@ -47,10 +53,11 @@ public class ExecutorsManager implements ExecutorService {
     private ExecutorService es = null;
     private int maxThreads = 1;
 
-	private final ExecutorType type = ExecutorType.FIXED;
+    private final ExecutorType type = ExecutorType.FIXED;
 
     /**
      * Create a new instance given the specified executor type.
+     *
      * @param et the executor type
      */
     public ExecutorsManager(final ExecutorType et) {
@@ -64,7 +71,8 @@ public class ExecutorsManager implements ExecutorService {
     }
 
     /**
-	 * Create a new instance with a fixed number of threads.
+     * Create a new instance with a fixed number of threads.
+     *
      * @param nthreads the number of threads
      */
     public ExecutorsManager(final int nthreads) {
@@ -74,7 +82,7 @@ public class ExecutorsManager implements ExecutorService {
 
     @Override
     public boolean awaitTermination(final long timeout, final TimeUnit unit)
-            throws InterruptedException {
+        throws InterruptedException {
         return this.es.awaitTermination(timeout, unit);
     }
 
@@ -85,28 +93,28 @@ public class ExecutorsManager implements ExecutorService {
 
     @Override
     public <T> List<Future<T>> invokeAll(
-            final Collection<? extends Callable<T>> tasks)
-            throws InterruptedException {
+        final Collection<? extends Callable<T>> tasks)
+        throws InterruptedException {
         return this.es.invokeAll(tasks);
     }
 
     @Override
     public <T> List<Future<T>> invokeAll(
-            final Collection<? extends Callable<T>> tasks, final long timeout,
-            final TimeUnit unit) throws InterruptedException {
+        final Collection<? extends Callable<T>> tasks, final long timeout,
+        final TimeUnit unit) throws InterruptedException {
         return this.es.invokeAll(tasks, timeout, unit);
     }
 
     @Override
     public <T> T invokeAny(final Collection<? extends Callable<T>> tasks)
-            throws InterruptedException, ExecutionException {
+        throws InterruptedException, ExecutionException {
         return this.es.invokeAny(tasks);
     }
 
     @Override
     public <T> T invokeAny(final Collection<? extends Callable<T>> tasks,
-            final long timeout, final TimeUnit unit)
-            throws InterruptedException, ExecutionException, TimeoutException {
+        final long timeout, final TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException {
         return this.es.invokeAny(tasks, timeout, unit);
     }
 

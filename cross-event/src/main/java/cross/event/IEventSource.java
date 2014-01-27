@@ -36,24 +36,24 @@ package cross.event;
  */
 public interface IEventSource<V> {
 
-	/**
-	 * Add a listener to this event source.
-	 *
-	 * @param l the listener
-	 */
-	public void addListener(IListener<IEvent<V>> l);
+    /**
+     * Add a listener to this event source.
+     *
+     * @param l the listener
+     */
+    public void addListener(IListener<IEvent<V>> l);
 
-	/**
-	 * Fire a typed event.
-	 *
-	 * @param e the event
-	 */
-	public void fireEvent(IEvent<V> e);
+    /**
+     * Fire a typed event.
+     *
+     * @param e the event
+     */
+    public void fireEvent(IEvent<V> e);
 
-	/**
-	 * Remove a listener for the event source.
-	 *
-	 * @param l the listener
-	 */
-	public void removeListener(IListener<IEvent<V>> l);
+    /**
+     * Remove a listener for the event source.
+     *
+     * @param l the listener
+     */
+    public void removeListener(IListener<IEvent<V>> l);
 }

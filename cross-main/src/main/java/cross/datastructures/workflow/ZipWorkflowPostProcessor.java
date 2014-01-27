@@ -43,37 +43,37 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class ZipWorkflowPostProcessor implements IWorkflowPostProcessor {
 
-	private WorkflowZipper workflowZipper = new WorkflowZipper();
-	private File outputDirectory = null;
-	private boolean useCustomName = false;
-	private boolean saveInOutputDirectory = false;
-	private String fileName = "maltcmsResults.zip";
-	private boolean encodeBase64 = false;
+    private WorkflowZipper workflowZipper = new WorkflowZipper();
+    private File outputDirectory = null;
+    private boolean useCustomName = false;
+    private boolean saveInOutputDirectory = false;
+    private String fileName = "maltcmsResults.zip";
+    private boolean encodeBase64 = false;
 
-	@Override
-	public void process(IWorkflow workflow) {
-		workflowZipper.setIWorkflow(workflow);
-		if (outputDirectory == null) {
-			if (saveInOutputDirectory) {
-				outputDirectory = workflow.getOutputDirectory();
-			} else {
-				outputDirectory = workflow.getOutputDirectory().getParentFile();
-			}
-		}
-		String name;
-		if (useCustomName) {
-			name = fileName;
-		} else {
-			name = workflow.getOutputDirectory().getName() + ".zip";
-		}
-		final File results = new File(outputDirectory, name);
+    @Override
+    public void process(IWorkflow workflow) {
+        workflowZipper.setIWorkflow(workflow);
+        if (outputDirectory == null) {
+            if (saveInOutputDirectory) {
+                outputDirectory = workflow.getOutputDirectory();
+            } else {
+                outputDirectory = workflow.getOutputDirectory().getParentFile();
+            }
+        }
+        String name;
+        if (useCustomName) {
+            name = fileName;
+        } else {
+            name = workflow.getOutputDirectory().getName() + ".zip";
+        }
+        final File results = new File(outputDirectory, name);
 
-		if (workflowZipper.save(results) && encodeBase64) {
-			BinaryFileBase64Wrapper.base64Encode(results, new File(outputDirectory,
-				results.getName() + ".b64"));
-		} else {
-			log.debug("Did not Base64 encode " + name);
-		}
-	}
+        if (workflowZipper.save(results) && encodeBase64) {
+            BinaryFileBase64Wrapper.base64Encode(results, new File(outputDirectory,
+                results.getName() + ".b64"));
+        } else {
+            log.debug("Did not Base64 encode " + name);
+        }
+    }
 
 }

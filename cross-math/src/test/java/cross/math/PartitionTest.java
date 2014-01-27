@@ -37,37 +37,37 @@ import org.junit.Test;
  */
 public class PartitionTest {
 
-	public PartitionTest() {
-	}
+    public PartitionTest() {
+    }
 
-	/**
-	 * Test of iteration of class Partition.
-	 */
-	@Test
-	public void testIteration() {
-		Partition p = new Partition(5);
-		for (int i = 0; i < p.size() - 1; i++) {
-			Assert.assertTrue(p.hasNext());
-			Assert.assertEquals(i, p.next().intValue());
-		}
-	}
+    /**
+     * Test of iteration of class Partition.
+     */
+    @Test
+    public void testIteration() {
+        Partition p = new Partition(5);
+        for (int i = 0; i < p.size() - 1; i++) {
+            Assert.assertTrue(p.hasNext());
+            Assert.assertEquals(i, p.next().intValue());
+        }
+    }
 
-	/**
-	 * Test of remove method, of class Partition.
-	 */
-	@Test(expected = UnsupportedOperationException.class)
-	public void testRemove() {
-		Partition p = new Partition(11);
-		p.remove();
-		Assert.assertEquals(10, p.size());
-	}
+    /**
+     * Test of remove method, of class Partition.
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public void testRemove() {
+        Partition p = new Partition(11);
+        p.remove();
+        Assert.assertEquals(10, p.size());
+    }
 
-	/**
-	 * Test of size method, of class Partition.
-	 */
-	@Test
-	public void testSize() {
-		Partition p = new Partition(11);
-		Assert.assertEquals(11, p.size());
-	}
+    /**
+     * Test of size method, of class Partition.
+     */
+    @Test
+    public void testSize() {
+        Partition p = new Partition(11);
+        Assert.assertEquals(11, p.size());
+    }
 }

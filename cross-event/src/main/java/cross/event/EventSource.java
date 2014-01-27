@@ -40,53 +40,53 @@ import java.util.concurrent.Executors;
  */
 public class EventSource<V> implements IEventSource<V> {
 
-	private final LinkedHashSet<IListener<IEvent<V>>> listenerMap;
-	private ExecutorService es = Executors.newCachedThreadPool();
+    private final LinkedHashSet<IListener<IEvent<V>>> listenerMap;
+    private ExecutorService es = Executors.newCachedThreadPool();
 
-	/**
-	 * Creates a new instance of EventSource.
-	 *
-	 * @param nThreads the number of threads to use for event notification
-	 */
-	public EventSource(int nThreads) {
-		this();
-		this.es = Executors.newFixedThreadPool(nThreads);
-	}
+    /**
+     * Creates a new instance of EventSource.
+     *
+     * @param nThreads the number of threads to use for event notification
+     */
+    public EventSource(int nThreads) {
+        this();
+        this.es = Executors.newFixedThreadPool(nThreads);
+    }
 
-	/**
-	 * Creates a new instance of EventSource with a cached thread pool
-	 * for event notification.
-	 */
-	public EventSource() {
-		this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
-	}
+    /**
+     * Creates a new instance of EventSource with a cached thread pool
+     * for event notification.
+     */
+    public EventSource() {
+        this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
+    }
 
-	@Override
-	public void addListener(final IListener<IEvent<V>> l) {
-		if (this.listenerMap.contains(l)) {
-			// System.out.println("IListener already known, ignoring!");
-		} else {
-			// System.out.println("Adding listener!");
-			this.listenerMap.add(l);
-		}
-	}
+    @Override
+    public void addListener(final IListener<IEvent<V>> l) {
+        if (this.listenerMap.contains(l)) {
+            // System.out.println("IListener already known, ignoring!");
+        } else {
+            // System.out.println("Adding listener!");
+            this.listenerMap.add(l);
+        }
+    }
 
-	@Override
-	public void fireEvent(final IEvent<V> e) {
-		for (final IListener<IEvent<V>> lst : this.listenerMap) {
-			es.submit(new Runnable() {
-				@Override
-				public void run() {
-					lst.listen(e);
-				}
-			});
-		}
-	}
+    @Override
+    public void fireEvent(final IEvent<V> e) {
+        for (final IListener<IEvent<V>> lst : this.listenerMap) {
+            es.submit(new Runnable() {
+                @Override
+                public void run() {
+                    lst.listen(e);
+                }
+            });
+        }
+    }
 
-	@Override
-	public void removeListener(final IListener<IEvent<V>> l) {
-		if (this.listenerMap.contains(l)) {
-			this.listenerMap.remove(l);
-		}
-	}
+    @Override
+    public void removeListener(final IListener<IEvent<V>> l) {
+        if (this.listenerMap.contains(l)) {
+            this.listenerMap.remove(l);
+        }
+    }
 }

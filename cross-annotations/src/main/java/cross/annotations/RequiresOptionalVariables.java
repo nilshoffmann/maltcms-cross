@@ -45,11 +45,11 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface RequiresOptionalVariables {
 
-	/**
-	 * Returns the array of optional variable names.
-	 * May be empty.
-	 *
-	 * @return the array of optional variable names
-	 */
-	String[] names() default "";
+    /**
+     * Returns the array of optional variable names.
+     * May be empty.
+     *
+     * @return the array of optional variable names
+     */
+    String[] names() default "";
 }

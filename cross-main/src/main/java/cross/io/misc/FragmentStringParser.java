@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -74,16 +74,16 @@ public class FragmentStringParser {
     /**
      * Create a IVariableFragment from given parameters.
      *
-     * @param irnge the index variable range
-     * @param vrnge the variable range
-     * @param parent the parent file fragment
+     * @param irnge   the index variable range
+     * @param vrnge   the variable range
+     * @param parent  the parent file fragment
      * @param varname the variable name
-     * @param ifrg the index variable fragment
+     * @param ifrg    the index variable fragment
      * @return the variable fragment, either new, or updated from parent
      */
     private IVariableFragment getVariableFragment(final Range irnge,
-            final Range vrnge, final IFileFragment parent,
-            final String varname, final IVariableFragment ifrg) {
+        final Range vrnge, final IFileFragment parent,
+        final String varname, final IVariableFragment ifrg) {
         try {
             IVariableFragment vf = null;
             if (parent.hasChild(varname)) {
@@ -97,7 +97,7 @@ public class FragmentStringParser {
             }
             // list.add(vf);
             log.debug("Created VariableFragment {} with Range {}", vf,
-                    vrnge);
+                vrnge);
             return vf;
         } catch (final IllegalArgumentException iae) {
             log.error(iae.getLocalizedMessage());
@@ -111,10 +111,10 @@ public class FragmentStringParser {
      * variable following the #.
      *
      * @param parent the parent file fragment
-     * @param var the variable fragment name
+     * @param var    the variable fragment name
      */
     private void handleIndexVariable(final IFileFragment parent,
-            final String var) {
+        final String var) {
         log.info("Found index var in {}", var);
         // Separate variable name from index variable name
         final String[] varIndex = var.split("#", 0);
@@ -128,30 +128,30 @@ public class FragmentStringParser {
             log.info("varIndexNameRange {}", varIndexNameRange);
             if (varIndexNameRange.length > 1) {
                 final String irange = varIndexNameRange[1].substring(0,
-                        varIndexNameRange[1].length() - 1);
+                    varIndexNameRange[1].length() - 1);
                 final String[] beginEnd = irange.split(":", 0);
                 irnge = parseIRange(irnge, beginEnd);
                 log.info("Index var has range {}", irnge);
                 log.info("Naming index var {}", varIndexNameRange[0]);
                 index = getVariableFragment(null, irnge, parent,
-                        varIndexNameRange[0], null);
+                    varIndexNameRange[0], null);
             } else {
                 // one otherwise, so we
                 // read the index variable completely, and create it
                 log.info("Index var has no range");
                 if (!parent.hasChild(varIndexNameRange[0])) {
                     log.info("Parent does not have variable {}",
-                            varIndexNameRange[0]);
+                        varIndexNameRange[0]);
                     log.info("Naming index var {}", varIndexNameRange[0]);
                     index = getVariableFragment(null, null, parent,
-                            varIndexNameRange[0], null);
+                        varIndexNameRange[0], null);
                 }
             }
             handleVariable(varIndex[0], index, parent);
 
         } else {
             throw new IllegalArgumentException("Could not parse " + var
-                    + " after #");
+                + " after #");
         }
     }
 
@@ -160,11 +160,11 @@ public class FragmentStringParser {
      * variable. [ can also be omitted, if the complete variable should be read.
      *
      * @param string the variable name
-     * @param index the index variable fragment
+     * @param index  the index variable fragment
      * @param parent the parent file fragment
      */
     private void handleVariable(final String string,
-            final IVariableFragment index, final IFileFragment parent) {
+        final IVariableFragment index, final IFileFragment parent) {
         log.info("Found plain var in {}", string);
         final String[] range = string.split("\\[", 0);
         final String varname = range[0];
@@ -218,7 +218,7 @@ public class FragmentStringParser {
 
         String filename = fileNameVarNameRest[0];
         File dir = new File(Factory.getInstance().getConfiguration().getString(
-                "input.basedir", ""));
+            "input.basedir", ""));
         final File ff = new File(filename);
         if (ff.isAbsolute()) {
             dir = ff.getParentFile();
@@ -231,7 +231,7 @@ public class FragmentStringParser {
             log.info("Vars not given explicitly, loading all!");
             try {
                 Factory.getInstance().getDataSourceFactory().getDataSourceFor(
-                        parent).readStructure(parent);
+                    parent).readStructure(parent);
             } catch (final IOException e) {
                 log.error(e.getLocalizedMessage());
             }
@@ -253,9 +253,9 @@ public class FragmentStringParser {
 
     /**
      * Parse a range.
-     * 
+     *
      * @param varIndex the index range
-     * @return 
+     * @return
      */
     private String[] parseIndexRange(final String varIndex) {
         String[] indexRange;
@@ -303,7 +303,7 @@ public class FragmentStringParser {
                 return s;
             } else {
                 throw new IllegalArgumentException("String " + s
-                        + " cannot be parsed!");
+                    + " cannot be parsed!");
             }
         }
     }

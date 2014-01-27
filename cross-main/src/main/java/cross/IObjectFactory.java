@@ -38,74 +38,74 @@ import org.apache.commons.configuration.Configuration;
  */
 public interface IObjectFactory extends IConfigurable {
 
-	/**
-	 * Configure the given object, if it implements {@link IConfigurable}.
-	 *
-	 * @param <T> the generic type
-	 * @param t   the object to be configured
-	 */
-	<T> void configureType(final T t);
+    /**
+     * Configure the given object, if it implements {@link IConfigurable}.
+     *
+     * @param <T> the generic type
+     * @param t   the object to be configured
+     */
+    <T> void configureType(final T t);
 
-	/**
-	 * Create a new Instance of c, configure automatically, if c is an instance
-	 * of IConfigurable
-	 *
-	 * @param <T> the generic type
-	 * @param c   the desired runtime class
-	 * @return a new, configured instance of the requested class
-	 */
-	<T> T instantiate(final Class<T> c);
+    /**
+     * Create a new Instance of c, configure automatically, if c is an instance
+     * of IConfigurable
+     *
+     * @param <T> the generic type
+     * @param c   the desired runtime class
+     * @return a new, configured instance of the requested class
+     */
+    <T> T instantiate(final Class<T> c);
 
-	/**
-	 * Instantiate a class, given by a classname and the class of Type T.
-	 *
-	 * @param <T>       the generic type
-	 * @param classname the fully qualified name of the class
-	 * @param cls       the desired runtime class
-	 * @return a new, configured instance of the requested class
-	 */
-	<T> T instantiate(final String classname, final Class<T> cls);
+    /**
+     * Instantiate a class, given by a classname and the class of Type T.
+     *
+     * @param <T>       the generic type
+     * @param classname the fully qualified name of the class
+     * @param cls       the desired runtime class
+     * @return a new, configured instance of the requested class
+     */
+    <T> T instantiate(final String classname, final Class<T> cls);
 
-	/**
-	 * Instantiate a class, given a classname and the class of Type t and
-	 * configure with configuration from configurationFile.
-	 *
-	 * @param <T>               the generic type
-	 * @param classname         the fully qualified name of the class
-	 * @param cls               the requested target class
-	 * @param configurationFile the configuration file location to use
-	 * @return a new, configured instance of the requested class
-	 */
-	<T> T instantiate(final String classname, final Class<T> cls, final String configurationFile);
+    /**
+     * Instantiate a class, given a classname and the class of Type t and
+     * configure with configuration from configurationFile.
+     *
+     * @param <T>               the generic type
+     * @param classname         the fully qualified name of the class
+     * @param cls               the requested target class
+     * @param configurationFile the configuration file location to use
+     * @return a new, configured instance of the requested class
+     */
+    <T> T instantiate(final String classname, final Class<T> cls, final String configurationFile);
 
-	/**
-	 * Instantiate a class, given a classname and the class of Type t and
-	 * configure with configuration from config.
-	 *
-	 * @param <T>       the generic type
-	 * @param classname the fully qualified name of the class
-	 * @param cls       the requested target class
-	 * @param config    the configuration to use
-	 * @return a new, configured instance of the requested class
-	 */
-	<T> T instantiate(final String classname, final Class<T> cls, final Configuration config);
+    /**
+     * Instantiate a class, given a classname and the class of Type t and
+     * configure with configuration from config.
+     *
+     * @param <T>       the generic type
+     * @param classname the fully qualified name of the class
+     * @param cls       the requested target class
+     * @param config    the configuration to use
+     * @return a new, configured instance of the requested class
+     */
+    <T> T instantiate(final String classname, final Class<T> cls, final Configuration config);
 
-	/**
-	 * Returns objects of the given type, or none if not object of that class is known.
-	 *
-	 * @param <T> the generic type
-	 * @param cls the requested target class
-	 * @return the objects of the given class type
-	 */
-	<T> Map<String, T> getObjectsOfType(final Class<T> cls);
+    /**
+     * Returns objects of the given type, or none if not object of that class is known.
+     *
+     * @param <T> the generic type
+     * @param cls the requested target class
+     * @return the objects of the given class type
+     */
+    <T> Map<String, T> getObjectsOfType(final Class<T> cls);
 
-	/**
-	 * Returns an object by name, or none if no object of that name is known.
-	 *
-	 * @param <T>  the generic type
-	 * @param name the name of the requestd class object
-	 * @param cls  the requested target class
-	 * @return the object with the given name and class type
-	 */
-	<T> T getNamedObject(final String name, final Class<T> cls);
+    /**
+     * Returns an object by name, or none if no object of that name is known.
+     *
+     * @param <T>  the generic type
+     * @param name the name of the requestd class object
+     * @param cls  the requested target class
+     * @return the object with the given name and class type
+     */
+    <T> T getNamedObject(final String name, final Class<T> cls);
 }

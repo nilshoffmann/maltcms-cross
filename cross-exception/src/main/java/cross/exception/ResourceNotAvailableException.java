@@ -29,36 +29,36 @@ package cross.exception;
 
 public class ResourceNotAvailableException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -277507898414704248L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -277507898414704248L;
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message the message
-	 */
-	public ResourceNotAvailableException(final String message) {
-		super(message);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message the message
+     */
+    public ResourceNotAvailableException(final String message) {
+        super(message);
+    }
 
-	/**
-	 * Creates a new instance with the given message and cause.
-	 *
-	 * @param message the message
-	 * @param cause   the cause
-	 */
-	public ResourceNotAvailableException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Creates a new instance with the given message and cause.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public ResourceNotAvailableException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Creates a new instance with the given cause.
-	 *
-	 * @param cause the cause
-	 */
-	public ResourceNotAvailableException(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance with the given cause.
+     *
+     * @param cause the cause
+     */
+    public ResourceNotAvailableException(final Throwable cause) {
+        super(cause);
+    }
 }

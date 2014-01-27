@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -28,7 +28,13 @@
 package cross.datastructures.tuple;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Abstract class for N-Tuples of type T, providing different utility methods,
@@ -40,7 +46,7 @@ import java.util.*;
  * @param <T>
  */
 public class TupleND<T extends Serializable> implements Collection<T>,
-        Serializable {
+    Serializable {
 
     /**
      *
@@ -108,14 +114,15 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return getSize() * (getSize() - 1) / 2;
     }
 
-	/**
-	 * Returns all unique pairs without repetition. For example the collection
-	 * [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D],[B,C],[B,D],[C,D].
-	 * @return the unique pairs without repetition
-	 */
+    /**
+     * Returns all unique pairs without repetition. For example the collection
+     * [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D],[B,C],[B,D],[C,D].
+     *
+     * @return the unique pairs without repetition
+     */
     public List<Tuple2D<T, T>> getPairs() {
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(
-                getNumberOfPairs());
+            getNumberOfPairs());
         // int size = getNumberOfPairs();
         int cnt = 1;
         for (int i = 0; i < this.c.size() - 1; i++) {
@@ -129,15 +136,16 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return Collections.unmodifiableList(al);
     }
 
-	/**
-	 * Returns all pairs of elements with the first element, excluding the first element.
-	 * For example the collection [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D].
-	 * @return the unique pairs without repetition
-	 */
+    /**
+     * Returns all pairs of elements with the first element, excluding the first element.
+     * For example the collection [A,B,C,D] will return the following pairs: [A,B],[A,C],[A,D].
+     *
+     * @return the unique pairs without repetition
+     */
     public List<Tuple2D<T, T>> getPairsWithFirstElement() {
         final T first = this.c.get(0);
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
-                .size() - 1);
+            .size() - 1);
         // int size = this.c.size() - 1;
         for (int i = 1; i < this.c.size(); i++) {
             // System.out.println("Adding pair " + i + " of " + size);
@@ -147,15 +155,16 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return Collections.unmodifiableList(al);
     }
 
-	/**
-	 * Returns all pairs of elements with the first element, excluding the first element.
-	 * For example the collection [A,B,C,D] will return the following pairs: [D,A],[D,B],[D,C].
-	 * @return the unique pairs without repetition
-	 */
+    /**
+     * Returns all pairs of elements with the first element, excluding the first element.
+     * For example the collection [A,B,C,D] will return the following pairs: [D,A],[D,B],[D,C].
+     *
+     * @return the unique pairs without repetition
+     */
     public List<Tuple2D<T, T>> getPairsWithLastElement() {
         final T last = this.c.get(this.c.size() - 1);
         final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
-                .size() - 1);
+            .size() - 1);
         final int size = this.c.size() - 1;
         for (int i = 0; i < size; i++) {
             // System.out.println("Adding pair " + i + " of " + size);
@@ -198,12 +207,13 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return this.c.retainAll(c1);
     }
 
-	/**
-	 * Adds the pair elements contained in <code>coll</code> to this 
-	 * n-tuple in the order that they appear in. For example the collection [[A,B],[A,C],[A,D]]
-	 * will create the following elements in order: [A,B,C,D].
-	 * @param coll the pair collection 
-	 */
+    /**
+     * Adds the pair elements contained in <code>coll</code> to this
+     * n-tuple in the order that they appear in. For example the collection [[A,B],[A,C],[A,D]]
+     * will create the following elements in order: [A,B,C,D].
+     *
+     * @param coll the pair collection
+     */
     public void setPairs(final Collection<Tuple2D<T, T>> coll) {
 //		System.out.println("Clearing collection!");
         this.c.clear();

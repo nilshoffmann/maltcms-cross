@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -37,18 +37,20 @@ import java.io.Serializable;
  */
 public interface ISerializationProxy<T> extends Serializable {
 
-	/**
-	 * Convert the given object to a Serializable instance.
-	 * @param t the runtime object
-	 * @return the Serializable proxy
-	 */
-	public Serializable convert(T t);
+    /**
+     * Convert the given object to a Serializable instance.
+     *
+     * @param t the runtime object
+     * @return the Serializable proxy
+     */
+    public Serializable convert(T t);
 
-	/**
-	 * Invert the conversion from the Serializable / Object, to the 
-	 * original type.
-	 * @param o the object to reverse convert
-	 * @return the object with its original type
-	 */
-	public T reverseConvert(Object o);
+    /**
+     * Invert the conversion from the Serializable / Object, to the
+     * original type.
+     *
+     * @param o the object to reverse convert
+     * @return the object with its original type
+     */
+    public T reverseConvert(Object o);
 }

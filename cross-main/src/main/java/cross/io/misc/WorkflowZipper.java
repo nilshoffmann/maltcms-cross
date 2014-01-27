@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -32,7 +32,13 @@ import cross.datastructures.tools.FileTools;
 import cross.datastructures.workflow.IWorkflow;
 import cross.datastructures.workflow.IWorkflowFileResult;
 import cross.datastructures.workflow.IWorkflowResult;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,7 +67,7 @@ public class WorkflowZipper implements IConfigurable {
     private boolean flatten = false;
 
     private void addZipEntry(final int bufsize, final ZipOutputStream zos,
-            final byte[] input_buffer, final File file, final HashSet<String> zipEntries) throws IOException {
+        final byte[] input_buffer, final File file, final HashSet<String> zipEntries) throws IOException {
         log.debug("Adding zip entry for file {}", file);
         if (file.exists() && file.isFile()) {
             // Use the file name for the ZipEntry name.
@@ -77,7 +83,7 @@ public class WorkflowZipper implements IConfigurable {
             // Create a buffered input stream from the file stream.
             final FileInputStream in = new FileInputStream(file);
             final BufferedInputStream source = new BufferedInputStream(in,
-                    bufsize);
+                bufsize);
 
             // Read from source into buffer and write, thereby compressing
             // on the fly
@@ -94,7 +100,7 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     private void addRelativeZipEntry(final int bufsize, final ZipOutputStream zos,
-            final byte[] input_buffer, final String relativePath, final File file, final HashSet<String> zipEntries) throws IOException {
+        final byte[] input_buffer, final String relativePath, final File file, final HashSet<String> zipEntries) throws IOException {
         log.debug("Adding zip entry for file {}", file);
         if (file.exists() && file.isFile()) {
             // Use the file name for the ZipEntry name.
@@ -110,7 +116,7 @@ public class WorkflowZipper implements IConfigurable {
             // Create a buffered input stream from the file stream.
             final FileInputStream in = new FileInputStream(file);
             final BufferedInputStream source = new BufferedInputStream(in,
-                    bufsize);
+                bufsize);
 
             // Read from source into buffer and write, thereby compressing
             // on the fly
@@ -138,9 +144,9 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-	 * Returns, whether the workflow output directory will be deleted when the application 
-	 * exits.
-	 * 
+     * Returns, whether the workflow output directory will be deleted when the application
+     * exits.
+     *
      * @return true if workflow output directory will be deleted on termination, false otherwise
      */
     public boolean isDeleteOnExit() {
@@ -148,7 +154,8 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-	 * Returns, whether the workflow will be zipped by the workflow zipper.
+     * Returns, whether the workflow will be zipped by the workflow zipper.
+     *
      * @return true if workflow output will be zipped, false otherwise
      */
     public boolean isZipWorkflow() {
@@ -161,7 +168,7 @@ public class WorkflowZipper implements IConfigurable {
      *
      * @param f the file to save to
      * @return true if the workflow was zipped, false otherwise
-	 * @throws RuntimeException if IOExceptions are encountered
+     * @throws RuntimeException if IOExceptions are encountered
      */
     public boolean save(final File f) {
         if (this.zipWorkflow) {
@@ -175,10 +182,10 @@ public class WorkflowZipper implements IConfigurable {
                 log.info("Created zip output stream");
                 final byte[] input_buffer = new byte[bufsize];
                 File basedir = FileTools.prependDefaultDirsWithPrefix("", null,
-                        this.iw.getStartupDate());
+                    this.iw.getStartupDate());
                 if (this.deleteOnExit) {
                     log.info("marked basedir for deletion on exit: {}",
-                            basedir);
+                        basedir);
                     basedir.deleteOnExit();
                 }
                 if (flatten) {
@@ -194,14 +201,14 @@ public class WorkflowZipper implements IConfigurable {
                             // mark file for deletion
                             final File parent = file.getParentFile();
                             log.info("Retrieving parent of file result {}",
-                                    parent);
+                                parent);
                             // Also delete the parent directory in which file was
                             // contained,
                             // unless it is the base directory + possibly additional
                             // defaultDirs
                             if (parent.getAbsolutePath().startsWith(
-                                    basedir.getAbsolutePath())
-                                    && !parent.getAbsolutePath().equals(
+                                basedir.getAbsolutePath())
+                                && !parent.getAbsolutePath().equals(
                                     basedir.getAbsolutePath())) {
                                 log.info("Marking file and parent for deletion");
                                 if (this.deleteOnExit) {
@@ -210,7 +217,7 @@ public class WorkflowZipper implements IConfigurable {
                                 }
                             }
                             if (file.getAbsolutePath().startsWith(
-                                    basedir.getAbsolutePath())) {
+                                basedir.getAbsolutePath())) {
                                 log.info("Marking file for deletion");
                                 if (this.deleteOnExit) {
                                     file.deleteOnExit();
@@ -265,18 +272,20 @@ public class WorkflowZipper implements IConfigurable {
         }
     }
 
-	/**
-	 * Save to file below <code>parentDir</code> and with name <code>filename</code>.
-	 * @param parentDir the parent directory
-	 * @param filename the filename
-	 * @return true if the workflow was zipped, false otherwise
-	 */
+    /**
+     * Save to file below <code>parentDir</code> and with name <code>filename</code>.
+     *
+     * @param parentDir the parent directory
+     * @param filename  the filename
+     * @return true if the workflow was zipped, false otherwise
+     */
     public boolean save(final File parentDir, final String filename) {
         return save(new File(parentDir, filename));
     }
 
     /**
-	 * Sets whether workflow output directory is deleted on exit.
+     * Sets whether workflow output directory is deleted on exit.
+     *
      * @param deleteOnExit true if output directory should be deleted, false otherwise
      */
     public void setDeleteOnExit(final boolean deleteOnExit) {
@@ -284,7 +293,8 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-	 * Sets the file filter to select files included in the result directory.
+     * Sets the file filter to select files included in the result directory.
+     *
      * @param fileFilter the file filter
      */
     public void setFileFilter(final FileFilter fileFilter) {
@@ -293,7 +303,8 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-	 * Sets the workflow.
+     * Sets the workflow.
+     *
      * @param workflow the workflow
      */
     public void setIWorkflow(final IWorkflow workflow) {
@@ -301,7 +312,8 @@ public class WorkflowZipper implements IConfigurable {
     }
 
     /**
-	 * Sets whether the workflow output directory should be zipped.
+     * Sets whether the workflow output directory should be zipped.
+     *
      * @param zipWorkflow true if output directory should be zipped, false otherwise
      */
     public void setZipWorkflow(final boolean zipWorkflow) {
@@ -310,6 +322,7 @@ public class WorkflowZipper implements IConfigurable {
 
     /**
      * Sets whether the file hierarchy in workflow output directory should be reduced or not.
+     *
      * @param flatten true if the output directory should be flattened, false if the file/directory hierarchy should be maintained
      */
     public void setFlatten(boolean flatten) {

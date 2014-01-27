@@ -42,33 +42,33 @@ import cross.cache.ICacheElementProvider;
  */
 public class AutoRetrievalSoftReferenceCache<K, V> extends SoftReferenceCache<K, V> {
 
-	private final ICacheElementProvider<K, V> provider;
+    private final ICacheElementProvider<K, V> provider;
 
-	/**
-	 * Creates a new instance
-	 *
-	 * @param name            the name of the cache
-	 * @param elementProvider the element provider
-	 */
-	public AutoRetrievalSoftReferenceCache(String name, ICacheElementProvider<K, V> elementProvider) {
-		super(name);
-		this.provider = elementProvider;
-	}
+    /**
+     * Creates a new instance
+     *
+     * @param name            the name of the cache
+     * @param elementProvider the element provider
+     */
+    public AutoRetrievalSoftReferenceCache(String name, ICacheElementProvider<K, V> elementProvider) {
+        super(name);
+        this.provider = elementProvider;
+    }
 
-	/**
-	 * Returns v from the cache or retrieves it from the cache element provider.
-	 *
-	 * @param key the key
-	 * @return the value
-	 */
-	@Override
-	public V get(K key) {
-		V v = super.get(key);
-		if (v != null) {
-			return v;
-		}
-		v = provider.provide(key);
-		put(key, v);
-		return v;
-	}
+    /**
+     * Returns v from the cache or retrieves it from the cache element provider.
+     *
+     * @param key the key
+     * @return the value
+     */
+    @Override
+    public V get(K key) {
+        V v = super.get(key);
+        if (v != null) {
+            return v;
+        }
+        v = provider.provide(key);
+        put(key, v);
+        return v;
+    }
 }

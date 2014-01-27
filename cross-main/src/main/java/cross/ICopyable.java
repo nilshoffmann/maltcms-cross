@@ -38,13 +38,13 @@ package cross;
  */
 public interface ICopyable<T> {
 
-	/**
-	 * Create a deep copy of the object implementing ICopyable.
-	 * The result may need to be cast to the appropriate type.
-	 *
-	 * @param <T> the target type of this object
-	 * @return the deep copy of this object
-	 */
-	<T> T copy();
+    /**
+     * Create a deep copy of the object implementing ICopyable.
+     * The result may need to be cast to the appropriate type.
+     *
+     * @param <T> the target type of this object
+     * @return the deep copy of this object
+     */
+    <T> T copy();
 
 }

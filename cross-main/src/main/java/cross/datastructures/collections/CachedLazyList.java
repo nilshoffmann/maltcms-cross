@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -30,7 +30,12 @@ package cross.datastructures.collections;
 import cross.datastructures.tools.EvalTools;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Implementation of a read-only cached list for indexed data access.
@@ -48,7 +53,7 @@ public class CachedLazyList<T> implements List<T> {
         private final Integer key;
 
         private SRefA(final Integer key, final T value,
-                final ReferenceQueue<T> rq) {
+            final ReferenceQueue<T> rq) {
             super(value, rq);
             this.key = key;
         }
@@ -59,7 +64,7 @@ public class CachedLazyList<T> implements List<T> {
     }
 
     public static <T> CachedLazyList<T> getList(final IElementProvider<T> ivf,
-            final int offset, final int length) {
+        final int offset, final int length) {
         CachedLazyList<T> cl = new CachedLazyList<T>(ivf);
 //        cl.setElementProvider(ivf);
         cl.init(offset, length);
@@ -171,10 +176,10 @@ public class CachedLazyList<T> implements List<T> {
                 final int upperBound = Math.min(this.size, this.cacheSize);
 //				Logging.getLogger(this).info("Prefetching: from {} to {}",
 //				        arg0, arg0 + upperBound);
-				int from = arg0;
-				int to = Math.max(arg0,Math.min(
-                        arg0 + upperBound - 1, this.size - 1));
-				EvalTools.geq(from, to, this);
+                int from = arg0;
+                int to = Math.max(arg0, Math.min(
+                    arg0 + upperBound - 1, this.size - 1));
+                EvalTools.geq(from, to, this);
                 final List<T> l = ivf.get(from, to);
                 for (int i = 0; i < l.size(); i++) {
                     addToCache(Integer.valueOf(arg0 + i), l.get(i));
@@ -204,7 +209,7 @@ public class CachedLazyList<T> implements List<T> {
     }
 
     private void init(final int offset, final int size) {
-        this.size = (int)this.ivf.size();
+        this.size = (int) this.ivf.size();
         if ((offset > 0) && (size >= 0)) {
 
             this.size = Math.min(this.size, size);
@@ -320,7 +325,7 @@ public class CachedLazyList<T> implements List<T> {
     public <T> T[] toArray(T[] a) {
         if (a.length < size) {
             a = (T[]) java.lang.reflect.Array.newInstance(
-                    a.getClass().getComponentType(), size);
+                a.getClass().getComponentType(), size);
         }
         Object[] result = a;
         for (int i = 0; i < size; i++) {

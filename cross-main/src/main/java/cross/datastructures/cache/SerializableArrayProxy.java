@@ -37,19 +37,19 @@ import ucar.ma2.Array;
  */
 public class SerializableArrayProxy implements ISerializationProxy<Array> {
 
-	@Override
-	public Externalizable convert(Array t) {
-		if (t == null) {
-			return null;
-		}
-		return new SerializableArray(t);
-	}
+    @Override
+    public Externalizable convert(Array t) {
+        if (t == null) {
+            return null;
+        }
+        return new SerializableArray(t);
+    }
 
-	@Override
-	public Array reverseConvert(Object o) {
-		if (o == null) {
-			return null;
-		}
-		return ((SerializableArray) o).getArray();
-	}
+    @Override
+    public Array reverseConvert(Object o) {
+        if (o == null) {
+            return null;
+        }
+        return ((SerializableArray) o).getArray();
+    }
 }

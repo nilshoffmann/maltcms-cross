@@ -38,17 +38,17 @@ import org.junit.runner.Description;
  */
 public class LogMethodName extends TestWatcher {
 
-	@Override
-	public void starting(Description method) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < 80; i++) {
-			sb.append("#");
-		}
-		sb.append("\n").append("# ").append(method.getMethodName()).append("\n");
-		for (int i = 0; i < 80; i++) {
-			sb.append("#");
-		}
-		System.out.println(sb.toString());
-	}
+    @Override
+    public void starting(Description method) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 80; i++) {
+            sb.append("#");
+        }
+        sb.append("\n").append("# ").append(method.getMethodName()).append("\n");
+        for (int i = 0; i < 80; i++) {
+            sb.append("#");
+        }
+        System.out.println(sb.toString());
+    }
 
 }

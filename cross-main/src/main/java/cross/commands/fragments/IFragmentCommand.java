@@ -43,18 +43,20 @@ import cross.vocabulary.ICvResolver;
  * @see IWorkflowElement
  */
 public interface IFragmentCommand extends
-	ICommand<TupleND<IFileFragment>, TupleND<IFileFragment>>,
-	IEventSource<IWorkflowResult>, IWorkflowElement {
+    ICommand<TupleND<IFileFragment>, TupleND<IFileFragment>>,
+    IEventSource<IWorkflowResult>, IWorkflowElement {
 
-	/**
-	 * Returns the resolver for controlled vocabularies associated to this command.
-	 * @return the controlled vocabulary resolver
-	 */
-	ICvResolver getCvResolver();
+    /**
+     * Returns the resolver for controlled vocabularies associated to this command.
+     *
+     * @return the controlled vocabulary resolver
+     */
+    ICvResolver getCvResolver();
 
-	/**
-	 * Set the controlled vocabulary resolver.
-	 * @param resolver the cv resolver
-	 */
-	void setCvResolver(ICvResolver resolver);
+    /**
+     * Set the controlled vocabulary resolver.
+     *
+     * @param resolver the cv resolver
+     */
+    void setCvResolver(ICvResolver resolver);
 }

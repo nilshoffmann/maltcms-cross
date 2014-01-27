@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -35,7 +35,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.LoggerFactory;
@@ -51,6 +57,7 @@ public class PropertyFileGenerator {
     /**
      * Creates a property file for the given class, containing those fields,
      * which are annotated by {@link cross.annotations.Configurable}.
+     *
      * @param className
      * @param basedir
      */
@@ -59,7 +66,7 @@ public class PropertyFileGenerator {
         try {
             c = PropertyFileGenerator.class.getClassLoader().loadClass(className);
             LoggerFactory.getLogger(PropertyFileGenerator.class).info(
-                    "Class: {}", c.getName());
+                "Class: {}", c.getName());
             PropertiesConfiguration pc = createProperties(c);
             if (!basedir.exists()) {
                 basedir.mkdirs();
@@ -68,11 +75,11 @@ public class PropertyFileGenerator {
                 pc.save(new File(basedir, c.getSimpleName() + ".properties"));
             } catch (ConfigurationException ex) {
                 LoggerFactory.getLogger(PropertyFileGenerator.class).warn("{}",
-                        ex.getLocalizedMessage());
+                    ex.getLocalizedMessage());
             }
         } catch (ClassNotFoundException e) {
             LoggerFactory.getLogger(PropertyFileGenerator.class).warn("{}", e.
-                    getLocalizedMessage());
+                getLocalizedMessage());
         }
     }
 
@@ -89,13 +96,13 @@ public class PropertyFileGenerator {
             PropertiesConfiguration pc = new PropertiesConfiguration();
             for (String key : keys) {
                 pc.addProperty(key, AnnotationInspector.getDefaultValueFor(c,
-                        key));
+                    key));
             }
             return pc;
         } else {
             LoggerFactory.getLogger(PropertyFileGenerator.class).info(
-                    "Could not find annotated configuration keys for class {}!",
-                    c.getName());
+                "Could not find annotated configuration keys for class {}!",
+                c.getName());
         }
         return new PropertiesConfiguration();
     }
@@ -104,7 +111,7 @@ public class PropertyFileGenerator {
         Options options = new Options();
         options.addOption("f", true, "base directory for output of files");
         Option provOptions = new Option("p", true,
-                "Comma separated list of provider classes to create Properties for");
+            "Comma separated list of provider classes to create Properties for");
         provOptions.setRequired(true);
         provOptions.setValueSeparator(',');
         options.addOption(provOptions);
@@ -118,23 +125,23 @@ public class PropertyFileGenerator {
                 basedir = new File(cmd.getOptionValue("f"));
             } else {
                 hf.printHelp(
-                        "java -cp maltcms.jar " + PropertyFileGenerator.class,
-                        options);
+                    "java -cp maltcms.jar " + PropertyFileGenerator.class,
+                    options);
             }
             if (cmd.hasOption("p")) {
                 String[] str = cmd.getOptionValues("p");
                 providers = Arrays.asList(str);
             } else {
                 hf.printHelp(
-                        "java -cp maltcms.jar " + PropertyFileGenerator.class,
-                        options);
+                    "java -cp maltcms.jar " + PropertyFileGenerator.class,
+                    options);
             }
             for (String provider : providers) {
                 createProperties(provider, basedir);
             }
         } catch (ParseException ex) {
             Logger.getLogger(PropertyFileGenerator.class.getName()).
-                    log(Level.SEVERE, null, ex);
+                log(Level.SEVERE, null, ex);
         }
     }
 }

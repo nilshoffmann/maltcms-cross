@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -45,12 +45,13 @@ import java.util.List;
  *
  */
 public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
-        IListener<IEvent<IWorkflowResult>>, IXMLSerializable {
+    IListener<IEvent<IWorkflowResult>>, IXMLSerializable {
 
-	/**
-	 * Return the list of commands to be executed by this command sequence.
-	 * @return the list of commands
-	 */
+    /**
+     * Return the list of commands to be executed by this command sequence.
+     *
+     * @return the list of commands
+     */
     public abstract List<IFragmentCommand> getCommands();
 
     /**
@@ -60,10 +61,11 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
      */
     public abstract TupleND<IFileFragment> getInput();
 
-	/**
-	 * Return the workflow associated to this command sequence
-	 * @return the workflow
-	 */
+    /**
+     * Return the workflow associated to this command sequence
+     *
+     * @return the workflow
+     */
     public abstract IWorkflow getWorkflow();
 
     /**
@@ -72,10 +74,11 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
     @Override
     public abstract boolean hasNext();
 
-	/**
-	 * Validate the command sequence.
-	 * @return true if this command sequence is valid, false otherwise
-	 */
+    /**
+     * Validate the command sequence.
+     *
+     * @return true if this command sequence is valid, false otherwise
+     */
     public abstract boolean validate();
 
     /**
@@ -87,49 +90,55 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
     @Override
     public abstract void remove();
 
-	/**
-	 * Set the commands to be executed by this command sequence.
-	 * @param c the list of commands
-	 */
+    /**
+     * Set the commands to be executed by this command sequence.
+     *
+     * @param c the list of commands
+     */
     public abstract void setCommands(List<IFragmentCommand> c);
 
-	/**
-	 * Set the input file fragments of this command sequence.
-	 * @param t the input file fragmentss
-	 */
+    /**
+     * Set the input file fragments of this command sequence.
+     *
+     * @param t the input file fragmentss
+     */
     public abstract void setInput(TupleND<IFileFragment> t);
 
-	/**
-	 * Set the workflow of this command sequence.
-	 * @param iw the workflow
-	 */
+    /**
+     * Set the workflow of this command sequence.
+     *
+     * @param iw the workflow
+     */
     public abstract void setWorkflow(IWorkflow iw);
 
-	/**
-	 * Return whether this command sequence checks its command dependencies.
-	 * @return true if command dependencies will be checked, false otherwise
-	 */
+    /**
+     * Return whether this command sequence checks its command dependencies.
+     *
+     * @return true if command dependencies will be checked, false otherwise
+     */
     public abstract boolean isCheckCommandDependencies();
 
-	/**
-	 * Set whether command dependencies should be checked before execution.
-	 * @param checkCommandDependencies true if command dependencies should be checke, false otherwise
-	 */
+    /**
+     * Set whether command dependencies should be checked before execution.
+     *
+     * @param checkCommandDependencies true if command dependencies should be checke, false otherwise
+     */
     public abstract void setCheckCommandDependencies(boolean checkCommandDependencies);
-    
+
     /**
      * If <code>true</code>, will throw a {@link ConstraintViolationException}
      * if any {@link IFileFragment} has unsaved changes, as determined by calling
-     * <code>f.isModified()</code>. Otherwise, a warning is logged. 
-     * 
+     * <code>f.isModified()</code>. Otherwise, a warning is logged.
+     *
      * @param b true if an exception should be thrown, false otherwise
      */
     public abstract void setThrowExceptionOnUnsavedModification(boolean b);
-    
-	/**
-	 * Return whether an exception will be thrown when unsaved modifications are 
-	 * encountered.
-	 * @return true if an exception will be thrown, false otherwise
-	 */
+
+    /**
+     * Return whether an exception will be thrown when unsaved modifications are
+     * encountered.
+     *
+     * @return true if an exception will be thrown, false otherwise
+     */
     public abstract boolean isThrowExceptionOnUnsavedModification();
 }

@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -47,14 +47,19 @@ import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
 
 /**
- * <p>A class representing immutable Variables. A Variable is a meta-info container
+ * <p>
+ * A class representing immutable Variables. A Variable is a meta-info container
  * for existing data stored in an array for example. VariableFragment objects
  * belong to a parent FileFragment, which corresponds to a virtual file
  * structure.</p>
- * 
- * <p>Objects of this type are returned for disk-persistent variable array data 
- * retrieved by {@see BfsVariableSearcher}. If you want to avoid accidental modification 
- * of unsaved <code>IVariableFragment</code> instances, please use {@see ImmutableVariableFragment},
+ *
+ * <p>
+ * Objects of this type are returned for disk-persistent variable array data
+ * retrieved by {
+ *
+ * @see BfsVariableSearcher}. If you want to avoid accidental modification
+ * of unsaved <code>IVariableFragment</code> instances, please use {
+ * @see ImmutableVariableFragment},
  * which achieves a weaker form of immutability through delegation.</p>
  *
  * @author Nils Hoffmann
@@ -64,7 +69,7 @@ import ucar.nc2.Dimension;
 public class ImmutableVariableFragment2 implements IVariableFragment {
 
     public static boolean useCachedIndexedAccess = false;
-    
+
     private final Fragment fragment = new Fragment();
     private final String varname;
     private Dimension[] dims;
@@ -77,8 +82,8 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
     private boolean useCachedList = useCachedIndexedAccess;
 
     private ImmutableVariableFragment2(final IFileFragment ff,
-            final IGroupFragment group, final String varname1,
-            final Dimension[] dims1, final DataType dt, final Range[] r) {
+        final IGroupFragment group, final String varname1,
+        final Dimension[] dims1, final DataType dt, final Range[] r) {
         EvalTools.notNull(varname1, "String varname was null", this);
         this.varname = varname1;
         this.ranges = r;
@@ -96,7 +101,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
                 if (d == null) {
                     if ((i < r.length) && (r[i] != null)) {
                         d = new Dimension("default" + i, r[i].length(), true,
-                                false, false);
+                            false, false);
                     }
                 } else {
                     if ((i < r.length) && (r[i] != null)) {
@@ -116,14 +121,15 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
 
     /**
      * Creates a new immutable variable fragment with the given name as a child of parent.
-     * @param parent2 the parent of this variable fragment
+     *
+     * @param parent2  the parent of this variable fragment
      * @param varname2 the name
      */
     public ImmutableVariableFragment2(final IFileFragment parent2,
-            final String varname2) {
+        final String varname2) {
         this(parent2, varname2, null, null, null);
     }
-    
+
     /**
      * Creates a VariableFragment compatible in type, name and dimensions to vf.
      * Does not copy Range or array data!
@@ -132,7 +138,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
      * @param vf the variable fragment to copy in structure
      */
     public static IVariableFragment createCompatible(IFileFragment ff,
-            IVariableFragment vf) {
+        IVariableFragment vf) {
         ImmutableVariableFragment2 nf = new ImmutableVariableFragment2(ff, vf.getName());
         Dimension[] d = vf.getDimensions();
         Dimension[] nd = new Dimension[d.length];
@@ -146,20 +152,21 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
     }
 
     private ImmutableVariableFragment2(final IFileFragment ff,
-            final String varname1, final Dimension[] dims1, final DataType dt,
-            final Range[] ranges1) {
+        final String varname1, final Dimension[] dims1, final DataType dt,
+        final Range[] ranges1) {
         this(ff, null, varname1, dims1, dt, ranges1);
     }
 
     /**
-     * Create a new immutable variable fragment with the given name, as a child of the given parent 
-	 * and with the provided index variable fragment.
-     * @param parent2 the parent
+     * Create a new immutable variable fragment with the given name, as a child of the given parent
+     * and with the provided index variable fragment.
+     *
+     * @param parent2  the parent
      * @param varname2 the name
-     * @param ifrg the index variable fragment
+     * @param ifrg     the index variable fragment
      */
     public ImmutableVariableFragment2(final IFileFragment parent2,
-            final String varname2, final IVariableFragment ifrg) {
+        final String varname2, final IVariableFragment ifrg) {
         this(parent2, varname2, null, null, null);
         setIndex(ifrg);
     }
@@ -232,7 +239,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         if (o instanceof ImmutableVariableFragment2) {
             final String lhs = getParent().getName() + ">" + getName();
             final String rhs = ((IVariableFragment) o).getParent().getName()
-                    + ">" + ((IVariableFragment) o).getName();
+                + ">" + ((IVariableFragment) o).getName();
             return lhs.compareTo(rhs);
         }
         return -1;
@@ -244,7 +251,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         if (this.getIndex() == null) {
             try {
                 return Factory.getInstance().getDataSourceFactory().getDataSourceFor(
-                        getParent()).readSingle(this);
+                    getParent()).readSingle(this);
             } catch (IOException ex) {
                 log.warn("", ex);
             } catch (ResourceNotAvailableException ex) {
@@ -280,8 +287,8 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
     @Override
     public List<Attribute> getAttributes() {
         return this.fragment.getAttributes();
-	}
-	
+    }
+
     @Override
     public ArrayChunkIterator getChunkIterator(final int chunksize) {
         return new ArrayChunkIterator(this, chunksize);
@@ -313,7 +320,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
             } else {
                 try {
                     final List<Array> l = Factory.getInstance().getDataSourceFactory().getDataSourceFor(
-                            getParent()).readIndexed(this);
+                        getParent()).readIndexed(this);
                     return l;
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
@@ -364,11 +371,12 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return this.isModified;
     }
 
-	/**
-	 * Whether this variable fragment uses a cached list for lazy array 
-	 * retrieval (only applies, if index variable is not null).
-	 * @return true if this variable fragment uses a cached list, false otherwise
-	 */
+    /**
+     * Whether this variable fragment uses a cached list for lazy array
+     * retrieval (only applies, if index variable is not null).
+     *
+     * @return true if this variable fragment uses a cached list, false otherwise
+     */
     public boolean isUseCachedList() {
         return this.useCachedList;
     }
@@ -431,11 +439,12 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         this.fragment.setStats(stats1);
     }
 
-	/**
-	 * Whether to use cached list for array retrieval (true) or load array data 
-	 * eagerly (false).
-	 * @param b whether to use the cached list or not
-	 */
+    /**
+     * Whether to use cached list for array retrieval (true) or load array data
+     * eagerly (false).
+     *
+     * @param b whether to use the cached list or not
+     */
     public void setUseCachedList(final boolean b) {
         this.useCachedList = b;
     }
@@ -450,7 +459,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
             for (final Range r : getRange()) {
                 if (r != null) {
                     sb.append("[" + r.first() + ":" + r.last() + ":"
-                            + r.stride() + "]");
+                        + r.stride() + "]");
                 }
             }
         }

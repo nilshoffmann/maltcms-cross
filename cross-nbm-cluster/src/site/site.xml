@@ -15,20 +15,20 @@
         <href>http://maltcms.sf.net</href>
     </bannerLeft>
     <skin>
-	<groupId>org.apache.maven.skins</groupId>
-	<artifactId>maven-fluido-skin</artifactId>
-	<version>1.3.0</version>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.3.0</version>
     </skin>
     <custom>
-    	<fluidoSkin>
-      		<topBarEnabled>false</topBarEnabled>
-      		<sideBarEnabled>true</sideBarEnabled>
-		<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-    	</fluidoSkin>
+        <fluidoSkin>
+            <topBarEnabled>false</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+        </fluidoSkin>
     </custom>
     <publishDate position="right"/>
     <version position="right" />
-	<!--
+    <!--
     <publishDate position="right"/>
     <version position="right"/>-->
     <body>
@@ -39,22 +39,22 @@
         <links>
             <item name="Maltcms" href="http://maltcms.sf.net" />
         </links>
-    	<menu name="Cross">
+        <menu name="Cross">
             <item name="About Cross NBM Modules" href="index.html" />
             <!--<item name="Getting Started" href="gettingStarted.html" />-->
         </menu>
         <menu ref="modules" />
 
         <menu ref="reports"/>
-<!--        <footer>-->
-           <!-- <span>
-                Copyright 2008-2012,
-            </span>-->
-<!--	    <ul class="inline">
-    		<li><a title="Contact" href="http://maltcms.sf.net/info/contact.html">Nils Hoffmann</a></li>
-		<li>Maltcms is hosted by <a title="Hosting by sourceforge.net" href="http://sourceforge.net/">sourceforge.net</a></li>
-		<li><a href="http://maven.apache.org">Built by Maven 3</a></li>
-    	    </ul>
+        <!--        <footer>-->
+        <!-- <span>
+            Copyright 2008-2012,
+        </span>-->
+        <!--	    <ul class="inline">
+            <li><a title="Contact" href="http://maltcms.sf.net/info/contact.html">Nils Hoffmann</a></li>
+        <li>Maltcms is hosted by <a title="Hosting by sourceforge.net" href="http://sourceforge.net/">sourceforge.net</a></li>
+        <li><a href="http://maven.apache.org">Built by Maven 3</a></li>
+            </ul>
         </footer>-->
     </body>
 </project>

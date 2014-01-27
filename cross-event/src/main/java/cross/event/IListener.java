@@ -36,10 +36,10 @@ package cross.event;
  */
 public interface IListener<V extends IEvent<?>> {
 
-	/**
-	 * React to the passed in transmitted event type object.
-	 *
-	 * @param v the event type object
-	 */
-	public void listen(V v);
+    /**
+     * React to the passed in transmitted event type object.
+     *
+     * @param v the event type object
+     */
+    public void listen(V v);
 }

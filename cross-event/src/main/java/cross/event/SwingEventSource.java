@@ -40,37 +40,37 @@ import javax.swing.SwingUtilities;
  */
 public class SwingEventSource<V> implements IEventSource<V> {
 
-	private final LinkedHashSet<IListener<IEvent<V>>> listenerMap;
+    private final LinkedHashSet<IListener<IEvent<V>>> listenerMap;
 
-	public SwingEventSource() {
-		this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
-	}
+    public SwingEventSource() {
+        this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
+    }
 
-	@Override
-	public void addListener(final IListener<IEvent<V>> l) {
-		if (this.listenerMap.contains(l)) {
-		} else {
-			this.listenerMap.add(l);
-		}
-	}
+    @Override
+    public void addListener(final IListener<IEvent<V>> l) {
+        if (this.listenerMap.contains(l)) {
+        } else {
+            this.listenerMap.add(l);
+        }
+    }
 
-	@Override
-	public void fireEvent(final IEvent<V> e) {
-		for (final IListener<IEvent<V>> lst : this.listenerMap) {
-			Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					lst.listen(e);
-				}
-			};
-			SwingUtilities.invokeLater(r);
-		}
-	}
+    @Override
+    public void fireEvent(final IEvent<V> e) {
+        for (final IListener<IEvent<V>> lst : this.listenerMap) {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    lst.listen(e);
+                }
+            };
+            SwingUtilities.invokeLater(r);
+        }
+    }
 
-	@Override
-	public void removeListener(final IListener<IEvent<V>> l) {
-		if (this.listenerMap.contains(l)) {
-			this.listenerMap.remove(l);
-		}
-	}
+    @Override
+    public void removeListener(final IListener<IEvent<V>> l) {
+        if (this.listenerMap.contains(l)) {
+            this.listenerMap.remove(l);
+        }
+    }
 }

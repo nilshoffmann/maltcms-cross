@@ -8,14 +8,14 @@
     <artifactId>cross-tools</artifactId>
     <packaging>jar</packaging>
     <name>Cross Tools</name>
-	<dependencies>
-	 <dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>cross-test</artifactId>
-	  <version>${project.version}</version>
-	  <scope>test</scope>
-	 </dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cross-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
 
 

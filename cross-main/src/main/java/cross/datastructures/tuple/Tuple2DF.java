@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -37,13 +37,13 @@ package cross.datastructures.tuple;
 public class Tuple2DF extends Tuple2D<Float, Float> {
 
     public static Tuple2D<Float, Float> diff(final Tuple2D<Float, Float> t1,
-            final Tuple2D<Float, Float> t2) {
+        final Tuple2D<Float, Float> t2) {
         return new Tuple2DF(t1.getFirst() - t2.getFirst(), t1.getSecond()
-                - t2.getSecond());
+            - t2.getSecond());
     }
 
     public static Float dot(final Tuple2D<Float, Float> t1,
-            final Tuple2D<Float, Float> t2) {
+        final Tuple2D<Float, Float> t2) {
         return t1.getFirst() * t2.getFirst() + t1.getSecond() * t2.getSecond();
     }
 
@@ -52,7 +52,7 @@ public class Tuple2DF extends Tuple2D<Float, Float> {
     }
 
     public static Tuple2D<Float, Float> mult(final Tuple2D<Float, Float> l1,
-            final Float mult) {
+        final Float mult) {
         return new Tuple2DF(l1.getFirst() * mult, l1.getSecond() * mult);
     }
 

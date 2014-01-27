@@ -82,483 +82,483 @@ import org.w3c.dom.Element;
 @Slf4j
 public class ReflectionApplicationContextGenerator {
 
-	/**
-	 * Creates a stub application context xml file for the given classes. The
-	 * default bean scope is 'prototype'.
-	 *
-	 * @param outputFile    the output file for the generated xml file
-	 * @param springVersion the spring version to use for validation
-	 * @param defaultScope  the default scope
-	 * @param classes       the classes to generate stubs for
-	 */
-	public static void createContextXml(File outputFile, String springVersion, String defaultScope, String... classes) {
-		//generate the application context XML
-		ReflectionApplicationContextGenerator generator = new ReflectionApplicationContextGenerator(springVersion, defaultScope);
-		for (String className : classes) {
-			try {
-				Collection<?> serviceImplementations = Lookup.getDefault().lookupAll(Class.forName(className));
-				if (serviceImplementations.isEmpty()) {
-					//standard bean, add it
-					try {
-						generator.addBean(className);
-					} catch (ClassNotFoundException ex) {
-						Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				} else {//service provider implementation
-					for (Object obj : serviceImplementations) {
-						try {
-							generator.addBean(obj.getClass().getCanonicalName());
-						} catch (ClassNotFoundException ex) {
-							Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-						}
-					}
-				}
-			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-			}
+    /**
+     * Creates a stub application context xml file for the given classes. The
+     * default bean scope is 'prototype'.
+     *
+     * @param outputFile    the output file for the generated xml file
+     * @param springVersion the spring version to use for validation
+     * @param defaultScope  the default scope
+     * @param classes       the classes to generate stubs for
+     */
+    public static void createContextXml(File outputFile, String springVersion, String defaultScope, String... classes) {
+        //generate the application context XML
+        ReflectionApplicationContextGenerator generator = new ReflectionApplicationContextGenerator(springVersion, defaultScope);
+        for (String className : classes) {
+            try {
+                Collection<?> serviceImplementations = Lookup.getDefault().lookupAll(Class.forName(className));
+                if (serviceImplementations.isEmpty()) {
+                    //standard bean, add it
+                    try {
+                        generator.addBean(className);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {//service provider implementation
+                    for (Object obj : serviceImplementations) {
+                        try {
+                            generator.addBean(obj.getClass().getCanonicalName());
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-		}
-		Document document = generator.getDocument();
-		Element element = document.getDocumentElement();
-		Comment comment = document.createComment("In order to use this template in a runnable pipeline, please include it from another application context xml file.");
-		element.getParentNode().insertBefore(comment, element);
-		writeToFile(document, outputFile);
-	}
+        }
+        Document document = generator.getDocument();
+        Element element = document.getDocumentElement();
+        Comment comment = document.createComment("In order to use this template in a runnable pipeline, please include it from another application context xml file.");
+        element.getParentNode().insertBefore(comment, element);
+        writeToFile(document, outputFile);
+    }
 
-	/**
-	 * Write the given xml document to the outputFile.
-	 *
-	 * @param document   the xml document
-	 * @param outputFile the output file
-	 */
-	public static void writeToFile(Document document, File outputFile) {
-		try {
-			TransformerFactory transfac = TransformerFactory.newInstance();
-			transfac.setAttribute("indent-number", new Integer(2));
-			Transformer trans = transfac.newTransformer();
-			trans.setOutputProperty(OutputKeys.INDENT, "yes");
-			DOMSource domSource = new DOMSource(document);
-			BufferedOutputStream bw = null;
-			try {
-				outputFile.getParentFile().mkdirs();
-				log.info("Writing to file {}", outputFile.getAbsolutePath());
-				bw = new BufferedOutputStream(new FileOutputStream(outputFile));
-				trans.transform(domSource, new StreamResult(new OutputStreamWriter(bw, "utf-8")));
-				bw.close();
-			} catch (IOException ex) {
-				Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-			} finally {
-				if (bw != null) {
-					try {
-						bw.close();
-					} catch (IOException ex) {
-						Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-			}
+    /**
+     * Write the given xml document to the outputFile.
+     *
+     * @param document   the xml document
+     * @param outputFile the output file
+     */
+    public static void writeToFile(Document document, File outputFile) {
+        try {
+            TransformerFactory transfac = TransformerFactory.newInstance();
+            transfac.setAttribute("indent-number", new Integer(2));
+            Transformer trans = transfac.newTransformer();
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource domSource = new DOMSource(document);
+            BufferedOutputStream bw = null;
+            try {
+                outputFile.getParentFile().mkdirs();
+                log.info("Writing to file {}", outputFile.getAbsolutePath());
+                bw = new BufferedOutputStream(new FileOutputStream(outputFile));
+                trans.transform(domSource, new StreamResult(new OutputStreamWriter(bw, "utf-8")));
+                bw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                if (bw != null) {
+                    try {
+                        bw.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
 
-			//System.out.println(xmlString);
-		} catch (TransformerException ex) {
-			Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+            //System.out.println(xmlString);
+        } catch (TransformerException ex) {
+            Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	/**
-	 *
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		String[] classes = args;
-		String springVersion = "3.0";
-		String scope = "prototype";
-		//generate the application context XML
-		ReflectionApplicationContextGenerator generator = new ReflectionApplicationContextGenerator(springVersion, scope);
-		for (String className : classes) {
-			try {
-				Collection<?> serviceImplementations = Lookup.getDefault().lookupAll(Class.forName(className));
-				if (serviceImplementations.isEmpty()) {
-					//standard bean, add it
-					try {
-						generator.addBean(className);
-					} catch (ClassNotFoundException ex) {
-						log.warn("Could not find class", ex);
-					}
-				} else {//service provider implementation
-					for (Object obj : serviceImplementations) {
-						try {
-							generator.addBean(obj.getClass().getCanonicalName());
-						} catch (ClassNotFoundException ex) {
-							log.warn("Could not find class", ex);
-						}
-					}
-				}
-			} catch (ClassNotFoundException ex) {
-				log.warn("Could not find class", ex);
-			}
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        String[] classes = args;
+        String springVersion = "3.0";
+        String scope = "prototype";
+        //generate the application context XML
+        ReflectionApplicationContextGenerator generator = new ReflectionApplicationContextGenerator(springVersion, scope);
+        for (String className : classes) {
+            try {
+                Collection<?> serviceImplementations = Lookup.getDefault().lookupAll(Class.forName(className));
+                if (serviceImplementations.isEmpty()) {
+                    //standard bean, add it
+                    try {
+                        generator.addBean(className);
+                    } catch (ClassNotFoundException ex) {
+                        log.warn("Could not find class", ex);
+                    }
+                } else {//service provider implementation
+                    for (Object obj : serviceImplementations) {
+                        try {
+                            generator.addBean(obj.getClass().getCanonicalName());
+                        } catch (ClassNotFoundException ex) {
+                            log.warn("Could not find class", ex);
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException ex) {
+                log.warn("Could not find class", ex);
+            }
 
-		}
-		Document document = generator.getDocument();
+        }
+        Document document = generator.getDocument();
 
-		writeToFile(document, new File("applicationContext.xml"));
-	}
-	/**
-	 * The list of Java primitive types.
-	 */
-	private static final List<String> primitives = Arrays.asList(new String[]{"byte", "short", "char", "int", "long", "float", "double", "boolean"});
-	/**
-	 * The list of Java wrapper classes (includes String).
-	 */
-	private static final List<String> wrappers = Arrays.asList(new String[]{"Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "Boolean", "String"});
-	/**
-	 * The XML document.
-	 */
-	private final Document document;
-	/**
-	 * The XML root element.
-	 */
-	private final Element root;
-	private LinkedHashMap<String, BeanDescriptor> classToElement = new LinkedHashMap<String, BeanDescriptor>();
-	private HashMap<Class<?>, List<Object>> classToObject = new HashMap<Class<?>, List<Object>>();
-	private String defaultScope = "prototype";
+        writeToFile(document, new File("applicationContext.xml"));
+    }
+    /**
+     * The list of Java primitive types.
+     */
+    private static final List<String> primitives = Arrays.asList(new String[]{"byte", "short", "char", "int", "long", "float", "double", "boolean"});
+    /**
+     * The list of Java wrapper classes (includes String).
+     */
+    private static final List<String> wrappers = Arrays.asList(new String[]{"Byte", "Short", "Character", "Integer", "Long", "Float", "Double", "Boolean", "String"});
+    /**
+     * The XML document.
+     */
+    private final Document document;
+    /**
+     * The XML root element.
+     */
+    private final Element root;
+    private LinkedHashMap<String, BeanDescriptor> classToElement = new LinkedHashMap<String, BeanDescriptor>();
+    private HashMap<Class<?>, List<Object>> classToObject = new HashMap<Class<?>, List<Object>>();
+    private String defaultScope = "prototype";
 
-	/**
-	 * Constructs a new application context generator.
-	 *
-	 * @param springVersion the Spring version
-	 */
-	public ReflectionApplicationContextGenerator(String springVersion, String defaultScope) {
-		//create the XML document
-		DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = null;
-		try {
-			docBuilder = dbfac.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			//never thrown in my case, so ignore it
-		}
-		document = docBuilder.newDocument();
+    /**
+     * Constructs a new application context generator.
+     *
+     * @param springVersion the Spring version
+     */
+    public ReflectionApplicationContextGenerator(String springVersion, String defaultScope) {
+        //create the XML document
+        DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = null;
+        try {
+            docBuilder = dbfac.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            //never thrown in my case, so ignore it
+        }
+        document = docBuilder.newDocument();
 
-		//create the root element
-		root = document.createElementNS("http://www.springframework.org/schema/beans", "beans");
-		root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation", "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-" + springVersion + ".xsd");
-		document.appendChild(root);
-		this.defaultScope = defaultScope;
-	}
+        //create the root element
+        root = document.createElementNS("http://www.springframework.org/schema/beans", "beans");
+        root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation", "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-" + springVersion + ".xsd");
+        document.appendChild(root);
+        this.defaultScope = defaultScope;
+    }
 
-	/**
-	 * Gets the generated XML document.
-	 *
-	 * @return the XML document
-	 */
-	public Document getDocument() {
-		return document;
-	}
+    /**
+     * Gets the generated XML document.
+     *
+     * @return the XML document
+     */
+    public Document getDocument() {
+        return document;
+    }
 
-	/**
-	 * Adds a bean to the application context using a Java source file. Only
-	 * public classes are added.
-	 *
-	 * @param reader the input stream to the Java source file (this is closed
-	 *               after it is read)
-	 * @return this
-	 * @throws IOException if there's a problem reading the file
-	 */
-	public ReflectionApplicationContextGenerator addBean(String className) throws ClassNotFoundException {
-		Class<?> clazz;
-		clazz = Class.forName(className);
-		if (classToObject.containsKey(clazz)) {
-			System.out.println("Class " + clazz.getCanonicalName() + " already known!");
-			return this;
-		}
-		if (!classToObject.containsKey(clazz)) {
-			createElement(clazz);
-		}
+    /**
+     * Adds a bean to the application context using a Java source file. Only
+     * public classes are added.
+     *
+     * @param reader the input stream to the Java source file (this is closed
+     *               after it is read)
+     * @return this
+     * @throws IOException if there's a problem reading the file
+     */
+    public ReflectionApplicationContextGenerator addBean(String className) throws ClassNotFoundException {
+        Class<?> clazz;
+        clazz = Class.forName(className);
+        if (classToObject.containsKey(clazz)) {
+            System.out.println("Class " + clazz.getCanonicalName() + " already known!");
+            return this;
+        }
+        if (!classToObject.containsKey(clazz)) {
+            createElement(clazz);
+        }
 
-		return this;
-	}
+        return this;
+    }
 
-	/**
-	 * Returns the known service providers for the given service interface name.
-	 *
-	 * @param serviceInterfaceName the fully qualified service interface class
-	 *                             name
-	 * @return the list of service providers
-	 */
-	public List<?> getServiceProviders(String serviceInterfaceName) {
-		try {
-			return createServiceProviderElements(Class.forName(serviceInterfaceName));
-		} catch (ClassNotFoundException ex) {
-			log.warn("Exception while instantiating services:", ex);
-			return Collections.emptyList();
-		}
-	}
+    /**
+     * Returns the known service providers for the given service interface name.
+     *
+     * @param serviceInterfaceName the fully qualified service interface class
+     *                             name
+     * @return the list of service providers
+     */
+    public List<?> getServiceProviders(String serviceInterfaceName) {
+        try {
+            return createServiceProviderElements(Class.forName(serviceInterfaceName));
+        } catch (ClassNotFoundException ex) {
+            log.warn("Exception while instantiating services:", ex);
+            return Collections.emptyList();
+        }
+    }
 
-	/**
-	 * Create a bean element for the given class.
-	 *
-	 * @param clazz the target class
-	 * @return the bean element or a list of beans for each service provider
-	 *         available
-	 */
-	public List<?> createElement(Class<?> clazz) {
-		if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
-			return createServiceProviderElements(clazz);
-		}
-		if (clazz.getConstructors().length == 0) {
-			log.warn("Class {} has no public no-argument constructor!", clazz);
-			return Collections.emptyList();
-		}
-		Object obj;
-		try {
-			obj = clazz.newInstance();
-			//build a "bean" element for each class
-			buildBeanElement(obj);
-			return Arrays.asList(obj);
-		} catch (InstantiationException ex) {
-			Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return Collections.emptyList();
-	}
+    /**
+     * Create a bean element for the given class.
+     *
+     * @param clazz the target class
+     * @return the bean element or a list of beans for each service provider
+     *         available
+     */
+    public List<?> createElement(Class<?> clazz) {
+        if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
+            return createServiceProviderElements(clazz);
+        }
+        if (clazz.getConstructors().length == 0) {
+            log.warn("Class {} has no public no-argument constructor!", clazz);
+            return Collections.emptyList();
+        }
+        Object obj;
+        try {
+            obj = clazz.newInstance();
+            //build a "bean" element for each class
+            buildBeanElement(obj);
+            return Arrays.asList(obj);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Collections.emptyList();
+    }
 
-	/**
-	 * Returns one prototype bean for each service provider known for the given
-	 * serviceInterface.
-	 *
-	 * @param serviceInterface the service interface to look for service
-	 *                         providers
-	 * @return the list of protype beans created by calling each service
-	 *         provider
-	 */
-	public List<?> createServiceProviderElements(Class<?> serviceInterface) {
-		if (classToObject.containsKey(serviceInterface)) {
-			return classToObject.get(serviceInterface);
-		}
-		LinkedList<Object> spis = new LinkedList<Object>(Lookup.getDefault().lookupAll(serviceInterface));
-		for (Object obj : spis) {
-			buildBeanElement(obj);
-		}
-		classToObject.put(serviceInterface, spis);
-		return spis;
-	}
+    /**
+     * Returns one prototype bean for each service provider known for the given
+     * serviceInterface.
+     *
+     * @param serviceInterface the service interface to look for service
+     *                         providers
+     * @return the list of protype beans created by calling each service
+     *         provider
+     */
+    public List<?> createServiceProviderElements(Class<?> serviceInterface) {
+        if (classToObject.containsKey(serviceInterface)) {
+            return classToObject.get(serviceInterface);
+        }
+        LinkedList<Object> spis = new LinkedList<Object>(Lookup.getDefault().lookupAll(serviceInterface));
+        for (Object obj : spis) {
+            buildBeanElement(obj);
+        }
+        classToObject.put(serviceInterface, spis);
+        return spis;
+    }
 
-	/**
-	 * Returns a version of
-	 * <code>s</code>, with the first character in lower case.
-	 *
-	 * @param s the string
-	 * @return s with lower-cased first character
-	 */
-	public static String toLowerCaseName(String s) {
-		return s.substring(0, 1).toLowerCase() + s.substring(1);
-	}
+    /**
+     * Returns a version of
+     * <code>s</code>, with the first character in lower case.
+     *
+     * @param s the string
+     * @return s with lower-cased first character
+     */
+    public static String toLowerCaseName(String s) {
+        return s.substring(0, 1).toLowerCase() + s.substring(1);
+    }
 
-	/**
-	 * Creates the
-	 * <code>BeanDescriptor</code> element.
-	 *
-	 * @param obj the object to create a bean descriptor for
-	 * @return the bean descriptor
-	 */
-	private BeanDescriptor buildBeanElement(Object obj) {
-		String id = toLowerCaseName(obj.getClass().getSimpleName());
-		if (classToElement.containsKey(id)) {
-			System.out.println("BeanDescriptor with id " + id + " already present!");
-		} else {
-			BeanDescriptor bd = new BeanDescriptor(this, obj, defaultScope, id);
-			Element beanElement = bd.createElement(document);
-			if (beanElement != null) {
-				Comment beanCommentElement = null;
-				if (obj instanceof AFragmentCommand) {
-					AFragmentCommand afc = (AFragmentCommand) obj;
-					beanCommentElement = document.createComment(afc.getDescription());
-					root.appendChild(beanCommentElement);
-				}
-				root.appendChild(beanElement);
-				System.out.println("Adding class " + obj.getClass().getCanonicalName());
-				classToObject.put(obj.getClass(), Arrays.asList(obj));
-				classToElement.put(id, bd);
-			} else {
-				//System.err.println("Warning: Could not find public class in \"" + file + "\".");
-			}
-		}
-		return classToElement.get(id);
-	}
+    /**
+     * Creates the
+     * <code>BeanDescriptor</code> element.
+     *
+     * @param obj the object to create a bean descriptor for
+     * @return the bean descriptor
+     */
+    private BeanDescriptor buildBeanElement(Object obj) {
+        String id = toLowerCaseName(obj.getClass().getSimpleName());
+        if (classToElement.containsKey(id)) {
+            System.out.println("BeanDescriptor with id " + id + " already present!");
+        } else {
+            BeanDescriptor bd = new BeanDescriptor(this, obj, defaultScope, id);
+            Element beanElement = bd.createElement(document);
+            if (beanElement != null) {
+                Comment beanCommentElement = null;
+                if (obj instanceof AFragmentCommand) {
+                    AFragmentCommand afc = (AFragmentCommand) obj;
+                    beanCommentElement = document.createComment(afc.getDescription());
+                    root.appendChild(beanCommentElement);
+                }
+                root.appendChild(beanElement);
+                System.out.println("Adding class " + obj.getClass().getCanonicalName());
+                classToObject.put(obj.getClass(), Arrays.asList(obj));
+                classToElement.put(id, bd);
+            } else {
+                //System.err.println("Warning: Could not find public class in \"" + file + "\".");
+            }
+        }
+        return classToElement.get(id);
+    }
 
-	/**
-	 * Checks and adds type information for the given method, class and object
-	 * to the properties list.
-	 *
-	 * @param method     the method to check for a property
-	 * @param javaClass  the class to check for settable property
-	 * @param obj        the stub / default object of type javaClass
-	 * @param properties the properties list
-	 */
-	public void checkMutableProperties(Method method, Class<?> javaClass, Object obj, List<ObjectProperty> properties) {
-		if (method.getName().startsWith("get") || method.getName().startsWith("is")) {
-			String methodBaseName = method.getName().startsWith("get") ? method.getName().substring(3) : method.getName().substring(2);
-			try {
-				//check for corresponding setter
-				if (javaClass.getMethod("set" + methodBaseName, method.getReturnType()) != null) {
-					String propertyName = toLowerCaseName(methodBaseName);
+    /**
+     * Checks and adds type information for the given method, class and object
+     * to the properties list.
+     *
+     * @param method     the method to check for a property
+     * @param javaClass  the class to check for settable property
+     * @param obj        the stub / default object of type javaClass
+     * @param properties the properties list
+     */
+    public void checkMutableProperties(Method method, Class<?> javaClass, Object obj, List<ObjectProperty> properties) {
+        if (method.getName().startsWith("get") || method.getName().startsWith("is")) {
+            String methodBaseName = method.getName().startsWith("get") ? method.getName().substring(3) : method.getName().substring(2);
+            try {
+                //check for corresponding setter
+                if (javaClass.getMethod("set" + methodBaseName, method.getReturnType()) != null) {
+                    String propertyName = toLowerCaseName(methodBaseName);
 //                            System.out.print("Handling property " + propertyName);
-					ObjectProperty p = new ObjectProperty();
-					Class<?> returnType = method.getReturnType();
-					if (returnType.isArray()) {
-						p.type = "Array";
-					} else {
-						p.type = returnType.getCanonicalName();
-					}
-					p.name = propertyName;
+                    ObjectProperty p = new ObjectProperty();
+                    Class<?> returnType = method.getReturnType();
+                    if (returnType.isArray()) {
+                        p.type = "Array";
+                    } else {
+                        p.type = returnType.getCanonicalName();
+                    }
+                    p.name = propertyName;
 
-					Object methodObject = null;
-					try {
-						methodObject = method.invoke(obj);
-					} catch (IllegalAccessException ex) {
-						log.warn(ex.getLocalizedMessage());
-					} catch (IllegalArgumentException ex) {
-						log.warn(ex.getLocalizedMessage());
-					} catch (InvocationTargetException ex) {
-						log.warn(ex.getLocalizedMessage());
-					}
-					String value = null;
-					if (methodObject == null) {
-						value = "";
-					} else {
-						if (methodObject.getClass().isArray()) {
-							value = methodObject.getClass().getComponentType().getCanonicalName();
-						} else {
-							value = methodObject.toString();
-						}
-					}
-					if (value == null) {
-						value = "";
-					} else {
-						value = value.trim();
-					}
-					if (value.contains("\"")) {
-						//remove the quotes that surround Strings
-						value = value.replaceAll("\"", "");
-					} else if (value.contains("'")) {
-						//remove the quotes that surround characters
-						value = value.replaceAll("'", "");
-					} else if (value.endsWith("d") || value.endsWith("D") || value.endsWith("f") || value.endsWith("F") || value.endsWith("l") || value.endsWith("L")) {
-						//remove the "double", "float", or "long" letters if they are there
-						value = value.substring(0, value.length() - 1);
-					}
-					p.value = value;
+                    Object methodObject = null;
+                    try {
+                        methodObject = method.invoke(obj);
+                    } catch (IllegalAccessException ex) {
+                        log.warn(ex.getLocalizedMessage());
+                    } catch (IllegalArgumentException ex) {
+                        log.warn(ex.getLocalizedMessage());
+                    } catch (InvocationTargetException ex) {
+                        log.warn(ex.getLocalizedMessage());
+                    }
+                    String value = null;
+                    if (methodObject == null) {
+                        value = "";
+                    } else {
+                        if (methodObject.getClass().isArray()) {
+                            value = methodObject.getClass().getComponentType().getCanonicalName();
+                        } else {
+                            value = methodObject.toString();
+                        }
+                    }
+                    if (value == null) {
+                        value = "";
+                    } else {
+                        value = value.trim();
+                    }
+                    if (value.contains("\"")) {
+                        //remove the quotes that surround Strings
+                        value = value.replaceAll("\"", "");
+                    } else if (value.contains("'")) {
+                        //remove the quotes that surround characters
+                        value = value.replaceAll("'", "");
+                    } else if (value.endsWith("d") || value.endsWith("D") || value.endsWith("f") || value.endsWith("F") || value.endsWith("l") || value.endsWith("L")) {
+                        //remove the "double", "float", or "long" letters if they are there
+                        value = value.substring(0, value.length() - 1);
+                    }
+                    p.value = value;
 
-					System.out.println(" value: " + p.value + " type: " + p.type);
-					properties.add(p);
-				}
-			} catch (NoSuchMethodException ex) {
-				log.info("Ignoring read-only property {}", methodBaseName);
-				//Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-			} catch (SecurityException ex) {
-				log.warn(ex.getLocalizedMessage());
-			}
-		}
-	}
+                    System.out.println(" value: " + p.value + " type: " + p.type);
+                    properties.add(p);
+                }
+            } catch (NoSuchMethodException ex) {
+                log.info("Ignoring read-only property {}", methodBaseName);
+                //Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                log.warn(ex.getLocalizedMessage());
+            }
+        }
+    }
 
-	/**
-	 * Holder class for bean information.
-	 */
-	public class BeanDescriptor {
+    /**
+     * Holder class for bean information.
+     */
+    public class BeanDescriptor {
 
-		private final ReflectionApplicationContextGenerator generator;
-		private final String scope;
-		private final Class<?> clazz;
-		private final Object obj;
-		/**
-		 *
-		 */
-		public String id;
-		/**
-		 *
-		 */
-		public List<ObjectProperty> properties = new ArrayList<ObjectProperty>();
+        private final ReflectionApplicationContextGenerator generator;
+        private final String scope;
+        private final Class<?> clazz;
+        private final Object obj;
+        /**
+         *
+         */
+        public String id;
+        /**
+         *
+         */
+        public List<ObjectProperty> properties = new ArrayList<ObjectProperty>();
 
-		/**
-		 * Creates a new bean descriptor from the given information.
-		 *
-		 * @param generator
-		 * @param obj
-		 * @param scope
-		 * @param id
-		 */
-		public BeanDescriptor(ReflectionApplicationContextGenerator generator, Object obj, String scope, String id) {
-			this.generator = generator;
-			this.clazz = obj.getClass();
-			this.obj = obj;
-			this.scope = scope;
-			this.id = id;
-		}
+        /**
+         * Creates a new bean descriptor from the given information.
+         *
+         * @param generator
+         * @param obj
+         * @param scope
+         * @param id
+         */
+        public BeanDescriptor(ReflectionApplicationContextGenerator generator, Object obj, String scope, String id) {
+            this.generator = generator;
+            this.clazz = obj.getClass();
+            this.obj = obj;
+            this.scope = scope;
+            this.id = id;
+        }
 
-		/**
-		 * Creates an xml element using the given document for element creation.
-		 *
-		 * @param document the document use for element creation
-		 * @return the modified element
-		 */
-		public Element createElement(Document document) {
-			Class<?> javaClass = clazz;
-			System.out.println("Building bean element for " + javaClass.getName());
-			//get the name of the class
-			String className = javaClass.getSimpleName();
+        /**
+         * Creates an xml element using the given document for element creation.
+         *
+         * @param document the document use for element creation
+         * @return the modified element
+         */
+        public Element createElement(Document document) {
+            Class<?> javaClass = clazz;
+            System.out.println("Building bean element for " + javaClass.getName());
+            //get the name of the class
+            String className = javaClass.getSimpleName();
 
-			//get the name of the package
-			String packageName = javaClass.getPackage().getName();
+            //get the name of the package
+            String packageName = javaClass.getPackage().getName();
 
-			//create <bean /> element
-			Element beanElement = document.createElement("bean");
-			String classNameLower = toLowerCaseName(className);
-			beanElement.setAttribute("id", classNameLower);
-			String classAttr = (packageName == null) ? className : packageName + "." + className;
-			beanElement.setAttribute("class", classAttr);
-			beanElement.setAttribute("scope", scope);
-			//constructors are not supported
-			//get all the class' properties from the public fields and setter methods.
+            //create <bean /> element
+            Element beanElement = document.createElement("bean");
+            String classNameLower = toLowerCaseName(className);
+            beanElement.setAttribute("id", classNameLower);
+            String classAttr = (packageName == null) ? className : packageName + "." + className;
+            beanElement.setAttribute("class", classAttr);
+            beanElement.setAttribute("scope", scope);
+            //constructors are not supported
+            //get all the class' properties from the public fields and setter methods.
 
-			for (Method method : javaClass.getMethods()) {
-				checkMutableProperties(method, javaClass, obj, properties);
-			}
-			//sort by name
-			Collections.sort(properties, new Comparator<ObjectProperty>() {
-				public int compare(ObjectProperty t, ObjectProperty t1) {
-					return t.name.compareTo(t1.name);
-				}
-			});
-			List<String> blackList = Arrays.asList("workflow", "progress", "cvResolver");
-			//add all properties as <property /> elements
-			for (ObjectProperty p : properties) {
-				if (!blackList.contains(p.name)) {
-					Element propertyElement = document.createElement("property");
-					propertyElement.setAttribute("name", p.name);
-					Comment propertyCommentElement = document.createComment(AnnotationInspector.getDescriptionFor(javaClass, p.name));
-					boolean append = true;
-					if (p.type.startsWith("java.lang.")) {
-						String shortType = p.type.substring("java.lang.".length());
-						if (primitives.contains(shortType) || wrappers.contains(shortType)) {
-							propertyElement.setAttribute("value", p.value);
-						}
-					} else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
-						propertyElement.setAttribute("value", p.value);
-					} else if ("Array".equals(p.type)
-						|| "List".equals(p.type) || "java.util.List".equals(p.type)) {
-						Element listElement = document.createElement("list");
-						propertyElement.appendChild(listElement);
-					} else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
-						Element listElement = document.createElement("set");
-						propertyElement.appendChild(listElement);
-					} else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
-						Element listElement = document.createElement("map");
-						propertyElement.appendChild(listElement);
-					} else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
-						Element listElement = document.createElement("props");
-						propertyElement.appendChild(listElement);
-					} else {
+            for (Method method : javaClass.getMethods()) {
+                checkMutableProperties(method, javaClass, obj, properties);
+            }
+            //sort by name
+            Collections.sort(properties, new Comparator<ObjectProperty>() {
+                public int compare(ObjectProperty t, ObjectProperty t1) {
+                    return t.name.compareTo(t1.name);
+                }
+            });
+            List<String> blackList = Arrays.asList("workflow", "progress", "cvResolver");
+            //add all properties as <property /> elements
+            for (ObjectProperty p : properties) {
+                if (!blackList.contains(p.name)) {
+                    Element propertyElement = document.createElement("property");
+                    propertyElement.setAttribute("name", p.name);
+                    Comment propertyCommentElement = document.createComment(AnnotationInspector.getDescriptionFor(javaClass, p.name));
+                    boolean append = true;
+                    if (p.type.startsWith("java.lang.")) {
+                        String shortType = p.type.substring("java.lang.".length());
+                        if (primitives.contains(shortType) || wrappers.contains(shortType)) {
+                            propertyElement.setAttribute("value", p.value);
+                        }
+                    } else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
+                        propertyElement.setAttribute("value", p.value);
+                    } else if ("Array".equals(p.type)
+                        || "List".equals(p.type) || "java.util.List".equals(p.type)) {
+                        Element listElement = document.createElement("list");
+                        propertyElement.appendChild(listElement);
+                    } else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
+                        Element listElement = document.createElement("set");
+                        propertyElement.appendChild(listElement);
+                    } else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
+                        Element listElement = document.createElement("map");
+                        propertyElement.appendChild(listElement);
+                    } else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
+                        Element listElement = document.createElement("props");
+                        propertyElement.appendChild(listElement);
+                    } else {
 //                    System.err.println("Skipping ref!");
-						append = false;
+                        append = false;
 //                    try {
 //                        generator.addBean(p.type);
 //                        Class<?> c = Class.forName(p.type);
@@ -572,37 +572,37 @@ public class ReflectionApplicationContextGenerator {
 //                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
 //                    }
 
-					}
-					if (append) {
-						beanElement.appendChild(propertyCommentElement);
-						beanElement.appendChild(propertyElement);
-					} else {
-						beanElement.appendChild(propertyCommentElement);
-						Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
-						beanElement.appendChild(comment);
-					}
-				}
-			}
-			return beanElement;
-		}
-	}
+                    }
+                    if (append) {
+                        beanElement.appendChild(propertyCommentElement);
+                        beanElement.appendChild(propertyElement);
+                    } else {
+                        beanElement.appendChild(propertyCommentElement);
+                        Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
+                        beanElement.appendChild(comment);
+                    }
+                }
+            }
+            return beanElement;
+        }
+    }
 
-	/**
-	 * Simple holder class for Object related properties.
-	 */
-	public class ObjectProperty {
+    /**
+     * Simple holder class for Object related properties.
+     */
+    public class ObjectProperty {
 
-		/**
-		 * The name of the object property
-		 */
-		public String name;
-		/**
-		 * The class type of the object property
-		 */
-		public String type;
-		/**
-		 * The value of the object property
-		 */
-		public String value;
-	}
+        /**
+         * The name of the object property
+         */
+        public String name;
+        /**
+         * The class type of the object property
+         */
+        public String type;
+        /**
+         * The value of the object property
+         */
+        public String value;
+    }
 }

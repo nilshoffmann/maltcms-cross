@@ -36,33 +36,33 @@ package cross.exception;
  */
 public class ExitVmException extends RuntimeException {
 
-	private static final long serialVersionUID = 8608712358705128763L;
+    private static final long serialVersionUID = 8608712358705128763L;
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message the message
-	 */
-	public ExitVmException(String message) {
-		super(message);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message the message
+     */
+    public ExitVmException(String message) {
+        super(message);
+    }
 
-	/**
-	 * Creates a new instance with the given message and cause.
-	 *
-	 * @param message the message
-	 * @param cause   the cause
-	 */
-	public ExitVmException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Creates a new instance with the given message and cause.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public ExitVmException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Creates a new instance with the given cause.
-	 *
-	 * @param cause the cause
-	 */
-	public ExitVmException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance with the given cause.
+     *
+     * @param cause the cause
+     */
+    public ExitVmException(Throwable cause) {
+        super(cause);
+    }
 }

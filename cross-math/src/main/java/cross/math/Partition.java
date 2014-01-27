@@ -40,80 +40,80 @@ import java.util.Iterator;
  */
 public class Partition implements Iterator<Integer> {
 
-	private final int size;
-	private int count = 0;
-	private int max;
-	private Partition neighbor = null;
+    private final int size;
+    private int count = 0;
+    private int max;
+    private Partition neighbor = null;
 
-	/**
-	 * Creates a new Partition.
-	 *
-	 * @param size the size of the partition
-	 */
-	public Partition(int size) {
-		this.size = size;
-		this.max = this.size;
-	}
+    /**
+     * Creates a new Partition.
+     *
+     * @param size the size of the partition
+     */
+    public Partition(int size) {
+        this.size = size;
+        this.max = this.size;
+    }
 
-	/**
-	 * Creates a new Partition with the given neighbor, whose counter is increased, once
-	 * the internal <code>count</code> exceeds <code>size</code>.
-	 *
-	 * @param neighbor the next neighbor
-	 * @param size     the size of the partition
-	 */
-	public Partition(Partition neighbor, int size) {
-		this(size);
-		this.neighbor = neighbor;
-	}
+    /**
+     * Creates a new Partition with the given neighbor, whose counter is increased, once
+     * the internal <code>count</code> exceeds <code>size</code>.
+     *
+     * @param neighbor the next neighbor
+     * @param size     the size of the partition
+     */
+    public Partition(Partition neighbor, int size) {
+        this(size);
+        this.neighbor = neighbor;
+    }
 
-	@Override
-	public boolean hasNext() {
-		return this.count < max;
-	}
+    @Override
+    public boolean hasNext() {
+        return this.count < max;
+    }
 
-	@Override
-	public Integer next() {
-		//overflow/carry to next neighbor
-		if (count + 1 == this.max) {
-			//this.max--;
-			this.count = 0;
-			if (this.neighbor != null) {
-				this.neighbor.next();
-			}
-			return this.count;
-		} else {//increase counter
-			return Integer.valueOf(count++);
-		}
-	}
+    @Override
+    public Integer next() {
+        //overflow/carry to next neighbor
+        if (count + 1 == this.max) {
+            //this.max--;
+            this.count = 0;
+            if (this.neighbor != null) {
+                this.neighbor.next();
+            }
+            return this.count;
+        } else {//increase counter
+            return Integer.valueOf(count++);
+        }
+    }
 
-	/**
-	 * Returns the current internal index of the partition.
-	 *
-	 * @return the current count value
-	 */
-	public Integer current() {
-		return this.count;
-	}
+    /**
+     * Returns the current internal index of the partition.
+     *
+     * @return the current count value
+     */
+    public Integer current() {
+        return this.count;
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-	/**
-	 * Returns the size of the partition.
-	 *
-	 * @return the partition size
-	 */
-	public int size() {
-		return this.size;
-	}
+    /**
+     * Returns the size of the partition.
+     *
+     * @return the partition size
+     */
+    public int size() {
+        return this.size;
+    }
 
-	/**
-	 * Resets the size of this partition.
-	 */
-	public void reset() {
-		this.count = 0;
-	}
+    /**
+     * Resets the size of this partition.
+     */
+    public void reset() {
+        this.count = 0;
+    }
 }

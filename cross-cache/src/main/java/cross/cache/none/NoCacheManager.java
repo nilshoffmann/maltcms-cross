@@ -38,55 +38,55 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NoCacheManager {
 
-	private static Map<String, NoCache> caches = new ConcurrentHashMap<String, NoCache>();
-	private static NoCacheManager instance;
+    private static Map<String, NoCache> caches = new ConcurrentHashMap<String, NoCache>();
+    private static NoCacheManager instance;
 
-	private NoCacheManager() {
-		super();
-	}
+    private NoCacheManager() {
+        super();
+    }
 
-	/**
-	 * Returns the <code>NoCacheManager</code> instance. Creates a new one if none
-	 * has yet been created.
-	 *
-	 * @return
-	 */
-	public static NoCacheManager getInstance() {
-		if (NoCacheManager.instance == null) {
-			NoCacheManager.instance = new NoCacheManager();
-		}
-		return NoCacheManager.instance;
-	}
+    /**
+     * Returns the <code>NoCacheManager</code> instance. Creates a new one if none
+     * has yet been created.
+     *
+     * @return
+     */
+    public static NoCacheManager getInstance() {
+        if (NoCacheManager.instance == null) {
+            NoCacheManager.instance = new NoCacheManager();
+        }
+        return NoCacheManager.instance;
+    }
 
-	/**
-	 * Returns the cache delegate with the given name or creates a new one.
-	 *
-	 * @param <K>  the key type
-	 * @param <V>  the value type
-	 * @param name the name of the cache
-	 * @return the cache delegate
-	 */
-	public <K, V> ICacheDelegate<K, V> getCache(String name) {
-		NoCache<K, V> delegate = caches.get(name);
-		if (delegate == null) {
-			delegate = new NoCache<K, V>(name);
-			caches.put(name, delegate);
-		}
-		return delegate;
-	}
+    /**
+     * Returns the cache delegate with the given name or creates a new one.
+     *
+     * @param <K>  the key type
+     * @param <V>  the value type
+     * @param name the name of the cache
+     * @return the cache delegate
+     */
+    public <K, V> ICacheDelegate<K, V> getCache(String name) {
+        NoCache<K, V> delegate = caches.get(name);
+        if (delegate == null) {
+            delegate = new NoCache<K, V>(name);
+            caches.put(name, delegate);
+        }
+        return delegate;
+    }
 
-	/**
-	 * Removes the cache delegate with the given name.
-	 *
-	 * @param <K>      the key type
-	 * @param <V>      the value type
-	 * @param delegate the cache delegate
-	 */
-	public <K, V> void remove(ICacheDelegate<K, V> delegate) {
-		NoCache<K, V> cache = caches.get(delegate.getName());
-		if (cache != null) {
-			cache.close();
-			caches.remove(delegate.getName());
-		}
-	}
+    /**
+     * Removes the cache delegate with the given name.
+     *
+     * @param <K>      the key type
+     * @param <V>      the value type
+     * @param delegate the cache delegate
+     */
+    public <K, V> void remove(ICacheDelegate<K, V> delegate) {
+        NoCache<K, V> cache = caches.get(delegate.getName());
+        if (cache != null) {
+            cache.close();
+            caches.remove(delegate.getName());
+        }
+    }
 }

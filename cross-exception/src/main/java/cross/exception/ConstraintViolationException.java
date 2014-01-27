@@ -36,33 +36,33 @@ package cross.exception;
  */
 public class ConstraintViolationException extends RuntimeException {
 
-	private static final long serialVersionUID = 6583620499607920323L;
+    private static final long serialVersionUID = 6583620499607920323L;
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message the message
-	 */
-	public ConstraintViolationException(final String message) {
-		super(message);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message the message
+     */
+    public ConstraintViolationException(final String message) {
+        super(message);
+    }
 
-	/**
-	 * Creates a new instance with the given message and cause.
-	 *
-	 * @param message the message
-	 * @param cause   the cause
-	 */
-	public ConstraintViolationException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Creates a new instance with the given message and cause.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public ConstraintViolationException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Creates a new instance with the given cause.
-	 *
-	 * @param cause the cause
-	 */
-	public ConstraintViolationException(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance with the given cause.
+     *
+     * @param cause the cause
+     */
+    public ConstraintViolationException(final Throwable cause) {
+        super(cause);
+    }
 }

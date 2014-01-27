@@ -42,187 +42,187 @@ import org.junit.rules.TemporaryFolder;
  */
 public class CacheFactoryTest {
 
-	private int narrays = 50;
-	private Integer[] indices;
-	private int maxRepetitions = 20;
-	private long seed = 1920712093679568761L;
-	private Random r;
-	/**
-	 * Set up a temporary folder
-	 */
-	@Rule
-	public TemporaryFolder tf = new TemporaryFolder();
+    private int narrays = 50;
+    private Integer[] indices;
+    private int maxRepetitions = 20;
+    private long seed = 1920712093679568761L;
+    private Random r;
+    /**
+     * Set up a temporary folder
+     */
+    @Rule
+    public TemporaryFolder tf = new TemporaryFolder();
 
-	/**
-	 * Set up the logging
-	 */
-	@Rule
-	public SetupLogging logging = new SetupLogging();
+    /**
+     * Set up the logging
+     */
+    @Rule
+    public SetupLogging logging = new SetupLogging();
 
-	/**
-	 * Set logging to log4j.category.net.sf.ehcache level INFO
-	 */
-	@Before
-	public void setUp() {
-		logging.getConfig().put("log4j.category.net.sf.ehcache", "INFO");
-		logging.update();
-	}
+    /**
+     * Set logging to log4j.category.net.sf.ehcache level INFO
+     */
+    @Before
+    public void setUp() {
+        logging.getConfig().put("log4j.category.net.sf.ehcache", "INFO");
+        logging.update();
+    }
 
-	private ICacheDelegate<Integer, double[]> createCache(String name) {
-		System.out.println("Setting up cache!");
-		int arraySize = 1000;
-		ICacheDelegate<Integer, double[]> delegate = CacheFactory.createDefaultCache(
-			name);
-		indices = new Integer[narrays];
-		for (int i = 0; i < narrays; i++) {
-			double[] a = new double[arraySize];
-			for (int j = 0; j < arraySize; j++) {
-				a[j] = Math.random() * 1023890213;
-			}
-			indices[i] = Integer.valueOf(i);
-			delegate.put(indices[i], a);
+    private ICacheDelegate<Integer, double[]> createCache(String name) {
+        System.out.println("Setting up cache!");
+        int arraySize = 1000;
+        ICacheDelegate<Integer, double[]> delegate = CacheFactory.createDefaultCache(
+            name);
+        indices = new Integer[narrays];
+        for (int i = 0; i < narrays; i++) {
+            double[] a = new double[arraySize];
+            for (int j = 0; j < arraySize; j++) {
+                a[j] = Math.random() * 1023890213;
+            }
+            indices[i] = Integer.valueOf(i);
+            delegate.put(indices[i], a);
 
-		}
-		System.out.println("Finished creating cache!");
-		return delegate;
-	}
+        }
+        System.out.println("Finished creating cache!");
+        return delegate;
+    }
 
-	/**
-	 * Test sequential LRU access from ehcache.
-	 */
-	@Test
-	public void cachedSequentialReadLru() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedSequentialRead1");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.LRU);
-		//simulate sequential access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[i]);
-			}
-		}
+    /**
+     * Test sequential LRU access from ehcache.
+     */
+    @Test
+    public void cachedSequentialReadLru() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedSequentialRead1");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.LRU);
+        //simulate sequential access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[i]);
+            }
+        }
 
-		System.out.println("Statistics for sequential access: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+        System.out.println("Statistics for sequential access: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
-	/**
-	 * Test sequential LFU access from ehcache
-	 */
-	@Test
-	public void cachedSequentialReadLfu() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedSequentialRead2");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.LFU);
-		//simulate sequential access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[i]);
-			}
-		}
+    /**
+     * Test sequential LFU access from ehcache
+     */
+    @Test
+    public void cachedSequentialReadLfu() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedSequentialRead2");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.LFU);
+        //simulate sequential access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[i]);
+            }
+        }
 
-		System.out.println("Statistics for sequential access lfu: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+        System.out.println("Statistics for sequential access lfu: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
-	/**
-	 * Test sequential FIFO access from ehcache
-	 */
-	@Test
-	public void cachedSequentialReadFifo() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedSequentialRead3");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.FIFO);
-		//simulate sequential access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[i]);
-			}
-		}
+    /**
+     * Test sequential FIFO access from ehcache
+     */
+    @Test
+    public void cachedSequentialReadFifo() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedSequentialRead3");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.FIFO);
+        //simulate sequential access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[i]);
+            }
+        }
 
-		System.out.println("Statistics for sequential access fifo: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+        System.out.println("Statistics for sequential access fifo: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
-	/**
-	 * Test random LRU access from ehcache
-	 */
-	@Test
-	public void cachedRandomReadLru() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedRandomRead1");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.LRU);
-		r = new Random(seed);
-		//simulate random access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[r.nextInt(narrays)]);
-			}
-		}
-		System.out.println("Statistics for random access lru: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+    /**
+     * Test random LRU access from ehcache
+     */
+    @Test
+    public void cachedRandomReadLru() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedRandomRead1");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.LRU);
+        r = new Random(seed);
+        //simulate random access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[r.nextInt(narrays)]);
+            }
+        }
+        System.out.println("Statistics for random access lru: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
-	/**
-	 * Test random LFU access from ehcache
-	 */
-	@Test
-	public void cachedRandomReadLfu() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedRandomRead2");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.LFU);
-		r = new Random(seed);
-		//simulate random access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[r.nextInt(narrays)]);
-			}
-		}
-		System.out.println("Statistics for random access lfu: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+    /**
+     * Test random LFU access from ehcache
+     */
+    @Test
+    public void cachedRandomReadLfu() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedRandomRead2");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.LFU);
+        r = new Random(seed);
+        //simulate random access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[r.nextInt(narrays)]);
+            }
+        }
+        System.out.println("Statistics for random access lfu: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
-	/**
-	 * Test random FIFO access from ehcache
-	 */
-	@Test
-	public void cachedRandomReadFifo() {
-		ICacheDelegate<Integer, double[]> delegate = createCache(
-			"cachedRandomRead3");
-		CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
-			setMemoryStoreEvictionPolicyFromObject(
-				MemoryStoreEvictionPolicy.FIFO);
-		r = new Random(seed);
-		//simulate random access
-		for (int j = 0; j < maxRepetitions; j++) {
-			for (int i = 0; i < narrays; i++) {
-				delegate.get(indices[r.nextInt(narrays)]);
-			}
-		}
-		System.out.println("Statistics for random access fifo: "
-			+ CacheFactory.getCacheFor(delegate.getName()).getStatistics());
-		CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
-			removeCache(delegate.getName());
-	}
+    /**
+     * Test random FIFO access from ehcache
+     */
+    @Test
+    public void cachedRandomReadFifo() {
+        ICacheDelegate<Integer, double[]> delegate = createCache(
+            "cachedRandomRead3");
+        CacheFactory.getCacheFor(delegate.getName()).getCacheConfiguration().
+            setMemoryStoreEvictionPolicyFromObject(
+                MemoryStoreEvictionPolicy.FIFO);
+        r = new Random(seed);
+        //simulate random access
+        for (int j = 0; j < maxRepetitions; j++) {
+            for (int i = 0; i < narrays; i++) {
+                delegate.get(indices[r.nextInt(narrays)]);
+            }
+        }
+        System.out.println("Statistics for random access fifo: "
+            + CacheFactory.getCacheFor(delegate.getName()).getStatistics());
+        CacheFactory.getCacheFor(delegate.getName()).getCacheManager().
+            removeCache(delegate.getName());
+    }
 
 }

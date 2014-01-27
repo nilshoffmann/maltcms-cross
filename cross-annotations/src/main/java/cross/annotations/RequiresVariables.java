@@ -45,10 +45,10 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface RequiresVariables {
 
-	/**
-	 * Returns the array of required variable names.
-	 *
-	 * @return the array of variable names
-	 */
-	String[] names();
+    /**
+     * Returns the array of required variable names.
+     *
+     * @return the array of variable names
+     */
+    String[] names();
 }

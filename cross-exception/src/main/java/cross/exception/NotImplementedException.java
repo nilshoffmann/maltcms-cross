@@ -35,43 +35,43 @@ package cross.exception;
  */
 public class NotImplementedException extends RuntimeException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 8040922236426369927L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8040922236426369927L;
 
-	/**
-	 * Creates a new instance with a default message.
-	 */
-	public NotImplementedException() {
-		this("This method has not yet been implemented!");
-	}
+    /**
+     * Creates a new instance with a default message.
+     */
+    public NotImplementedException() {
+        this("This method has not yet been implemented!");
+    }
 
-	/**
-	 * Creates a new instance with the given message.
-	 *
-	 * @param message the message
-	 */
-	public NotImplementedException(final String message) {
-		super(message);
-	}
+    /**
+     * Creates a new instance with the given message.
+     *
+     * @param message the message
+     */
+    public NotImplementedException(final String message) {
+        super(message);
+    }
 
-	/**
-	 * Creates a new instance with the given message and cause.
-	 *
-	 * @param message the message
-	 * @param cause   the cause
-	 */
-	public NotImplementedException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Creates a new instance with the given message and cause.
+     *
+     * @param message the message
+     * @param cause   the cause
+     */
+    public NotImplementedException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Creates a new instance with the given cause.
-	 *
-	 * @param cause the cause
-	 */
-	public NotImplementedException(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Creates a new instance with the given cause.
+     *
+     * @param cause the cause
+     */
+    public NotImplementedException(final Throwable cause) {
+        super(cause);
+    }
 }

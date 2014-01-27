@@ -38,68 +38,68 @@ import java.util.Set;
  */
 public class SetOperations {
 
-	/**
-	 * Creates a new typed {@link HashSet} from the given collection.
-	 *
-	 * @param <T> the value type
-	 * @param c   the collection
-	 * @return a new typed hash set
-	 */
-	public static <T> Set<T> newSet(Collection<? extends T> c) {
-		return new HashSet<T>(c);
-	}
+    /**
+     * Creates a new typed {@link HashSet} from the given collection.
+     *
+     * @param <T> the value type
+     * @param c   the collection
+     * @return a new typed hash set
+     */
+    public static <T> Set<T> newSet(Collection<? extends T> c) {
+        return new HashSet<T>(c);
+    }
 
-	/**
-	 * Returns the union (a+b) of <code>a</code> and <code>b</code>.
-	 *
-	 * @param <T> the value type
-	 * @param a   set a
-	 * @param b   set b
-	 * @return the union of a and b
-	 */
-	public static <T> Set<T> union(Set<T> a, Set<T> b) {
-		Set<T> union = new HashSet<T>(a);
-		union.addAll(b);
-		return union;
-	}
+    /**
+     * Returns the union (a+b) of <code>a</code> and <code>b</code>.
+     *
+     * @param <T> the value type
+     * @param a   set a
+     * @param b   set b
+     * @return the union of a and b
+     */
+    public static <T> Set<T> union(Set<T> a, Set<T> b) {
+        Set<T> union = new HashSet<T>(a);
+        union.addAll(b);
+        return union;
+    }
 
-	/**
-	 * Returns the intersection (a \cap b, all common elements) of <code>a</code> and <code>b</code>.
-	 *
-	 * @param <T> the value type
-	 * @param a   set a
-	 * @param b   set b
-	 * @return the intersection of a and b
-	 */
-	public static <T> Set<T> intersection(Set<T> a, Set<T> b) {
-		Set<T> inters = new HashSet<T>(a);
-		inters.retainAll(b);
-		return inters;
-	}
+    /**
+     * Returns the intersection (a \cap b, all common elements) of <code>a</code> and <code>b</code>.
+     *
+     * @param <T> the value type
+     * @param a   set a
+     * @param b   set b
+     * @return the intersection of a and b
+     */
+    public static <T> Set<T> intersection(Set<T> a, Set<T> b) {
+        Set<T> inters = new HashSet<T>(a);
+        inters.retainAll(b);
+        return inters;
+    }
 
-	/**
-	 * Returns the complement (a without elements also in b) of <code>a</code> and <code>b</code>.
-	 *
-	 * @param <T> the value type
-	 * @param a   set a
-	 * @param b   set b
-	 * @return the complement of a and b
-	 */
-	public static <T> Set<T> complement(Set<T> a, Set<T> b) {
-		Set<T> a1 = new HashSet<T>(a);
-		a1.removeAll(b);
-		return a1;
-	}
+    /**
+     * Returns the complement (a without elements also in b) of <code>a</code> and <code>b</code>.
+     *
+     * @param <T> the value type
+     * @param a   set a
+     * @param b   set b
+     * @return the complement of a and b
+     */
+    public static <T> Set<T> complement(Set<T> a, Set<T> b) {
+        Set<T> a1 = new HashSet<T>(a);
+        a1.removeAll(b);
+        return a1;
+    }
 
-	/**
-	 * Returns the symmetric set difference (<code>union(complement(a,b),complement(b,a))</code>) on <code>a</code> and <code>b</code>.
-	 *
-	 * @param <T> the value type
-	 * @param a   set a
-	 * @param b   set b
-	 * @return the symmetric set difference
-	 */
-	public static <T> Set<T> symmetricDifference(Set<T> a, Set<T> b) {
-		return union(complement(a, b), complement(b, a));
-	}
+    /**
+     * Returns the symmetric set difference (<code>union(complement(a,b),complement(b,a))</code>) on <code>a</code> and <code>b</code>.
+     *
+     * @param <T> the value type
+     * @param a   set a
+     * @param b   set b
+     * @return the symmetric set difference
+     */
+    public static <T> Set<T> symmetricDifference(Set<T> a, Set<T> b) {
+        return union(complement(a, b), complement(b, a));
+    }
 }

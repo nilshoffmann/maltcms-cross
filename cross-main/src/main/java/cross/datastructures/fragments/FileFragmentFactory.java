@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -41,7 +41,7 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  *
  * Provides a number of convenience methods to create new {@link IFileFragment}
- * instances. However, you can also create {@link FileFragment} and 
+ * instances. However, you can also create {@link FileFragment} and
  * {@link ImmutableFileFragment} instances directly.
  *
  * @author Nils Hoffmann
@@ -84,7 +84,7 @@ public class FileFragmentFactory implements IFileFragmentFactory {
      */
     @Override
     public IFileFragment create(final File f,
-            final IFileFragment... sourceFiles) {
+        final IFileFragment... sourceFiles) {
         final IFileFragment iff = create(f);
         iff.addSourceFile(sourceFiles);
         return iff;
@@ -110,7 +110,7 @@ public class FileFragmentFactory implements IFileFragmentFactory {
      */
     @Override
     public IFileFragment create(final String dirname, final String filename,
-            final IFileFragment... sourceFiles) {
+        final IFileFragment... sourceFiles) {
         final IFileFragment iff = create(new File(dirname, filename));
         iff.addSourceFile(sourceFiles);
         return iff;
@@ -125,7 +125,7 @@ public class FileFragmentFactory implements IFileFragmentFactory {
      */
     @Override
     public IFileFragment create(final File dir, final String filename,
-            final IFileFragment... sourceFiles) {
+        final IFileFragment... sourceFiles) {
         final IFileFragment iff = create(new File(dir, filename));
         iff.addSourceFile(sourceFiles);
         return iff;
@@ -141,8 +141,8 @@ public class FileFragmentFactory implements IFileFragmentFactory {
      */
     @Override
     public IFileFragment create(final String dirname, final String filename,
-            final Collection<IFileFragment> resourceFiles)
-            throws IllegalArgumentException {
+        final Collection<IFileFragment> resourceFiles)
+        throws IllegalArgumentException {
         File f = null;
         IFileFragment ff = null;
         if (filename == null) {
@@ -166,7 +166,7 @@ public class FileFragmentFactory implements IFileFragmentFactory {
      */
     @Override
     public IFileFragment create(final IFileFragment f1, final IFileFragment f2,
-            final File outputdir) {
+        final File outputdir) {
         EvalTools.notNull(new Object[]{f1, f2}, this);
         final IFileFragment ff = create(outputdir.getAbsolutePath(), null);
         FragmentTools.setLHSFile(ff, f1);
@@ -192,7 +192,7 @@ public class FileFragmentFactory implements IFileFragmentFactory {
             filename = FileTools.getFilename(s);
         }
         final IFileFragment ff = create(dirname, filename,
-                new LinkedList<IFileFragment>());
+            new LinkedList<IFileFragment>());
         return ff;
     }
 

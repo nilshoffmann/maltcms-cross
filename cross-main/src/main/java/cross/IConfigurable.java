@@ -39,10 +39,10 @@ import org.apache.commons.configuration.Configuration;
  */
 public interface IConfigurable extends Serializable {
 
-	/**
-	 * Apply the configuration.
-	 *
-	 * @param cfg the configuration
-	 */
-	public void configure(Configuration cfg);
+    /**
+     * Apply the configuration.
+     *
+     * @param cfg the configuration
+     */
+    public void configure(Configuration cfg);
 }

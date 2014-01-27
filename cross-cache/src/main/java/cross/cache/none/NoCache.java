@@ -45,50 +45,50 @@ import java.util.Set;
  */
 public class NoCache<K, V> implements ICacheDelegate<K, V> {
 
-	private final HashMap<K, V> map;
-	private final String name;
+    private final HashMap<K, V> map;
+    private final String name;
 
-	/**
-	 * Creates a new instance.
-	 *
-	 * @param name the cache name
-	 */
-	public NoCache(String name) {
-		this.name = name;
-		this.map = new HashMap<K, V>();
-	}
+    /**
+     * Creates a new instance.
+     *
+     * @param name the cache name
+     */
+    public NoCache(String name) {
+        this.name = name;
+        this.map = new HashMap<K, V>();
+    }
 
-	@Override
-	public Set<K> keys() {
-		return this.map.keySet();
-	}
+    @Override
+    public Set<K> keys() {
+        return this.map.keySet();
+    }
 
-	@Override
-	public void put(K key, V value) {
-		if (value == null) {
-			map.remove(key);
-		} else {
-			map.put(key, value);
-		}
-	}
+    @Override
+    public void put(K key, V value) {
+        if (value == null) {
+            map.remove(key);
+        } else {
+            map.put(key, value);
+        }
+    }
 
-	@Override
-	public V get(K key) {
-		return map.get(key);
-	}
+    @Override
+    public V get(K key) {
+        return map.get(key);
+    }
 
-	@Override
-	public String getName() {
-		return this.name;
-	}
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-	@Override
-	public void close() {
-		this.map.clear();
-	}
+    @Override
+    public void close() {
+        this.map.clear();
+    }
 
-	@Override
-	public CacheType getCacheType() {
-		return CacheType.NONE;
-	}
+    @Override
+    public CacheType getCacheType() {
+        return CacheType.NONE;
+    }
 }

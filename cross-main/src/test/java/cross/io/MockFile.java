@@ -1,5 +1,5 @@
  /*
- * Cross, common runtime object support system. 
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -45,32 +45,32 @@ import ucar.ma2.Array;
 @Data
 public class MockFile {
 
-	private final URI uri;
-	private final Map<String, ArrayList<Array>> variableToDataMap = new LinkedHashMap<String, ArrayList<Array>>();
+    private final URI uri;
+    private final Map<String, ArrayList<Array>> variableToDataMap = new LinkedHashMap<String, ArrayList<Array>>();
 
-	public MockFile(URI uri) {
-		this.uri = uri;
-	}
+    public MockFile(URI uri) {
+        this.uri = uri;
+    }
 
-	public Set<String> keys() {
-		return variableToDataMap.keySet();
-	}
+    public Set<String> keys() {
+        return variableToDataMap.keySet();
+    }
 
-	public Array getChild(String name) {
-		if (variableToDataMap.containsKey(name)) {
-			return ArrayTools.glue(variableToDataMap.get(name));
-		}
-		throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
-	}
+    public Array getChild(String name) {
+        if (variableToDataMap.containsKey(name)) {
+            return ArrayTools.glue(variableToDataMap.get(name));
+        }
+        throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
+    }
 
-	public ArrayList<Array> getIndexedChild(String name) {
-		if (variableToDataMap.containsKey(name)) {
-			return variableToDataMap.get(name);
-		}
-		throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
-	}
+    public ArrayList<Array> getIndexedChild(String name) {
+        if (variableToDataMap.containsKey(name)) {
+            return variableToDataMap.get(name);
+        }
+        throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
+    }
 
-	public void addChild(String name, ArrayList<Array> c) {
-		variableToDataMap.put(name, c);
-	}
+    public void addChild(String name, ArrayList<Array> c) {
+        variableToDataMap.put(name, c);
+    }
 }

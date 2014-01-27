@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -45,18 +45,18 @@ import org.apache.commons.codec.binary.Base64;
 public class Base64Util {
 
     public static List<Float> base64StringToFloatList(
-            final String base64String, final boolean bigEndian)
-            throws DecoderException {
+        final String base64String, final boolean bigEndian)
+        throws DecoderException {
         final Base64 base64 = new Base64();
         final byte[] encoded = base64String.getBytes();
         final byte[] raw = base64.decode(encoded);
         final List<Float> floatList = Base64Util.byteArrayToFloatList(raw,
-                bigEndian);
+            bigEndian);
         return floatList;
     }
 
     public static double[] byteArrayToDoubleArray(final byte[] raw,
-            final boolean bigEndian, final int length) {
+        final boolean bigEndian, final int length) {
         final double[] d = new double[length];
         int i = 0;
         if (bigEndian) {
@@ -106,7 +106,7 @@ public class Base64Util {
     }
 
     public static float[] byteArrayToFloatArray(final byte[] raw,
-            final boolean bigEndian, final int length) {
+        final boolean bigEndian, final int length) {
         final float[] f = new float[length];
         int i = 0;
         if (bigEndian) {
@@ -140,7 +140,7 @@ public class Base64Util {
     }
 
     public static List<Float> byteArrayToFloatList(final byte[] raw,
-            final boolean bigEndian) {
+        final boolean bigEndian) {
         final List<Float> f = new ArrayList<Float>();
         if (bigEndian) {
             for (int iii = 0; iii < raw.length; iii += 4) {
@@ -173,9 +173,9 @@ public class Base64Util {
     }
 
     public static String floatListToBase64String(final List<Float> floatList,
-            final boolean bigEndian) throws EncoderException {
+        final boolean bigEndian) throws EncoderException {
         final byte[] raw = Base64Util
-                .floatListToByteArray(floatList, bigEndian);
+            .floatListToByteArray(floatList, bigEndian);
         final Base64 base64 = new Base64();
         final byte[] encoded = base64.encode(raw);
         return new String(encoded);
@@ -188,10 +188,10 @@ public class Base64Util {
      * @param floatList a list of float values
      * @param bigEndian
      * @return a byte array representing the float values in the IEEE 754
-     * floating-point "single format" bit layout.
+     *         floating-point "single format" bit layout.
      */
     public static byte[] floatListToByteArray(final List<Float> floatList,
-            final boolean bigEndian) {
+        final boolean bigEndian) {
         final int floatListSize = floatList.size();
         final byte[] raw = new byte[floatListSize * 4];
         int jjj = 0;

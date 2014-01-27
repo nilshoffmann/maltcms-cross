@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -55,12 +55,12 @@ public class EvalTools {
     private static ScriptEngine engine;
 
     public static String apply(final String s,
-            final HashMap<String, Double> stats, final String lastPosition) {
+        final HashMap<String, Double> stats, final String lastPosition) {
         if (EvalTools.isOperator(s)) {
             EvalTools.log.debug(s + " is operator");
             if (lastPosition.equals(s)) {
                 EvalTools.log.debug("Double operator detected, deleting additional operator "
-                        + s);
+                    + s);
                 return "";
             }
         }
@@ -76,12 +76,12 @@ public class EvalTools {
     }
 
     public static String apply(final String s,
-            final Tuple2D<Context, Context> context, final String lastPosition) {
+        final Tuple2D<Context, Context> context, final String lastPosition) {
         if (EvalTools.isOperator(s)) {
             EvalTools.log.debug(s + " is operator");
             if (lastPosition.equals(s)) {
                 EvalTools.log.debug("Double operator detected, deleting additional operator "
-                        + s);
+                    + s);
                 return "";
             }
         }
@@ -120,25 +120,25 @@ public class EvalTools {
     public static void eq(final Object a, final Object b) {
         if (!a.equals(b)) {
             throw new ConstraintViolationException(
-                    "Objects a and b are not equal!");
+                "Objects a and b are not equal!");
         }
     }
 
     public static void eqD(final double d, final double e, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         if (d != e) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString() + ": Values are not equal: " + d + "!="
-                    + e);
+                + caller.toString() + ": Values are not equal: " + d + "!="
+                + e);
         }
     }
 
     public static void eqI(final int i, final int j, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         if (i != j) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString() + ": Values are not equal :" + i + "!="
-                    + j);
+                + caller.toString() + ": Values are not equal :" + i + "!="
+                + j);
         }
     }
 
@@ -148,7 +148,7 @@ public class EvalTools {
         // manual handling of
         // tokens
         final StringTokenizer stok = new StringTokenizer(s, "[+\\-*:/^()]",
-                true);
+            true);
         // st.parseNumbers();
         final StringBuilder sb = new StringBuilder(s.length());
         String lastPosition = "";
@@ -164,8 +164,8 @@ public class EvalTools {
         final ScriptEngine engine1 = manager1.getEngineByName("JavaScript");
         // Logging.getInstance().logger.info("Initialized JavaScriptEngine!");
         EvalTools.notNull(engine1,
-                "Failed to initialize script engine for JavaScript",
-                EvalTools.class);
+            "Failed to initialize script engine for JavaScript",
+            EvalTools.class);
         try {
             final String scr = sb.toString();
             // EvalTools.log.debug(scr);
@@ -185,11 +185,11 @@ public class EvalTools {
     }
 
     public static Double evalContext(final String s,
-            final Tuple2D<Context, Context> context) {
+        final Tuple2D<Context, Context> context) {
         // Context c1 = context.getFirst();
         // Context c2 = context.getSecond();
         final StringTokenizer stok = new StringTokenizer(s, "[+\\-*:/^()]",
-                true);
+            true);
         // st.parseNumbers();
         final StringBuilder sb = new StringBuilder(s.length());
         String lastPosition = "";
@@ -223,38 +223,38 @@ public class EvalTools {
     }
 
     public static void inRangeD(final double min, final double max,
-            final double v, final Object caller)
-            throws ConstraintViolationException {
+        final double v, final Object caller)
+        throws ConstraintViolationException {
         // for(double d:v){
         if (v < min) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString()
-                    + ": Value was smaller than minimum supplied: " + v + "<"
-                    + min);
+                + caller.toString()
+                + ": Value was smaller than minimum supplied: " + v + "<"
+                + min);
         }
         if (v > max) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString()
-                    + ": Value was greater than maximum supplied: " + v + ">"
-                    + max);
+                + caller.toString()
+                + ": Value was greater than maximum supplied: " + v + ">"
+                + max);
         }
         // }
     }
 
     public static void inRangeI(final int min, final int max, final int v,
-            final Object caller) throws ConstraintViolationException {
+        final Object caller) throws ConstraintViolationException {
         // for(int i:v){
         if (v < min) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString()
-                    + ": Value was smaller than minimum supplied: " + v + "<"
-                    + min);
+                + caller.toString()
+                + ": Value was smaller than minimum supplied: " + v + "<"
+                + min);
         }
         if (v > max) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString()
-                    + ": Value was greater than maximum supplied: " + v + ">"
-                    + max);
+                + caller.toString()
+                + ": Value was greater than maximum supplied: " + v + ">"
+                + max);
         }
         // }
     }
@@ -291,33 +291,33 @@ public class EvalTools {
         // signed decimal integer.
         final String Exp = "[eE][+-]?" + Digits;
         final String fpRegex = "[\\x00-\\x20]*" + // Optional leading
-                // "whitespace"
-                "[+-]?(" + // Optional sign character
-                "NaN|" + // "NaN" string
-                "Infinity|"
-                + // "Infinity" string
-                // A decimal floating-point string representing a finite
-                // positive
-                // number without a leading sign has at most five basic pieces:
-                // Digits . Digits ExponentPart FloatTypeSuffix
-                // 
-                // Since this method allows integer-only strings as input
-                // in addition to strings of floating-point literals, the
-                // two sub-patterns below are simplifications of the grammar
-                // productions from the Java Language Specification, 2nd
-                // edition, section 3.10.2.
-                // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
-                "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|"
-                + // . Digits ExponentPart_opt FloatTypeSuffix_opt
-                "(\\.(" + Digits + ")(" + Exp + ")?)|"
-                + // Hexadecimal strings
-                "(("
-                + // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
-                "(0[xX]" + HexDigits + "(\\.)?)|"
-                + // 0[xX] HexDigits_opt . HexDigits BinaryExponent
-                // FloatTypeSuffix_opt
-                "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")"
-                + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*";// Optional
+            // "whitespace"
+            "[+-]?(" + // Optional sign character
+            "NaN|" + // "NaN" string
+            "Infinity|"
+            + // "Infinity" string
+            // A decimal floating-point string representing a finite
+            // positive
+            // number without a leading sign has at most five basic pieces:
+            // Digits . Digits ExponentPart FloatTypeSuffix
+            //
+            // Since this method allows integer-only strings as input
+            // in addition to strings of floating-point literals, the
+            // two sub-patterns below are simplifications of the grammar
+            // productions from the Java Language Specification, 2nd
+            // edition, section 3.10.2.
+            // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
+            "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|"
+            + // . Digits ExponentPart_opt FloatTypeSuffix_opt
+            "(\\.(" + Digits + ")(" + Exp + ")?)|"
+            + // Hexadecimal strings
+            "(("
+            + // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+            "(0[xX]" + HexDigits + "(\\.)?)|"
+            + // 0[xX] HexDigits_opt . HexDigits BinaryExponent
+            // FloatTypeSuffix_opt
+            "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")"
+            + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*";// Optional
         // trailing
         // "whitespace"
         if (Pattern.matches(fpRegex, s)) {
@@ -329,7 +329,7 @@ public class EvalTools {
 
     public static boolean isOperator(final String s) {
         if (s.equals("*") || s.equals("/") || s.equals("-") || s.equals("+")
-                || s.equals("(") || s.equals(")") || s.equals("^")) {
+            || s.equals("(") || s.equals(")") || s.equals("^")) {
             return true;
         }
         return false;
@@ -343,7 +343,7 @@ public class EvalTools {
     }
 
     public static boolean isVar(final String s,
-            final HashMap<String, Double> stats) {
+        final HashMap<String, Double> stats) {
         if (s.matches("[A-Za-z_]+") && stats.containsKey(s)) {
             return true;
         }
@@ -357,47 +357,47 @@ public class EvalTools {
     }
 
     public static void neqD(final double i, final double j, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         if (i == j) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString()
-                    + ": Values are equal, but should not be :" + i + "!=" + j);
+                + caller.toString()
+                + ": Values are equal, but should not be :" + i + "!=" + j);
         }
     }
 
     public static void neqI(final int i, final int j, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         if (i == j) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString() + ": Values are equal :" + i + "!=" + j);
+                + caller.toString() + ": Values are equal :" + i + "!=" + j);
         }
     }
 
     public static void notNull(final Object o, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         final String message = "Argument was null!";
         EvalTools.notNull(o, "Called from " + caller.toString() + ": "
-                + message, caller);
+            + message, caller);
     }
 
     public static void notNull(final Object o, final String message,
-            final Object caller) throws ConstraintViolationException {
+        final Object caller) throws ConstraintViolationException {
         if (o == null) {
             throw new ConstraintViolationException("Called from "
-                    + caller.toString() + ": " + message);
+                + caller.toString() + ": " + message);
         }
     }
 
     public static void notNull(final Object[] o, final Object caller)
-            throws ConstraintViolationException {
+        throws ConstraintViolationException {
         int i = 0;
         for (final Object ob : o) {
             try {
                 EvalTools.notNull(ob, caller);
             } catch (final ConstraintViolationException cve) {
                 throw new ConstraintViolationException("Called from "
-                        + caller.toString() + ": Argument " + (i + 1) + " of "
-                        + o.length + " was null!");
+                    + caller.toString() + ": Argument " + (i + 1) + " of "
+                    + o.length + " was null!");
             }
             i++;
         }
@@ -406,7 +406,7 @@ public class EvalTools {
     public static void isNull(final Object o, final Object caller) throws ConstraintViolationException {
         if (o != null) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": "
-                    + "Argument was not null!");
+                + "Argument was not null!");
         }
     }
 
@@ -422,7 +422,7 @@ public class EvalTools {
     }
 
     public static String value(final String var,
-            final HashMap<String, Double> stats) {
+        final HashMap<String, Double> stats) {
         if (EvalTools.isVar(var, stats)) {
             EvalTools.log.debug(stats.get(var).toString());
             if (stats.containsKey(var)) {

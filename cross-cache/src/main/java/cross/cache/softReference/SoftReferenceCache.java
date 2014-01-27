@@ -44,66 +44,66 @@ import java.util.Set;
  */
 public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
 
-	private final HashMap<K, SoftReference<? extends V>> map;
-	private final String name;
+    private final HashMap<K, SoftReference<? extends V>> map;
+    private final String name;
 
-	/**
-	 * Creates a new instance.
-	 *
-	 * @param name the cache name
-	 */
-	public SoftReferenceCache(String name) {
-		this.name = name;
-		this.map = new HashMap<K, SoftReference<? extends V>>();
-	}
+    /**
+     * Creates a new instance.
+     *
+     * @param name the cache name
+     */
+    public SoftReferenceCache(String name) {
+        this.name = name;
+        this.map = new HashMap<K, SoftReference<? extends V>>();
+    }
 
-	@Override
-	public Set<K> keys() {
-		return this.map.keySet();
-	}
+    @Override
+    public Set<K> keys() {
+        return this.map.keySet();
+    }
 
-	@Override
-	public void put(K key, V value) {
-		if (value == null) {
-			map.remove(key);
-		} else {
-			map.put(key, new SoftReference<V>(value));//,this.referenceQueue));
-		}
-	}
+    @Override
+    public void put(K key, V value) {
+        if (value == null) {
+            map.remove(key);
+        } else {
+            map.put(key, new SoftReference<V>(value));//,this.referenceQueue));
+        }
+    }
 
-	@Override
-	public V get(K key) {
-		if (map.containsKey(key)) {
-			SoftReference<? extends V> softReference = map.get(key);
-			//soft reference is null, no entry for key
-			if (softReference == null) {
-				return null;
-			}
-			V value = softReference.get();
-			if (value == null) {
-				//value was garbage collected
-				map.remove(key);
-			}
-			return value;
-		}
-		return null;
-	}
+    @Override
+    public V get(K key) {
+        if (map.containsKey(key)) {
+            SoftReference<? extends V> softReference = map.get(key);
+            //soft reference is null, no entry for key
+            if (softReference == null) {
+                return null;
+            }
+            V value = softReference.get();
+            if (value == null) {
+                //value was garbage collected
+                map.remove(key);
+            }
+            return value;
+        }
+        return null;
+    }
 
-	@Override
-	public String getName() {
-		return this.name;
-	}
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * Clears the map of all keys and values.
-	 */
-	@Override
-	public void close() {
-		this.map.clear();
-	}
+    /**
+     * Clears the map of all keys and values.
+     */
+    @Override
+    public void close() {
+        this.map.clear();
+    }
 
-	@Override
-	public CacheType getCacheType() {
-		return CacheType.SOFT;
-	}
+    @Override
+    public CacheType getCacheType() {
+        return CacheType.SOFT;
+    }
 }

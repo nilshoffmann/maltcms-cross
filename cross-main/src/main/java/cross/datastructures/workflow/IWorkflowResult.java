@@ -39,27 +39,31 @@ import java.io.Serializable;
  */
 public interface IWorkflowResult extends IXMLSerializable, Serializable {
 
-	/**
-	 * Returns the workflow element associated to this result.
-	 * @return the workflow element
-	 */
-	public IWorkflowElement getWorkflowElement();
+    /**
+     * Returns the workflow element associated to this result.
+     *
+     * @return the workflow element
+     */
+    public IWorkflowElement getWorkflowElement();
 
-	/**
-	 * Returns the workflow slot / category associated to this result.
-	 * @return the workflow slot
-	 */
-	public WorkflowSlot getWorkflowSlot();
+    /**
+     * Returns the workflow slot / category associated to this result.
+     *
+     * @return the workflow slot
+     */
+    public WorkflowSlot getWorkflowSlot();
 
-	/**
-	 * Sets the workflow element that created / reported this result.
-	 * @param iwe the workflow element
-	 */
-	public void setWorkflowElement(IWorkflowElement iwe);
+    /**
+     * Sets the workflow element that created / reported this result.
+     *
+     * @param iwe the workflow element
+     */
+    public void setWorkflowElement(IWorkflowElement iwe);
 
-	/**
-	 * Sets the workflow slot / category.
-	 * @param ws the workflow slot
-	 */
-	public void setWorkflowSlot(WorkflowSlot ws);
+    /**
+     * Sets the workflow slot / category.
+     *
+     * @param ws the workflow slot
+     */
+    public void setWorkflowSlot(WorkflowSlot ws);
 }

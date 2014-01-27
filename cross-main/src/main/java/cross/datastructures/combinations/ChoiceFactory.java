@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -43,47 +43,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChoiceFactory {
 
-	/**
-	 * Returns a lazily instantiated list (allows for an almost arbitrary number
-	 * of combinations {@link Integer.maxValue()}) of all unique object
-	 * combinations, s.t. for (a,b)=(b,a) only (a,b) is returned. The list is
-	 * backed by a {@link CombinationProvider} wrapping a {@link
-	 * CombinationIterator} to feed a {@link CachedLazyList}.
-	 *
-	 * @param data the list of parameters, each parameter's values are contained
-	 * in one object arrray
-	 * @return the list of unique parameter combinations, each in one object
-	 * array
-	 */
-	public static List<Object[]> getKPartiteChoices(List<Object[]> data) {
-		//element counter
+    /**
+     * Returns a lazily instantiated list (allows for an almost arbitrary number
+     * of combinations {@link Integer.maxValue()}) of all unique object
+     * combinations, s.t. for (a,b)=(b,a) only (a,b) is returned. The list is
+     * backed by a {@link CombinationProvider} wrapping a {@link
+     * CombinationIterator} to feed a {@link CachedLazyList}.
+     *
+     * @param data the list of parameters, each parameter's values are contained
+     *             in one object arrray
+     * @return the list of unique parameter combinations, each in one object
+     *         array
+     */
+    public static List<Object[]> getKPartiteChoices(List<Object[]> data) {
+        //element counter
 //        int nelements = 0;
-		int[] partitionSize = new int[data.size()];
-		Partition[] parts = new Partition[data.size()];
-		// store partition size
-		// and partition
-		// allowed combinations are enumerated by
-		// treating each individual partition p as a 
-		// base |p| number register. 
-		// While enumerating, the current value of the right-most
-		// partition/register is increased until its maximum is reached.
-		// It then carries over to the next neighbor, who is also increased.
-		// The counting continues until the maximum number of possible choices
-		// is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all partition
-		// sizes)
-		for (int i = 0; i < data.size(); i++) {
-			partitionSize[i] = data.get(i).length;
-			if (i > 0) {
-				parts[i] = new Partition(parts[i - 1], partitionSize[i]);
-			} else {
-				parts[i] = new Partition(partitionSize[i]);
-			}
-		}
+        int[] partitionSize = new int[data.size()];
+        Partition[] parts = new Partition[data.size()];
+        // store partition size
+        // and partition
+        // allowed combinations are enumerated by
+        // treating each individual partition p as a
+        // base |p| number register.
+        // While enumerating, the current value of the right-most
+        // partition/register is increased until its maximum is reached.
+        // It then carries over to the next neighbor, who is also increased.
+        // The counting continues until the maximum number of possible choices
+        // is reached, which is \PI_{i=0}^{k}|p_{i}| (the product of all partition
+        // sizes)
+        for (int i = 0; i < data.size(); i++) {
+            partitionSize[i] = data.get(i).length;
+            if (i > 0) {
+                parts[i] = new Partition(parts[i - 1], partitionSize[i]);
+            } else {
+                parts[i] = new Partition(partitionSize[i]);
+            }
+        }
 
-		CombinationIterator pi = new CombinationIterator(parts);
-		// list holding returned choices
-		IElementProvider<Object[]> iep = new CombinationProvider(pi, data);
-		List<Object[]> l = CachedLazyList.getList(iep);//new ArrayList<Object[]>();
-		return l;
-	}
+        CombinationIterator pi = new CombinationIterator(parts);
+        // list holding returned choices
+        IElementProvider<Object[]> iep = new CombinationProvider(pi, data);
+        List<Object[]> l = CachedLazyList.getList(iep);//new ArrayList<Object[]>();
+        return l;
+    }
 }

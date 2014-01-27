@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -57,7 +57,7 @@ public class Fragment implements IFragment {
         if (this.attributes != null) {
             final Element group = new Element("attributes");
             group.setAttribute("size", ""
-                    + this.attributes.asCollection().size());
+                + this.attributes.asCollection().size());
             e.addContent(group);
             for (final String s : this.attributes.keySet()) {
                 final Element attr = new Element("attribute");
@@ -79,7 +79,8 @@ public class Fragment implements IFragment {
      */
     /**
      * Appends this fragment's attributes to the xml element.
-     * @param e the element 
+     *
+     * @param e the element
      */
     @Override
     public void appendXML(final Element e) {
@@ -88,8 +89,9 @@ public class Fragment implements IFragment {
 
     /**
      * Compare Fragments by comparing their string representations.
-	 * @param arg0 the first fragment
-	 * @param arg1 the second fragment
+     *
+     * @param arg0 the first fragment
+     * @param arg1 the second fragment
      */
     @Override
     public int compare(final IFragment arg0, final IFragment arg1) {

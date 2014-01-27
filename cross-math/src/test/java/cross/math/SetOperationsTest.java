@@ -40,55 +40,55 @@ import org.junit.Test;
  */
 public class SetOperationsTest {
 
-	/**
-	 * Test of union method, of class SetOperations.
-	 */
-	@Test
-	public void testUnion() {
-		Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
-		Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
-		Set<Integer> union = new HashSet<Integer>(Arrays.asList(5, 21, 26, 43, 45, 1));
-		Set<Integer> result = SetOperations.union(a, b);
-		Assert.assertEquals(union, result);
-	}
+    /**
+     * Test of union method, of class SetOperations.
+     */
+    @Test
+    public void testUnion() {
+        Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
+        Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
+        Set<Integer> union = new HashSet<Integer>(Arrays.asList(5, 21, 26, 43, 45, 1));
+        Set<Integer> result = SetOperations.union(a, b);
+        Assert.assertEquals(union, result);
+    }
 
-	/**
-	 * Test of intersection method, of class SetOperations.
-	 */
-	@Test
-	public void testIntersection() {
-		Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
-		Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
-		Set<Integer> intersection = new HashSet<Integer>(Arrays.asList(1, 5));
-		Set<Integer> result = SetOperations.intersection(a, b);
-		Assert.assertEquals(intersection, result);
-	}
+    /**
+     * Test of intersection method, of class SetOperations.
+     */
+    @Test
+    public void testIntersection() {
+        Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
+        Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
+        Set<Integer> intersection = new HashSet<Integer>(Arrays.asList(1, 5));
+        Set<Integer> result = SetOperations.intersection(a, b);
+        Assert.assertEquals(intersection, result);
+    }
 
-	/**
-	 * Test of complement method, of class SetOperations.
-	 */
-	@Test
-	public void testComplement() {
-		Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
-		Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
-		Set<Integer> complementA = new HashSet<Integer>(Arrays.asList(21, 45));
-		Set<Integer> complementB = new HashSet<Integer>(Arrays.asList(26, 43));
-		Set<Integer> resultA = SetOperations.complement(a, b);
-		Set<Integer> resultB = SetOperations.complement(b, a);
-		Assert.assertEquals(complementA, resultA);
-		Assert.assertEquals(complementB, resultB);
-	}
+    /**
+     * Test of complement method, of class SetOperations.
+     */
+    @Test
+    public void testComplement() {
+        Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
+        Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
+        Set<Integer> complementA = new HashSet<Integer>(Arrays.asList(21, 45));
+        Set<Integer> complementB = new HashSet<Integer>(Arrays.asList(26, 43));
+        Set<Integer> resultA = SetOperations.complement(a, b);
+        Set<Integer> resultB = SetOperations.complement(b, a);
+        Assert.assertEquals(complementA, resultA);
+        Assert.assertEquals(complementB, resultB);
+    }
 
-	/**
-	 * Test of symmetricDifference method, of class SetOperations.
-	 */
-	@Test
-	public void testSymmetricDifference() {
-		Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
-		Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
-		Set<Integer> symmetricDiff = new HashSet<Integer>(Arrays.asList(21, 45, 26, 43));
-		Set<Integer> result = SetOperations.symmetricDifference(a, b);
-		Set<Integer> resultB = SetOperations.complement(b, a);
-		Assert.assertEquals(symmetricDiff, result);
-	}
+    /**
+     * Test of symmetricDifference method, of class SetOperations.
+     */
+    @Test
+    public void testSymmetricDifference() {
+        Set<Integer> a = new HashSet<Integer>(Arrays.asList(5, 21, 45, 1));
+        Set<Integer> b = new HashSet<Integer>(Arrays.asList(5, 26, 43, 1));
+        Set<Integer> symmetricDiff = new HashSet<Integer>(Arrays.asList(21, 45, 26, 43));
+        Set<Integer> result = SetOperations.symmetricDifference(a, b);
+        Set<Integer> resultB = SetOperations.complement(b, a);
+        Assert.assertEquals(symmetricDiff, result);
+    }
 }

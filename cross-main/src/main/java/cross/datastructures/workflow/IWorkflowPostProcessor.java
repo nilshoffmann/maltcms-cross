@@ -37,13 +37,13 @@ import java.io.Serializable;
  */
 public interface IWorkflowPostProcessor extends Serializable {
 
-	/**
-	 * Process the results of this workflow as a whole.
-	 *
-	 * For intermediate processing results, consider to use {@link IListener<IEvent<IWorkflowResult>>}.
-	 *
-	 * @param workflow the workflow
-	 * @see IWorkflow
-	 */
-	public void process(IWorkflow workflow);
+    /**
+     * Process the results of this workflow as a whole.
+     *
+     * For intermediate processing results, consider to use {@link IListener<IEvent<IWorkflowResult>>}.
+     *
+     * @param workflow the workflow
+     * @see IWorkflow
+     */
+    public void process(IWorkflow workflow);
 }

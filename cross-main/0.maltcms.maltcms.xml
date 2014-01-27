@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<maltcms><file filename="file:/tmp/junit1861617249586602926/junit3921833824877208882/4/0.maltcms.xml" size="3"><attributes size="0" /><dimensions><dimension name="dimension2" length="1" id="0" shared="true" unlimited="false" variableLength="false" /><dimension name="dimension3" length="128" id="1" shared="true" unlimited="false" variableLength="false" /><dimension name="source_file_number" length="1" id="2" shared="true" unlimited="false" variableLength="false" /><dimension name="source_file_max_chars" length="128" id="3" shared="true" unlimited="false" variableLength="false" /><dimension name="dimension4" length="2" id="4" shared="true" unlimited="false" variableLength="false" /></dimensions><variable name="source_files" dataType="char"><attributes size="0" /><dimensions><dimension refname="source_file_number" /><dimension refname="source_file_max_chars" /></dimensions></variable><data>H4sIAAAAAAAAAFvzloG1hNE0TSFTIUchVcFKQV+hRCFXoQBIZymUKuQBxUsUDBUsFMyAJAibKxgp
-mChYKpiCxcwUDIB8SyA2Q9FhDBYD6TMGQguwHgugXpBuAyDLAiymD5TTB/L1gDYmAu0vUUgGsoqB
-/AognaNwoGFQIwCUCubzPAEAAA==</data><variable name="unique-4" dataType="int"><attributes size="0" /><dimensions><dimension refname="dimension4" /></dimensions></variable><data>H4sIAAAAAAAAAFvzloG1hIHFQMFEAQBALpm/CwAAAA==</data><variable name="shadow-0" dataType="int"><attributes size="0" /><dimensions><dimension refname="dimension2" /></dimensions></variable><data>H4sIAAAAAAAAAFvzloG1hIHJRAEAC4UTIwkAAAA=</data></file></maltcms>
+<maltcms>
+    <file filename="file:/tmp/junit1861617249586602926/junit3921833824877208882/4/0.maltcms.xml" size="3">
+        <attributes size="0" />
+        <dimensions>
+            <dimension name="dimension2" length="1" id="0" shared="true" unlimited="false" variableLength="false" />
+            <dimension name="dimension3" length="128" id="1" shared="true" unlimited="false" variableLength="false" />
+            <dimension name="source_file_number" length="1" id="2" shared="true" unlimited="false" variableLength="false" />
+            <dimension name="source_file_max_chars" length="128" id="3" shared="true" unlimited="false" variableLength="false" />
+            <dimension name="dimension4" length="2" id="4" shared="true" unlimited="false" variableLength="false" />
+        </dimensions>
+        <variable name="source_files" dataType="char">
+            <attributes size="0" />
+            <dimensions>
+                <dimension refname="source_file_number" />
+                <dimension refname="source_file_max_chars" />
+            </dimensions>
+        </variable>
+        <data>H4sIAAAAAAAAAFvzloG1hNE0TSFTIUchVcFKQV+hRCFXoQBIZymUKuQBxUsUDBUsFMyAJAibKxgp
+            mChYKpiCxcwUDIB8SyA2Q9FhDBYD6TMGQguwHgugXpBuAyDLAiymD5TTB/L1gDYmAu0vUUgGsoqB
+            /AognaNwoGFQIwCUCubzPAEAAA==</data>
+        <variable name="unique-4" dataType="int">
+            <attributes size="0" />
+            <dimensions>
+                <dimension refname="dimension4" />
+            </dimensions>
+        </variable>
+        <data>H4sIAAAAAAAAAFvzloG1hIHFQMFEAQBALpm/CwAAAA==</data>
+        <variable name="shadow-0" dataType="int">
+            <attributes size="0" />
+            <dimensions>
+                <dimension refname="dimension2" />
+            </dimensions>
+        </variable>
+        <data>H4sIAAAAAAAAAFvzloG1hIHJRAEAC4UTIwkAAAA=</data>
+    </file>
+</maltcms>

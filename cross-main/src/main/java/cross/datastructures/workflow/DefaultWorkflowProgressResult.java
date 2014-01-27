@@ -1,5 +1,5 @@
-/* 
- * Cross, common runtime object support system. 
+/*
+ * Cross, common runtime object support system.
  * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -27,9 +27,6 @@
  */
 package cross.datastructures.workflow;
 
-import cross.datastructures.workflow.IWorkflowElement;
-import cross.datastructures.workflow.IWorkflowProgressResult;
-import cross.datastructures.workflow.WorkflowSlot;
 import cross.datastructures.tools.EvalTools;
 import org.jdom.Element;
 
@@ -50,7 +47,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
     private String[] stepNames = new String[]{""};
 
     public DefaultWorkflowProgressResult(final String[] stepNames,
-            final IWorkflowElement iwe, final WorkflowSlot ws) {
+        final IWorkflowElement iwe, final WorkflowSlot ws) {
         this.stepNames = stepNames;
         this.numberOfSteps = this.stepNames.length;
         this.iwe = iwe;
@@ -58,7 +55,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
     }
 
     public DefaultWorkflowProgressResult(final int numberOfSteps,
-            final IWorkflowElement iwe, final WorkflowSlot ws) {
+        final IWorkflowElement iwe, final WorkflowSlot ws) {
         this.numberOfSteps = numberOfSteps;
         this.iwe = iwe;
         this.ws = ws;
@@ -66,7 +63,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * cross.datastructures.workflow.IWorkflowProgressResult#getCurrentStep()
      */
@@ -77,7 +74,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see cross.datastructures.workflow.IWorkflowResult#getWorkflowElement()
      */
     @Override
@@ -87,7 +84,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * cross.datastructures.workflow.IWorkflowProgressResult#getNumberOfSteps()
      */
@@ -98,7 +95,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * cross.datastructures.workflow.IWorkflowProgressResult#getOverallProgress
      * ()
@@ -110,7 +107,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see cross.datastructures.workflow.IWorkflowProgressResult#getStepNames()
      */
     @Override
@@ -120,7 +117,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see cross.datastructures.workflow.IWorkflowResult#getWorkflowSlot()
      */
     @Override
@@ -130,7 +127,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see cross.datastructures.workflow.IWorkflowProgressResult#nextStep()
      */
     @Override
@@ -143,7 +140,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * cross.datastructures.workflow.IWorkflowResult#setWorkflowElement(cross
      * .datastructures.workflow.IWorkflowElement)
@@ -156,7 +153,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @seecross.datastructures.workflow.IWorkflowResult#setWorkflowSlot(cross.
      * datastructures.workflow.WorkflowSlot)
      */
@@ -168,7 +165,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom.Element)
      */
     @Override
