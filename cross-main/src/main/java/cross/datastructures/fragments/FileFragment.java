@@ -28,7 +28,6 @@
 package cross.datastructures.fragments;
 
 import cross.Factory;
-import cross.cache.CacheType;
 import cross.cache.ICacheDelegate;
 import cross.datastructures.StatsMap;
 import cross.datastructures.tools.EvalTools;
@@ -439,7 +438,7 @@ public final class FileFragment implements IFileFragment {
     public ICacheDelegate<IVariableFragment, List<Array>> getCache() {
         if (this.persistentCache == null) {
 //            String cacheLocation = UUID.nameUUIDFromBytes(getUri().toString().getBytes()).toString();
-            this.persistentCache = Fragments.createFragmentCache("FileFragmentCache", CacheType.EHCACHE);
+            this.persistentCache = Fragments.createFragmentCache("FileFragmentCache");
         }
         return this.persistentCache;
     }
