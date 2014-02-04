@@ -29,8 +29,9 @@ package cross.cache.none;
 
 import cross.cache.CacheType;
 import cross.cache.ICacheDelegate;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A mock cache using a typed HashMap for key->value mappings.
@@ -45,7 +46,7 @@ import java.util.Set;
  */
 public class NoCache<K, V> implements ICacheDelegate<K, V> {
 
-    private final HashMap<K, V> map;
+    private final Map<K, V> map;
     private final String name;
 
     /**
@@ -55,7 +56,7 @@ public class NoCache<K, V> implements ICacheDelegate<K, V> {
      */
     public NoCache(String name) {
         this.name = name;
-        this.map = new HashMap<K, V>();
+        this.map = new ConcurrentHashMap<K, V>();
     }
 
     @Override

@@ -30,8 +30,9 @@ package cross.cache.softReference;
 import cross.cache.CacheType;
 import cross.cache.ICacheDelegate;
 import java.lang.ref.SoftReference;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Values are referenced using {@link java.lang.ref.SoftReference}. These may be
@@ -44,7 +45,7 @@ import java.util.Set;
  */
 public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
 
-    private final HashMap<K, SoftReference<? extends V>> map;
+    private final Map<K, SoftReference<? extends V>> map;
     private final String name;
 
     /**
@@ -54,7 +55,7 @@ public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
      */
     public SoftReferenceCache(String name) {
         this.name = name;
-        this.map = new HashMap<K, SoftReference<? extends V>>();
+        this.map = new ConcurrentHashMap<K, SoftReference<? extends V>>();
     }
 
     @Override

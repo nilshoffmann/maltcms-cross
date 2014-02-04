@@ -264,6 +264,10 @@ public final class Factory implements ConfigurationListener {
         final int numProcessors = Runtime.getRuntime().availableProcessors();
         this.log.debug("{} processors available to current runtime",
             numProcessors);
+        if (this.maxthreads < 1) {
+            this.log.debug("Automatically selecting {} threads according to number of available processors!", this.maxthreads);
+            this.maxthreads = numProcessors;
+        }
         this.maxthreads = (this.maxthreads < numProcessors) ? this.maxthreads
             : numProcessors;
         cfg.setProperty("cross.Factory.maxthreads", this.maxthreads);

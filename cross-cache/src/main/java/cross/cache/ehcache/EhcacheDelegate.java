@@ -29,8 +29,9 @@ package cross.cache.ehcache;
 
 import cross.cache.CacheType;
 import cross.cache.ICacheDelegate;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -49,6 +50,7 @@ import net.sf.ehcache.Element;
 public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
 
     private final Ehcache cache;
+    private final Set<K> keys;
 
     /**
      * Creates a new instance.
@@ -57,11 +59,12 @@ public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
      */
     public EhcacheDelegate(final Ehcache cache) {
         this.cache = cache;
+        this.keys = Collections.newSetFromMap(new ConcurrentHashMap<K, Boolean>());
     }
 
     @Override
     public Set<K> keys() {
-        return new HashSet<K>(getCache().getKeys());
+        return this.keys;
     }
 
     @Override
@@ -69,8 +72,10 @@ public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
         try {
             if (value == null) {
                 getCache().remove(key);
+                keys.remove(key);
             } else {
                 getCache().put(new Element(key, value));
+                keys.add(key);
             }
         } catch (IllegalStateException se) {
             log.warn("Failed to add element to cache: " + key, se);

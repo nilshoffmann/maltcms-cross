@@ -30,8 +30,9 @@ package cross.cache.ehcache;
 import cross.cache.CacheType;
 import cross.cache.ICacheDelegate;
 import cross.cache.ICacheElementProvider;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
@@ -78,7 +79,7 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
                 }
             }
         });
-        this.keys = new HashSet<K>();
+        this.keys = Collections.newSetFromMap(new ConcurrentHashMap<K, Boolean>());
     }
 
     @Override
