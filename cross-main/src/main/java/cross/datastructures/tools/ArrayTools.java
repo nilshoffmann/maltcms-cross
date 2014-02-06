@@ -296,4 +296,26 @@ public class ArrayTools {
         }
         return a;
     }
+
+    /**
+     * Checks multiple features of two arrays for equality: element type, shape, and the
+     * array elements themselves. If any mismatch is found, a
+     * <code>ConstraintViolationException</code> is thrown.
+     *
+     * @param a the first array to check
+     * @param b the second array to check
+     * @throws ConstraintViolationException
+     */
+    public static void checkFullArrayEquality(Array a, Array b) throws ConstraintViolationException {
+        EvalTools.eq(a.getElementType(), b.getElementType());
+        EvalTools.eqI(a.getShape().length, b.getShape().length, ArrayTools.class);
+        for (int i = 0; i < a.getShape().length; i++) {
+            EvalTools.eqI(a.getShape()[i], b.getShape()[i], ArrayTools.class);
+        }
+        IndexIterator aiter = a.getIndexIterator();
+        IndexIterator biter = b.getIndexIterator();
+        while (aiter.hasNext() && biter.hasNext()) {
+            EvalTools.eqD(0, (aiter.getDoubleNext() - biter.getDoubleNext()), aiter);
+        }
+    }
 }
