@@ -3,6 +3,16 @@ Release Notes
 Changes for version 1.3.1:
 ---------------------------
 
+New features
+
+* Added ResultAwareCommandPipeline, see [the documentation](./doc/concepts.html) for more details
+* Bug fixes concerning Ehcache cache manager
+
+Deprecation
+
+* The singleton static access pattern for `cross.Factory().getInstance()` has been deprecated in favor of using 
+`cross.IFactoryService` and its corresponding implementation `cross.FactoryService`. Cross 1.4 wll not use this pattern 
+any longer.
 
 
 Changes for version 1.3:
