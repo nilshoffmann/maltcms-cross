@@ -74,13 +74,13 @@ public class FragmentTools {
      * Creates a one-dimensional double array and adds it as to the
      * automatically created IVariableFragment with varname.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable name
-     * @param size    the array size (one-dimensional)
+     * @param size the array size (one-dimensional)
      * @return the new variable fragment with empty array set
      */
     public static IVariableFragment createDoubleArrayD1(
-        final IFileFragment parent, final String varname, final int size) {
+            final IFileFragment parent, final String varname, final int size) {
         IVariableFragment vf = null;
         if (parent.hasChild(varname)) {
             vf = parent.getChild(varname);
@@ -96,14 +96,14 @@ public class FragmentTools {
      * Creates an array of given shape and type as array of varname as child of
      * parent.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable name
-     * @param type    the array type
-     * @param shape   the shape of the array to create
+     * @param type the array type
+     * @param shape the shape of the array to create
      * @return the new variable fragment with empty array set
      */
     public static IVariableFragment createArray(final IFileFragment parent,
-        final String varname, final DataType type, final int... shape) {
+            final String varname, final DataType type, final int... shape) {
         IVariableFragment vf = null;
         if (parent.hasChild(varname)) {
             vf = parent.getChild(varname);
@@ -122,7 +122,7 @@ public class FragmentTools {
      * @param f1 the left-hand-side file fragment
      * @param f2 the right-hand-side file fragment
      * @return a file fragment that contains both file fragments linked in
-     *         variables
+     * variables
      * @see
      * FragmentTools#setLHSFile(cross.datastructures.fragments.IFileFragment,
      * cross.datastructures.fragments.IFileFragment)
@@ -131,7 +131,7 @@ public class FragmentTools {
      * cross.datastructures.fragments.IFileFragment)
      */
     public static IFileFragment createFragment(final IFileFragment f1,
-        final IFileFragment f2, final File outputdir) {
+            final IFileFragment f2, final File outputdir) {
         EvalTools.notNull(new Object[]{f1, f2}, FragmentTools.class);
         final IFileFragment ff = new FileFragment(outputdir, null);
         FragmentTools.setLHSFile(ff, f1);
@@ -141,18 +141,16 @@ public class FragmentTools {
     }
 
     /**
-     * Creates or retrieves a {@link IVariableFragment} with
-     * <code>parent</code> as parent and with name
-     * <code>name</code> and
-     * <code>size</code> elements.
+     * Creates or retrieves a {@link IVariableFragment} with <code>parent</code>
+     * as parent and with name <code>name</code> and <code>size</code> elements.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable fragment name
-     * @param size    the size of the integer array to create (one-dimensional)
+     * @param size the size of the integer array to create (one-dimensional)
      * @return the new variable fragment with empty array set
      */
     public static IVariableFragment createIntArrayD1(
-        final IFileFragment parent, final String varname, final int size) {
+            final IFileFragment parent, final String varname, final int size) {
         IVariableFragment vf = null;
         if (parent.hasChild(varname)) {
             vf = parent.getChild(varname);
@@ -165,18 +163,17 @@ public class FragmentTools {
     }
 
     /**
-     * Create a {@link IVariableFragment} as child of
-     * <code>parent</code> with name
-     * <code>varname</code> and contents as given in string
+     * Create a {@link IVariableFragment} as child of <code>parent</code> with
+     * name <code>varname</code> and contents as given in string
      * <code>value</code>.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable fragment name
-     * @param value   the string value to set
+     * @param value the string value to set
      * @return the new variable fragment with string array set (ArrayChar.D1)
      */
     public static IVariableFragment createString(final IFileFragment parent,
-        final String varname, final String value) {
+            final String varname, final String value) {
         IVariableFragment vf = null;
         if (parent.hasChild(varname)) {
             vf = parent.getChild(varname);
@@ -190,19 +187,18 @@ public class FragmentTools {
     }
 
     /**
-     * Create a {@link IVariableFragment} as child of
-     * <code>parent</code> with name
-     * <code>varname</code> and contents as given in string collection
+     * Create a {@link IVariableFragment} as child of <code>parent</code> with
+     * name <code>varname</code> and contents as given in string collection
      * <code>c</code>.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable fragment name
-     * @param c       the collection of strings to set
+     * @param c the collection of strings to set
      * @return the new variable fragment with string array set
      */
     public static IVariableFragment createStringArray(
-        final IFileFragment parent, final String varname,
-        final Collection<String> c) {
+            final IFileFragment parent, final String varname,
+            final Collection<String> c) {
         IVariableFragment vf = null;
         if (parent.hasChild(varname)) {
             vf = parent.getChild(varname);
@@ -216,17 +212,16 @@ public class FragmentTools {
 
     /**
      * Create or return a {@link IVariableFragment} as a child of
-     * <code>parent</code>, with name
-     * <code>varname</code> and index fragment
+     * <code>parent</code>, with name <code>varname</code> and index fragment
      * <code>ifrg</code>.
      *
-     * @param parent  the parent file fragment
+     * @param parent the parent file fragment
      * @param varname the variable fragment name
-     * @param ifrg    the index fragment to set
+     * @param ifrg the index fragment to set
      * @return the variable fragment with set index
      */
     public static IVariableFragment createVariable(final IFileFragment parent,
-        final String varname, final IVariableFragment ifrg) {
+            final String varname, final IVariableFragment ifrg) {
         EvalTools.notNull(new Object[]{parent, varname}, FragmentTools.class);
         try {
             final IVariableFragment vf = parent.getChild(varname);
@@ -236,7 +231,7 @@ public class FragmentTools {
             // does not exist, so create new
         } catch (final ResourceNotAvailableException e) {
             log.debug("VariableFragment " + varname
-                + " not available as child of " + parent.getUri());
+                    + " not available as child of " + parent.getUri());
         }
         log.debug("Adding as new child!");
         final IVariableFragment vf = new VariableFragment(parent, varname, ifrg);
@@ -244,8 +239,7 @@ public class FragmentTools {
     }
 
     /**
-     * Returns a list of variable names as defined in
-     * <code>default.vars</code>.
+     * Returns a list of variable names as defined in <code>default.vars</code>.
      *
      * @return a list of default variable names
      */
@@ -261,16 +255,16 @@ public class FragmentTools {
     /**
      * Returns the i'th indexed array of an indexed variable fragment.
      *
-     * @param iff      the parent file fragment
-     * @param var      the variable name
+     * @param iff the parent file fragment
+     * @param var the variable name
      * @param indexVar the index variable name
-     * @param i        the index to retrieve
+     * @param i the index to retrieve
      * @return the i'th indexed array
      * @throws ConstraintViolationException
      */
     public static Array getIndexed(final IFileFragment iff, final String var,
-        final String indexVar, final int i)
-        throws ConstraintViolationException {
+            final String indexVar, final int i)
+            throws ConstraintViolationException {
         final IVariableFragment si = iff.getChild(indexVar);
         final IVariableFragment variable = iff.getChild(var);
         variable.setIndex(si);
@@ -281,13 +275,13 @@ public class FragmentTools {
      * Returns the i'th indexed array of an indexed variable fragment.
      *
      * @param ivf the variable fragment with non-null index variable fragment
-     * @param i   the index to retrieve
+     * @param i the index to retrieve
      * @return the i'th indexed array
      */
     public static Array getIndexed(final IVariableFragment ivf, final int i) {
         EvalTools.notNull(
-            new Object[]{ivf, ivf.getParent(), ivf.getIndex()},
-            FragmentTools.class);
+                new Object[]{ivf, ivf.getParent(), ivf.getIndex()},
+                FragmentTools.class);
         return FragmentTools.getIndexed(ivf.getParent(), ivf.getName(), ivf.getIndex().getName(), i);
     }
 
@@ -299,8 +293,8 @@ public class FragmentTools {
      */
     public static IFileFragment getLHSFile(final IFileFragment ff) {
         final String s = FragmentTools.getStringVar(
-            ff,
-            Factory.getInstance().getConfiguration().getString("var.reference_file", "reference_file"));
+                ff,
+                Factory.getInstance().getConfiguration().getString("var.reference_file", "reference_file"));
         return new FileFragment(FileTools.resolveRelativeUri(ff.getUri(), URI.create(FileTools.escapeUri(s))));
     }
 
@@ -319,14 +313,14 @@ public class FragmentTools {
      * Returns all immediate source files of a {@link IFileFragment}.
      *
      * @param ff the file fragment whose source files should be retrieved from
-     *           disk
+     * disk
      * @return a map from URI to file fragment instance of source files
      */
     public static Map<URI, IFileFragment> getSourceFiles(
-        final IFileFragment ff) {
+            final IFileFragment ff) {
         final String sourceFilesVar = Factory.getInstance().getConfiguration().getString("var.source_files", "source_files");
         log.debug("Trying to load {} for {}", sourceFilesVar,
-            ff.getUri());
+                ff.getUri());
         IVariableFragment tf = ff.hasChild(sourceFilesVar) ? ff.getChild(sourceFilesVar) : new VariableFragment(ff, sourceFilesVar);
         Array a = null;
         try {
@@ -348,7 +342,7 @@ public class FragmentTools {
             return Collections.emptyMap();
         }
         final Map<URI, IFileFragment> al = new LinkedHashMap<URI, IFileFragment>(
-            c.size());
+                c.size());
         log.info("Found the following source files:");
         URI baseUri = ff.getUri().normalize();
         StringBuilder uris = new StringBuilder();
@@ -392,14 +386,13 @@ public class FragmentTools {
     }
 
     /**
-     * Returns true if
-     * <code>childFile</code> is a direct child of
+     * Returns true if <code>childFile</code> is a direct child of
      * <code>parentFile</code>.
      *
      * @param parentFile the parent file fragment
-     * @param childFile  the child to check against parentFile
+     * @param childFile the child to check against parentFile
      * @return true if childFile is a direct child of parentFile, false
-     *         otherwise
+     * otherwise
      */
     public static boolean isChild(IFileFragment parentFile, IFileFragment childFile) {
         URI parent = parentFile.getUri().normalize();
@@ -419,9 +412,9 @@ public class FragmentTools {
      * Relativize the URI of targetFile against baseFile.
      *
      * @param targetFile the target file fragment to retrieve a relative path
-     *                   for
-     * @param baseFile   the base file fragment against which targetFile should be
-     *                   relativized
+     * for
+     * @param baseFile the base file fragment against which targetFile should be
+     * relativized
      * @return the relative URI from baseFile to targetFile
      */
     public static URI resolve(IFileFragment targetFile, IFileFragment baseFile) {
@@ -446,7 +439,7 @@ public class FragmentTools {
     /**
      * Returns the source files in array format.
      *
-     * @param root  the file fragment containing the source files
+     * @param root the file fragment containing the source files
      * @param files the source file fragments
      * @return an array containing the source file (relative) URIs
      */
@@ -465,7 +458,7 @@ public class FragmentTools {
         int i = 0;
         for (final String s : names) {
             log.debug("Setting source file {} on {}", s,
-                root);
+                    root);
             a.setString(i++, s);
 
         }
@@ -475,12 +468,12 @@ public class FragmentTools {
     /**
      * Returns a collection of strings from a char array.
      *
-     * @param ff           the file fragment
+     * @param ff the file fragment
      * @param variableName the variable fragment name
      * @return the strings retrieved from the array described by variableName
      */
     public static Collection<String> getStringArray(final IFileFragment ff,
-        final String variableName) {
+            final String variableName) {
         IVariableFragment vf;
         try {
             vf = ff.getChild(variableName);
@@ -500,14 +493,14 @@ public class FragmentTools {
     /**
      * Returns a single string.
      *
-     * @param ff           the file fragment
+     * @param ff the file fragment
      * @param variableName the variable fragment name
      * @return the string value
      * @deprecated
      */
     @Deprecated
     public static String getStringVar(final IFileFragment ff,
-        final String variableName) {
+            final String variableName) {
         IVariableFragment vf;
         vf = ff.getChild(variableName);
         final Array a = vf.getArray();
@@ -523,8 +516,8 @@ public class FragmentTools {
     /**
      * Returns the variable fragment given the parent, varname and indexname.
      *
-     * @param parent    the parent file fragment
-     * @param varname   the variable fragment name
+     * @param parent the parent file fragment
+     * @param varname the variable fragment name
      * @param indexname the index variable name
      * @return the variable fragment
      * @throws ResourceNotAvailableException
@@ -535,8 +528,8 @@ public class FragmentTools {
      * See {@link IFileFragment} and {@link IVariableFragment}.
      */
     public static IVariableFragment getVariable(final IFileFragment parent,
-        final String varname, final String indexname)
-        throws ResourceNotAvailableException {
+            final String varname, final String indexname)
+            throws ResourceNotAvailableException {
         EvalTools.notNull(parent, varname, indexname);
         IVariableFragment vf = null;
         IVariableFragment ifrg = null;
@@ -549,8 +542,7 @@ public class FragmentTools {
     }
 
     /**
-     * Load additional variables from
-     * <code>ff</code>, using
+     * Load additional variables from <code>ff</code>, using
      * <code>additional.vars</code>.
      *
      * @param ff the file fragment
@@ -560,22 +552,20 @@ public class FragmentTools {
     }
 
     /**
-     * Load additional variables from
-     * <code>ff</code>, using the given
-     * <code>configKey</code> or
-     * <code>additional.vars</code> if
+     * Load additional variables from <code>ff</code>, using the given
+     * <code>configKey</code> or <code>additional.vars</code> if
      * <code>configKey</code> is null.
      *
-     * @param ff        the file fragment
+     * @param ff the file fragment
      * @param configKey the configuration key to use
      * @see Factory#getConfiguration()
      */
     public static void loadAdditionalVars(final IFileFragment ff,
-        final String configKey) {
+            final String configKey) {
         final List<?> l = Factory.getInstance().getConfiguration().getList(configKey == null ? "additional.vars" : configKey);
         final Iterator<?> iter = l.iterator();
         log.debug("Trying to load additional vars for file {}",
-            ff.getUri());
+                ff.getUri());
         while (iter.hasNext()) {
             final String var = iter.next().toString();
             if (var.equals("*")) { // load all available Variables
@@ -603,9 +593,7 @@ public class FragmentTools {
     }
 
     /**
-     * Load variables from
-     * <code>ff</code>, using
-     * <code>default.vars</code>.
+     * Load variables from <code>ff</code>, using <code>default.vars</code>.
      *
      * @param ff the file fragment
      * @see Factory#getConfiguration()
@@ -615,22 +603,20 @@ public class FragmentTools {
     }
 
     /**
-     * Load variables from
-     * <code>ff</code>, using the given
-     * <code>configKey</code> or
-     * <code>default.vars</code> if
+     * Load variables from <code>ff</code>, using the given
+     * <code>configKey</code> or <code>default.vars</code> if
      * <code>configKey</code> is null.
      *
-     * @param ff        the file fragment
+     * @param ff the file fragment
      * @param configKey the configuration key to use
      * @see Factory#getConfiguration()
      */
     public static void loadDefaultVars(final IFileFragment ff,
-        final String configKey) {
+            final String configKey) {
         final List<?> l = Factory.getInstance().getConfiguration().getList(configKey == null ? "default.vars" : configKey);
         final Iterator<?> iter = l.iterator();
         log.debug("Loading default vars for file {}",
-            ff.getUri());
+                ff.getUri());
         while (iter.hasNext()) {
             final String var = iter.next().toString();
             if (!var.equals("") && !var.trim().isEmpty()) {
@@ -642,44 +628,42 @@ public class FragmentTools {
     }
 
     /**
-     * Set variable
-     * <code>var.reference_file</code>, left hand side (lhs) for pairwise
-     * alignments.
+     * Set variable <code>var.reference_file</code>, left hand side (lhs) for
+     * pairwise alignments.
      *
-     * @param ff  the file fragment storing the pairwise alignment
+     * @param ff the file fragment storing the pairwise alignment
      * @param lhs the reference file fragment
      */
     public static void setLHSFile(final IFileFragment ff,
-        final IFileFragment lhs) {
+            final IFileFragment lhs) {
         FragmentTools.createString(ff, Factory.getInstance().getConfiguration().getString("var.reference_file", "reference_file"),
-            FileTools.getRelativeUri(ff.getUri(), lhs.getUri()).toString());
+                FileTools.getRelativeUri(ff.getUri(), lhs.getUri()).toString());
     }
 
     /**
-     * Set variable
-     * <code>var.query_file</code>, right hand side (rhs) for pairwise
-     * alignments.
+     * Set variable <code>var.query_file</code>, right hand side (rhs) for
+     * pairwise alignments.
      *
-     * @param ff  the file fragment storing the pairwise alignment
+     * @param ff the file fragment storing the pairwise alignment
      * @param rhs the query file fragment
      */
     public static void setRHSFile(final IFileFragment ff,
-        final IFileFragment rhs) {
+            final IFileFragment rhs) {
         FragmentTools.createString(ff, Factory.getInstance().getConfiguration().getString("var.query_file", "query_file"),
-            FileTools.getRelativeUri(ff.getUri(), rhs.getUri()).toString());
+                FileTools.getRelativeUri(ff.getUri(), rhs.getUri()).toString());
     }
 
     /**
      * Returns those variables, which share <em>at least one</em> of the
      * dimensions given in the second argument.
      *
-     * @param variables  the variable fragments to check
+     * @param variables the variable fragments to check
      * @param dimensions the dimensions to check
      * @return the list of variables fragments sharing at least on of the given
-     *         dimensions
+     * dimensions
      */
     public static List<IVariableFragment> getVariablesSharingAnyDimensions(
-        List<IVariableFragment> variables, String... dimensions) {
+            List<IVariableFragment> variables, String... dimensions) {
         List<IVariableFragment> r = new ArrayList<IVariableFragment>();
         String[] dimnames = dimensions;
         Arrays.sort(dimnames);
@@ -699,13 +683,13 @@ public class FragmentTools {
      * Returns those variables, which share <em>all</em> of the dimensions given
      * in the second argument.
      *
-     * @param variables  the variable fragments to check
+     * @param variables the variable fragments to check
      * @param dimensions the dimensions to check
      * @return the list of variables fragments sharing all of the given
-     *         dimensions
+     * dimensions
      */
     public static List<IVariableFragment> getVariablesSharingAllDimensions(
-        List<IVariableFragment> variables, String... dimensions) {
+            List<IVariableFragment> variables, String... dimensions) {
         List<IVariableFragment> r = new ArrayList<IVariableFragment>();
         String[] dimnames = dimensions;
         Arrays.sort(dimnames);
@@ -736,10 +720,10 @@ public class FragmentTools {
      *
      * @param fragment the file fragment to explore
      * @return a list of all aggregated variable fragments, may contain variable
-     *         fragments with identical name from different ancestors
+     * fragments with identical name from different ancestors
      */
     public static List<IVariableFragment> getAggregatedVariables(
-        IFileFragment fragment) {
+            IFileFragment fragment) {
         HashMap<String, IVariableFragment> names = new HashMap<String, IVariableFragment>();
         List<IVariableFragment> allVars = new ArrayList<IVariableFragment>();
         List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
@@ -787,8 +771,8 @@ public class FragmentTools {
      *
      * @param fragment the file fragment to explore
      * @return a list of file fragments at the deepest level from this fragment,
-     *         multiple file fragments are returned, if they are discovered at the same
-     *         level
+     * multiple file fragments are returned, if they are discovered at the same
+     * level
      */
     public static List<IFileFragment> getDeepestAncestor(IFileFragment fragment) {
         List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
@@ -804,21 +788,22 @@ public class FragmentTools {
             IFileFragment parent = parentsToExplore.remove(0);
             try {
                 IVariableFragment sf = parent.getChild("source_files", true);
-                Collection<String> c = ArrayTools.getStringsFromArray(sf.getArray());
-                depth++;
-                for (String s : c) {
-                    log.debug("Processing file {}", s);
-                    URI path = URI.create(FileTools.escapeUri(s));
-                    IFileFragment frag = null;
-                    if (path.getScheme() == null || !path.getPath().startsWith("/")) {
-                        URI resolved = FileTools.resolveRelativeUri(fragment.getUri().normalize(), path);
-                        log.debug("Adding resolved relative path: {} to {}", path, resolved);
-                        frag = new FileFragment(resolved);
-                    } else {
-                        log.debug("Adding absolute path: {}", path);
-                        frag = new FileFragment(path);
-                    }
-                    if (frag != null) {
+                Array a = sf.getArray();
+                if (a != null) {
+                    Collection<String> c = ArrayTools.getStringsFromArray(a);
+                    depth++;
+                    for (String s : c) {
+                        log.debug("Processing file {}", s);
+                        URI path = URI.create(FileTools.escapeUri(s));
+                        IFileFragment frag = null;
+                        if (path.getScheme() == null || !path.getPath().startsWith("/")) {
+                            URI resolved = FileTools.resolveRelativeUri(fragment.getUri().normalize(), path);
+                            log.debug("Adding resolved relative path: {} to {}", path, resolved);
+                            frag = new FileFragment(resolved);
+                        } else {
+                            log.debug("Adding absolute path: {}", path);
+                            frag = new FileFragment(path);
+                        }
                         Integer key = Integer.valueOf(depth);
                         if (depth > maxDepth) {
                             maxDepth = depth;
@@ -831,6 +816,8 @@ public class FragmentTools {
                             depthToFragment.put(key, lhs);
                         }
                     }
+                } else {
+                    log.debug("Fragment {} is itself the top level ancestor!", fragment.getUri());
                 }
             } catch (ResourceNotAvailableException rnae) {
             }
@@ -849,11 +836,11 @@ public class FragmentTools {
      *
      * @param fragment the file fragment to explore
      * @return a list of variable fragments available for the given file
-     *         fragment
+     * fragment
      * @throws IOException
      */
     public static List<IVariableFragment> getVariablesFor(IFileFragment fragment)
-        throws IOException {
+            throws IOException {
         IDataSourceFactory dsf = Factory.getInstance().getDataSourceFactory();
         return dsf.getDataSourceFor(fragment).readStructure(fragment);
     }
