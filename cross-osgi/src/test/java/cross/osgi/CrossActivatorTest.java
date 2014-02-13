@@ -33,7 +33,7 @@ public class CrossActivatorTest {
 
         return options(
             junitBundles(),
-            mavenBundle("net.sf.maltcms", "cross-osgi").start(),
+            mavenBundle("net.sf.maltcms", "cross-osgi", "1.3.1-SNAPSHOT").start(),
             //            mavenBundle("net.sf.maltcms", "cross-main", "1.3.1-SNAPSHOT").start(),
             mavenBundle("net.sf.maltcms", "cross-test", "1.3.1-SNAPSHOT").start()//,
         //            mavenBundle("net.sf.maltcms", "cross-annotations").versionAsInProject(),
