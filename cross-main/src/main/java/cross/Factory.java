@@ -61,6 +61,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -70,7 +71,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
 import org.apache.commons.io.FileUtils;
 import org.openide.util.Lookup;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -95,6 +95,7 @@ import org.slf4j.LoggerFactory;
  * @see DefaultApplicationContextFactoryfor configuration objectFactory the pipeline and
  * workflow
  */
+@Slf4j
 public final class Factory implements IFactory {
 
     private static final IFactory factory = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
@@ -229,17 +230,23 @@ public final class Factory implements IFactory {
         }
     }
 
+    @Configurable
     private IDataSourceFactory dataSourceFactory = null;
+    @Configurable
     private IInputDataFactory inputDataFactory = null;
+    @Configurable
     private IObjectFactory objectFactory = null;
+    @Configurable
     private IFileFragmentFactory fileFragmentFactory = null;
+    @Configurable
     private ICvResolver cvResolver = null;
-    public final transient Logger log = LoggerFactory.getLogger(Factory.class);
-    private transient CompositeConfiguration configuration = new CompositeConfiguration();
-    private transient ExecutorService mainThreadPool;
     @Configurable(name = "cross.Factory.maxthreads")
     private int maxthreads = 1;
+    @Configurable
     private String name = "default";
+    
+    private transient CompositeConfiguration configuration = new CompositeConfiguration();
+    private transient ExecutorService mainThreadPool;
     private transient ExecutorService auxiliaryThreadPool;
 
     /**

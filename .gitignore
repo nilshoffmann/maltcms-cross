@@ -8,3 +8,9 @@
 /cross-main/target/
 /cross-osgi/target/
 /target/
+/cross-nbm-cluster/apache-commons-nbm/target/
+/cross-nbm-cluster/target/
+/cross-nbm-cluster/slf4j-nbm/target/
+/cross-nbm-cluster/mpaxs-nbm/target/
+/cross-nbm-cluster/netcdf-nbm/target/
+/cross-nbm-cluster/cross-nbm/target/

@@ -166,7 +166,8 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
     }
 
     /**
-     * Used to check, whether any files have changed compared to the last invocation.
+     * Used to check, whether any files have changed compared to the last
+     * invocation.
      *
      * @return
      */
@@ -187,7 +188,8 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
      * Calculates a byte-level digest of the given files.
      *
      * @param files the files to calculate the digest for.
-     * @return the hexadecimal, zero-padded digest, or null if any exceptions occurred
+     * @return the hexadecimal, zero-padded digest, or null if any exceptions
+     * occurred
      */
     public String digest(Collection<File> files) {
         try {
@@ -214,7 +216,8 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
     }
 
     /**
-     * Used to check, whether any parameters have changed compared to the last invocation.
+     * Used to check, whether any parameters have changed compared to the last
+     * invocation.
      *
      * @param cmd the command to calculate a hash code for, based on reflection
      * @return the hash code as string
@@ -243,114 +246,19 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
     }
 
     @Override
-    public TupleND<IFileFragment> next() {
-        try {
-            if (!isLoadedPreviousWorkflowResults()) {
-                log.info("Looking for results from previous workflow invocation!");
-                getWorkflow().load(getWorkflow().getWorkflowXmlFile());
-                getHashes(getWorkflow());
-                setLoadedPreviousWorkflowResults(true);
-            }
-            if (getExecutionServer() == null && !getWorkflow().isExecuteLocal()) {
-                log.info("Launching execution infrastructure!");
-                setExecutionServer(ComputeServerFactory.getComputeServer());
-                File computeHostJarLocation = new File(System.getProperty("maltcms.home"), "maltcms.jar");
-                if (!computeHostJarLocation.exists() || !computeHostJarLocation.isFile()) {
-                    throw new IOException("Could not locate maltcms.jar in " + System.getProperty("maltcms.home"));
-                }
-                final PropertiesConfiguration cfg = new PropertiesConfiguration();
-//set execution type
-                cfg.setProperty(ConfigurationKeys.KEY_EXECUTION_MODE, ExecutionType.DRMAA);
-//set location of compute host jar
-                cfg.setProperty(ConfigurationKeys.KEY_PATH_TO_COMPUTEHOST_JAR, computeHostJarLocation);
-//exit to console when master server shuts down
-                cfg.setProperty(ConfigurationKeys.KEY_MASTER_SERVER_EXIT_ON_SHUTDOWN, true);
-//limit the number of used compute hosts
-                cfg.setProperty(ConfigurationKeys.KEY_MAX_NUMBER_OF_CHOSTS, getWorkflow().getConfiguration().getInt("maltcms.pipelinethreads", 1));
-//native specs for the drmaa api
-                cfg.setProperty(ConfigurationKeys.KEY_NATIVE_SPEC, getWorkflow().getConfiguration().getString("mpaxs.nativeSpec", ""));
-                getExecutionServer().startMasterServer(cfg);
-            }
-            if (getIter().hasNext()) {
-                final IFragmentCommand cmd = getIter().next();
-                cmd.addListener(this);
-                cmd.setWorkflow(getWorkflow());
-                cmd.getWorkflow().getOutputDirectory(cmd);
-                // save current state of workflow
-                getWorkflow().save();
-                // log.info("Next ICommand: {}",cmd.getClass().getName());
-                log.info(
-                    "#############################################################################");
-                log.info("# Running {}/{}: {}",
-                    new Object[]{(getCnt() + 1),
-                        getCommands().size(), cmd.getClass().getSimpleName()});
-                log.debug("# Package: {}", cmd.getClass().getPackage().getName());
-                log.info(
-                    "#############################################################################");
-                long start = 0l;
-                TupleND<IFileFragment> results = null;
-                if (!isUpToDate(getTmp(), cmd)) {
-                    if (getWorkflow().getOutputDirectory(cmd).exists() && getWorkflow().getOutputDirectory(cmd).listFiles().length > 0) {
-                        log.info("Deleting invalid results for {} below {}", cmd, getWorkflow().getOutputDirectory(cmd));
-                        FileUtils.deleteDirectory(getWorkflow().getOutputDirectory(cmd));
-                    }
-                    // set output dir to currently active command
-                    start = System.nanoTime();
-                    results = cmd.apply(getTmp());
-                    cmd.removeListener(this);
-                    //clear arrays to allow for gc
-                    for (IFileFragment f : getTmp()) {
-                        if (f.isModified()) {
-                            log.warn("FileFragment {} has modifications after fragment command {}!"
-                                + " Please call clearArrays() or save a modified FileFragment before returning it!",
-                                f.getName(), cmd.getClass().getCanonicalName());
-                            if (isThrowExceptionOnUnsavedModification()) {
-                                throw new ConstraintViolationException("FileFragment " + f.getName() + " has modifications after fragment command " + cmd.getClass().getCanonicalName() + "! Please call clearArrays() or save a modified FileFragment before returning it!");
-                            }
-                        }
-                        f.clearArrays();
-                        f.clearDimensions();
-                    }
-                    start = Math.abs(System.nanoTime() - start);
-                    storeCommandRuntime(start, cmd, getWorkflow());
-                } else {
-                    File outputDir = getWorkflow().getOutputDirectory(cmd);
-                    Collection<File> inputFiles = FileUtils.listFiles(outputDir, new String[]{"cdf", "CDF", "nc", "NC"}, false);
-                    TupleND<IFileFragment> inputFragments = new TupleND<>();
-                    for (File f : inputFiles) {
-                        inputFragments.add(getWorkflow().getFactory().getFileFragmentFactory().create(f));
-                    }
-                    log.debug("Setting file fragments {} as next input!", inputFragments);
-                    results = inputFragments;
-                }
-                updateHashes(getTmp(), cmd);
-                log.debug("Hashes: {}", ConfigurationUtils.toString(getHashes()));
-                setTmp(results);
-                setCnt(getCnt() + 1);
-                //shutdown master server if execution has finished
-                if (getCnt() == getCommands().size()) {
-                    shutdownMasterServer();
-                }
-                System.gc();
-
-            }
-        } catch (Exception e) {
-            log.error("Caught exception while executing pipeline: ", e);
-            shutdownMasterServer();
-            throw new RuntimeException(e);
-        }
-        return getTmp();
-    }
-
-    @Override
-    protected void runFragmentCommand(IWorkflow workflow, IFragmentCommand cmd) throws IOException, ConstraintViolationException, IllegalStateException {
+    protected void runFragmentCommand(IWorkflow workflow, IFragmentCommand cmd) {
         try {
             beforeCommand(cmd);
             TupleND<IFileFragment> results;
             if (!isUpToDate(getTmp(), cmd)) {
                 if (getWorkflow().getOutputDirectory(cmd).exists() && getWorkflow().getOutputDirectory(cmd).listFiles().length > 0) {
                     log.info("Deleting invalid results for {} below {}", cmd, getWorkflow().getOutputDirectory(cmd));
-                    FileUtils.deleteDirectory(getWorkflow().getOutputDirectory(cmd));
+                    try {
+                        FileUtils.deleteDirectory(getWorkflow().getOutputDirectory(cmd));
+                    } catch (IOException ex) {
+                        log.warn("Caught IO Exception while trying to delete workflow output directory at " + getWorkflow().getOutputDirectory());
+                        throw new RuntimeException(ex);
+                    }
                 }
                 // set output dir to currently active command
                 long start = System.nanoTime();

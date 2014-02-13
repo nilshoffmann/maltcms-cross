@@ -54,7 +54,7 @@ import org.apache.commons.configuration.event.ConfigurationListener;
  * @see cross.Factory
  * @since 1.3.1
  */
-public interface IFactory extends ConfigurationListener {
+public interface IFactory extends ConfigurationListener, IConfigurable {
 
     /**
      * Call configure before retrieving an instance of ArrayFactory. This
