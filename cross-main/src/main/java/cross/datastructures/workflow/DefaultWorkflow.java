@@ -31,6 +31,7 @@ import cross.Factory;
 import cross.annotations.Configurable;
 import cross.commands.fragments.AFragmentCommand;
 import cross.commands.fragments.IFragmentCommand;
+import cross.datastructures.fragments.FileFragment;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.pipeline.ICommandSequence;
 import cross.datastructures.tuple.TupleND;
@@ -54,11 +55,15 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryType;
 import java.lang.management.ThreadMXBean;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -71,7 +76,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.ProcessingInstruction;
+import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.openide.util.lookup.ServiceProvider;
@@ -92,8 +99,8 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
      *
      */
     private static final long serialVersionUID = 1781229121330043626L;
-    private ArrayList<IWorkflowResult> al = new ArrayList<IWorkflowResult>();
-    private IEventSource<IWorkflowResult> iwres = new EventSource<IWorkflowResult>();
+    private Collection<IWorkflowResult> al = new ArrayList<IWorkflowResult>();
+    private transient IEventSource<IWorkflowResult> iwres = new EventSource<IWorkflowResult>();
     private ICommandSequence commandSequence = null;
     private String name = "workflow";
     private IFragmentCommand activeCommand = null;
@@ -110,6 +117,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     private boolean executeLocal = true;
     private File outputDirectory = new File(System.getProperty("user.dir"));
     private List<IWorkflowPostProcessor> workflowPostProcessors = new ArrayList<IWorkflowPostProcessor>();
+    private transient Factory factory;
 
     @Override
     public void addListener(final IListener<IEvent<IWorkflowResult>> l) {
@@ -119,7 +127,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     @Override
     public void append(final IWorkflowResult iwr) {
         if (this.al == null) {
-            this.al = new ArrayList<IWorkflowResult>();
+            this.al = new LinkedHashSet<IWorkflowResult>();
         }
         if (iwr instanceof IWorkflowProgressResult) {
             final IWorkflowProgressResult iwpr = (IWorkflowProgressResult) iwr;
@@ -221,7 +229,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     /**
      * @return the IWorkflowResults as List
      */
-    public ArrayList<IWorkflowResult> getWorkflowResults() {
+    public Collection<IWorkflowResult> getWorkflowResults() {
         return this.al;
     }
 
@@ -239,22 +247,68 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         if (workflowname != null) {
             setName(workflowname);
         }
+
+        TupleND<IFileFragment> inputFragments = new TupleND<IFileFragment>();
+        Element workflowInputs = e.getChild("workflowInputs");
+        for (Object child : workflowInputs.getChildren("workflowInput")) {
+            Element workflowInput = (Element) child;
+            String uri = workflowInput.getAttributeValue("uri");
+            inputFragments.add(new FileFragment(URI.create(uri)));
+        }
+
+        Element workflowOutputs = e.getChild("workflowOutputs");
+        for (Object child : workflowOutputs.getChildren("workflowOutput")) {
+            Element workflowOutput = (Element) child;
+            String uri = workflowOutput.getAttributeValue("uri");
+        }
+
+        Element workflowCommands = e.getChild("workflowCommands");
+        List<?> commandChildren = workflowCommands.getChildren("workflowCommand");
+        if (commandChildren.size() != getCommandSequence().getCommands().size()) {
+            throw new ConstraintViolationException("Number of workflow commands between stored and active workflow differ! Not loading old workflow!");
+        }
+        int i = 0;
+        for (Object child : commandChildren) {
+            Element workflowCommand = (Element) child;
+            String clazz = workflowCommand.getAttributeValue("class");
+            if (!getCommandSequence().getCommands().get(i).getClass().getCanonicalName().equals(clazz)) {
+                throw new ConstraintViolationException("Workflow commands differ between stored and active workflow at position " + i + "!");
+            }
+            i++;
+        }
+
         final List<?> l = e.getChildren("workflowElementResult");
         for (final Object obj : l) {
             final Element elem = (Element) obj;
             final String cls = elem.getAttributeValue("class");
             final String slot = elem.getAttributeValue("slot");
             final String generator = elem.getAttributeValue("generator");
-            final String file = elem.getAttributeValue("file");
-            final IWorkflowFileResult iwr = Factory.getInstance().
-                getObjectFactory().instantiate(cls,
-                    IWorkflowFileResult.class);
-            final IWorkflowElement iwe = Factory.getInstance().getObjectFactory().
+
+            final IWorkflowResult iwr
+                = getFactory().getObjectFactory().instantiate(cls,
+                    IWorkflowResult.class);
+            final IWorkflowElement iwe = getFactory().getObjectFactory().
                 instantiate(generator,
                     IWorkflowElement.class);
             iwr.setWorkflowElement(iwe);
-            iwr.setFile(new File(file));
             iwr.setWorkflowSlot(WorkflowSlot.valueOf(slot));
+            if (iwr instanceof IWorkflowFileResult) {
+                final String file = elem.getAttributeValue("file");
+                IWorkflowFileResult fileResult = (IWorkflowFileResult) iwr;
+                fileResult.setFile(new File(file));
+                Element resources = e.getChild("resources");
+                if (resources != null) {
+                    List<IFileFragment> fragments = new ArrayList<IFileFragment>();
+                    for (Object o : resources.getChildren("resource")) {
+                        Element resource = (Element) o;
+                        URI uri = URI.create(resource.getAttributeValue("resource"));
+                        fragments.add(new FileFragment(uri));
+                    }
+                    fileResult.setResources(fragments.toArray(new IFileFragment[fragments.size()]));
+                }
+            } else {
+                log.warn("Unsupported workflow result type! Can not convert!");
+            }
             append(iwr);
         }
     }
@@ -265,14 +319,33 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     }
 
     @Override
+    public void load(File f) {
+        if (f.exists()) {
+            try {
+                SAXBuilder saxBuilder = new SAXBuilder();
+                Document dom = saxBuilder.build(f);
+                try {
+                    log.info("Reading workflow state from {}.", f);
+                    readXML(dom.getRootElement());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (JDOMException ex) {
+                Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            log.info("No workflow.xml from previous invocation found!");
+        }
+    }
+
+    @Override
     public void save() {
         try {
             final String wflname = getName();
             log.info("Saving workflow {}", wflname);
             final Document doc = new Document();
-//			final HashMap<String, String> hm = new HashMap<String, String>();
-//			hm.put("type", "text/xsl");
-//			hm.put("href", this.xslPathPrefix + "maltcmsResult.xsl");
             final ProcessingInstruction pi = new ProcessingInstruction(
                 "xml-stylesheet",
                 "type=\"text/xsl\" href=\"http://maltcms.sourceforge.net/res/maltcmsHTMLResult.xsl\"");
@@ -665,12 +738,19 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         if (commandSequence.isCheckCommandDependencies() && !commandSequence.validate()) {
             throw new ConstraintViolationException("Pipeline validation failed! Check output for details!");
         }
-        while (commandSequence.hasNext()) {
-            results = commandSequence.next();
+        try {
+            commandSequence.before();
+            while (commandSequence.hasNext()) {
+                results = commandSequence.next();
+            }
+        } finally {
+            //ensure that any resources are cleaned up
+            commandSequence.after();
+            // Save configuration
+            Factory.dumpConfig("runtime.properties", getStartupDate());
+            addVmStats(getOutputDirectory());
         }
-        // Save configuration
-        Factory.dumpConfig("runtime.properties", getStartupDate());
-        addVmStats(getOutputDirectory());
+        //only run workflow post processors if we have not experienced any exceptions
         for (IWorkflowPostProcessor pp : workflowPostProcessors) {
             log.info("Running workflowPostProcessor {}", pp.getClass().getName());
             pp.process(this);
@@ -748,5 +828,18 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             log.error("{}", ex);
         }
 
+    }
+
+    @Override
+    public Factory getFactory() {
+        return factory;
+    }
+
+    @Override
+    public void setFactory(Factory factory) {
+        if (this.factory != null) {
+            throw new IllegalStateException("Factory was already initialized!");
+        }
+        this.factory = factory;
     }
 }

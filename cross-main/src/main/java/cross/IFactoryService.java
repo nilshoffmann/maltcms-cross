@@ -1,6 +1,6 @@
-/* 
- * Cross, common runtime object support system. 
- * Copyright (C) 2008-2014, The authors of Cross. All rights reserved.
+/*
+ * Cross, common runtime object support system.
+ * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
  *
@@ -14,10 +14,10 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code 
- * under. Certain files or entire directories may not be covered by this 
+ * As a user/recipient of Cross, you may choose which license to receive the code
+ * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
- * License exceptions are explicitly declared in all relevant files or in a 
+ * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
@@ -25,25 +25,16 @@
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
-package cross.cache;
+package cross;
 
 /**
- * Enumeration of currently available cache types.
+ * Service interface for the retrieval of IFactory instances.
  *
  * @author Nils Hoffmann
+ * @since 1.3.1
  */
-public enum CacheType {
+public interface IFactoryService {
 
-    /**
-     * Cache backed by ehcache implementation.
-     */
-    EHCACHE,
-    /**
-     * Cache backed by soft reference hash map.
-     */
-    SOFT,
-    /**
-     * Cache backed by standard hash map.
-     */
-    NONE;
+    IFactory getInstance(String name);
+
 }

@@ -27,7 +27,6 @@
  */
 package cross.datastructures.pipeline;
 
-import cross.Factory;
 import cross.IConfigurable;
 import cross.commands.fragments.IFragmentCommand;
 import cross.datastructures.fragments.IFileFragment;
@@ -39,6 +38,7 @@ import cross.datastructures.workflow.IWorkflowResult;
 import cross.datastructures.workflow.WorkflowSlot;
 import cross.event.IEvent;
 import cross.exception.ConstraintViolationException;
+import cross.exception.ExitVmException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +59,7 @@ import net.sf.mpaxs.api.Impaxs;
 import net.sf.mpaxs.spi.concurrent.ComputeServerFactory;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.jdom.Element;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -70,8 +71,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @Slf4j
 @Data
-@ServiceProvider(service = ICommandSequence.class)
-public final class CommandPipeline implements ICommandSequence, IConfigurable {
+@ServiceProvider(service = ICommandSequence.class, position = Integer.MIN_VALUE)
+public class CommandPipeline implements ICommandSequence, IConfigurable {
 
     /*
      *
@@ -92,19 +93,19 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
      */
     //execution server instance
     @Getter
-    @Setter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.PROTECTED)
     private Impaxs executionServer;
     //iterator for fragment commands
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
     private Iterator<IFragmentCommand> iter;
     //intermediate results
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
     private TupleND<IFileFragment> tmp;
     //counter of processed fragment commands
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
     private int cnt;
 
     /**
@@ -145,97 +146,68 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
         this.workflow.append(v.get());
     }
 
-    /**
-     * Load and configure a given command.
-     *
-     * @param clsname the fragment command clazz to load and configure
-     * @return the fragment command instance
-     */
-    @Deprecated
-    protected IFragmentCommand loadCommand(final String clsname,
-        final String propertiesFileName) {
-        EvalTools.notNull(clsname, this);
-        final IFragmentCommand clazz = Factory.getInstance().getObjectFactory().
-            instantiate(clsname, IFragmentCommand.class,
-                propertiesFileName);
-        clazz.addListener(this);
-        EvalTools.notNull(clazz, "Could not load class " + clsname
-            + ". Check package and classname for possible typos!", this);
-        return clazz;
-    }
-
     @Override
     public TupleND<IFileFragment> next() {
         try {
-            if (this.executionServer == null && !getWorkflow().isExecuteLocal()) {
-                log.info("Launching execution infrastructure!");
-                executionServer = ComputeServerFactory.getComputeServer();
-                File computeHostJarLocation = new File(System.getProperty("maltcms.home"), "maltcms.jar");
-                if (!computeHostJarLocation.exists() || !computeHostJarLocation.isFile()) {
-                    throw new IOException("Could not locate maltcms.jar in " + System.getProperty("maltcms.home"));
-                }
-                final PropertiesConfiguration cfg = new PropertiesConfiguration();
-//set execution type
-                cfg.setProperty(ConfigurationKeys.KEY_EXECUTION_MODE, ExecutionType.DRMAA);
-//set location of compute host jar
-                cfg.setProperty(ConfigurationKeys.KEY_PATH_TO_COMPUTEHOST_JAR, computeHostJarLocation);
-//exit to console when master server shuts down
-                cfg.setProperty(ConfigurationKeys.KEY_MASTER_SERVER_EXIT_ON_SHUTDOWN, true);
-//limit the number of used compute hosts
-                cfg.setProperty(ConfigurationKeys.KEY_MAX_NUMBER_OF_CHOSTS, Factory.getInstance().getConfiguration().getInt("maltcms.pipelinethreads", 1));
-//native specs for the drmaa api
-                cfg.setProperty(ConfigurationKeys.KEY_NATIVE_SPEC, Factory.getInstance().getConfiguration().getString("mpaxs.nativeSpec", ""));
-                executionServer.startMasterServer(cfg);
-            }
-            if (this.iter.hasNext()) {
-                final IFragmentCommand cmd = this.iter.next();
-                cmd.setWorkflow(getWorkflow());
-                cmd.getWorkflow().getOutputDirectory(cmd);
-                // save current state of workflow
-                final IWorkflow iw = getWorkflow();
-                iw.save();
-                // log.info("Next ICommand: {}",cmd.getClass().getName());
-                log.info(
-                    "#############################################################################");
-                log.info("# Running {}/{}: {}",
-                    new Object[]{(this.cnt + 1),
-                        this.commands.size(), cmd.getClass().getSimpleName()});
-                log.debug("# Package: {}", cmd.getClass().getPackage().getName());
-                log.info(
-                    "#############################################################################");
-                // set output dir to currently active command
-                getWorkflow().getOutputDirectory(cmd);
-                long start = System.nanoTime();
-                this.tmp = cmd.apply(this.tmp);
-                //clear arrays to allow for gc
-                for (IFileFragment f : this.tmp) {
-                    if (f.isModified()) {
-                        log.warn("FileFragment {} has modifications after fragment command {}!"
-                            + " Please call clearArrays() or save a modified FileFragment before returning it!",
-                            f.getName(), cmd.getClass().getCanonicalName());
-                        if (throwExceptionOnUnsavedModification) {
-                            throw new ConstraintViolationException("FileFragment " + f.getName() + " has modifications after fragment command " + cmd.getClass().getCanonicalName() + "! Please call clearArrays() or save a modified FileFragment before returning it!");
-                        }
-                    }
-                    f.clearArrays();
-                    f.clearDimensions();
-                }
-                start = Math.abs(System.nanoTime() - start);
-                storeCommandRuntime(start, cmd, getWorkflow());
-                this.cnt++;
-                //shutdown master server if execution has finished
-                if (this.cnt == this.commands.size()) {
-                    shutdownMasterServer();
-                }
-                System.gc();
-
+            if (getIter().hasNext()) {
+                runFragmentCommand(getWorkflow(), getIter().next());
+            } else {
+                throw new IllegalStateException("Fragment command iterator has no further elements!");
             }
         } catch (Exception e) {
             log.error("Caught exception while executing pipeline: ", e);
             shutdownMasterServer();
             throw new RuntimeException(e);
         }
-        return this.tmp;
+        return getTmp();
+    }
+
+    @Override
+    public void beforeCommand(IFragmentCommand cmd) {
+        cmd.addListener(this);
+        cmd.setWorkflow(getWorkflow());
+        // set output dir to currently active command
+        cmd.getWorkflow().getOutputDirectory(cmd);
+        // save current state of workflow
+        getWorkflow().save();
+        log.info(
+            "#############################################################################");
+        log.info("# Running {}/{}: {}",
+            new Object[]{(getCnt() + 1),
+                getCommands().size(), cmd.getClass().getSimpleName()});
+        log.debug("# Package: {}", cmd.getClass().getPackage().getName());
+        log.info(
+            "#############################################################################");
+    }
+
+    @Override
+    public void afterCommand(IFragmentCommand cmd) {
+        cmd.removeListener(this);
+        //clear arrays to allow for gc
+        for (IFileFragment f : getTmp()) {
+            if (f.isModified()) {
+                log.warn("FileFragment {} has modifications after fragment command {}!"
+                    + " Please call clearArrays() or save a modified FileFragment before returning it!",
+                    f.getName(), cmd.getClass().getCanonicalName());
+                if (throwExceptionOnUnsavedModification) {
+                    throw new ConstraintViolationException("FileFragment " + f.getName() + " has modifications after fragment command " + cmd.getClass().getCanonicalName() + "! Please call clearArrays() or save a modified FileFragment before returning it!");
+                }
+            }
+            f.clearArrays();
+            f.clearDimensions();
+        }
+        setCnt(getCnt() + 1);
+    }
+
+    protected void runFragmentCommand(final IWorkflow workflow, final IFragmentCommand cmd) throws ConstraintViolationException, IllegalStateException {
+        try {
+            beforeCommand(cmd);
+            long start = System.nanoTime();
+            setTmp(cmd.apply(getTmp()));
+            storeCommandRuntime(start, System.nanoTime(), cmd, getWorkflow());
+        } finally {
+            afterCommand(cmd);
+        }
     }
 
     /**
@@ -258,6 +230,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
                         e);
                 }
             }
+            executionServer = null;
         }
     }
 
@@ -299,7 +272,7 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
         e.addContent(ifrge);
 
         final Element ofrge = new Element("workflowOutputs");
-        for (final IFileFragment ofrg : tmp) {
+        for (final IFileFragment ofrg : getTmp()) {
             final Element ofrge0 = new Element("workflowOutput");
             ofrge0.setAttribute("uri", ofrg.getUri().normalize().
                 toString());
@@ -319,12 +292,14 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
     /**
      * Store the runtime of the last command.
      *
-     * @param runtime  wall clock execution time runtime of the command
+     * @param start    wall clock start time of the command
+     *
+     * @param stop     wall clock stop time of the command
      * @param cmd      the command
      * @param workflow the current workflow
      */
-    protected void storeCommandRuntime(long runtime, final IFragmentCommand cmd, final IWorkflow workflow) {
-        final float seconds = ((float) runtime) / ((float) 1000000000);
+    protected void storeCommandRuntime(long start, long stop, final IFragmentCommand cmd, final IWorkflow workflow) {
+        final float seconds = ((float) stop - start) / ((float) 1000000000);
         final StringBuilder sb = new StringBuilder();
         final Formatter formatter = new Formatter(sb);
         formatter.format(CommandPipeline.NUMBERFORMAT, (seconds));
@@ -332,11 +307,64 @@ public final class CommandPipeline implements ICommandSequence, IConfigurable {
             cmd.getClass().getSimpleName(),
             sb.toString());
         Map<String, Object> statsMap = new HashMap<String, Object>();
-        statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(runtime / 1000000.f));
+        statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(stop - start / 1000000.f));
+        statsMap.put("RUNTIME_SECONDS", Double.valueOf(seconds));
         DefaultWorkflowStatisticsResult dwsr = new DefaultWorkflowStatisticsResult();
         dwsr.setWorkflowElement(cmd);
         dwsr.setWorkflowSlot(WorkflowSlot.STATISTICS);
         dwsr.setStats(statsMap);
         workflow.append(dwsr);
+    }
+
+    @Override
+    public void before() {
+        if (getExecutionServer() == null && !getWorkflow().isExecuteLocal()) {
+            log.info("Launching execution infrastructure!");
+            setExecutionServer(ComputeServerFactory.getComputeServer());
+            File computeHostJarLocation = new File(System.getProperty("maltcms.home"), "maltcms.jar");
+            if (!computeHostJarLocation.exists() || !computeHostJarLocation.isFile()) {
+                throw new ExitVmException("Could not locate maltcms.jar in " + System.getProperty("maltcms.home"));
+            }
+            final PropertiesConfiguration cfg = new PropertiesConfiguration();
+//set execution type
+            cfg.setProperty(ConfigurationKeys.KEY_EXECUTION_MODE, ExecutionType.DRMAA);
+//set location of compute host jar
+            cfg.setProperty(ConfigurationKeys.KEY_PATH_TO_COMPUTEHOST_JAR, computeHostJarLocation);
+//exit to console when master server shuts down
+            cfg.setProperty(ConfigurationKeys.KEY_MASTER_SERVER_EXIT_ON_SHUTDOWN, true);
+//limit the number of used compute hosts
+            cfg.setProperty(ConfigurationKeys.KEY_MAX_NUMBER_OF_CHOSTS, workflow.getConfiguration().getInt("maltcms.pipelinethreads", 1));
+//native specs for the drmaa api
+            cfg.setProperty(ConfigurationKeys.KEY_NATIVE_SPEC, workflow.getConfiguration().getString("mpaxs.nativeSpec", ""));
+            getExecutionServer().startMasterServer(cfg);
+        }
+        if (getWorkflow().getOutputDirectory().exists()) {
+            if (getWorkflow().getOutputDirectory().listFiles().length > 0) {
+                if (getWorkflow().getConfiguration().
+                    getBoolean("output.overwrite", false)) {
+                    log.warn(
+                        "Output in location {} already exists. Option output.overwrite=true, removing previous output!");
+                    try {
+                        FileUtils.deleteDirectory(getWorkflow().getOutputDirectory());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(
+                            "Deletion of directory " + getWorkflow().getOutputDirectory() + " failed!",
+                            ex);
+                    }
+                    getWorkflow().getOutputDirectory().mkdirs();
+                } else {
+                    throw new ConstraintViolationException(
+                        "Output exists in " + getWorkflow().getOutputDirectory() + " but output.overwrite=false. Call maltcms with -Doutput.overwrite=true to override!");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void after() {
+        //shutdown master server if execution has finished
+//        if (getCnt() == getCommands().size()) {
+        shutdownMasterServer();
+//        }
     }
 }

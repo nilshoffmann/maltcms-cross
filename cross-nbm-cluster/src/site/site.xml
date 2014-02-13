@@ -9,7 +9,7 @@
 -->
 <project xmlns="http://maven.apache.org/DECORATION/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.1.0 http://maven.apache.org/xsd/decoration-1.1.0.xsd" name="Cross">
-    <bannerLeft>
+<!--    <bannerLeft>
         <name>Cross</name>
         <src>images/ChromA4DSurface.png</src>
         <href>http://maltcms.sf.net</href>
@@ -28,9 +28,9 @@
     </custom>
     <publishDate position="right"/>
     <version position="right" />
-    <!--
+    
     <publishDate position="right"/>
-    <version position="right"/>-->
+    <version position="right"/>
     <body>
         <breadcrumbs>
             <item name="Home" href="../landingPage/index.html" />
@@ -41,20 +41,20 @@
         </links>
         <menu name="Cross">
             <item name="About Cross NBM Modules" href="index.html" />
-            <!--<item name="Getting Started" href="gettingStarted.html" />-->
+            <item name="Getting Started" href="gettingStarted.html" />
         </menu>
         <menu ref="modules" />
 
         <menu ref="reports"/>
-        <!--        <footer>-->
-        <!-- <span>
+                <footer>
+         <span>
             Copyright 2008-2012,
-        </span>-->
-        <!--	    <ul class="inline">
+        </span>
+        	    <ul class="inline">
             <li><a title="Contact" href="http://maltcms.sf.net/info/contact.html">Nils Hoffmann</a></li>
         <li>Maltcms is hosted by <a title="Hosting by sourceforge.net" href="http://sourceforge.net/">sourceforge.net</a></li>
         <li><a href="http://maven.apache.org">Built by Maven 3</a></li>
             </ul>
-        </footer>-->
-    </body>
+        </footer>
+    </body>-->
 </project>

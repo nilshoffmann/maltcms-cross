@@ -29,6 +29,7 @@ package cross.datastructures.fragments;
 
 import cross.IConfigurable;
 import java.io.File;
+import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -113,6 +114,15 @@ public interface IFileFragmentFactory extends IConfigurable {
      * @return the new file fragment
      */
     IFileFragment create(final String s);
+
+    /**
+     * Create a new file fragment from the given uniform resource identifier.
+     *
+     * @param uri the uniform resource identifier
+     * @return the new file fragment
+     * @since 1.3.1
+     */
+    IFileFragment create(final URI uri);
 
     /**
      * Create a FileFragment and possibly associated VariableFragments by

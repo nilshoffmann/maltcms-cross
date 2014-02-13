@@ -33,6 +33,7 @@ import cross.datastructures.tools.FileTools;
 import cross.datastructures.tools.FragmentTools;
 import cross.io.misc.FragmentStringParser;
 import java.io.File;
+import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.apache.commons.configuration.Configuration;
@@ -194,6 +195,11 @@ public class FileFragmentFactory implements IFileFragmentFactory {
         final IFileFragment ff = create(dirname, filename,
             new LinkedList<IFileFragment>());
         return ff;
+    }
+
+    @Override
+    public IFileFragment create(final URI uri) {
+        return new FileFragment(uri);
     }
 
     /**

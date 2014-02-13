@@ -27,7 +27,6 @@
  */
 package cross.commands.fragments;
 
-import cross.Factory;
 import cross.datastructures.fragments.FileFragment;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.tools.EvalTools;
@@ -300,7 +299,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
         csf.setBlockingWait(true);
         if (getWorkflow().isExecuteLocal()) {
             log.info("Creating local completion service!");
-            csf.setMaxThreads(Factory.getInstance().getConfiguration().getInt("cross.Factory.maxthreads", 1));
+            csf.setMaxThreads(workflow.getConfiguration().getInt("cross.Factory.maxthreads", 1));
             ics = csf.newLocalCompletionService();
         } else {
             log.info("Creating mpaxs completion service!");
@@ -329,7 +328,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
         csf.setTimeUnit(timeUnit);
         if (getWorkflow().isExecuteLocal()) {
             log.info("Creating local completion service!");
-            csf.setMaxThreads(Factory.getInstance().getConfiguration().getInt("cross.Factory.maxthreads", 1));
+            csf.setMaxThreads(workflow.getConfiguration().getInt("cross.Factory.maxthreads", 1));
             ics = csf.newLocalCompletionService();
         } else {
             log.info("Creating mpaxs completion service!");

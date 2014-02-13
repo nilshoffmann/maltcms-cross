@@ -1,10 +1,10 @@
 /*
  * Cross, common runtime object support system.
- * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
+ * Copyright (C) 2008-2012, The authors objectFactory Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
  *
- * Cross may be used under the terms of either the
+ * Cross may be used under the terms objectFactory either the
  *
  * GNU Lesser General Public License (LGPL)
  * http://www.gnu.org/licenses/lgpl.html
@@ -14,37 +14,39 @@
  * Eclipse Public License (EPL)
  * http://www.eclipse.org/org/documents/epl-v10.php
  *
- * As a user/recipient of Cross, you may choose which license to receive the code
+ * As a user/recipient objectFactory Cross, you may choose which license to receive the code
  * under. Certain files or entire directories may not be covered by this
  * dual license, but are subject to licenses compatible to both LGPL and EPL.
  * License exceptions are explicitly declared in all relevant files or in a
  * LICENSE file in the relevant directories.
  *
  * Cross is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * ANY WARRANTY; without even the implied warranty objectFactory MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. Please consult the relevant license documentation
  * for details.
  */
 package cross;
 
 import cross.annotations.Configurable;
-import cross.applicationContext.DefaultApplicationContextFactory;
 import cross.cache.CacheType;
+import cross.datastructures.fragments.FileFragmentFactory;
 import cross.datastructures.fragments.Fragments;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IFileFragmentFactory;
 import cross.datastructures.pipeline.CommandPipeline;
+import cross.datastructures.pipeline.DefaultCommandSequenceValidator;
 import cross.datastructures.pipeline.ICommandSequence;
 import cross.datastructures.threads.ExecutorsManager;
 import cross.datastructures.threads.ExecutorsManager.ExecutorType;
 import cross.datastructures.tools.EvalTools;
 import cross.datastructures.tools.FileTools;
 import cross.datastructures.tuple.TupleND;
-import cross.exception.ConstraintViolationException;
 import cross.io.DataSourceFactory;
 import cross.io.IDataSourceFactory;
 import cross.io.IInputDataFactory;
 import cross.io.InputDataFactory;
+import cross.vocabulary.CvResolver;
+import cross.vocabulary.ICvResolver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -66,14 +68,14 @@ import org.apache.commons.configuration.ConfigurationUtils;
 import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
-import org.apache.commons.configuration.event.ConfigurationListener;
 import org.apache.commons.io.FileUtils;
+import org.openide.util.Lookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * Factory for the creation of processing chains.</p>
+ * Factory for the creation objectFactory processing chains.</p>
  *
  * <p>
  * It should be configured prior to any call to
@@ -82,45 +84,36 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Alternatively, you can set up the pipeline completely on your own, but
  * beware, there is only partial requirements checking between pipeline stages
- * as of now. You have to ensure, that commands early in the chain provide the
+ * as objectFactory now. You have to ensure, that commands early in the chain provide the
  * data needed by those commands later in the chain. If you need branching
  * behaviour, consider setting named properties for later pipeline elements to
- * use, or set up multiple instances of Maltcms with different configurations.
+ * use, or set up multiple instances objectFactory Maltcms with different configurations.
  * </p>
  *
- * @author Nils Hoffmann
+ * @author Nils HobjectFactoryfmann
  * @see DefaultCommandSequenceValidator for command sequence validation
- * @see DefaultApplicationContextFactory for configuration of the pipeline and
+ * @see DefaultApplicationContextFactoryfor configuration objectFactory the pipeline and
  * workflow
  */
-public final class Factory implements ConfigurationListener {
+public final class Factory implements IFactory {
 
-    private static final Factory factory = new Factory();
+    private static final IFactory factory = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
 
-    private Factory() {
+    public Factory() {
     }
 
     /**
      * NEVER SYNCHRONIZE THIS METHOD, IT WILL BLOCK EVERYHTING WITHIN THE QUEUE!
      *
-     * @param time to wait until termination of each ThreadPool
-     * @param u    the unit of time
-     * @throws InterruptedException thrown if interruption of waiting on
+     * @param factory the factory instance to use
+     * @param time    to wait until termination objectFactory each ThreadPool
+     * @param u       the unit objectFactory time
+     * @throws InterruptedException thrown if interruption objectFactory waiting on
      *                              termination occurs
      */
-    public static void awaitTermination(final long time, final TimeUnit u)
+    public static void awaitTermination(final IFactory factory, final long time, final TimeUnit u)
         throws InterruptedException {
-        if ((Factory.getInstance().es == null)
-            || (Factory.getInstance().auxPool == null)) {
-            throw new IllegalArgumentException(
-                "ExecutorService not initialized!");
-        }
-        Factory.getInstance().auxPool.awaitTermination(time, u);
-        Factory.getInstance().es.awaitTermination(time, u);
-        // NetcdfFileCache.clearCache(true);
-        // NetcdfFileCache.exit();
-//        FileFragment.clearFragments();
-        // Factory.getInstance().resetDate();
+        factory.awaitTermination(time, u);
     }
 
     /**
@@ -130,8 +123,19 @@ public final class Factory implements ConfigurationListener {
      * @param d        the date stamp to use
      */
     public static void dumpConfig(final String filename, final Date d) {
+        dumpConfig(Factory.getInstance(), filename, d);
+    }
+
+    /**
+     * Write current configuration to file.
+     *
+     * @param factory  the factory instance to use
+     * @param filename the filename to use
+     * @param d        the date stamp to use
+     */
+    public static void dumpConfig(final IFactory factory, final String filename, final Date d) {
         //retrieve global, joint configuration
-        final Configuration cfg = Factory.getInstance().getConfiguration();
+        final Configuration cfg = factory.getConfiguration();
         //retrieve pipeline.properties location
         String configFile = cfg.getString("pipeline.properties");
         if (configFile != null) {
@@ -163,27 +167,30 @@ public final class Factory implements ConfigurationListener {
                     File configLocationNew = new File(location.getParentFile(), configLocation.getName());
                     FileUtils.copyFile(configLocation, configLocationNew);
                 }
-                Factory.getInstance().log.error("Saving configuration to: ");
-                Factory.getInstance().log.error("{}", location.getAbsolutePath());
-                Factory.saveConfiguration(cfg, location);
+                LoggerFactory.getLogger(Factory.class).error("Saving configuration to: ");
+                LoggerFactory.getLogger(Factory.class).error("{}", location.getAbsolutePath());
+                Factory.saveConfiguration(factory, cfg, location);
             } catch (IOException ex) {
-                Factory.getInstance().log.error("{}", ex);
+                LoggerFactory.getLogger(Factory.class).error("{}", ex);
 //            } catch (URISyntaxException ex) {
 //                Factory.getInstance().log.error("{}", ex);
             } catch (ConfigurationException ex) {
-                Factory.getInstance().log.error("{}", ex);
+                LoggerFactory.getLogger(Factory.class).error("{}", ex);
             }
         } else {
-            Factory.getInstance().log.warn("Can not save configuration, no pipeline properties file given!");
+            LoggerFactory.getLogger(Factory.class).warn("Can not save configuration, no pipeline properties file given!");
         }
     }
 
     /**
-     * Return an instance of the factory.
+     * Return an instance objectFactory the factory.
      *
+     * @deprecated injection of the factory into components requiring access to it should be preferred.
      * @return the factory
      */
-    public static Factory getInstance() {
+    @Deprecated
+    public static IFactory getInstance() {
+        LoggerFactory.getLogger(Factory.class).warn("Access to factory via getInstance() is deprecated, returning default instance!\nPlease use FactoryService to create new factory instances!");
         return Factory.factory;
     }
 
@@ -195,64 +202,82 @@ public final class Factory implements ConfigurationListener {
      */
     public static void saveConfiguration(final Configuration cfg,
         final File location) {
+        saveConfiguration(Factory.getInstance(), cfg, location);
+    }
+
+    /**
+     * Save the current configuration to file.
+     *
+     * @param factory  the factory instance to use
+     * @param cfg      the configuration to save
+     * @param location the file to write to
+     */
+    public static void saveConfiguration(final IFactory factory, final Configuration cfg,
+        final File location) {
         if (cfg instanceof FileConfiguration) {
             try {
                 ((FileConfiguration) cfg).save(location);
             } catch (final ConfigurationException e) {
-                Factory.getInstance().log.error(e.getLocalizedMessage());
+                LoggerFactory.getLogger(Factory.class).error(e.getLocalizedMessage());
             }
         } else {
             try {
                 ConfigurationUtils.dump(cfg, new PrintStream(location));
             } catch (final FileNotFoundException e) {
-                Factory.getInstance().log.error(e.getLocalizedMessage());
+                LoggerFactory.getLogger(Factory.class).error(e.getLocalizedMessage());
             }
         }
     }
-    private DataSourceFactory dsf = null;
-    private InputDataFactory idf = null;
-    private ObjectFactory of = null;
-    private IFileFragmentFactory fff = null;
+
+    private IDataSourceFactory dataSourceFactory = null;
+    private IInputDataFactory inputDataFactory = null;
+    private IObjectFactory objectFactory = null;
+    private IFileFragmentFactory fileFragmentFactory = null;
+    private ICvResolver cvResolver = null;
     public final transient Logger log = LoggerFactory.getLogger(Factory.class);
-    private transient CompositeConfiguration objconfig = new CompositeConfiguration();
-    private transient ExecutorService es;
+    private transient CompositeConfiguration configuration = new CompositeConfiguration();
+    private transient ExecutorService mainThreadPool;
     @Configurable(name = "cross.Factory.maxthreads")
     private int maxthreads = 1;
-    private transient ExecutorService auxPool;
+    private String name = "default";
+    private transient ExecutorService auxiliaryThreadPool;
 
     /**
      * Listen to ConfigurationEvents.
+     *
+     * @param event the configuration event
      */
     @Override
-    public void configurationChanged(final ConfigurationEvent arg0) {
-        Factory.getInstance().log.debug("Configuration changed for property: "
-            + arg0.getPropertyName() + " to value "
-            + arg0.getPropertyValue());
+    public void configurationChanged(final ConfigurationEvent event) {
+        log.debug("Configuration changed for property: "
+            + event.getPropertyName() + " to value "
+            + event.getPropertyValue());
 
     }
 
     /**
-     * Call configure before retrieving an instance of ArrayFactory. This
+     * Call configure before retrieving an instance objectFactory ArrayFactory. This
      * ensures, that the factory is instantiated with a fixed config.
      *
      * @param config the configuration to use
      */
+    @Override
     public void configure(final Configuration config) {
         EvalTools.notNull(config, Factory.class);
-        Factory.getInstance().configureMe(config);
+        configureMe(config);
     }
 
     protected void configureMe(final Configuration config1) {
         EvalTools.notNull(config1, this);
-        this.objconfig = new CompositeConfiguration();
-        this.objconfig.addConfiguration(config1);
-        this.objconfig.addConfigurationListener(this);
+        this.configuration = new CompositeConfiguration();
+        this.configuration.addConfiguration(config1);
+//        this.objconfig.addConfigurationListener(this);
         if (config1.getBoolean("maltcms.ui.charts.PlotRunner.headless", true) == true) {
             System.setProperty("java.awt.headless", "true");
         }
-        configureThreadPool(this.objconfig);
+        configureThreadPool(this.configuration);
         //initialize CacheFactory
-        Fragments.setDefaultFragmentCacheType(CacheType.valueOf(this.objconfig.getString(Fragments.class.getName() + ".cacheType", "EHCACHE")));
+        Fragments.setDefaultFragmentCacheType(CacheType.valueOf(this.configuration.getString(Fragments.class.getName() + ".cacheType", "EHCACHE")));
         // configure ObjectFactory
         getObjectFactory().configure(config1);
         getDataSourceFactory().configure(config1);
@@ -281,16 +306,18 @@ public final class Factory implements ConfigurationListener {
      *
      * @return a command sequence initialized according to current configuration
      */
+    @Override
     public ICommandSequence createCommandSequence() {
-
         return createCommandSequence(null);
     }
 
     /**
      * Build the command sequence, aka pipeline for command execution.
      *
+     * @param t the input file fragments
      * @return a command sequence initialized according to current configuration
      */
+    @Override
     public ICommandSequence createCommandSequence(final TupleND<IFileFragment> t) {
         final ICommandSequence cd = getObjectFactory().instantiate(
             CommandPipeline.class);
@@ -306,26 +333,11 @@ public final class Factory implements ConfigurationListener {
             outputDir = new File(outputDir, userName);
             outputDir = new File(outputDir, dateFormat.format(
                 cd.getWorkflow().getStartupDate()));
-        } else if (outputDir.exists()) {
-            if (outputDir.listFiles().length != 0 && getConfiguration().
-                getBoolean("output.overwrite", false)) {
-                log.warn(
-                    "Output in location {} already exists. Option output.overwrite=true, removing previous output!");
-                try {
-                    FileUtils.deleteDirectory(outputDir);
-                } catch (IOException ex) {
-                    throw new RuntimeException(
-                        "Deletion of directory " + outputDir + " failed!",
-                        ex);
-                }
-                outputDir.mkdirs();
-            } else {
-                throw new ConstraintViolationException(
-                    "Output exists in " + outputDir + " but output.overwrite=false. Call maltcms with -Doutput.overwrite=true to override!");
-            }
         }
         outputDir.mkdirs();
         cd.getWorkflow().setOutputDirectory(outputDir);
+        cd.getWorkflow().setConfiguration(getConfiguration());
+        cd.getWorkflow().setFactory(this);
         if (t == null) {
             cd.setInput(getInputDataFactory().prepareInputData(getConfiguration().
                 getStringArray("input.dataInfo")));
@@ -341,20 +353,21 @@ public final class Factory implements ConfigurationListener {
      *
      * @return the configuration
      */
+    @Override
     public Configuration getConfiguration() {
-        return Factory.getInstance().getConfigurationMe();
+        return getConfigurationMe();
     }
 
     protected Configuration getConfigurationMe() {
-        if (this.objconfig == null) {
+        if (this.configuration == null) {
             this.log.warn("Configuration not set, creating empty one!");
-            this.objconfig = new CompositeConfiguration();
+            this.configuration = new CompositeConfiguration();
         }
         // EvalTools.notNull(this.objconfig,
         // "ArrayFactory has not been configured yet!", this);
         // throw new RuntimeException("ArrayFactory has not been configured
         // yet!");
-        return this.objconfig;
+        return this.configuration;
     }
 
     /**
@@ -364,36 +377,36 @@ public final class Factory implements ConfigurationListener {
      * @see cross.io.IDataSourceFactory
      * @see cross.io.DataSourceFactory
      */
+    @Override
     public IDataSourceFactory getDataSourceFactory() {
-        if (this.dsf == null) {
-            this.dsf = getObjectFactory().instantiate(
-                "cross.io.DataSourceFactory", DataSourceFactory.class,
-                getConfiguration());
+        if (this.dataSourceFactory == null) {
+            this.dataSourceFactory = getObjectFactory().getNamedObject("dataSourceFactory", IDataSourceFactory.class);
+            if (this.dataSourceFactory == null) {
+                log.debug("Falling back to non application context based instantiation.");
+                this.dataSourceFactory = getObjectFactory().instantiate(DataSourceFactory.class);
+            }
         }
-        return this.dsf;
+        return this.dataSourceFactory;
     }
 
     /**
-     * Return the current input data factory, responsible for handling of input
+     * Return the current input data factory, responsible for handling objectFactory input
      * data.
      *
      * @return the input data factory
      * @see cross.io.IInputDataFactory
      * @see cross.io.InputDataFactory
      */
+    @Override
     public IInputDataFactory getInputDataFactory() {
-        if (this.idf == null) {
-            InputDataFactory idf = getObjectFactory().instantiate(
-                "cross.io.InputDataFactory", InputDataFactory.class,
-                getConfiguration());
-            idf.setBasedir(getConfiguration().getString("input.basedir"));
-            idf.setInput(getConfiguration().getStringArray("input.dataInfo"));
-            idf.setRecurse(getConfiguration().getBoolean("input.basedir.recurse",
-                false));
-            idf.setBasedir(System.getProperty("user.dir"));
-            this.idf = idf;
+        if (this.inputDataFactory == null) {
+            this.inputDataFactory = getObjectFactory().getNamedObject("inputDataFactory", IInputDataFactory.class);
+            if (this.inputDataFactory == null) {
+                log.debug("Falling back to non application context based instantiation.");
+                this.inputDataFactory = getObjectFactory().instantiate(InputDataFactory.class);
+            }
         }
-        return this.idf;
+        return this.inputDataFactory;
     }
 
     /**
@@ -403,59 +416,125 @@ public final class Factory implements ConfigurationListener {
      * @see cross.IObjectFactory
      * @see cross.ObjectFactory
      */
+    @Override
     public IObjectFactory getObjectFactory() {
-        if (this.of == null) {
-            this.of = new ObjectFactory();
-            this.of.configure(getConfiguration());
+        if (this.objectFactory == null) {
+            this.objectFactory = new ObjectFactory();
+            this.objectFactory.configure(getConfiguration());
         }
-        return this.of;
+        return this.objectFactory;
+    }
+
+    /**
+     * Return the current cv resolver, responsible for resolving cv terms and
+     * namespaced variable terms to their clear names.
+     *
+     * @return the cv resolver
+     * @see cross.vocabulary.ICvResolver
+     * @see cross.vocabulary.IControlledVocabularyProvider
+     * @see cross.vocabulary.CvResolver
+     * @since 1.3.1
+     */
+    @Override
+    public ICvResolver getCvResolver() {
+        if (this.cvResolver == null) {
+            this.cvResolver = getObjectFactory().getNamedObject("cvResolver", ICvResolver.class);
+            if (this.cvResolver == null) {
+                log.debug("Falling back to non application context based instantiation.");
+                this.cvResolver = getObjectFactory().instantiate(CvResolver.class);
+            }
+        }
+        return this.cvResolver;
+    }
+
+    /**
+     * Return the current file fragment factory, responsible for creating
+     * file fragments.
+     *
+     * @return the file fragment factory
+     * @see cross.datastructures.fragments.IFileFragmentFactory
+     * @see cross.datastructures.fragments.FileFragmentFactory
+     * @since 1.3.1
+     */
+    @Override
+    public IFileFragmentFactory getFileFragmentFactory() {
+        if (this.fileFragmentFactory == null) {
+            this.fileFragmentFactory = getObjectFactory().getNamedObject("fileFragmentFactory", IFileFragmentFactory.class);
+            if (this.fileFragmentFactory == null) {
+                log.debug("Falling back to non application context based instantiation.");
+                this.fileFragmentFactory = getObjectFactory().instantiate(FileFragmentFactory.class);
+            }
+        }
+        return this.fileFragmentFactory;
     }
 
     private void initThreadPools() {
-        this.es = new ExecutorsManager(this.maxthreads);// Executors.newFixedThreadPool(this.maxthreads);
-        this.auxPool = new ExecutorsManager(ExecutorType.SINGLETON);// Executors.newFixedThreadPool(this.maxthreads);
+        this.mainThreadPool = new ExecutorsManager(this.maxthreads);// Executors.newFixedThreadPool(this.maxthreads);
+        this.auxiliaryThreadPool = new ExecutorsManager(ExecutorType.SINGLETON);// Executors.newFixedThreadPool(this.maxthreads);
     }
 
     /**
      * Shutdown the factory's thread pool.
      *
      */
+    @Override
     public void shutdown() {
-        if ((this.es == null) || (this.auxPool == null)) {
+        if ((this.mainThreadPool == null) || (this.auxiliaryThreadPool == null)) {
             throw new IllegalArgumentException(
                 "ExecutorService not initialized!");
         }
 
-        this.es.shutdown();
-        this.auxPool.shutdown();
+        this.mainThreadPool.shutdown();
+        this.auxiliaryThreadPool.shutdown();
 
     }
 
     /**
      * Attempts to shutdown all executing threads immediately, and returns a
-     * list of all {@link Runnable} instances that were executing or were
+     * list objectFactory all {@link Runnable} instances that were executing or were
      * waiting to be executed when
      * <code>shutdownNow</code> was called.
      */
+    @Override
     public List<Runnable> shutdownNow() {
-        if ((this.es == null) || (this.auxPool == null)) {
+        if ((this.mainThreadPool == null) || (this.auxiliaryThreadPool == null)) {
             throw new IllegalArgumentException(
                 "ExecutorService not initialized!");
         }
         final List<Runnable> l = new ArrayList<Runnable>();
-        l.addAll(this.es.shutdownNow());
-        l.addAll(this.auxPool.shutdownNow());
+        l.addAll(this.mainThreadPool.shutdownNow());
+        l.addAll(this.auxiliaryThreadPool.shutdownNow());
         return l;
+    }
+
+    @Override
+    public void awaitTermination(long time, TimeUnit u) {
+        if ((this.mainThreadPool == null)
+            || (this.auxiliaryThreadPool == null)) {
+            throw new IllegalArgumentException(
+                "ExecutorService not initialized!");
+        }
+        try {
+            this.auxiliaryThreadPool.awaitTermination(time, u);
+        } catch (InterruptedException ex) {
+            log.warn("Interrupted while waiting for auxPool to terminate!", ex);
+        }
+        try {
+            this.mainThreadPool.awaitTermination(time, u);
+        } catch (InterruptedException ex) {
+            log.warn("Interrupted while waiting for executorPool to terminate!", ex);
+        }
     }
 
     /**
      * Jobs submitted via this method will be run by the auxiliary thread pool.
      *
-     * @param c the Callable of any type to submit
-     * @return a Future of the same type as the Callable
+     * @param c the Callable objectFactory any type to submit
+     * @return a Future objectFactory the same type as the Callable
      */
+    @Override
     public Future<?> submitJob(final Callable<?> c) {
-        return this.auxPool.submit(c);
+        return this.auxiliaryThreadPool.submit(c);
     }
 
     /**
@@ -463,12 +542,30 @@ public final class Factory implements ConfigurationListener {
      *
      * @param r the Runnable to submit
      */
+    @Override
     public void submitJob(final Runnable r) {
         submitJobMe(r);
     }
 
     protected void submitJobMe(final Runnable r) {
         EvalTools.notNull(r, this);
-        this.es.execute(r);
+        this.mainThreadPool.execute(r);
+    }
+
+    @Override
+    public void setConfiguration(Configuration config) {
+        EvalTools.notNull(config, Factory.class);
+        configureMe(config);
+    }
+
+    @Override
+    public void setName(String name) {
+        EvalTools.notNull(name, this);
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 }

@@ -1,6 +1,6 @@
 /* 
  * Cross, common runtime object support system. 
- * Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
+ * Copyright (C) 2008-2014, The authors of Cross. All rights reserved.
  *
  * Project website: http://maltcms.sf.net
  *

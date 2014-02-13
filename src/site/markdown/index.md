@@ -1,9 +1,4 @@
-<h2>Welcome to Cross</h2>
-
-Cross, the _Common Runtime Object Support System_ is a Java API
-for definition, creation and execution of sequential workflows.
-
-<h3>Sequential Assembly</h3>
+## Sequential Assembly
 
 A workflow in Cross is made up of a sequence of _fragment command_
 objects that use _file fragments_ as their in- and output type.
@@ -13,7 +8,7 @@ schemes or generally schemes with different or equal parities.
 The basic configuration of all workflow elements is performed using a Spring Application Context and
 Spring Beans - based xml configuration, supplemented by runtime properties.
 
-<h3>Validation</h3>
+## Validation
 
 Cross allows _fragment commands_ to define their required _variable fragments_ by 
 adding class-level annotations. Additionally, _fragment commands_ may define which 
@@ -21,7 +16,7 @@ _variable fragments_ they provide. Thus, Cross can validate the accessibility of
 variables required by a workflow __before__ the workflow is actually executed. This 
 helps avoid running computationally expensive workflows on invalid data.
 
-<h3>Monitoring and Transformation</h3>
+## Monitoring and Transformation
 
 A workflow monitors the _fragment commands_ it executes and notifies reqistered 
 listeners of various workflow-related events. These include the creation of primary and 
@@ -31,7 +26,7 @@ self-contained (except for initial input data) output directory. This output dir
 contains all information necessary to re-run the workflow with the exact same parameters 
 and conditions. Workflows in Cross are therefore self-descriptive and repeatable. 
 
-<h3>Efficient Data Structures</h3>
+## Efficient Data Structures
 
 A _file fragment_ is an aggregation of _variable fragment_ objects, defined by a
 storage location URI. _File fragment_ objects may reference an arbitrary
@@ -40,21 +35,25 @@ result variables of previous fragment commands. _Shadowing_ allows _file fragmen
 to hide the existence of an upstream variable of the same name from downstream
 _file fragments_. _DataSource_ implementations allow different URI extensions to 
 be handled, so that _file fragment_ objects can exist as simple files on disk or within 
-a distributed database system.
+a distributed database system. Custom implementations provide the mapping from binary 
+or textual storage formats to the variable-based abstraction used by _Cross_.
 
-<h3>Caching of Intermediate Results</h3>
+## Caching of Intermediate Results
 
 _File fragments_ have access to a user-defineable caching implementation. Currently,
-_Ehcache_ and _db4o_ (in memory and on disk), as well as a mock in-memory hashmap-based cache are available.
+_Ehcache_ (in memory and on disk), as well as a volatile in-memory weak reference hashmap and a non-volatile 
+hashmap cache are available. Caches based on Ehcache can either be volatile or session-persistent, depending on the required use-case. Other 
+cache implementations.
 
-<h3>Controlled Vocabulary</h3>
+## Controlled Vocabulary
 
 Cross variables have simple String-based names. However, in different contexts, the same 
 variable name could have a different meaning. Thus, Cross supports namespaced controlled 
 vocabularies for specific domains that translate a variable placeholder name to the 
-actual, cv-supported clear name.
+actual, cv-supported clear name. The cv system also supports deprecation for the evolution of 
+terms.
 
-<h3>Parallelization</h3>
+## Parallelization
 
 Cross uses the [Mpaxs API](http://sf.net/p/mpaxs) for transparent parallelization
 of _Runnable_ and _Callable_ tasks either within the local virtual machine or on 
@@ -65,6 +64,4 @@ Scaling up and down with the required amount of parallelization can be managed
 automatically by Mpaxs for example using its OpenGridEngine (OracleGridEngine) compliant 
 compute host launcher implementation. Mpaxs uses a round-robin scheduling 
 method to utilize all available hosts as fair as possible.
-
-
 

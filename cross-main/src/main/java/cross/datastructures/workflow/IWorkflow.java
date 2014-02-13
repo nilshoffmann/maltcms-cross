@@ -27,6 +27,7 @@
  */
 package cross.datastructures.workflow;
 
+import cross.Factory;
 import cross.IConfigurable;
 import cross.commands.fragments.AFragmentCommand;
 import cross.datastructures.fragments.IFileFragment;
@@ -168,6 +169,13 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
     public abstract void save();
 
     /**
+     * Load the previously save xml information of this workflow.
+     *
+     * @param f the workflow xml file.
+     */
+    public abstract void load(File f);
+
+    /**
      * Set ics to be the active ICommandSequence instance.
      *
      * @param ics the command sequence
@@ -259,5 +267,21 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
      *
      * @return the list of workflow post processors
      */
-    public List<IWorkflowPostProcessor> getWorkflowPostProcessors();
+    public abstract List<IWorkflowPostProcessor> getWorkflowPostProcessors();
+
+    /**
+     * Returns the factory associated to this workflow.
+     *
+     * @return the factory
+     * @since 1.3.1
+     */
+    public abstract Factory getFactory();
+
+    /**
+     * Set the factory associated to this workflow.
+     *
+     * @param factory
+     * @since 1.3.1
+     */
+    public abstract void setFactory(Factory factory);
 }

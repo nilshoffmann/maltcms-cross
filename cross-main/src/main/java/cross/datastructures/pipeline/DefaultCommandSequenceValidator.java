@@ -54,7 +54,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Data
 @Slf4j
-class DefaultCommandSequenceValidator implements ICommandSequenceValidator {
+public class DefaultCommandSequenceValidator implements ICommandSequenceValidator {
 
     private boolean checkInheritedVariables = true;
     private ICvResolver resolver = new CvResolver();

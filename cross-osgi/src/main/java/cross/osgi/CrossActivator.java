@@ -28,6 +28,7 @@
 package cross.osgi;
 
 import cross.Factory;
+import cross.IFactory;
 import cross.commands.fragments.AFragmentCommand;
 import cross.io.IDataSource;
 import cross.vocabulary.IControlledVocabularyProvider;
@@ -56,7 +57,7 @@ public class CrossActivator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         setupLogging();
         Dictionary props = new Properties();
-        Factory factory = Factory.getInstance();
+        IFactory factory = Factory.getInstance();
         PropertiesConfiguration cfg = new PropertiesConfiguration();
         factory.configure(cfg);
         services = new LinkedList<ServiceRegistration>();

@@ -35,6 +35,20 @@ for details.
         This file defines elements of the default workflow.
     </description>
     
+    <bean id="fileFragmentFactory" class="cross.datastructures.fragments.FileFragmentFactory" scope="singleton">
+        
+    </bean>
+    
+    <bean id="dataSourceFactory" class="cross.io.DataSourceFactory" scope="singleton">
+        
+    </bean>
+    
+    <bean id="inputDataFactory" class="cross.io.InputDataFactory" scope="singleton">
+        
+    </bean>
+    
+    <bean id="cvResolver" class="cross.vocabulary.CvResolver" scope="singleton"></bean>
+    
     <bean id="workflow" class="cross.datastructures.workflow.DefaultWorkflow" scope="singleton">
         <property name="commandSequence" ref="commandPipeline"/>
         <property name="name" value="workflow"/>

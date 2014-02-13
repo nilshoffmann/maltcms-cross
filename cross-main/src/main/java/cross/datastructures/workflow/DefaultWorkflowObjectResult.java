@@ -35,11 +35,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
 
 /**
+ * Deprecated. Please store objects in file fragments and add them as
+ * DefaultWorkflowResult.
  *
  * @author Nils Hoffmann
+ * @deprecated
  */
 @Slf4j
 @Data
+@Deprecated
 public class DefaultWorkflowObjectResult<T> implements IWorkflowObjectResult<T> {
 
     private T object = null;

@@ -239,12 +239,18 @@ public class ObjectFactory implements IObjectFactory {
 
     @Override
     public <T> Map<String, T> getObjectsOfType(Class<T> cls) {
+        if (context == null) {
+            return null;
+        }
         return context.getBeansOfType(cls);
     }
 
     @Override
     public <T> T getNamedObject(String name,
         Class<T> cls) {
+        if (context == null) {
+            return null;
+        }
         return context.getBean(name, cls);
     }
 }

@@ -30,6 +30,7 @@ package cross.annotations;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,13 +158,29 @@ public final class AnnotationInspector {
     }
 
     /**
+     * Returns unqualified names of class fields that are annotated with {@link Configurable}.
+     *
+     * @param c The class to inspect.
+     * @return a {@link java.util.Collection} object.
+     */
+    public static Collection<String> getRequiredConfigFieldNames(final Class<?> c) {
+        final ArrayList<String> coll = new ArrayList<String>();
+        final Class<?> clazz = c;
+        if (clazz != null) {
+            AnnotationInspector.inspectUnqualifiedFieldNames(clazz, coll);
+        }
+        Collections.sort(coll);
+        return coll;
+    }
+
+    /**
      * Returns configuration key names for object's class fields that are annotated with {@link Configurable}.
      *
      * @param o The object to inspect.
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredConfigKeys(final Object o) {
-        final Collection<String> coll = new ArrayList<String>();
+        final ArrayList<String> coll = new ArrayList<String>();
         AnnotationInspector.inspectFields(o.getClass(), coll);
         final Class<?> clazz = o.getClass().getSuperclass();
         if (clazz != null) {
@@ -329,6 +346,25 @@ public final class AnnotationInspector {
                         name, c.getName() + "." + fld.getName());
                     name = c.getName() + "." + fld.getName();
                 }
+                AnnotationInspector.log.debug(
+                    "Annotation Configurable is present on {} > {}", c.getName(), name);
+                coll.add(name);
+            }
+        }
+    }
+
+    /**
+     * Adds the field names annotated with {@link Configurable} to the provided collection.
+     *
+     * @param c    the class to check
+     * @param coll the collection to add the annotated field names to
+     */
+    private static void inspectUnqualifiedFieldNames(final Class<?> c,
+        final Collection<String> coll) {
+        final Field[] f = c.getDeclaredFields();
+        for (final Field fld : f) {
+            if (fld.isAnnotationPresent(Configurable.class)) {
+                String name = fld.getName();
                 AnnotationInspector.log.debug(
                     "Annotation Configurable is present on {} > {}", c.getName(), name);
                 coll.add(name);

@@ -34,6 +34,7 @@ import cross.datastructures.workflow.IWorkflow;
 import cross.datastructures.workflow.IWorkflowResult;
 import cross.event.IEvent;
 import cross.event.IListener;
+import cross.exception.ConstraintViolationException;
 import cross.io.xml.IXMLSerializable;
 import java.util.Iterator;
 import java.util.List;
@@ -141,4 +142,34 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
      * @return true if an exception will be thrown, false otherwise
      */
     public abstract boolean isThrowExceptionOnUnsavedModification();
+
+    /**
+     * Method that should prepare any resources required by the command sequence.
+     *
+     * @since 1.3.1
+     */
+    public abstract void before();
+
+    /**
+     * Method that should clean up any resources required by the command sequence.
+     *
+     * @since 1.3.1
+     */
+    public abstract void after();
+
+    /**
+     * Method that should prepare any resources required by a particular command.
+     *
+     * @param command the command
+     * @since 1.3.1
+     */
+    public abstract void beforeCommand(IFragmentCommand command);
+
+    /**
+     * Method that should clean up any resources required by a particular command.
+     *
+     * @param command the command
+     * @since 1.3.1
+     */
+    public abstract void afterCommand(IFragmentCommand command);
 }

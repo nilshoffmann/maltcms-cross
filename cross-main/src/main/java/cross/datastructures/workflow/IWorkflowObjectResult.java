@@ -34,7 +34,9 @@ import cross.datastructures.fragments.IFileFragment;
  *
  * @author Nils Hoffmann
  * @param <T> the generic type of the object result
+ * @deprecated
  */
+@Deprecated
 public interface IWorkflowObjectResult<T> extends IWorkflowResult {
 
     /**
