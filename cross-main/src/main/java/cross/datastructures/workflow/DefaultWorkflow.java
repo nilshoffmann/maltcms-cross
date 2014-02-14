@@ -283,33 +283,42 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             final String cls = elem.getAttributeValue("class");
             final String slot = elem.getAttributeValue("slot");
             final String generator = elem.getAttributeValue("generator");
+            IWorkflowResult iwr = null;
+            String file = "";
+            try {
 
-            final IWorkflowResult iwr
-                = getFactory().getObjectFactory().instantiate(cls,
+                iwr = getFactory().getObjectFactory().instantiate(cls,
                     IWorkflowResult.class);
-            final IWorkflowElement iwe = getFactory().getObjectFactory().
-                instantiate(generator,
-                    IWorkflowElement.class);
-            iwr.setWorkflowElement(iwe);
-            iwr.setWorkflowSlot(WorkflowSlot.valueOf(slot));
-            if (iwr instanceof IWorkflowFileResult) {
-                final String file = elem.getAttributeValue("file");
-                IWorkflowFileResult fileResult = (IWorkflowFileResult) iwr;
-                fileResult.setFile(new File(file));
-                Element resources = e.getChild("resources");
-                if (resources != null) {
-                    List<IFileFragment> fragments = new ArrayList<IFileFragment>();
-                    for (Object o : resources.getChildren("resource")) {
-                        Element resource = (Element) o;
-                        URI uri = URI.create(resource.getAttributeValue("resource"));
-                        fragments.add(new FileFragment(uri));
+                final IWorkflowElement iwe = getFactory().getObjectFactory().
+                    instantiate(generator,
+                        IWorkflowElement.class);
+                iwr.setWorkflowElement(iwe);
+                iwr.setWorkflowSlot(WorkflowSlot.valueOf(slot));
+                if (iwr instanceof IWorkflowFileResult) {
+                    file = elem.getAttributeValue("file");
+                    IWorkflowFileResult fileResult = (IWorkflowFileResult) iwr;
+                    fileResult.setFile(new File(file));
+                    Element resources = e.getChild("resources");
+                    if (resources != null) {
+                        List<IFileFragment> fragments = new ArrayList<IFileFragment>();
+                        for (Object o : resources.getChildren("resource")) {
+                            Element resource = (Element) o;
+                            URI uri = URI.create(resource.getAttributeValue("resource"));
+                            fragments.add(new FileFragment(uri));
+                        }
+                        fileResult.setResources(fragments.toArray(new IFileFragment[fragments.size()]));
                     }
-                    fileResult.setResources(fragments.toArray(new IFileFragment[fragments.size()]));
+                } else {
+                    log.warn("Unsupported workflow result type! Can not convert!");
                 }
-            } else {
-                log.warn("Unsupported workflow result type! Can not convert!");
+                append(iwr);
+            } catch (ConstraintViolationException rnae) {
+                if (iwr != null) {
+                    log.warn("Could not load result! Not found at location: " + file);
+                } else {
+                    log.warn("Could not load workflow result!");
+                }
             }
-            append(iwr);
         }
     }
 
@@ -841,5 +850,10 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             throw new IllegalStateException("Factory was already initialized!");
         }
         this.factory = factory;
+    }
+
+    @Override
+    public void clearResults() {
+        this.al.clear();
     }
 }

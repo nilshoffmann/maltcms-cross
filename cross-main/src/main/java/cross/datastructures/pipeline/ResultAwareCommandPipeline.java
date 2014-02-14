@@ -53,10 +53,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.mpaxs.api.ConfigurationKeys;
 import net.sf.mpaxs.api.ExecutionType;
@@ -81,10 +78,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ICommandSequence.class, position = Integer.MIN_VALUE + 1)
 public class ResultAwareCommandPipeline extends CommandPipeline {
 
-    @Getter(AccessLevel.PROTECTED)
-    @Setter(AccessLevel.PROTECTED)
-    private boolean loadedPreviousWorkflowResults = false;
-
+//    @Getter(AccessLevel.PROTECTED)
+//    @Setter(AccessLevel.PROTECTED)
+//    private boolean loadedPreviousWorkflowResults = false;
     /**
      * Create a new command pipeline instance.
      */
@@ -139,14 +135,29 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
 
     protected String getFileHashKey(IFragmentCommand cmd) {
         URI fragmentCommandOutputDirectory = cmd.getWorkflow().getOutputDirectory(cmd).getAbsoluteFile().toURI();
-        URI relativeFile = relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
+        URI relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
         return cmd.getClass().getName() + "-" + relativeFile.getPath() + ".fileHash";
     }
 
     protected String getParametersHashKey(IFragmentCommand cmd) {
         URI fragmentCommandOutputDirectory = cmd.getWorkflow().getOutputDirectory(cmd).getAbsoluteFile().toURI();
-        URI relativeFile = relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
+        URI relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
         return cmd.getClass().getName() + "-" + relativeFile.getPath() + ".parametersHash";
+    }
+
+    protected boolean isInputUpToDate(TupleND<IFileFragment> inputFiles, IWorkflow workflow) {
+        PropertiesConfiguration pc = getHashes(workflow);
+        Collection<File> files = getInputFiles(inputFiles);
+        String oldWorkflowInputFilesHash = pc.getString(workflow.getName() + ".inputFiles.fileHash", "");
+        String workflowInputFilesHash = getRecursiveFileHash(files);
+        return oldWorkflowInputFilesHash.equals(workflowInputFilesHash);
+    }
+
+    protected void updateWorkflowInputHashes(TupleND<IFileFragment> inputFiles, IWorkflow workflow) {
+        PropertiesConfiguration pc = getHashes(workflow);
+        Collection<File> files = getInputFiles(inputFiles);
+        String fileHash = getRecursiveFileHash(files);
+        pc.setProperty(workflow.getName() + ".inputFiles.fileHash", fileHash);
     }
 
     protected boolean isUpToDate(TupleND<IFileFragment> inputFiles, IFragmentCommand cmd) {
@@ -189,7 +200,7 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
      *
      * @param files the files to calculate the digest for.
      * @return the hexadecimal, zero-padded digest, or null if any exceptions
-     * occurred
+     *         occurred
      */
     public String digest(Collection<File> files) {
         try {
@@ -260,11 +271,11 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
                         throw new RuntimeException(ex);
                     }
                 }
-                // set output dir to currently active command
                 long start = System.nanoTime();
                 results = cmd.apply(getTmp());
                 storeCommandRuntime(start, System.nanoTime(), cmd, getWorkflow());
             } else {
+                log.info("Skipping, everything up to date!");
                 File outputDir = getWorkflow().getOutputDirectory(cmd);
                 Collection<File> inputFiles = FileUtils.listFiles(outputDir, new String[]{"cdf", "CDF", "nc", "NC"}, false);
                 TupleND<IFileFragment> inputFragments = new TupleND<>();
@@ -275,6 +286,7 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
                 results = inputFragments;
             }
             updateHashes(getTmp(), cmd);
+            setTmp(results);
             log.debug("Hashes: {}", ConfigurationUtils.toString(getHashes()));
         } finally {
             afterCommand(cmd);
@@ -283,12 +295,29 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
 
     @Override
     public void before() {
-        if (!isLoadedPreviousWorkflowResults()) {
-            log.info("Looking for results from previous workflow invocation!");
-            getWorkflow().load(getWorkflow().getWorkflowXmlFile());
-            getHashes(getWorkflow());
-            setLoadedPreviousWorkflowResults(true);
+        log.info("Looking for results from previous workflow invocation...");
+        if (getWorkflow().getWorkflowXmlFile().isFile()) {
+            log.info("Found previous workflow.xml file!");
+            if (isInputUpToDate(getInput(), getWorkflow())) {
+                log.info("Input data has not changed, restoring workflow!");
+                getWorkflow().load(getWorkflow().getWorkflowXmlFile());
+            } else {
+                try {
+                    log.info("Input data has changed, deleting previous workflow output!");
+                    FileUtils.deleteDirectory(getWorkflow().getOutputDirectory());
+                    getWorkflow().clearResults();
+                } catch (IOException ex) {
+                    throw new RuntimeException(
+                        "Deletion of directory " + getWorkflow().getOutputDirectory() + " failed!",
+                        ex);
+                }
+                getWorkflow().getOutputDirectory().mkdirs();
+            }
+        } else {
+            log.info("Did not find results from a previous workflow instance!");
         }
+        //update input file hashes
+        updateWorkflowInputHashes(getInput(), getWorkflow());
         if (getExecutionServer() == null && !getWorkflow().isExecuteLocal()) {
             log.info("Launching execution infrastructure!");
             setExecutionServer(ComputeServerFactory.getComputeServer());

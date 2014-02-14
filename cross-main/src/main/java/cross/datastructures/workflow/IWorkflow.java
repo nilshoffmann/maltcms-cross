@@ -284,4 +284,11 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
      * @since 1.3.1
      */
     public abstract void setFactory(Factory factory);
+
+    /**
+     * Clear all workflow related results.
+     *
+     * @since 1.3.1
+     */
+    public abstract void clearResults();
 }

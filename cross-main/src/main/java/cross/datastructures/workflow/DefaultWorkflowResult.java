@@ -30,6 +30,7 @@ package cross.datastructures.workflow;
 import cross.datastructures.fragments.FileFragment;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.tools.EvalTools;
+import cross.exception.ConstraintViolationException;
 import cross.exception.ResourceNotAvailableException;
 import java.io.File;
 import java.net.URI;
@@ -115,7 +116,11 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
     @Override
     public void setFile(final File iff1) {
         EvalTools.notNull(iff1, this);
-        this.file = iff1.toURI();
+        if (iff1.isFile()) {
+            this.file = iff1.toURI();
+        } else {
+            throw new ConstraintViolationException("File " + iff1.getAbsolutePath() + " does not exist!");
+        }
     }
 
     @Override
@@ -174,8 +179,12 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
             }
             iwr.addContent(resourcesElement);
         }
-        iwr.setAttribute("file", getFile().getAbsolutePath());
-        iwr.setAttribute("file-uri", this.file.normalize().toString());
-        e.addContent(iwr);
+        try {
+            iwr.setAttribute("file", getFile().getAbsolutePath());
+            iwr.setAttribute("file-uri", this.file.normalize().toString());
+            e.addContent(iwr);
+        } catch (ResourceNotAvailableException rnae) {
+            log.warn("Resource for workflow result at {} does not exist! Skipping write of workflowElementResult!", this.file);
+        }
     }
 }
