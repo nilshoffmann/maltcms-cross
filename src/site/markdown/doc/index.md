@@ -1,5 +1,5 @@
 The Cross Maven project is a multi-module project. The following sections explain 
-the rationale behind each module and describe their functions.
+the rationale behind each module and describe their functions. 
 
 ## [Cross Annotations](../cross-annotations/)
 
@@ -38,6 +38,7 @@ runtime system, workflow creation and execution, as well as essential datastruct
 file and variable fragments. Additionally, it provides basic support for IO, controlled vocabularies,
 and configuration.
 
+[Concepts](./concepts.html)
 [Module JavaDoc](../cross-main/apidocs/)
 
 ## [Cross Math](../cross-math/)

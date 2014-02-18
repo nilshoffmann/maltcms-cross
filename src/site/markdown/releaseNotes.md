@@ -6,7 +6,11 @@ Changes for version 1.3.1:
 New features
 
 * Added ResultAwareCommandPipeline, see [the documentation](./doc/concepts.html) for more details
-* Bug fixes concerning Ehcache cache manager
+* Added user and system time to measured metrics. Added defensive measures to avoid Exceptions.
+* Added method to compare two arrays for (element) equality.
+* Added AutoRetrievalSoftReferenceCache.
+* Updated and extended JavaDoc API documentation.
+* Further improvements in test coverage.
 
 Deprecation
 
@@ -14,6 +18,22 @@ Deprecation
 `cross.IFactoryService` and its corresponding implementation `cross.FactoryService`. Cross 1.4 wll not use this pattern 
 any longer.
 
+Bug fixes
+
+* Fixes to ResultAwareCommandPipeline and DefaultWorkflow result to be aware of prematurely terminated workflows.
+* Fix for deepest ancestor being the file fragment itself.
+* Fixed a bug in FileFragment externalization that closed in/out streams too early.
+* Fixed cache providers to use thread safe collections.
+* Fixed fragment cache creation errors and cache manager warnings.
+* Fixed creation of fragment command xmls.
+* Fixed versioning problems for nbm modules.
+* Fixed netcdf nbm cluster definition to export additional package.
+
+Updates
+
+* Updated lombok version.
+* Updated mpaxs dependency.
+* Changed default FileFragment cache type to NONE.
 
 Changes for version 1.3:
 ---------------------------

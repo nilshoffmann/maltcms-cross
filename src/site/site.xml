@@ -87,6 +87,7 @@
             <item name="Getting Started" href="gettingStarted.html" />
             <item name="Release Notes" href="releaseNotes.html" />
             <item name="Documentation" href="./doc/index.html" collapse="true">
+                <item name="Concepts" href="./doc/concepts.html" />
                 <item name="API" href="./apidocs/index.html" />
                 <item name="Wiki" href="http://sf.net/p/maltcms/wiki" />
             </item>
