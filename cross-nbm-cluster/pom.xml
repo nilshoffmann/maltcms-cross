@@ -44,7 +44,6 @@
                 <extensions>true</extensions>
                 <executions>
                     <execution>
-                        <phase>install</phase>
                         <id>extra</id>
                         <goals>
                             <goal>cluster</goal>
