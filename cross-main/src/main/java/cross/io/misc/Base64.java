@@ -188,6 +188,7 @@ public class Base64 {
          * returns the next byte.
          *
          * @return next byte
+         * @throws java.io.IOException
          * @since 1.3
          */
         @Override
@@ -307,6 +308,7 @@ public class Base64 {
          * @param off  offset for array
          * @param len  max number of bytes to read into array
          * @return bytes read into array or -1 if end of stream is encountered.
+         * @throws java.io.IOException
          * @since 1.3
          */
         @Override
@@ -408,6 +410,7 @@ public class Base64 {
         /**
          * Flushes and closes (I think, in the superclass) the stream.
          *
+         * @throws java.io.IOException
          * @since 1.3
          */
         @Override
@@ -426,6 +429,7 @@ public class Base64 {
         /**
          * Method added by PHIL. [Thanks, PHIL. -Rob] This pads the buffer
          * without closing the stream.
+         * @throws java.io.IOException
          */
         public void flushBase64() throws java.io.IOException {
             if (this.position > 0) {
@@ -456,6 +460,7 @@ public class Base64 {
          * Suspends encoding of the stream. May be helpful if you need to embed
          * a piece of base640-encoded data in a stream.
          *
+         * @throws java.io.IOException
          * @since 1.5.1
          */
         public void suspendEncoding() throws java.io.IOException {
@@ -470,6 +475,7 @@ public class Base64 {
          * @param theBytes array from which to read bytes
          * @param off      offset for array
          * @param len      max number of bytes to read into array
+         * @throws java.io.IOException
          * @since 1.3
          */
         @Override
@@ -494,6 +500,7 @@ public class Base64 {
          * are buffered four at a time.
          *
          * @param theByte the byte to write
+         * @throws java.io.IOException
          * @since 1.3
          */
         @Override
@@ -819,6 +826,7 @@ public class Base64 {
      * @param source The Base64 encoded data
      * @param off    The offset of where to begin decoding
      * @param len    The length of characters to decode
+     * @param options
      * @return decoded data
      * @since 1.3
      */
@@ -1190,11 +1198,7 @@ public class Base64 {
 
             obj = ois.readObject();
         } // end try
-        catch (final java.io.IOException e) {
-            e.printStackTrace();
-            // obj = null;
-        } // end catch
-        catch (final java.lang.ClassNotFoundException e) {
+        catch (final java.io.IOException | java.lang.ClassNotFoundException e) {
             e.printStackTrace();
             // obj = null;
         } // end catch
@@ -1307,6 +1311,7 @@ public class Base64 {
      * Encodes a byte array into Base64 notation. Does not GZip-compress data.
      *
      * @param source The data to convert
+     * @return 
      * @since 1.4
      */
     public static String encodeBytes(final byte[] source) {
@@ -1334,6 +1339,7 @@ public class Base64 {
      *
      * @param source  The data to convert
      * @param options Specified options
+     * @return 
      * @see Base64#GZIP
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0
@@ -1348,6 +1354,7 @@ public class Base64 {
      * @param source The data to convert
      * @param off    Offset in array where conversion should begin
      * @param len    Length of data to convert
+     * @return 
      * @since 1.4
      */
     public static String encodeBytes(final byte[] source, final int off,
@@ -1377,8 +1384,7 @@ public class Base64 {
      * @param off     Offset in array where conversion should begin
      * @param len     Length of data to convert
      * @param options Specified options
-     * @param options alphabet type is pulled from this (standard, url-safe,
-     *                ordered)
+     * @return 
      * @see Base64#GZIP
      * @see Base64#DONT_BREAK_LINES
      * @since 2.0
@@ -1747,6 +1753,7 @@ public class Base64 {
      * Encodes or decodes two files from the command line; <strong>feel free to
      * delete this method (in fact you probably should) if you're embedding this
      * code into a larger program.</strong>
+     * @param args
      */
     public final static void main(final String[] args) {
         if (args.length < 3) {
@@ -1756,15 +1763,17 @@ public class Base64 {
             final String flag = args[0];
             final String infile = args[1];
             final String outfile = args[2];
-            if (flag.equals("-e")) {
-                Base64.encodeFileToFile(infile, outfile);
-            } // end if: encode
-            else if (flag.equals("-d")) {
-                Base64.decodeFileToFile(infile, outfile);
-            } // end else if: decode
-            else {
-                Base64.usage("Unknown flag: " + flag);
-            } // end else
+            switch (flag) {
+                case "-e":
+                    Base64.encodeFileToFile(infile, outfile);
+                    break;
+                case "-d":
+                    Base64.decodeFileToFile(infile, outfile);
+                    break;
+                default:
+                    Base64.usage("Unknown flag: " + flag);
+                    break;
+            }
         } // end else
     } // end main
 

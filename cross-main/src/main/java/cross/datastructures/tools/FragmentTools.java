@@ -121,6 +121,7 @@ public class FragmentTools {
      *
      * @param f1 the left-hand-side file fragment
      * @param f2 the right-hand-side file fragment
+     * @param outputdir
      * @return a file fragment that contains both file fragments linked in
      * variables
      * @see
@@ -205,7 +206,7 @@ public class FragmentTools {
         } else {
             vf = new VariableFragment(parent, varname);
         }
-        Array a = Array.makeArray(DataType.STRING, new LinkedList<String>(c));
+        Array a = Array.makeArray(DataType.STRING, new LinkedList<>(c));
         vf.setArray(a);
         return vf;
     }
@@ -245,7 +246,7 @@ public class FragmentTools {
      */
     public static ArrayList<String> getDefaultVars() {
         final List<?> l = Factory.getInstance().getConfiguration().getList("default.vars");
-        final ArrayList<String> al = new ArrayList<String>();
+        final ArrayList<String> al = new ArrayList<>();
         for (final Object o : l) {
             al.add(o.toString());
         }
@@ -325,10 +326,8 @@ public class FragmentTools {
         Array a = null;
         try {
             a = Factory.getInstance().getDataSourceFactory().getDataSourceFor(ff).readSingle(tf);
-        } catch (ResourceNotAvailableException rnae) {
+        } catch (ResourceNotAvailableException | IOException rnae) {
             //this is fine, it simply means, there is no source file variable available
-        } catch (IOException ioex) {
-            //throw new RuntimeException(ioex);
         }
         Collection<String> c = null;
         if (a != null) {
@@ -341,7 +340,7 @@ public class FragmentTools {
             log.warn("Could not retrieve source_files from " + ff);
             return Collections.emptyMap();
         }
-        final Map<URI, IFileFragment> al = new LinkedHashMap<URI, IFileFragment>(
+        final Map<URI, IFileFragment> al = new LinkedHashMap<>(
                 c.size());
         log.info("Found the following source files:");
         URI baseUri = ff.getUri().normalize();
@@ -445,7 +444,7 @@ public class FragmentTools {
      */
     public static ArrayChar.D2 createSourceFilesArray(final IFileFragment root, Collection<IFileFragment> files) {
         int ml = 128;
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (final IFileFragment file : files) {
             String resolvedPath = resolve(file, root).toString();
             log.info("Adding resolved (relative) source file: {}", resolvedPath);
@@ -664,7 +663,7 @@ public class FragmentTools {
      */
     public static List<IVariableFragment> getVariablesSharingAnyDimensions(
             List<IVariableFragment> variables, String... dimensions) {
-        List<IVariableFragment> r = new ArrayList<IVariableFragment>();
+        List<IVariableFragment> r = new ArrayList<>();
         String[] dimnames = dimensions;
         Arrays.sort(dimnames);
         for (IVariableFragment ivf : variables) {
@@ -690,7 +689,7 @@ public class FragmentTools {
      */
     public static List<IVariableFragment> getVariablesSharingAllDimensions(
             List<IVariableFragment> variables, String... dimensions) {
-        List<IVariableFragment> r = new ArrayList<IVariableFragment>();
+        List<IVariableFragment> r = new ArrayList<>();
         String[] dimnames = dimensions;
         Arrays.sort(dimnames);
         for (IVariableFragment ivf : variables) {
@@ -724,9 +723,9 @@ public class FragmentTools {
      */
     public static List<IVariableFragment> getAggregatedVariables(
             IFileFragment fragment) {
-        HashMap<String, IVariableFragment> names = new HashMap<String, IVariableFragment>();
-        List<IVariableFragment> allVars = new ArrayList<IVariableFragment>();
-        List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
+        HashMap<String, IVariableFragment> names = new HashMap<>();
+        List<IVariableFragment> allVars = new ArrayList<>();
+        List<IFileFragment> parentsToExplore = new LinkedList<>();
         // System.out.println("Parent files " + parentsToExplore);
         parentsToExplore.add(fragment);
         while (!parentsToExplore.isEmpty()) {
@@ -775,14 +774,14 @@ public class FragmentTools {
      * level
      */
     public static List<IFileFragment> getDeepestAncestor(IFileFragment fragment) {
-        List<IFileFragment> parentsToExplore = new LinkedList<IFileFragment>();
+        List<IFileFragment> parentsToExplore = new LinkedList<>();
         // System.out.println("Parent files " + parentsToExplore);
-        LinkedHashMap<Integer, LinkedHashSet<IFileFragment>> depthToFragment = new LinkedHashMap<Integer, LinkedHashSet<IFileFragment>>();
+        LinkedHashMap<Integer, LinkedHashSet<IFileFragment>> depthToFragment = new LinkedHashMap<>();
         parentsToExplore.add(fragment);
         int depth = 0;
-        LinkedHashSet<IFileFragment> lhs = new LinkedHashSet<IFileFragment>();
+        LinkedHashSet<IFileFragment> lhs = new LinkedHashSet<>();
         lhs.add(fragment);
-        depthToFragment.put(Integer.valueOf(depth), lhs);
+        depthToFragment.put(depth, lhs);
         int maxDepth = 0;
         while (!parentsToExplore.isEmpty()) {
             IFileFragment parent = parentsToExplore.remove(0);
@@ -804,14 +803,14 @@ public class FragmentTools {
                             log.debug("Adding absolute path: {}", path);
                             frag = new FileFragment(path);
                         }
-                        Integer key = Integer.valueOf(depth);
+                        Integer key = depth;
                         if (depth > maxDepth) {
                             maxDepth = depth;
                         }
                         if (depthToFragment.containsKey(key)) {
                             depthToFragment.get(key).add(frag);
                         } else {
-                            lhs = new LinkedHashSet<IFileFragment>();
+                            lhs = new LinkedHashSet<>();
                             lhs.add(frag);
                             depthToFragment.put(key, lhs);
                         }
@@ -825,8 +824,8 @@ public class FragmentTools {
 //        if (depthToFragment.containsKey(Integer.valueOf(depth))) {
 //            new LinkedList<IFileFragment>(depthToFragment.get(Integer.valueOf(depth)));
 //        }
-        lhs = depthToFragment.get(Integer.valueOf(maxDepth));
-        return new LinkedList<IFileFragment>(lhs);
+        lhs = depthToFragment.get(maxDepth);
+        return new LinkedList<>(lhs);
     }
 
     /**
@@ -853,7 +852,7 @@ public class FragmentTools {
      * @return an n-tuple of immutable file fragments
      */
     public static TupleND<IFileFragment> immutable(File... files) {
-        TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> t = new TupleND<>();
         for (File f : files) {
             t.add(new ImmutableFileFragment(f));
         }
@@ -868,7 +867,7 @@ public class FragmentTools {
      * @return an n-tuple of immutable file fragments
      */
     public static TupleND<IFileFragment> immutable(Collection<File> files) {
-        TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> t = new TupleND<>();
         for (File f : files) {
             t.add(new ImmutableFileFragment(f));
         }
@@ -883,7 +882,7 @@ public class FragmentTools {
      * @return an n-tuple of immutable file fragments
      */
     public static TupleND<IFileFragment> immutableURIs(Collection<URI> uris) {
-        TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> t = new TupleND<>();
         for (URI uri : uris) {
             t.add(new ImmutableFileFragment(uri));
         }
@@ -897,7 +896,7 @@ public class FragmentTools {
      * @return an n-tuple of mutable file fragments
      */
     public static TupleND<IFileFragment> mutable(Collection<File> files) {
-        TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> t = new TupleND<>();
         for (File f : files) {
             t.add(new FileFragment(f));
         }
@@ -911,7 +910,7 @@ public class FragmentTools {
      * @return an n-tuple of mutable file fragments
      */
     public static TupleND<IFileFragment> mutableURIs(Collection<URI> uris) {
-        TupleND<IFileFragment> t = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> t = new TupleND<>();
         for (URI u : uris) {
             t.add(new FileFragment(u));
         }

@@ -34,20 +34,54 @@ import java.util.List;
  * e.g. for self-populating caches on immutable data.
  *
  * @author Nils Hoffmann
+ * @param <T>
  */
 public interface IElementProvider<T> {
 
+    /**
+     *
+     * @return
+     */
     int size();
 
+    /**
+     *
+     * @return
+     */
     long sizeLong();
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     T get(int i);
 
+    /**
+     *
+     * @param start
+     * @param stop
+     * @return
+     */
     List<T> get(int start, int stop);
 
+    /**
+     *
+     */
     void reset();
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     T get(long l);
 
+    /**
+     *
+     * @param start
+     * @param stop
+     * @return
+     */
     List<T> get(long start, long stop);
 }

@@ -52,7 +52,7 @@ import ucar.ma2.Array;
 @Slf4j
 public class MockDatasource implements IDataSource {
 
-    Map<URI, MockFile> persistentCache = new HashMap<URI, MockFile>();
+    Map<URI, MockFile> persistentCache = new HashMap<>();
     private String[] fileEnding = new String[]{"nc", "nc.gz", "nc.z", "nc.zip", "nc.gzip", "nc.bz2", "cdf", "cdf.gz", "cdf.z", "cdf.zip", "cdf.gzip", "cdf.bz2"};
 
     @Override
@@ -83,7 +83,7 @@ public class MockDatasource implements IDataSource {
 
     @Override
     public ArrayList<Array> readAll(IFileFragment f) throws IOException, ResourceNotAvailableException {
-        ArrayList<Array> al = new ArrayList<Array>();
+        ArrayList<Array> al = new ArrayList<>();
         for (IVariableFragment frag : f) {
             al.add(getCache(f).getChild(frag.getName()));
         }
@@ -103,9 +103,9 @@ public class MockDatasource implements IDataSource {
     @Override
     public ArrayList<IVariableFragment> readStructure(IFileFragment f) throws IOException {
         if (getCache(f).keys().isEmpty()) {
-            return new ArrayList<IVariableFragment>(0);
+            return new ArrayList<>(0);
         }
-        ArrayList<IVariableFragment> children = new ArrayList<IVariableFragment>();
+        ArrayList<IVariableFragment> children = new ArrayList<>();
         for (String key : getCache(f).keys()) {
             if (!f.hasChild(key)) {
                 VariableFragment vf = new VariableFragment(f, key);
@@ -135,9 +135,9 @@ public class MockDatasource implements IDataSource {
         for (IVariableFragment v : f.getImmediateChildren()) {
             log.info("Writing variable fragment {}. Indexed: {}", v.getName(), v.getIndex() != null);
             if (v.getIndex() != null) {
-                mf.addChild(v.getName(), new ArrayList<Array>(v.getIndexedArray()));
+                mf.addChild(v.getName(), new ArrayList<>(v.getIndexedArray()));
             } else {
-                mf.addChild(v.getName(), new ArrayList<Array>(Arrays.asList(v.getArray())));
+                mf.addChild(v.getName(), new ArrayList<>(Arrays.asList(v.getArray())));
             }
         }
         return true;
@@ -147,6 +147,10 @@ public class MockDatasource implements IDataSource {
     public void configure(Configuration cfg) {
     }
 
+    /**
+     *
+     * @param ce
+     */
     @Override
     public void configurationChanged(ConfigurationEvent ce) {
     }

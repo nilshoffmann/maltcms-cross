@@ -54,6 +54,13 @@ public class EvalTools {
     private static ScriptEngineManager manager;
     private static ScriptEngine engine;
 
+    /**
+     *
+     * @param s
+     * @param stats
+     * @param lastPosition
+     * @return
+     */
     public static String apply(final String s,
         final HashMap<String, Double> stats, final String lastPosition) {
         if (EvalTools.isOperator(s)) {
@@ -75,6 +82,13 @@ public class EvalTools {
         return s;
     }
 
+    /**
+     *
+     * @param s
+     * @param context
+     * @param lastPosition
+     * @return
+     */
     public static String apply(final String s,
         final Tuple2D<Context, Context> context, final String lastPosition) {
         if (EvalTools.isOperator(s)) {
@@ -99,6 +113,9 @@ public class EvalTools {
         return s;
     }
 
+    /**
+     *
+     */
     public static void checkEngines() {
         final ScriptEngineManager mgr = new ScriptEngineManager();
         final List<ScriptEngineFactory> factories = mgr.getEngineFactories();
@@ -117,6 +134,11 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public static void eq(final Object a, final Object b) {
         if (!a.equals(b)) {
             throw new ConstraintViolationException(
@@ -124,6 +146,13 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param d
+     * @param e
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void eqD(final double d, final double e, final Object caller)
         throws ConstraintViolationException {
         if (d != e) {
@@ -133,6 +162,13 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param i
+     * @param j
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void eqI(final int i, final int j, final Object caller)
         throws ConstraintViolationException {
         if (i != j) {
@@ -142,6 +178,12 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param s
+     * @param hm
+     * @return
+     */
     public static Double eval(final String s, final StatsMap hm) {// FIXME need
         // to try
         // StringTokenizer and
@@ -184,6 +226,12 @@ public class EvalTools {
         return null;
     }
 
+    /**
+     *
+     * @param s
+     * @param context
+     * @return
+     */
     public static Double evalContext(final String s,
         final Tuple2D<Context, Context> context) {
         // Context c1 = context.getFirst();
@@ -222,6 +270,14 @@ public class EvalTools {
         return null;
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void inRangeD(final double min, final double max,
         final double v, final Object caller)
         throws ConstraintViolationException {
@@ -241,6 +297,14 @@ public class EvalTools {
         // }
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void inRangeI(final int min, final int max, final int v,
         final Object caller) throws ConstraintViolationException {
         // for(int i:v){
@@ -259,30 +323,63 @@ public class EvalTools {
         // }
     }
 
+    /**
+     *
+     * @param min
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void gt(final int min, final int v, final Object caller) throws ConstraintViolationException {
         if (!(v > min)) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": Value was smaller or equal than expected: " + v + "<=" + min + ". Should be greater!");
         }
     }
 
+    /**
+     *
+     * @param min
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void geq(final int min, final int v, final Object caller) throws ConstraintViolationException {
         if (!(v >= min)) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": Value was smaller than expected: " + v + "<" + min + ". Should be greater or equal!");
         }
     }
 
+    /**
+     *
+     * @param max
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void lt(final int max, final int v, final Object caller) throws ConstraintViolationException {
         if (!(v < max)) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": Value was larger or equal than expected: " + v + ">=" + max + ". Should be smaller!");
         }
     }
 
+    /**
+     *
+     * @param max
+     * @param v
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void leq(final int max, final int v, final Object caller) throws ConstraintViolationException {
         if (!(v <= max)) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": Value was larger than expected: " + v + ">" + max + ". Should be smaller or equal!");
         }
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static boolean isNumber(final String s) {
         // REGEXP taken from java 6 api, java.lang.Double
         final String Digits = "(\\p{Digit}+)";
@@ -327,6 +424,11 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static boolean isOperator(final String s) {
         if (s.equals("*") || s.equals("/") || s.equals("-") || s.equals("+")
             || s.equals("(") || s.equals(")") || s.equals("^")) {
@@ -335,6 +437,12 @@ public class EvalTools {
         return false;
     }
 
+    /**
+     *
+     * @param s
+     * @param c
+     * @return
+     */
     public static boolean isVar(final String s, final Context c) {
         if (s.matches("[A-Za-z_]+") && c.has(s)) {
             return true;
@@ -342,6 +450,12 @@ public class EvalTools {
         return false;
     }
 
+    /**
+     *
+     * @param s
+     * @param stats
+     * @return
+     */
     public static boolean isVar(final String s,
         final HashMap<String, Double> stats) {
         if (s.matches("[A-Za-z_]+") && stats.containsKey(s)) {
@@ -350,12 +464,24 @@ public class EvalTools {
         return false;
     }
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public static void neq(final Object a, final Object b) {
         if (a.equals(b)) {
             throw new ConstraintViolationException("Objects a and b are equal!");
         }
     }
 
+    /**
+     *
+     * @param i
+     * @param j
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void neqD(final double i, final double j, final Object caller)
         throws ConstraintViolationException {
         if (i == j) {
@@ -365,6 +491,13 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param i
+     * @param j
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void neqI(final int i, final int j, final Object caller)
         throws ConstraintViolationException {
         if (i == j) {
@@ -373,6 +506,12 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param o
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void notNull(final Object o, final Object caller)
         throws ConstraintViolationException {
         final String message = "Argument was null!";
@@ -380,6 +519,13 @@ public class EvalTools {
             + message, caller);
     }
 
+    /**
+     *
+     * @param o
+     * @param message
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void notNull(final Object o, final String message,
         final Object caller) throws ConstraintViolationException {
         if (o == null) {
@@ -388,6 +534,12 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param o
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void notNull(final Object[] o, final Object caller)
         throws ConstraintViolationException {
         int i = 0;
@@ -403,6 +555,12 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param o
+     * @param caller
+     * @throws ConstraintViolationException
+     */
     public static void isNull(final Object o, final Object caller) throws ConstraintViolationException {
         if (o != null) {
             throw new ConstraintViolationException("Called from " + caller.toString() + ": "
@@ -410,6 +568,12 @@ public class EvalTools {
         }
     }
 
+    /**
+     *
+     * @param var
+     * @param c
+     * @return
+     */
     public static String value(final String var, final Context c) {
         if (EvalTools.isVar(var, c)) {
             EvalTools.log.debug(c.get(var.toString()).toString());
@@ -421,6 +585,12 @@ public class EvalTools {
         return String.valueOf(Double.NaN);
     }
 
+    /**
+     *
+     * @param var
+     * @param stats
+     * @return
+     */
     public static String value(final String var,
         final HashMap<String, Double> stats) {
         if (EvalTools.isVar(var, stats)) {

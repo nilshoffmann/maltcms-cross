@@ -86,6 +86,10 @@ public class ObjectFactory implements IObjectFactory {
 
     private Configuration cfg = new PropertiesConfiguration();
     private ApplicationContext context = null;
+
+    /**
+     *
+     */
     public static final String CONTEXT_LOCATION_KEY = "pipeline.xml";
 
     @Override
@@ -114,7 +118,7 @@ public class ObjectFactory implements IObjectFactory {
             }
             String[] defaultLocations = cfg.getStringArray("cross.applicationContext.defaultLocations");
             log.debug("Using default context locations: {}", Arrays.toString(defaultLocations));
-            LinkedList<String> applicationContextLocations = new LinkedList<String>(Arrays.asList(defaultLocations));
+            LinkedList<String> applicationContextLocations = new LinkedList<>(Arrays.asList(defaultLocations));
             applicationContextLocations.addAll(Arrays.asList(contextLocations));
             context = new DefaultApplicationContextFactory(applicationContextLocations, this.cfg).
                 createApplicationContext();
@@ -170,9 +174,7 @@ public class ObjectFactory implements IObjectFactory {
     private <T> T instantiateType(final Class<T> c) {
         try {
             return c.newInstance();
-        } catch (final InstantiationException e) {
-            log.error(e.getLocalizedMessage());
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             log.error(e.getLocalizedMessage());
         }
         throw new IllegalArgumentException("Could not instantiate class "

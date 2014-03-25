@@ -109,6 +109,12 @@ public class FragmentXMLSerializer implements IDataSource {
      * configurationChanged
      * (org.apache.commons.configuration.event.ConfigurationEvent)
      */
+
+    /**
+     *
+     * @param arg0
+     */
+    
     @Override
     public void configurationChanged(final ConfigurationEvent arg0) {
         // TODO Auto-generated method stub
@@ -126,6 +132,12 @@ public class FragmentXMLSerializer implements IDataSource {
         // TODO Auto-generated method stub
     }
 
+    /**
+     *
+     * @param location
+     * @return
+     * @throws IOException
+     */
     public IFileFragment deserialize(final String location) throws IOException {
         final File f = new File(location);
         log.info("Deserializing {}", f.getAbsolutePath());
@@ -144,6 +156,11 @@ public class FragmentXMLSerializer implements IDataSource {
         return ff;
     }
 
+    /**
+     *
+     * @param f
+     * @param group
+     */
     protected void handleAttributes(final IFragment f, final Element group) {
         final Element attributes = group.getChild("attributes");
         if (attributes != null) {
@@ -296,6 +313,11 @@ public class FragmentXMLSerializer implements IDataSource {
         return a;
     }
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     protected IFileFragment handleFile(final Element root) {
         final Element file = root.getChild("file");
         final Attribute filename1 = file.getAttribute("filename");
@@ -307,7 +329,7 @@ public class FragmentXMLSerializer implements IDataSource {
         final IFileFragment ff1 = new FileFragment(f.toURI());
         handleAttributes(ff1, file);
         final List<?> l = file.getChildren("namedGroup");
-        final HashSet<String> idxVars = new HashSet<String>();
+        final HashSet<String> idxVars = new HashSet<>();
         // first pass: read all non indexed variables first
         for (final Object o : l) {
             final Element group = (Element) o;
@@ -331,6 +353,12 @@ public class FragmentXMLSerializer implements IDataSource {
         return ff1;
     }
 
+    /**
+     *
+     * @param parent
+     * @param var
+     * @return
+     */
     protected IVariableFragment handleVariable(final IFileFragment parent,
         final Element var) {
         final String varname = var.getAttribute("name").getValue();
@@ -341,6 +369,12 @@ public class FragmentXMLSerializer implements IDataSource {
         return vf;
     }
 
+    /**
+     *
+     * @param parent
+     * @param var
+     * @return
+     */
     protected IVariableFragment parseVariable(final IFileFragment parent,
         final Element var) {
         final String name = var.getAttribute("name").getValue();
@@ -367,9 +401,7 @@ public class FragmentXMLSerializer implements IDataSource {
                 try {
                     r = new Range(r_name.getValue(), r_first.getIntValue(),
                         r_last.getIntValue(), r_stride.getIntValue());
-                } catch (final DataConversionException e) {
-                    log.error(e.getLocalizedMessage());
-                } catch (final InvalidRangeException e) {
+                } catch (final DataConversionException | InvalidRangeException e) {
                     log.error(e.getLocalizedMessage());
                 }
                 // if (r_name != null) {
@@ -439,7 +471,7 @@ public class FragmentXMLSerializer implements IDataSource {
                 new FileInputStream(file)));
             final Element root = doc.getRootElement();
             final List<?> l = root.getChildren("namedGroup");
-            final ArrayList<Array> al = new ArrayList<Array>();
+            final ArrayList<Array> al = new ArrayList<>();
             for (final Object o : l) {
                 final Element group = (Element) o;
                 final String name = group.getAttribute("name").getValue();
@@ -451,7 +483,7 @@ public class FragmentXMLSerializer implements IDataSource {
         } catch (final JDOMException e) {
             log.error(e.getLocalizedMessage());
         }
-        return new ArrayList<Array>(0);
+        return new ArrayList<>(0);
     }
 
     /*
@@ -536,7 +568,7 @@ public class FragmentXMLSerializer implements IDataSource {
         int index_offset = 0;
 
         // create the ArrayList, which will hold the individual arrays
-        final ArrayList<Array> al = new ArrayList<Array>(num_arrays);
+        final ArrayList<Array> al = new ArrayList<>(num_arrays);
 
         // Iterate over all arrays in range, starting at relative index 0
         // this can be translated to absolute in index_array via
@@ -629,7 +661,7 @@ public class FragmentXMLSerializer implements IDataSource {
                 new FileInputStream(file)));
             final Element root = doc.getRootElement();
             final List<?> l = root.getChildren("namedGroup");
-            final ArrayList<IVariableFragment> al = new ArrayList<IVariableFragment>();
+            final ArrayList<IVariableFragment> al = new ArrayList<>();
             for (final Object o : l) {
                 final Element group = (Element) o;
                 al.add(handleVariable(f, group));
@@ -672,6 +704,12 @@ public class FragmentXMLSerializer implements IDataSource {
             + f.getName() + " in file " + file.getAbsolutePath());
     }
 
+    /**
+     *
+     * @param iff
+     * @return
+     * @throws IOException
+     */
     public String serialize(final IFileFragment iff) throws IOException {
         final String filename = StringTools.removeFileExt(FileTools.getFilename(iff.getUri()))
             + ".maltcms.xml";

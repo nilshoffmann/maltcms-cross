@@ -43,9 +43,14 @@ public final class Combinatorics {
 
     private static double[] faculty = null;
 
+    /**
+     *
+     * @param lh
+     * @return
+     */
     public static String[][] toStringArray(Map<String, List<String>> lh) {
         String[][] s = new String[lh.size()][];
-        List<String> keys = new LinkedList<String>(lh.keySet());
+        List<String> keys = new LinkedList<>(lh.keySet());
         for (int i = 0; i < s.length; i++) {
             List<String> ls = lh.get(keys.get(i));
             s[i] = ls.toArray(new String[ls.size()]);
@@ -53,9 +58,14 @@ public final class Combinatorics {
         return s;
     }
 
+    /**
+     *
+     * @param lh
+     * @return
+     */
     public static List<Object[]> toObjectArray(Map<String, ?> lh) {
-        List<Object[]> s = new LinkedList<Object[]>();
-        List<String> keys = new LinkedList<String>(lh.keySet());
+        List<Object[]> s = new LinkedList<>();
+        List<String> keys = new LinkedList<>(lh.keySet());
         for (int i = 0; i < lh.size(); i++) {
             Object ls = lh.get(keys.get(i));
             if (ls instanceof Collection) {

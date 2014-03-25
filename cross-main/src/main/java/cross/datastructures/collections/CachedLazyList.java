@@ -44,6 +44,7 @@ import java.util.ListIterator;
  * All list-related modification methods throw {@link UnsupportedOperationException}.
  *
  * @author Nils Hoffmann
+ * @param <T>
  *
  */
 public class CachedLazyList<T> implements List<T> {
@@ -59,23 +60,37 @@ public class CachedLazyList<T> implements List<T> {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param ivf
+     * @return
+     */
     public static <T> CachedLazyList<T> getList(final IElementProvider<T> ivf) {
         return CachedLazyList.getList(ivf, 0, -1);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param ivf
+     * @param offset
+     * @param length
+     * @return
+     */
     public static <T> CachedLazyList<T> getList(final IElementProvider<T> ivf,
         final int offset, final int length) {
-        CachedLazyList<T> cl = new CachedLazyList<T>(ivf);
+        CachedLazyList<T> cl = new CachedLazyList<>(ivf);
 //        cl.setElementProvider(ivf);
         cl.init(offset, length);
         return cl;
     }
     private IElementProvider<T> ivf = null;
-    private final HashMap<Integer, SRefA> cache = new HashMap<Integer, SRefA>();
+    private final HashMap<Integer, SRefA> cache = new HashMap<>();
     private int cacheSize = 512;
     private boolean prefetchOnMiss = false;
-    private final LinkedList<Integer> lru = new LinkedList<Integer>();
-    private final ReferenceQueue<T> rq = new ReferenceQueue<T>();
+    private final LinkedList<Integer> lru = new LinkedList<>();
+    private final ReferenceQueue<T> rq = new ReferenceQueue<>();
     private int size = -1;
     private int offset = 0;
     private int cacheHit = 0;
@@ -85,10 +100,18 @@ public class CachedLazyList<T> implements List<T> {
     private int cacheLRUPURGELAST = 0;
     private int cacheSoftRefRemoved = 0;
 
+    /**
+     *
+     * @param iep
+     */
     public CachedLazyList(IElementProvider<T> iep) {
         this.ivf = iep;
     }
 
+    /**
+     *
+     * @param iep
+     */
     public void setElementProvider(IElementProvider<T> iep) {
         this.ivf = iep;
     }
@@ -153,7 +176,7 @@ public class CachedLazyList<T> implements List<T> {
         if ((arg < 0) || (arg > this.size - 1)) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + arg0);
         }
-        final Integer key = Integer.valueOf(arg);
+        final Integer key = arg;
         T a = null;
         // Lookup SoftReference to array in hashmap
         final SRefA aref = this.cache.get(key);
@@ -182,7 +205,7 @@ public class CachedLazyList<T> implements List<T> {
                 EvalTools.geq(from, to, this);
                 final List<T> l = ivf.get(from, to);
                 for (int i = 0; i < l.size(); i++) {
-                    addToCache(Integer.valueOf(arg0 + i), l.get(i));
+                    addToCache(arg0 + i, l.get(i));
                 }
                 a = l.get(0);
             } else {
@@ -199,6 +222,10 @@ public class CachedLazyList<T> implements List<T> {
         return a;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCacheSize() {
         return this.cacheSize;
     }
@@ -225,6 +252,10 @@ public class CachedLazyList<T> implements List<T> {
         return this.ivf.size() == 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPrefetchOnMiss() {
         return this.prefetchOnMiss;
     }
@@ -292,10 +323,18 @@ public class CachedLazyList<T> implements List<T> {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param cachesize
+     */
     public void setCacheSize(final int cachesize) {
         this.cacheSize = cachesize;
     }
 
+    /**
+     *
+     * @param prefetchOnMiss
+     */
     public void setPrefetchOnMiss(final boolean prefetchOnMiss) {
         this.prefetchOnMiss = prefetchOnMiss;
     }

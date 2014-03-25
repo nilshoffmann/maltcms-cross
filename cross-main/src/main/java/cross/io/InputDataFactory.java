@@ -64,6 +64,10 @@ public class InputDataFactory implements IInputDataFactory {
 
     private final static InputDataFactory idf = new InputDataFactory();
 
+    /**
+     *
+     * @return
+     */
     public static InputDataFactory getInstance() {
         return InputDataFactory.idf;
     }
@@ -102,7 +106,7 @@ public class InputDataFactory implements IInputDataFactory {
      * @return a collection of files
      */
     public Collection<File> getInputFiles(String[] input) {
-        LinkedHashSet<File> files = new LinkedHashSet<File>();
+        LinkedHashSet<File> files = new LinkedHashSet<>();
         for (String inputString : input) {
             log.debug("Processing input string {}", inputString);
             //separate wildcards from plain files
@@ -152,7 +156,7 @@ public class InputDataFactory implements IInputDataFactory {
         }
         log.info("Preparing input data!");
         log.debug("Received paths: {}", Arrays.toString(input));
-        this.initialFiles = new ArrayList<IFileFragment>();
+        this.initialFiles = new ArrayList<>();
         for (String s : input) {
             File inputFile = new File(s);
             URI uri = null;
@@ -174,6 +178,6 @@ public class InputDataFactory implements IInputDataFactory {
         if (initialFiles.isEmpty()) {
             throw new ExitVmException("Could not create input data for files " + Arrays.toString(input));
         }
-        return new TupleND<IFileFragment>(initialFiles);
+        return new TupleND<>(initialFiles);
     }
 }

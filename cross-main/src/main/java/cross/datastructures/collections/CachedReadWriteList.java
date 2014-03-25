@@ -50,12 +50,18 @@ import java.util.TreeSet;
  * List interface. All unsupported methods throw {@link UnsupportedOperationException}.
  *
  * @author Nils Hoffmann
+ * @param <T>
  */
 public class CachedReadWriteList<T> implements List<T> {
 
     private ICacheDelegate<Integer, Object> cacheDelegate;
     private ISerializationProxy<T> serializationProxy;
 
+    /**
+     *
+     * @param name
+     * @param maxElementsInMemory
+     */
     public CachedReadWriteList(String name, int maxElementsInMemory) {
         cacheDelegate = CacheFactory.createDefaultCache(name, maxElementsInMemory);
     }
@@ -71,11 +77,22 @@ public class CachedReadWriteList<T> implements List<T> {
         this.serializationProxy = serializationProxy;
     }
 
+    /**
+     *
+     * @param name
+     * @param serializationProxy
+     * @param maxElementsInMemory
+     */
     public CachedReadWriteList(String name, ISerializationProxy<T> serializationProxy, int maxElementsInMemory) {
         this(name, maxElementsInMemory);
         this.serializationProxy = serializationProxy;
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     protected Object convert(T t) {
         if (serializationProxy == null) {
             return t;
@@ -83,6 +100,11 @@ public class CachedReadWriteList<T> implements List<T> {
         return serializationProxy.convert(t);
     }
 
+    /**
+     *
+     * @param t
+     * @return
+     */
     protected T reverseConvert(Object t) {
         if (serializationProxy == null) {
             return (T) t;
@@ -90,6 +112,11 @@ public class CachedReadWriteList<T> implements List<T> {
         return serializationProxy.reverseConvert(t);
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public Serializable getSerializable(int index) {
         return (Serializable) cacheDelegate.get(index);
     }
@@ -104,10 +131,19 @@ public class CachedReadWriteList<T> implements List<T> {
         return cacheDelegate.keys().isEmpty();
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public boolean contains(Integer index) {
         return cacheDelegate.get(index) != null;
     }
 
+    /**
+     *
+     * @param index
+     */
     public void remove(Integer index) {
         cacheDelegate.put(index, null);
     }
@@ -145,9 +181,9 @@ public class CachedReadWriteList<T> implements List<T> {
         public CachedReadWriteListIterator(CachedReadWriteList crwl) {
             this.crwl = crwl;
             int size = this.crwl.size();
-            keys = new TreeSet<Integer>();
+            keys = new TreeSet<>();
             for (int i = 0; i < size; i++) {
-                keys.add(Integer.valueOf(i));
+                keys.add(i);
             }
         }
 

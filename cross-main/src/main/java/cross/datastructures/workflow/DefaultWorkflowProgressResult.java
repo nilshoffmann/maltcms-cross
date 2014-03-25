@@ -46,6 +46,12 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
     private final int numberOfSteps;
     private String[] stepNames = new String[]{""};
 
+    /**
+     *
+     * @param stepNames
+     * @param iwe
+     * @param ws
+     */
     public DefaultWorkflowProgressResult(final String[] stepNames,
         final IWorkflowElement iwe, final WorkflowSlot ws) {
         this.stepNames = stepNames;
@@ -54,6 +60,12 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
         this.ws = ws;
     }
 
+    /**
+     *
+     * @param numberOfSteps
+     * @param iwe
+     * @param ws
+     */
     public DefaultWorkflowProgressResult(final int numberOfSteps,
         final IWorkflowElement iwe, final WorkflowSlot ws) {
         this.numberOfSteps = numberOfSteps;

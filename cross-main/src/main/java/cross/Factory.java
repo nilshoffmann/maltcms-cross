@@ -84,22 +84,26 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Alternatively, you can set up the pipeline completely on your own, but
  * beware, there is only partial requirements checking between pipeline stages
- * as objectFactory now. You have to ensure, that commands early in the chain provide the
- * data needed by those commands later in the chain. If you need branching
- * behaviour, consider setting named properties for later pipeline elements to
- * use, or set up multiple instances objectFactory Maltcms with different configurations.
+ * as objectFactory now. You have to ensure, that commands early in the chain
+ * provide the data needed by those commands later in the chain. If you need
+ * branching behaviour, consider setting named properties for later pipeline
+ * elements to use, or set up multiple instances objectFactory Maltcms with
+ * different configurations.
  * </p>
  *
  * @author Nils HobjectFactoryfmann
  * @see DefaultCommandSequenceValidator for command sequence validation
- * @see DefaultApplicationContextFactoryfor configuration objectFactory the pipeline and
- * workflow
+ * @see DefaultApplicationContextFactoryfor configuration objectFactory the
+ * pipeline and workflow
  */
 @Slf4j
 public final class Factory implements IFactory {
 
     private static final IFactory factory = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
 
+    /**
+     *
+     */
     public Factory() {
     }
 
@@ -107,13 +111,13 @@ public final class Factory implements IFactory {
      * NEVER SYNCHRONIZE THIS METHOD, IT WILL BLOCK EVERYHTING WITHIN THE QUEUE!
      *
      * @param factory the factory instance to use
-     * @param time    to wait until termination objectFactory each ThreadPool
-     * @param u       the unit objectFactory time
-     * @throws InterruptedException thrown if interruption objectFactory waiting on
-     *                              termination occurs
+     * @param time to wait until termination objectFactory each ThreadPool
+     * @param u the unit objectFactory time
+     * @throws InterruptedException thrown if interruption objectFactory waiting
+     * on termination occurs
      */
     public static void awaitTermination(final IFactory factory, final long time, final TimeUnit u)
-        throws InterruptedException {
+            throws InterruptedException {
         factory.awaitTermination(time, u);
     }
 
@@ -121,7 +125,7 @@ public final class Factory implements IFactory {
      * Write current configuration to file.
      *
      * @param filename the filename to use
-     * @param d        the date stamp to use
+     * @param d the date stamp to use
      */
     public static void dumpConfig(final String filename, final Date d) {
         dumpConfig(Factory.getInstance(), filename, d);
@@ -130,9 +134,9 @@ public final class Factory implements IFactory {
     /**
      * Write current configuration to file.
      *
-     * @param factory  the factory instance to use
+     * @param factory the factory instance to use
      * @param filename the filename to use
-     * @param d        the date stamp to use
+     * @param d the date stamp to use
      */
     public static void dumpConfig(final IFactory factory, final String filename, final Date d) {
         //retrieve global, joint configuration
@@ -150,7 +154,7 @@ public final class Factory implements IFactory {
                 pipelineXml = new File(pipelineLocation);
                 //setup output location
                 final File location = new File(FileTools.prependDefaultDirsWithPrefix(
-                    "", Factory.class, d), filename);
+                        "", Factory.class, d), filename);
                 //location for pipeline.properties dump
                 final File pipelinePropertiesFileDump = new File(location.getParentFile(), pipelinePropertiesFile.getName());
 
@@ -171,12 +175,10 @@ public final class Factory implements IFactory {
                 LoggerFactory.getLogger(Factory.class).error("Saving configuration to: ");
                 LoggerFactory.getLogger(Factory.class).error("{}", location.getAbsolutePath());
                 Factory.saveConfiguration(factory, cfg, location);
-            } catch (IOException ex) {
+            } catch (IOException | ConfigurationException ex) {
                 LoggerFactory.getLogger(Factory.class).error("{}", ex);
 //            } catch (URISyntaxException ex) {
 //                Factory.getInstance().log.error("{}", ex);
-            } catch (ConfigurationException ex) {
-                LoggerFactory.getLogger(Factory.class).error("{}", ex);
             }
         } else {
             LoggerFactory.getLogger(Factory.class).warn("Can not save configuration, no pipeline properties file given!");
@@ -186,7 +188,8 @@ public final class Factory implements IFactory {
     /**
      * Return an instance objectFactory the factory.
      *
-     * @deprecated injection of the factory into components requiring access to it should be preferred.
+     * @deprecated injection of the factory into components requiring access to
+     * it should be preferred.
      * @return the factory
      */
     @Deprecated
@@ -198,23 +201,23 @@ public final class Factory implements IFactory {
     /**
      * Save the current configuration to file.
      *
-     * @param cfg      the configuration to save
+     * @param cfg the configuration to save
      * @param location the file to write to
      */
     public static void saveConfiguration(final Configuration cfg,
-        final File location) {
+            final File location) {
         saveConfiguration(Factory.getInstance(), cfg, location);
     }
 
     /**
      * Save the current configuration to file.
      *
-     * @param factory  the factory instance to use
-     * @param cfg      the configuration to save
+     * @param factory the factory instance to use
+     * @param cfg the configuration to save
      * @param location the file to write to
      */
     public static void saveConfiguration(final IFactory factory, final Configuration cfg,
-        final File location) {
+            final File location) {
         if (cfg instanceof FileConfiguration) {
             try {
                 ((FileConfiguration) cfg).save(location);
@@ -244,7 +247,7 @@ public final class Factory implements IFactory {
     private int maxthreads = 1;
     @Configurable
     private String name = "default";
-    
+
     private transient CompositeConfiguration configuration = new CompositeConfiguration();
     private transient ExecutorService mainThreadPool;
     private transient ExecutorService auxiliaryThreadPool;
@@ -257,14 +260,13 @@ public final class Factory implements IFactory {
     @Override
     public void configurationChanged(final ConfigurationEvent event) {
         log.debug("Configuration changed for property: "
-            + event.getPropertyName() + " to value "
-            + event.getPropertyValue());
+                + event.getPropertyName() + " to value "
+                + event.getPropertyValue());
 
     }
 
     /**
-     * Call configure before retrieving an instance objectFactory ArrayFactory. This
-     * ensures, that the factory is instantiated with a fixed config.
+     * Call configure to ensure, that the factory is up to date.
      *
      * @param config the configuration to use
      */
@@ -274,6 +276,11 @@ public final class Factory implements IFactory {
         configureMe(config);
     }
 
+    /**
+     * Configures the factory.
+     *
+     * @param config1 the configuration to use
+     */
     protected void configureMe(final Configuration config1) {
         EvalTools.notNull(config1, this);
         this.configuration = new CompositeConfiguration();
@@ -295,13 +302,13 @@ public final class Factory implements IFactory {
         this.maxthreads = cfg.getInt("cross.Factory.maxthreads", 1);
         final int numProcessors = Runtime.getRuntime().availableProcessors();
         this.log.debug("{} processors available to current runtime",
-            numProcessors);
+                numProcessors);
         if (this.maxthreads < 1) {
             this.log.debug("Automatically selecting {} threads according to number of available processors!", this.maxthreads);
             this.maxthreads = numProcessors;
         }
         this.maxthreads = (this.maxthreads < numProcessors) ? this.maxthreads
-            : numProcessors;
+                : numProcessors;
         cfg.setProperty("cross.Factory.maxthreads", this.maxthreads);
         cfg.setProperty("maltcms.pipelinethreads", this.maxthreads);
         this.log.debug("Starting with Thread-Pool of size: " + this.maxthreads);
@@ -327,19 +334,19 @@ public final class Factory implements IFactory {
     @Override
     public ICommandSequence createCommandSequence(final TupleND<IFileFragment> t) {
         final ICommandSequence cd = getObjectFactory().instantiate(
-            CommandPipeline.class);
+                CommandPipeline.class);
         EvalTools.notNull(cd, this);
         //final IWorkflow iw = getObjectFactory().instantiate(IWorkflow.class);
         File outputDir = new File(getConfiguration().getString(
-            "output.basedir", System.getProperty("user.dir")));
+                "output.basedir", System.getProperty("user.dir")));
         //add username and timestamp as subdirectories
         if (!getConfiguration().getBoolean("omitUserTimePrefix", false)) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "MM-dd-yyyy_HH-mm-ss", Locale.US);
+                    "MM-dd-yyyy_HH-mm-ss", Locale.US);
             String userName = System.getProperty("user.name", "default");
             outputDir = new File(outputDir, userName);
             outputDir = new File(outputDir, dateFormat.format(
-                cd.getWorkflow().getStartupDate()));
+                    cd.getWorkflow().getStartupDate()));
         }
         outputDir.mkdirs();
         cd.getWorkflow().setOutputDirectory(outputDir);
@@ -347,7 +354,7 @@ public final class Factory implements IFactory {
         cd.getWorkflow().setFactory(this);
         if (t == null) {
             cd.setInput(getInputDataFactory().prepareInputData(getConfiguration().
-                getStringArray("input.dataInfo")));
+                    getStringArray("input.dataInfo")));
         } else {
             cd.setInput(t);
         }
@@ -365,6 +372,11 @@ public final class Factory implements IFactory {
         return getConfigurationMe();
     }
 
+    /**
+     * Return the current configuration.
+     *
+     * @return the current configuration
+     */
     protected Configuration getConfigurationMe() {
         if (this.configuration == null) {
             this.log.warn("Configuration not set, creating empty one!");
@@ -397,8 +409,8 @@ public final class Factory implements IFactory {
     }
 
     /**
-     * Return the current input data factory, responsible for handling objectFactory input
-     * data.
+     * Return the current input data factory, responsible for handling
+     * objectFactory input data.
      *
      * @return the input data factory
      * @see cross.io.IInputDataFactory
@@ -455,8 +467,8 @@ public final class Factory implements IFactory {
     }
 
     /**
-     * Return the current file fragment factory, responsible for creating
-     * file fragments.
+     * Return the current file fragment factory, responsible for creating file
+     * fragments.
      *
      * @return the file fragment factory
      * @see cross.datastructures.fragments.IFileFragmentFactory
@@ -488,7 +500,7 @@ public final class Factory implements IFactory {
     public void shutdown() {
         if ((this.mainThreadPool == null) || (this.auxiliaryThreadPool == null)) {
             throw new IllegalArgumentException(
-                "ExecutorService not initialized!");
+                    "ExecutorService not initialized!");
         }
 
         this.mainThreadPool.shutdown();
@@ -498,17 +510,16 @@ public final class Factory implements IFactory {
 
     /**
      * Attempts to shutdown all executing threads immediately, and returns a
-     * list objectFactory all {@link Runnable} instances that were executing or were
-     * waiting to be executed when
-     * <code>shutdownNow</code> was called.
+     * list objectFactory all {@link Runnable} instances that were executing or
+     * were waiting to be executed when <code>shutdownNow</code> was called.
      */
     @Override
     public List<Runnable> shutdownNow() {
         if ((this.mainThreadPool == null) || (this.auxiliaryThreadPool == null)) {
             throw new IllegalArgumentException(
-                "ExecutorService not initialized!");
+                    "ExecutorService not initialized!");
         }
-        final List<Runnable> l = new ArrayList<Runnable>();
+        final List<Runnable> l = new ArrayList<>();
         l.addAll(this.mainThreadPool.shutdownNow());
         l.addAll(this.auxiliaryThreadPool.shutdownNow());
         return l;
@@ -517,9 +528,9 @@ public final class Factory implements IFactory {
     @Override
     public void awaitTermination(long time, TimeUnit u) {
         if ((this.mainThreadPool == null)
-            || (this.auxiliaryThreadPool == null)) {
+                || (this.auxiliaryThreadPool == null)) {
             throw new IllegalArgumentException(
-                "ExecutorService not initialized!");
+                    "ExecutorService not initialized!");
         }
         try {
             this.auxiliaryThreadPool.awaitTermination(time, u);
@@ -554,11 +565,21 @@ public final class Factory implements IFactory {
         submitJobMe(r);
     }
 
+    /**
+     * Submit a Runnable to the main thread pool.
+     *
+     * @param r the runnable
+     */
     protected void submitJobMe(final Runnable r) {
         EvalTools.notNull(r, this);
         this.mainThreadPool.execute(r);
     }
 
+    /**
+     * Set the configuration on the factory instance.
+     *
+     * @param config the configuration
+     */
     @Override
     public void setConfiguration(Configuration config) {
         EvalTools.notNull(config, Factory.class);

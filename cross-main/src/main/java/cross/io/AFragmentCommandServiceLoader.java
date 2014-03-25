@@ -77,7 +77,7 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     public List<AFragmentCommand> getAvailableCommands() {
         ServiceLoader<AFragmentCommand> sl = ServiceLoader
             .load(AFragmentCommand.class);
-        HashSet<AFragmentCommand> s = new HashSet<AFragmentCommand>();
+        HashSet<AFragmentCommand> s = new HashSet<>();
         for (AFragmentCommand ifc : sl) {
             s.add(ifc);
         }
@@ -91,7 +91,7 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
      * @return the list of user commands
      */
     public List<AFragmentCommand> getAvailableUserCommands(ObjectFactory of) {
-        HashSet<AFragmentCommand> s = new HashSet<AFragmentCommand>();
+        HashSet<AFragmentCommand> s = new HashSet<>();
         for (String uc : fragmentCommands) {
             try {
                 AFragmentCommand af = of
@@ -113,7 +113,7 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
      */
     public List<AFragmentCommand> createSortedListFromSet(
         Set<AFragmentCommand> s, Comparator<AFragmentCommand> comp) {
-        ArrayList<AFragmentCommand> al = new ArrayList<AFragmentCommand>();
+        ArrayList<AFragmentCommand> al = new ArrayList<>();
         al.addAll(s);
         Collections.sort(al, comp);
         return al;

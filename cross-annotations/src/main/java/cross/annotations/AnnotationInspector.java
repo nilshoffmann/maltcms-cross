@@ -56,7 +56,7 @@ public final class AnnotationInspector {
      */
     public static Collection<String> getOptionalRequiredVariables(
         final Class<?> c) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeOptionalRequiredVariables(c, coll);
         AnnotationInspector.inspectTypeOptionalRequiredVariables(c.getSuperclass(), coll);
         return coll;
@@ -69,7 +69,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredVariables(final Class<?> c) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeRequiredVariables(c, coll);
         AnnotationInspector.inspectTypeRequiredVariables(c.getSuperclass(),
             coll);
@@ -83,7 +83,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getProvidedVariables(final Class<?> c) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeProvidedVariables(c, coll);
         final Class<?> clazz = c.getSuperclass();
         if (clazz != null) {
@@ -99,7 +99,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getOptionalRequiredVariables(final Object o) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeOptionalRequiredVariables(o.getClass(),
             coll);
         final Class<?> clazz = o.getClass().getSuperclass();
@@ -117,7 +117,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredVariables(final Object o) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeRequiredVariables(o.getClass(), coll);
         final Class<?> clazz = o.getClass().getSuperclass();
         if (clazz != null) {
@@ -133,7 +133,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getProvidedVariables(final Object o) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         AnnotationInspector.inspectTypeProvidedVariables(o.getClass(), coll);
         final Class<?> clazz = o.getClass().getSuperclass();
         if (clazz != null) {
@@ -149,7 +149,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredConfigKeys(final Class<?> c) {
-        final Collection<String> coll = new ArrayList<String>();
+        final Collection<String> coll = new ArrayList<>();
         final Class<?> clazz = c;
         if (clazz != null) {
             AnnotationInspector.inspectFields(clazz, coll);
@@ -164,7 +164,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredConfigFieldNames(final Class<?> c) {
-        final ArrayList<String> coll = new ArrayList<String>();
+        final ArrayList<String> coll = new ArrayList<>();
         final Class<?> clazz = c;
         if (clazz != null) {
             AnnotationInspector.inspectUnqualifiedFieldNames(clazz, coll);
@@ -180,7 +180,7 @@ public final class AnnotationInspector {
      * @return a {@link java.util.Collection} object.
      */
     public static Collection<String> getRequiredConfigKeys(final Object o) {
-        final ArrayList<String> coll = new ArrayList<String>();
+        final ArrayList<String> coll = new ArrayList<>();
         AnnotationInspector.inspectFields(o.getClass(), coll);
         final Class<?> clazz = o.getClass().getSuperclass();
         if (clazz != null) {

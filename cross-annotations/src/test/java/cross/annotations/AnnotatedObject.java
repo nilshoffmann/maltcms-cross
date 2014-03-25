@@ -50,18 +50,34 @@ public class AnnotatedObject {
     private String field3;
     private Long field4 = 1l;
 
+    /**
+     *
+     * @return
+     */
     public static final List<String> getRequiredVariables() {
         return Arrays.asList("a", "b", "c");
     }
 
+    /**
+     *
+     * @return
+     */
     public static final List<String> getOptionalRequiredVariables() {
         return Arrays.asList("e");
     }
 
+    /**
+     *
+     * @return
+     */
     public static final List<String> getProvidedVariables() {
         return Arrays.asList("b", "d");
     }
 
+    /**
+     *
+     * @return
+     */
     public static final List<String> getRequiredConfigKeys() {
         return Arrays.asList("cross.annotations.AnnotatedObject.myField1", "cross.annotations.AnnotatedObject.field2", "cross.annotations.AnnotatedObject.field3");
     }

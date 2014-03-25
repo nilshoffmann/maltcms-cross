@@ -63,10 +63,14 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
     private final Ehcache cache;
     private final Map<IVariableFragment, List<Array>> keys;
 
+    /**
+     *
+     * @param cache
+     */
     public VariableFragmentArrayCache(final Ehcache cache) {
         this.cache = cache;
         this.cacheName = cache.getName();
-        this.keys = new HashMap<IVariableFragment, List<Array>>();
+        this.keys = new HashMap<>();
     }
 
     @Override
@@ -92,7 +96,7 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
                 List c = (List) value;
                 if (c.size() > 0) {
                     //System.out.println("Converting array to serializable array for " + key);
-                    List l = new ArrayList<SerializableArray>(c.size());
+                    List l = new ArrayList<>(c.size());
                     for (Object object : c) {
                         l.add(new SerializableArray((Array) object));
                     }
@@ -105,6 +109,11 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
         }
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String getVariableFragmentId(IVariableFragment key) {
         return key.getParent().getName() + ">" + key.getName();
     }
@@ -121,7 +130,7 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
                     List<SerializableArray> c = (List<SerializableArray>) element.getValue();
                     if (c != null && c.size() > 0) {
                         //System.out.println("Converting serializable array to array for " + key);
-                        List<Array> l = new ArrayList<Array>(c.size());
+                        List<Array> l = new ArrayList<>(c.size());
                         for (Object object : c) {
                             l.add(((SerializableArray) object).getArray());
                         }
@@ -144,6 +153,10 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
 //		cache.dispose();
     }
 
+    /**
+     *
+     * @return
+     */
     public Ehcache getCache() {
         if (cache.getStatus() != Status.STATUS_ALIVE) {
             cache.dispose();

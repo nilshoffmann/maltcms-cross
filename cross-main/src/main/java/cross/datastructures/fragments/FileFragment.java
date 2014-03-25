@@ -105,8 +105,16 @@ import ucar.nc2.Dimension;
 @Slf4j
 public final class FileFragment implements IFileFragment {
 
+    /**
+     *
+     */
     public static final String NUMBERFORMAT = "%010d";
 
+    /**
+     *
+     * @param ff
+     * @return
+     */
     public static String printFragment(final IFileFragment ff) {
         final StringBuffer sb = new StringBuffer();
         final List<Attribute> attrs = ff.getAttributes();
@@ -158,10 +166,10 @@ public final class FileFragment implements IFileFragment {
      * Create a FileFragment
      */
     public FileFragment() {
-        this.sourcefiles = new LinkedHashMap<URI, IFileFragment>();
+        this.sourcefiles = new LinkedHashMap<>();
         this.fID = FileFragment.FID++;
-        this.children = new ConcurrentHashMap<String, IVariableFragment>();
-        this.dims = new LinkedHashMap<String, Dimension>();
+        this.children = new ConcurrentHashMap<>();
+        this.dims = new LinkedHashMap<>();
         this.bvs = new BfsVariableSearcher();
         setFile(new File(getDefaultFilename()).toURI());
     }
@@ -204,6 +212,7 @@ public final class FileFragment implements IFileFragment {
      * cache has not yet been initialized (is null). Throws an
      * {@link IllegalStateException} otherwise to prevent loss of cached data.
      *
+     * @param persistentCache
      * @throws IllegalStateException
      */
     @Override
@@ -372,7 +381,7 @@ public final class FileFragment implements IFileFragment {
 
     @Override
     public void clearArrays() throws IllegalStateException {
-        List<IVariableFragment> toRemove = new LinkedList<IVariableFragment>();
+        List<IVariableFragment> toRemove = new LinkedList<>();
         for (final IVariableFragment ivf : this.getImmediateChildren()) {
             if (ivf.isModified()) {
                 log.warn(
@@ -486,7 +495,7 @@ public final class FileFragment implements IFileFragment {
 
     @Override
     public List<IVariableFragment> getImmediateChildren() {
-        return Collections.unmodifiableList(new ArrayList<IVariableFragment>(this.children.values()));
+        return Collections.unmodifiableList(new ArrayList<>(this.children.values()));
     }
 
     @Override
@@ -601,6 +610,10 @@ public final class FileFragment implements IFileFragment {
         return sb.toString() + this.fileExtension;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isModified() {
         for (final IVariableFragment ivf : this) {
@@ -613,7 +626,7 @@ public final class FileFragment implements IFileFragment {
 
     @Override
     public Iterator<IVariableFragment> iterator() {
-        final ArrayList<IVariableFragment> al = new ArrayList<IVariableFragment>(
+        final ArrayList<IVariableFragment> al = new ArrayList<>(
             this.children.size());
         if (this.children.isEmpty()) {
             try {
@@ -679,7 +692,7 @@ public final class FileFragment implements IFileFragment {
             if (variableFragment.getIndex() != null) {
                 throw new ConstraintViolationException("Tried to remove a variable that references an index variable: " + variableFragment.getName() + "; index: " + variableFragment.getIndex().getName());
             }
-            List<IVariableFragment> indexReferents = new LinkedList<IVariableFragment>();
+            List<IVariableFragment> indexReferents = new LinkedList<>();
             for (IVariableFragment other : this.children.values()) {
                 if (other.getIndex() != null) {
                     if (other.getIndex().getName().equals(variableFragment.getName())) {
@@ -805,15 +818,29 @@ public final class FileFragment implements IFileFragment {
         setFile(f1.toURI());
     }
 
+    /**
+     *
+     * @param uri
+     */
     protected void setFile(final URI uri) {
         setFile(uri.toString());
     }
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     protected boolean isFile(final String path) {
         File f = new File(path);
         return f.isFile();
     }
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     protected boolean isURI(final String path) {
         URI uri = URI.create(FileTools.escapeUri(path));
         if (uri.getScheme() == null || uri.getScheme().isEmpty()) {
@@ -848,6 +875,7 @@ public final class FileFragment implements IFileFragment {
 
     /**
      * Returns a string containing all VariableNames and Ranges.
+     * @return 
      */
     protected String structureToString() {
         final StringBuilder sb = new StringBuilder();
@@ -902,7 +930,7 @@ public final class FileFragment implements IFileFragment {
             save();
         }
         // store id
-        out.writeObject(Long.valueOf(this.fID));
+        out.writeObject(this.fID);
         // store path to storage
         out.writeObject(this.u.toString());
         out.flush();
@@ -911,7 +939,7 @@ public final class FileFragment implements IFileFragment {
 
     @Override
     public Set<Dimension> getDimensions() {
-        return Collections.unmodifiableSet(new LinkedHashSet<Dimension>(this.dims.values()));
+        return Collections.unmodifiableSet(new LinkedHashSet<>(this.dims.values()));
     }
 
     @Override

@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NoCacheManager {
 
-    private static Map<String, NoCache> caches = new ConcurrentHashMap<String, NoCache>();
+    private static Map<String, NoCache> caches = new ConcurrentHashMap<>();
     private static NoCacheManager instance;
 
     private NoCacheManager() {
@@ -69,7 +69,7 @@ public class NoCacheManager {
     public <K, V> ICacheDelegate<K, V> getCache(String name) {
         NoCache<K, V> delegate = caches.get(name);
         if (delegate == null) {
-            delegate = new NoCache<K, V>(name);
+            delegate = new NoCache<>(name);
             caches.put(name, delegate);
         }
         return delegate;

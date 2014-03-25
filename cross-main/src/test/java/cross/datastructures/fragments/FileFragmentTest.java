@@ -63,10 +63,21 @@ import ucar.ma2.ArrayChar;
 @Slf4j
 public class FileFragmentTest {
 
+    /**
+     *
+     */
     @Rule
     public LogMethodName logMethodName = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
+
+    /**
+     *
+     */
     @Rule
     public TemporaryFolder tf = new TemporaryFolder();
 
@@ -79,6 +90,9 @@ public class FileFragmentTest {
         Fragments.setDefaultFragmentCacheType(CacheType.NONE);
     }
 
+    /**
+     *
+     */
     @Test
     public void testUriEquality() {
 
@@ -90,6 +104,9 @@ public class FileFragmentTest {
         Assert.assertEquals(uri2, uri3);
     }
 
+    /**
+     *
+     */
     @Test
     public void testUriRelativization() {
         log.info("File to file");
@@ -153,6 +170,9 @@ public class FileFragmentTest {
         Assert.assertEquals(URI.create("otherOutput/oof.cdf"), relative1112);
     }
 
+    /**
+     *
+     */
     @Test
     public void testSourceFilesRelativization() {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -174,7 +194,7 @@ public class FileFragmentTest {
         log.info("Raw Source files from array: {}", a);
         Assert.assertEquals(sourceFiles[0].getUri(), URI.create(a.getString(0)));
         Assert.assertEquals(local3.getUri(), FileTools.resolveRelativeUri(local4.getUri(), URI.create(a.getString(1))));
-        ArrayList<IFileFragment> resolvedSourceFiles = new ArrayList<IFileFragment>(local4.getSourceFiles());
+        ArrayList<IFileFragment> resolvedSourceFiles = new ArrayList<>(local4.getSourceFiles());
         for (int i = 0; i < sourceFiles.length; i++) {
             Assert.assertEquals(resolvedSourceFiles.get(i).getUri(), sourceFiles[i].getUri());
         }
@@ -199,6 +219,9 @@ public class FileFragmentTest {
         Assert.assertEquals(URI.create(FileTools.escapeUri("otherOutput/oof 1.cdf")), FragmentTools.resolve(f5, f3));
     }
 
+    /**
+     *
+     */
     @Test
     public void testSourceFilesEquality() {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -225,6 +248,9 @@ public class FileFragmentTest {
         Assert.assertEquals(c, cs);
     }
 
+    /**
+     *
+     */
     @Test
     public void testBreadthFirstSearch() {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -254,6 +280,9 @@ public class FileFragmentTest {
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testBreadthFirstDifferentDepthSearch() {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -287,6 +316,9 @@ public class FileFragmentTest {
 
     }
 
+    /**
+     *
+     */
     @Test(expected = ConstraintViolationException.class)
     public void testBreadthFirstSameDepthSearch() {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -323,6 +355,10 @@ public class FileFragmentTest {
 
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Test
     public void testVariableFragmentEquality() throws IOException {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
@@ -345,6 +381,10 @@ public class FileFragmentTest {
         Assert.assertNull(f.getChild("indexVar1").getIndex());
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Test
     public void testGetName() throws IOException {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "DEBUG");
@@ -354,16 +394,21 @@ public class FileFragmentTest {
         Assert.assertTrue(plainName.endsWith(".D"));
     }
 
+    /**
+     *
+     * @param folder
+     * @return
+     */
     public IFileFragment createTestFragment(File folder) {
         IFileFragment f = new FileFragment(folder, "testFragment.cdf");
         f.addChild("variable1").setIndex(f.addChild("indexVar1"));
-        List<Array> l1 = new ArrayList<Array>();
+        List<Array> l1 = new ArrayList<>();
         l1.add(Array.factory(new double[]{1.2, 1.5}));
         l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
         l1.add(Array.factory(new double[]{3.67}));
         f.getChild("variable1").setIndexedArray(l1);
         f.addChild("variable2").setIndex(f.getChild("indexVar1"));
-        List<Array> l2 = new ArrayList<Array>();
+        List<Array> l2 = new ArrayList<>();
         l2.add(Array.factory(new int[]{1, 1}));
         l2.add(Array.factory(new int[]{2, 2, 2}));
         l2.add(Array.factory(new int[]{3}));
@@ -384,10 +429,9 @@ public class FileFragmentTest {
         logging.setLogLevel("log4j.category.cross.datastructures.fragments", "INFO");
         logging.setLogLevel("log4j.category.cross.io", "INFO");
         IFileFragment f = createTestFragment(tf.newFolder());
-        List<IVariableFragment> originalChildren = new ArrayList<IVariableFragment>(f.getImmediateChildren());
+        List<IVariableFragment> originalChildren = new ArrayList<>(f.getImmediateChildren());
         File outputFile = new File(tf.newFolder(), "serializedFile.ser");
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile));
-        try {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile))) {
             f.writeExternal(oos);
             f = new FileFragment(f.getUri());
 //			f.readStructure();
@@ -408,8 +452,6 @@ public class FileFragmentTest {
             } finally {
                 ois.close();
             }
-        } finally {
-            oos.close();
         }
 
     }

@@ -125,6 +125,7 @@ public final class VariableFragment implements IVariableFragment {
      *
      * @param ff the parent file fragment for the new variable fragment
      * @param vf the variable fragment to copy the structure from
+     * @return 
      */
     public static IVariableFragment createCompatible(IFileFragment ff,
         IVariableFragment vf) {
@@ -162,6 +163,10 @@ public final class VariableFragment implements IVariableFragment {
         setIndex(ifrg);
     }
 
+    /**
+     *
+     * @return
+     */
     protected Array getArrayRef() {
         List<Array> l = parent.getCache().get(this);
         if (l != null) {
@@ -367,7 +372,7 @@ public final class VariableFragment implements IVariableFragment {
             clear();
         } else {
             this.isModified = true;
-            ArrayList<Array> list = new ArrayList<Array>(1);
+            ArrayList<Array> list = new ArrayList<>(1);
             list.add(a1);
             parent.getCache().put(this, list);
             setDataType(DataType.getType(a1.getElementType()));
@@ -423,6 +428,10 @@ public final class VariableFragment implements IVariableFragment {
 //        }
     }
 
+    /**
+     *
+     * @param al1
+     */
     protected void setIndexedArrayInternal(final List<Array> al1) {
         if (al1 != null && !al1.isEmpty()) {
             this.isModified = true;

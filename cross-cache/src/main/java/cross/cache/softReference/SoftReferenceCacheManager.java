@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SoftReferenceCacheManager {
 
-    private static Map<String, SoftReferenceCache> caches = new ConcurrentHashMap<String, SoftReferenceCache>();
+    private static Map<String, SoftReferenceCache> caches = new ConcurrentHashMap<>();
     private static SoftReferenceCacheManager instance;
 
     private SoftReferenceCacheManager() {
@@ -70,7 +70,7 @@ public class SoftReferenceCacheManager {
     public <K, V> ICacheDelegate<K, V> getCache(String name) {
         SoftReferenceCache<K, V> delegate = caches.get(name);
         if (delegate == null) {
-            delegate = new SoftReferenceCache<K, V>(name);
+            delegate = new SoftReferenceCache<>(name);
             caches.put(name, delegate);
         }
         return delegate;
@@ -89,7 +89,7 @@ public class SoftReferenceCacheManager {
     public <K, V> ICacheDelegate<K, V> getAutoRetrievalCache(String name, ICacheElementProvider<K, V> provider) {
         SoftReferenceCache<K, V> delegate = caches.get(name);
         if (delegate == null) {
-            delegate = new AutoRetrievalSoftReferenceCache<K, V>(name, provider);
+            delegate = new AutoRetrievalSoftReferenceCache<>(name, provider);
             caches.put(name, delegate);
         }
         return delegate;

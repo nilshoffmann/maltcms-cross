@@ -39,6 +39,7 @@ import org.jdom.Element;
  * DefaultWorkflowResult.
  *
  * @author Nils Hoffmann
+ * @param <T>
  * @deprecated
  */
 @Slf4j
@@ -51,9 +52,19 @@ public class DefaultWorkflowObjectResult<T> implements IWorkflowObjectResult<T> 
     private IWorkflowElement workflowElement = null;
     private IFileFragment[] resources = null;
 
+    /**
+     *
+     */
     public DefaultWorkflowObjectResult() {
     }
 
+    /**
+     *
+     * @param t
+     * @param iwe1
+     * @param ws1
+     * @param resources
+     */
     public DefaultWorkflowObjectResult(final T t, final IWorkflowElement iwe1,
         final WorkflowSlot ws1, IFileFragment... resources) {
         this();

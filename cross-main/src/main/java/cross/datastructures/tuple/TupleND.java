@@ -54,16 +54,27 @@ public class TupleND<T extends Serializable> implements Collection<T>,
     private static final long serialVersionUID = 3369621175169080132L;
     private final List<T> c;
 
+    /**
+     *
+     * @param c1
+     */
     public TupleND(final Collection<T> c1) {
-        this.c = new ArrayList<T>(c1);
+        this.c = new ArrayList<>(c1);
     }
 
+    /**
+     *
+     */
     public TupleND() {
-        this.c = new ArrayList<T>();
+        this.c = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param ts
+     */
     public TupleND(final T... ts) {
-        this.c = new ArrayList<T>(ts.length);
+        this.c = new ArrayList<>(ts.length);
         for (final T t : ts) {
             this.c.add(t);
         }
@@ -94,22 +105,44 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return this.c.containsAll(c1);
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public T get(final int n) {
         return this.c.get(n);
     }
 
+    /**
+     *
+     * @return
+     */
     public Iterator<T> getIterator() {
         return this.c.iterator();
     }
 
+    /**
+     *
+     * @return
+     */
     public ListIterator<T> getListIterator() {
         return this.c.listIterator();
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public ListIterator<T> getListIterator(final int index) {
         return this.c.listIterator(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNumberOfPairs() {
         return getSize() * (getSize() - 1) / 2;
     }
@@ -121,14 +154,14 @@ public class TupleND<T extends Serializable> implements Collection<T>,
      * @return the unique pairs without repetition
      */
     public List<Tuple2D<T, T>> getPairs() {
-        final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(
+        final ArrayList<Tuple2D<T, T>> al = new ArrayList<>(
             getNumberOfPairs());
         // int size = getNumberOfPairs();
         int cnt = 1;
         for (int i = 0; i < this.c.size() - 1; i++) {
             for (int j = i + 1; j < this.c.size(); j++) {
                 // System.out.println("Adding pair " + cnt + " of " + size);
-                al.add(new Tuple2D<T, T>(this.c.get(i), this.c.get(j)));
+                al.add(new Tuple2D<>(this.c.get(i), this.c.get(j)));
                 cnt++;
             }
         }
@@ -144,12 +177,12 @@ public class TupleND<T extends Serializable> implements Collection<T>,
      */
     public List<Tuple2D<T, T>> getPairsWithFirstElement() {
         final T first = this.c.get(0);
-        final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
+        final ArrayList<Tuple2D<T, T>> al = new ArrayList<>(this.c
             .size() - 1);
         // int size = this.c.size() - 1;
         for (int i = 1; i < this.c.size(); i++) {
             // System.out.println("Adding pair " + i + " of " + size);
-            al.add(new Tuple2D<T, T>(first, this.c.get(i)));
+            al.add(new Tuple2D<>(first, this.c.get(i)));
         }
 
         return Collections.unmodifiableList(al);
@@ -163,17 +196,21 @@ public class TupleND<T extends Serializable> implements Collection<T>,
      */
     public List<Tuple2D<T, T>> getPairsWithLastElement() {
         final T last = this.c.get(this.c.size() - 1);
-        final ArrayList<Tuple2D<T, T>> al = new ArrayList<Tuple2D<T, T>>(this.c
+        final ArrayList<Tuple2D<T, T>> al = new ArrayList<>(this.c
             .size() - 1);
         final int size = this.c.size() - 1;
         for (int i = 0; i < size; i++) {
             // System.out.println("Adding pair " + i + " of " + size);
-            al.add(new Tuple2D<T, T>(last, this.c.get(i)));
+            al.add(new Tuple2D<>(last, this.c.get(i)));
         }
 
         return Collections.unmodifiableList(al);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSize() {
         return this.c.size();
     }
@@ -188,6 +225,11 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return getIterator();
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public T remove(final int n) {
         return this.c.remove(n);
     }
@@ -218,7 +260,7 @@ public class TupleND<T extends Serializable> implements Collection<T>,
 //		System.out.println("Clearing collection!");
         this.c.clear();
         final Iterator<Tuple2D<T, T>> iter = coll.iterator();
-        final HashSet<T> hm = new HashSet<T>();
+        final HashSet<T> hm = new HashSet<>();
 //		System.out.println("Adding new Pairs!");
         while (iter.hasNext()) {
             final Tuple2D<T, T> tuple = iter.next();

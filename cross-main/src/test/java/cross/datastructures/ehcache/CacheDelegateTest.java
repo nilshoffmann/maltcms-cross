@@ -75,6 +75,10 @@ public class CacheDelegateTest {
      */
     @Rule
     public TemporaryFolder tf = new TemporaryFolder();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
 
@@ -100,6 +104,8 @@ public class CacheDelegateTest {
 
     /**
      *
+     * @throws java.io.IOException
+     * @throws IOException
      */
     @Test
     public void cachedVariableFragment() throws IOException {
@@ -118,7 +124,7 @@ public class CacheDelegateTest {
             VariableFragment vfIndex = new VariableFragment(ff, "index" + j);
             vfIndex.setArray(new ArrayInt.D1(20));
             VariableFragment vf2 = new VariableFragment(ff, "b" + j, vfIndex);
-            List<Array> l = new ArrayList<Array>();
+            List<Array> l = new ArrayList<>();
             Array indexArray = vfIndex.getArray();
             int offset = 0;
             for (int i = 0; i < 20; i++) {
@@ -142,6 +148,7 @@ public class CacheDelegateTest {
 
     /**
      *
+     * @throws IOException
      */
     @Test
     public void customCachedVariableFragment() throws IOException {
@@ -171,7 +178,7 @@ public class CacheDelegateTest {
             VariableFragment vfIndex = new VariableFragment(ff, "index" + j);
             vfIndex.setArray(new ArrayInt.D1(20));
             VariableFragment vf2 = new VariableFragment(ff, "b" + j, vfIndex);
-            List<Array> l = new ArrayList<Array>();
+            List<Array> l = new ArrayList<>();
             Array indexArray = vfIndex.getArray();
             int offset = 0;
             for (int i = 0; i < 20; i++) {

@@ -44,6 +44,13 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class Base64Util {
 
+    /**
+     *
+     * @param base64String
+     * @param bigEndian
+     * @return
+     * @throws DecoderException
+     */
     public static List<Float> base64StringToFloatList(
         final String base64String, final boolean bigEndian)
         throws DecoderException {
@@ -55,6 +62,13 @@ public class Base64Util {
         return floatList;
     }
 
+    /**
+     *
+     * @param raw
+     * @param bigEndian
+     * @param length
+     * @return
+     */
     public static double[] byteArrayToDoubleArray(final byte[] raw,
         final boolean bigEndian, final int length) {
         final double[] d = new double[length];
@@ -105,6 +119,13 @@ public class Base64Util {
         return d;
     }
 
+    /**
+     *
+     * @param raw
+     * @param bigEndian
+     * @param length
+     * @return
+     */
     public static float[] byteArrayToFloatArray(final byte[] raw,
         final boolean bigEndian, final int length) {
         final float[] f = new float[length];
@@ -139,9 +160,15 @@ public class Base64Util {
         return f;
     }
 
+    /**
+     *
+     * @param raw
+     * @param bigEndian
+     * @return
+     */
     public static List<Float> byteArrayToFloatList(final byte[] raw,
         final boolean bigEndian) {
-        final List<Float> f = new ArrayList<Float>();
+        final List<Float> f = new ArrayList<>();
         if (bigEndian) {
             for (int iii = 0; iii < raw.length; iii += 4) {
                 int ieee754 = 0;
@@ -153,7 +180,7 @@ public class Base64Util {
                 ieee754 <<= 8;
                 ieee754 |= ((raw[iii + 3]) & 0xff);
                 final float aFloat = Float.intBitsToFloat(ieee754);
-                f.add(Float.valueOf(aFloat));
+                f.add(aFloat);
             }
         } else {
             for (int iii = 0; iii < raw.length; iii += 4) {
@@ -166,12 +193,19 @@ public class Base64Util {
                 ieee754 <<= 8;
                 ieee754 |= ((raw[iii]) & 0xff);
                 final float aFloat = Float.intBitsToFloat(ieee754);
-                f.add(Float.valueOf(aFloat));
+                f.add(aFloat);
             }
         }
         return f;
     }
 
+    /**
+     *
+     * @param floatList
+     * @param bigEndian
+     * @return
+     * @throws EncoderException
+     */
     public static String floatListToBase64String(final List<Float> floatList,
         final boolean bigEndian) throws EncoderException {
         final byte[] raw = Base64Util

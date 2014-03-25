@@ -39,14 +39,26 @@ import java.util.HashMap;
  */
 public class PublicMemberGetters<T> {
 
+    /**
+     *
+     */
     protected HashMap<String, Method> hm;
 
+    /**
+     *
+     * @param c
+     */
     public PublicMemberGetters(Class<?> c) {
         this(c, new String[]{});
     }
 
+    /**
+     *
+     * @param c
+     * @param suffixesToExclude
+     */
     public PublicMemberGetters(Class<?> c, String... suffixesToExclude) {
-        hm = new HashMap<String, Method>();
+        hm = new HashMap<>();
         Method[] m = c.getMethods();
         for (Method method : m) {
             if (!method.isAnnotationPresent(NoFeature.class)) {
@@ -65,10 +77,19 @@ public class PublicMemberGetters<T> {
         }
     }
 
+    /**
+     *
+     * @param t
+     */
     public PublicMemberGetters(T t) {
         this(t.getClass());
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public Method getMethodForGetterName(String s) {
         String name = s;
         if (name.startsWith("get")) {
@@ -81,6 +102,11 @@ public class PublicMemberGetters<T> {
         }
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public Method getMethodForFieldName(String s) {
         String name = s;
         if (name.startsWith("get")) {
@@ -96,8 +122,13 @@ public class PublicMemberGetters<T> {
         }
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public String[] getGetterNames(String[] s) {
-        ArrayList<String> al = new ArrayList<String>(s.length);
+        ArrayList<String> al = new ArrayList<>(s.length);
         for (String method : s) {
             if (getMethodForGetterName(method) != null) {
                 al.add(method);
@@ -106,6 +137,10 @@ public class PublicMemberGetters<T> {
         return al.toArray(new String[al.size()]);
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getGetterNames() {
         String[] names = new String[hm.size()];
         int i = 0;

@@ -65,7 +65,7 @@ public final class CombinationIterator implements Iterator<int[]> {
     public int[] next() {
         int[] ret = new int[this.partitions.length];
         for (int i = 0; i < ret.length; i++) {
-            ret[i] = partitions[i].current().intValue();
+            ret[i] = partitions[i].current();
         }
         partitions[this.partitions.length - 1].next();
         cnt++;

@@ -92,6 +92,7 @@ public class Fragment implements IFragment {
      *
      * @param arg0 the first fragment
      * @param arg1 the second fragment
+     * @return 
      */
     @Override
     public int compare(final IFragment arg0, final IFragment arg1) {
@@ -100,6 +101,8 @@ public class Fragment implements IFragment {
 
     /**
      * Only perform comparison on instances of Fragment.
+     * @param arg0
+     * @return 
      */
     @Override
     public int compareTo(final Object arg0) {
@@ -139,7 +142,7 @@ public class Fragment implements IFragment {
      */
     @Override
     public List<Attribute> getAttributes() {
-        final ArrayList<Attribute> al = new ArrayList<Attribute>();
+        final ArrayList<Attribute> al = new ArrayList<>();
         if (this.attributes != null) {
             al.addAll(this.attributes.asCollection());
         }

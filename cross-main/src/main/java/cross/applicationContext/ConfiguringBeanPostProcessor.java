@@ -50,11 +50,25 @@ public class ConfiguringBeanPostProcessor implements BeanPostProcessor {
 
     private Configuration configuration;
 
+    /**
+     *
+     * @param o
+     * @param string
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object postProcessBeforeInitialization(Object o, String string) throws BeansException {
         return o;
     }
 
+    /**
+     *
+     * @param o
+     * @param string
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object postProcessAfterInitialization(Object o, String string) throws BeansException {
         if (o instanceof IConfigurable) {

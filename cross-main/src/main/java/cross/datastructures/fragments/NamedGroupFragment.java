@@ -54,7 +54,7 @@ public class NamedGroupFragment extends Fragment implements IGroupFragment {
      * @param name1  the name
      */
     public NamedGroupFragment(final IGroupFragment parent, final String name1) {
-        this.children = new ConcurrentHashMap<String, IVariableFragment>();
+        this.children = new ConcurrentHashMap<>();
         this.parentGroup = parent;
         this.id = parent.nextGID();
         this.name = (name1 == null) ? "" + this.id : name1;

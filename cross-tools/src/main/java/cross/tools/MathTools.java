@@ -137,29 +137,6 @@ public class MathTools {
      * than 170.
      * @param n the value
      * @return the factorial value
-     * @throws IllegalArgumentExceptio
-     *
-     *
-     *
-
-     *
-     *
-     *
-
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * n
      */
     public static double factorial(final int n) {
         return faculty(n);
@@ -171,29 +148,6 @@ public class MathTools {
      * than 170.
      * @param n the value
      * @return the factorial value
-     * @throws IllegalArgumentExceptio
-     *
-     *
-     *
-
-     *
-     *
-     *
-
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * n
      */
     public static double faculty(final int n) {
         if (n < 0) {
@@ -305,7 +259,7 @@ public class MathTools {
      * @return the median value
      */
     public static double median(final Collection<Integer> values) {
-        final List<Integer> c = new ArrayList<Integer>(values);
+        final List<Integer> c = new ArrayList<>(values);
         Collections.sort(c);
         if (c.size() <= 1) {
             return c.get(0);

@@ -35,6 +35,11 @@ package cross;
  */
 public interface IFactoryService {
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     IFactory getInstance(String name);
 
 }

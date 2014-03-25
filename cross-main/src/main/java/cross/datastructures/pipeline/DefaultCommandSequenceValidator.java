@@ -79,7 +79,7 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
     public void checkCommandDependencies(
         TupleND<IFileFragment> inputFragments,
         List<IFragmentCommand> commands) {
-        final HashSet<String> providedVariables = new HashSet<String>();
+        final HashSet<String> providedVariables = new HashSet<>();
         for (IFragmentCommand cmd : commands) {
             if (this.checkInheritedVariables) {
                 // required variables
@@ -167,7 +167,7 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
             return requiredVars;
         }
         boolean check = true;
-        final Collection<String> failedVars = new ArrayList<String>();
+        final Collection<String> failedVars = new ArrayList<>();
         for (final String var : requiredVars) {
             log.debug("Checking variable {}", var);
             if (!var.isEmpty() && !providedVariables.contains(var)) {

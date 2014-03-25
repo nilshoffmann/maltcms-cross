@@ -60,8 +60,15 @@ import ucar.ma2.Range;
 @Slf4j
 public class ArrayChunkIteratorTest {
 
+    /**
+     *
+     */
     @Rule
     public LogMethodName logMethodName = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
 
@@ -91,7 +98,7 @@ public class ArrayChunkIteratorTest {
     private void testChunkIterator(int length, int chunksize) {
         Array ref = ArrayTools.random(new Random(System.nanoTime()), double.class, new int[]{length});
         int activeChunkSize;
-        List<Array> refChunks = new ArrayList<Array>();
+        List<Array> refChunks = new ArrayList<>();
         int mod = ref.getShape()[0] % chunksize;
         int chunks = (mod == 0 ? 0 : 1) + (ref.getShape()[0] / chunksize);
         int offset = 0;
@@ -114,7 +121,7 @@ public class ArrayChunkIteratorTest {
         ArrayChunkIterator aci = new ArrayChunkIterator(testVar, chunksize);//21 chunks, 20 of size 10 and one of size 5
         int idx = 0;
         Array reconstructedRef = Array.factory(DataType.getType(ref.getElementType()), ref.getShape());
-        List<Array> arrayChunks = new ArrayList<Array>();
+        List<Array> arrayChunks = new ArrayList<>();
         while (aci.hasNext()) {
             Array chunk = aci.next();
             arrayChunks.add(chunk);

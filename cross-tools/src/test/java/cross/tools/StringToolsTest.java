@@ -41,8 +41,15 @@ import org.junit.Test;
  */
 public class StringToolsTest {
 
+    /**
+     *
+     */
     @Rule
     public LogMethodName logMethodName = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
 
@@ -93,7 +100,7 @@ public class StringToolsTest {
      */
     @Test
     public void testToStringList() {
-        List<Object> l = new ArrayList<Object>();
+        List<Object> l = new ArrayList<>();
         l.add("one");
         l.add("two");
         l.add("three");

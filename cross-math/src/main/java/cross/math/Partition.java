@@ -83,7 +83,7 @@ public class Partition implements Iterator<Integer> {
             }
             return this.count;
         } else {//increase counter
-            return Integer.valueOf(count++);
+            return count++;
         }
     }
 

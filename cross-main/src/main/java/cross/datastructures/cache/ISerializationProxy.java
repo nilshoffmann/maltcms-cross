@@ -34,6 +34,7 @@ import java.io.Serializable;
  * originally not marked as {@link Serializable}.
  *
  * @author Nils Hoffmann
+ * @param <T>
  */
 public interface ISerializationProxy<T> extends Serializable {
 

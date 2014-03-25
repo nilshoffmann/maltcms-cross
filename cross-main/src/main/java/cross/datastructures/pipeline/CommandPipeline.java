@@ -81,6 +81,11 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
     /*
      * accessible fields with generated getters and setters
      */
+
+    /**
+     *
+     */
+    
     public static final String NUMBERFORMAT = "%.2f";
     private List<IFragmentCommand> commands = Collections.emptyList();
     private TupleND<IFileFragment> input;
@@ -154,7 +159,7 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
             } else {
                 throw new IllegalStateException("Fragment command iterator has no further elements!");
             }
-        } catch (Exception e) {
+        } catch (ConstraintViolationException | IllegalStateException e) {
             log.error("Caught exception while executing pipeline: ", e);
             shutdownMasterServer();
             throw new RuntimeException(e);
@@ -199,6 +204,13 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
         setCnt(getCnt() + 1);
     }
 
+    /**
+     *
+     * @param workflow
+     * @param cmd
+     * @throws ConstraintViolationException
+     * @throws IllegalStateException
+     */
     protected void runFragmentCommand(final IWorkflow workflow, final IFragmentCommand cmd) throws ConstraintViolationException, IllegalStateException {
         try {
             beforeCommand(cmd);
@@ -242,7 +254,7 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
     @Override
     public void setCommands(List<IFragmentCommand> c) {
         EvalTools.inRangeI(1, Integer.MAX_VALUE, c.size(), this);
-        this.commands = new ArrayList<IFragmentCommand>(c);
+        this.commands = new ArrayList<>(c);
         this.iter = this.commands.iterator();
         this.cnt = 0;
     }
@@ -306,9 +318,9 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
         log.info("Runtime of command {}: {} sec",
             cmd.getClass().getSimpleName(),
             sb.toString());
-        Map<String, Object> statsMap = new HashMap<String, Object>();
-        statsMap.put("RUNTIME_MILLISECONDS", Double.valueOf(stop - start / 1000000.f));
-        statsMap.put("RUNTIME_SECONDS", Double.valueOf(seconds));
+        Map<String, Object> statsMap = new HashMap<>();
+        statsMap.put("RUNTIME_MILLISECONDS", (double) stop - start / 1000000.f);
+        statsMap.put("RUNTIME_SECONDS", (double) seconds);
         DefaultWorkflowStatisticsResult dwsr = new DefaultWorkflowStatisticsResult();
         dwsr.setWorkflowElement(cmd);
         dwsr.setWorkflowSlot(WorkflowSlot.STATISTICS);

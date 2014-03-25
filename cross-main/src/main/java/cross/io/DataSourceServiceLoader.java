@@ -52,12 +52,12 @@ public class DataSourceServiceLoader {
      */
     public List<IDataSource> getAvailableCommands() {
         ServiceLoader<IDataSource> sl = ServiceLoader.load(IDataSource.class);
-        HashSet<IDataSource> s = new HashSet<IDataSource>();
+        HashSet<IDataSource> s = new HashSet<>();
         for (IDataSource ifc : sl) {
             Factory.getInstance().getObjectFactory().configureType(ifc);
             s.add(ifc);
         }
-        ArrayList<IDataSource> al = new ArrayList<IDataSource>();
+        ArrayList<IDataSource> al = new ArrayList<>();
         al.addAll(s);
         Collections.sort(al, new Comparator<IDataSource>() {
             @Override

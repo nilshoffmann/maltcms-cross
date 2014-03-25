@@ -100,7 +100,7 @@ public class BfsVariableSearcher {
         Level initial = new Level(0, Arrays.asList(root));
         //breadth first queue of levels, each levels contains file fragments which
         //have the same distance to root
-        Queue<Level> toExplore = new LinkedList<Level>(Arrays.asList(initial));
+        Queue<Level> toExplore = new LinkedList<>(Arrays.asList(initial));
         //explore until empty
         while (!toExplore.isEmpty()) {
             //retrieve the oldest element in the queue
@@ -174,11 +174,14 @@ public class BfsVariableSearcher {
         return l.matches;
     }
 
+    /**
+     *
+     */
     @Data
     public final class Level {
 
         private final int level;
         private final Collection<IFileFragment> members;
-        private final Collection<IFileFragment> matches = new LinkedList<IFileFragment>();
+        private final Collection<IFileFragment> matches = new LinkedList<>();
     }
 }

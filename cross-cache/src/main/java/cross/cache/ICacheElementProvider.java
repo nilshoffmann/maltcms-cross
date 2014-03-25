@@ -33,8 +33,14 @@ package cross.cache;
  *
  * @author Nils Hoffmann
  * @param <K>
+ * @param <V>
  */
 public interface ICacheElementProvider<K, V> {
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     V provide(K key);
 }

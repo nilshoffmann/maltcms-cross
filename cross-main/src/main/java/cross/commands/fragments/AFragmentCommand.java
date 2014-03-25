@@ -80,7 +80,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
 
     private static final long serialVersionUID = -4551167359317007776L;
     @Getter(AccessLevel.NONE)
-    private final IEventSource<IWorkflowResult> eventSource = new EventSource<IWorkflowResult>();
+    private final IEventSource<IWorkflowResult> eventSource = new EventSource<>();
     private IWorkflow workflow = null;
     private DefaultWorkflowProgressResult progress = null;
     private ICvResolver cvResolver = new CvResolver();
@@ -106,7 +106,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
      */
     public TupleND<IFileFragment> postProcess(ICompletionService<File> ics,
         final TupleND<IFileFragment> t) {
-        TupleND<IFileFragment> ret = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> ret = new TupleND<>();
         try {
             List<File> results = ics.call();
             // expect at least one result
@@ -132,7 +132,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
      */
     public TupleND<IFileFragment> postProcessUri(ICompletionService<URI> ics,
         final TupleND<IFileFragment> t) {
-        TupleND<IFileFragment> ret = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> ret = new TupleND<>();
         try {
             List<URI> results = ics.call();
             // expect at least one result
@@ -191,7 +191,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
      *         (one-to-one)
      */
     public TupleND<IFileFragment> createWorkFragments(TupleND<IFileFragment> t) {
-        TupleND<IFileFragment> wt = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> wt = new TupleND<>();
         for (IFileFragment iff : t) {
             wt.add(createWorkFragment(iff));
         }
@@ -223,7 +223,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
      */
     public TupleND<IFileFragment> mapToInputUri(List<URI> files,
         TupleND<IFileFragment> inputFragments) {
-        HashMap<String, URI> names = new LinkedHashMap<String, URI>();
+        HashMap<String, URI> names = new LinkedHashMap<>();
         for (URI f : files) {
             String filename = FileTools.getFilename(f);
             String basename = StringTools.removeFileExt(filename);
@@ -235,7 +235,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
             }
             names.put(basename, f);
         }
-        TupleND<IFileFragment> retFragments = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> retFragments = new TupleND<>();
         for (IFileFragment fragment : inputFragments) {
             log.debug("InputFragment: " + fragment.getUri());
             String filename = FileTools.getFilename(fragment.getUri());
@@ -262,7 +262,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
      */
     public TupleND<IFileFragment> mapToInput(List<File> files,
         TupleND<IFileFragment> inputFragments) {
-        List<URI> uris = new LinkedList<URI>();
+        List<URI> uris = new LinkedList<>();
         for (File f : files) {
             log.info("Adding result file {}", f.toURI());
             uris.add(f.toURI());
@@ -295,7 +295,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
     public <T extends Serializable> ICompletionService<T> createBlockingCompletionService(
         Class<? extends T> serviceObjectType) {
         ICompletionService<T> ics = null;
-        CompletionServiceFactory<T> csf = new CompletionServiceFactory<T>();
+        CompletionServiceFactory<T> csf = new CompletionServiceFactory<>();
         csf.setBlockingWait(true);
         if (getWorkflow().isExecuteLocal()) {
             log.info("Creating local completion service!");
@@ -323,7 +323,7 @@ public abstract class AFragmentCommand implements IFragmentCommand {
         Class<? extends T> serviceObjectType, long timeOut,
         TimeUnit timeUnit) {
         ICompletionService<T> ics = null;
-        CompletionServiceFactory<T> csf = new CompletionServiceFactory<T>();
+        CompletionServiceFactory<T> csf = new CompletionServiceFactory<>();
         csf.setTimeOut(timeOut);
         csf.setTimeUnit(timeUnit);
         if (getWorkflow().isExecuteLocal()) {

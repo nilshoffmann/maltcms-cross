@@ -36,30 +36,63 @@ package cross.datastructures.tuple;
  */
 public class Tuple2DD extends Tuple2D<Double, Double> {
 
+    /**
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
     public static Tuple2D<Double, Double> diff(
         final Tuple2D<Double, Double> t1, final Tuple2D<Double, Double> t2) {
         return new Tuple2DD(t1.getFirst() - t2.getFirst(), t1.getSecond()
             - t2.getSecond());
     }
 
+    /**
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
     public static Double dot(final Tuple2D<Double, Double> t1,
         final Tuple2D<Double, Double> t2) {
         return t1.getFirst() * t2.getFirst() + t1.getSecond() * t2.getSecond();
     }
 
+    /**
+     *
+     * @param t1
+     * @return
+     */
     public static Double len(final Tuple2D<Double, Double> t1) {
         return 1.0f / Math.sqrt(Tuple2DD.dot(t1, t1));
     }
 
+    /**
+     *
+     * @param l1
+     * @param mult
+     * @return
+     */
     public static Tuple2D<Double, Double> mult(
         final Tuple2D<Double, Double> l1, final Double mult) {
         return new Tuple2DD(l1.getFirst() * mult, l1.getSecond() * mult);
     }
 
+    /**
+     *
+     * @param t1
+     * @return
+     */
     public static Tuple2D<Double, Double> trans(final Tuple2D<Double, Double> t1) {
         return new Tuple2DD(t1.getSecond(), t1.getFirst());
     }
 
+    /**
+     *
+     * @param t1
+     * @param t2
+     */
     public Tuple2DD(final Double t1, final Double t2) {
         super(t1, t2);
     }

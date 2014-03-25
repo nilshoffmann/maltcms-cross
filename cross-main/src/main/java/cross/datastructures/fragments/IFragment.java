@@ -44,12 +44,15 @@ public interface IFragment extends Comparable<Object>, Comparator<IFragment>,
 
     /**
      * Compare Fragments by comparing their string representations.
+     * @param arg0
+     * @param arg1
      */
     @Override
     public int compare(IFragment arg0, IFragment arg1);
 
     /**
      * Only perform comparison on instances of Fragment.
+     * @param arg0
      */
     @Override
     public int compareTo(Object arg0);

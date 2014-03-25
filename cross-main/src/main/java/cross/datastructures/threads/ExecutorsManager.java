@@ -46,9 +46,25 @@ import java.util.concurrent.TimeoutException;
  */
 public class ExecutorsManager implements ExecutorService {
 
+    /**
+     *
+     */
     public enum ExecutorType {
 
-        SINGLETON, CACHED, FIXED
+        /**
+         *
+         */
+        SINGLETON,
+
+        /**
+         *
+         */
+        CACHED,
+
+        /**
+         *
+         */
+        FIXED
     }
     private ExecutorService es = null;
     private int maxThreads = 1;

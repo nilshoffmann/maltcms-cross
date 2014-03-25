@@ -42,6 +42,9 @@ public class AnnotationInspectorTest {
     private AnnotatedObject testObject = new AnnotatedObject();
     private final String prefix = "cross.annotations.AnnotatedObject.";
 
+    /**
+     *
+     */
     public AnnotationInspectorTest() {
     }
 

@@ -55,7 +55,7 @@ public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
      */
     public SoftReferenceCache(String name) {
         this.name = name;
-        this.map = new ConcurrentHashMap<K, SoftReference<? extends V>>();
+        this.map = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
         if (value == null) {
             map.remove(key);
         } else {
-            map.put(key, new SoftReference<V>(value));//,this.referenceQueue));
+            map.put(key, new SoftReference<>(value));//,this.referenceQueue));
         }
     }
 

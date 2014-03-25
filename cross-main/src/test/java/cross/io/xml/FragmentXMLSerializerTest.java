@@ -84,34 +84,56 @@ import ucar.nc2.Dimension;
 @Ignore
 public class FragmentXMLSerializerTest {
 
+    /**
+     *
+     */
     @Rule
     public SetupLogging sl = new SetupLogging();
+
+    /**
+     *
+     */
     @Rule
     public LogMethodName lmn = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public TemporaryFolder tf = new TemporaryFolder();
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         Factory.getInstance().getDataSourceFactory().setDataSources(Arrays.asList(FragmentXMLSerializer.class.getCanonicalName(), MockDatasource.class.getCanonicalName()));
         Fragments.setDefaultFragmentCacheType(CacheType.NONE);
     }
 
+    /**
+     *
+     * @return
+     */
     public IDataSource getDataSource() {
         return new FragmentXMLSerializer();
     }
 
+    /**
+     *
+     * @return
+     */
     public File[] getFiles() {
         try {
             IFileFragment f = new FileFragment(tf.newFolder(), "testFragment.maltcms.xml");
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
-            List<Array> l1 = new ArrayList<Array>();
+            List<Array> l1 = new ArrayList<>();
             l1.add(Array.factory(new double[]{1.2, 1.5}));
             l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
             l1.add(Array.factory(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.getChild("indexVar1"));
-            List<Array> l2 = new ArrayList<Array>();
+            List<Array> l2 = new ArrayList<>();
             l2.add(Array.factory(new int[]{1, 1}));
             l2.add(Array.factory(new int[]{2, 2, 2}));
             l2.add(Array.factory(new int[]{3}));
@@ -150,6 +172,7 @@ public class FragmentXMLSerializerTest {
 
     /**
      * Test of readAll method, of class NetcdfDataSource.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReadAll() throws Exception {
@@ -170,6 +193,7 @@ public class FragmentXMLSerializerTest {
 
     /**
      * Test of readIndexed method, of class NetcdfDataSource.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReadIndexed() throws Exception {
@@ -204,6 +228,7 @@ public class FragmentXMLSerializerTest {
 
     /**
      * Test of readSingle method, of class NetcdfDataSource.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReadSingle() throws Exception {
@@ -226,6 +251,7 @@ public class FragmentXMLSerializerTest {
 
     /**
      * Test of readStructure method, of class NetcdfDataSource.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReadStructure_IVariableFragment() throws Exception {
@@ -269,22 +295,44 @@ public class FragmentXMLSerializerTest {
             asList(fileEnding));
     }
 
+    /**
+     *
+     * @param dim
+     * @return
+     */
     public List<Dimension> copyDims(Dimension... dim) {
-        List<Dimension> copy = new LinkedList<Dimension>();
+        List<Dimension> copy = new LinkedList<>();
         for (Dimension dimension : dim) {
             copy.add(new Dimension(dimension.getName(), dimension));
         }
         return copy;
     }
 
+    /**
+     *
+     * @param attr
+     * @return
+     */
     public List<Attribute> copyAttributes(Attribute... attr) {
-        List<Attribute> copy = new LinkedList<Attribute>();
+        List<Attribute> copy = new LinkedList<>();
         for (Attribute attribute : attr) {
             copy.add(new Attribute(attribute.getName(), attribute));
         }
         return copy;
     }
 
+    /**
+     *
+     * @param uri
+     * @param variableNames
+     * @param indexedVariableNames
+     * @param attributes
+     * @param variableAttributes
+     * @param usedDimensions
+     * @param unusedDimensions
+     * @param variableToArray
+     * @return
+     */
     public IFileFragment createTestFragment(URI uri, List<String> variableNames, Map<String, String> indexedVariableNames, List<Attribute> attributes, Map<String, List<Attribute>> variableAttributes, Map<String, List<Dimension>> usedDimensions, List<Dimension> unusedDimensions, Map<String, List<Array>> variableToArray) {
         FileFragment ff = new FileFragment(uri);
         Attribute a1 = new Attribute("software", "maltcms");
@@ -331,7 +379,7 @@ public class FragmentXMLSerializerTest {
         //variable4 - index variable
         VariableFragment ivf4 = new VariableFragment(ff, "variable4");
         ivf4.setDimensions(new Dimension[]{dim5});
-        List<Array> arrays = new ArrayList<Array>();
+        List<Array> arrays = new ArrayList<>();
         ArrayInt.D1 index = new ArrayInt.D1(24);
         int offset = 0;
         for (int i = 0; i < 24; i++) {
@@ -356,7 +404,7 @@ public class FragmentXMLSerializerTest {
         VariableFragment ivf6 = new VariableFragment(ff, "variable6");
         ivf6.setDimensions(new Dimension[]{dim6});
         ivf6.setIndex(ivf4);
-        List<Array> arrays2 = new ArrayList<Array>();
+        List<Array> arrays2 = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             Array a = new ArrayDouble.D1(10);
             arrays2.add(a);
@@ -380,6 +428,7 @@ public class FragmentXMLSerializerTest {
 
     /**
      * Test of write method, of class NetcdfDataSource.
+     * @throws java.io.IOException
      */
     @Test
     public void testWriteRead() throws IOException {
@@ -387,13 +436,13 @@ public class FragmentXMLSerializerTest {
         sl.setLogLevel("cross.datastructures.fragments",
             "DEBUG");
         sl.setLogLevel("cross.io.xml", "DEBUG");
-        List<Attribute> attributes = new LinkedList<Attribute>();
-        List<String> variableNames = new LinkedList<String>();
-        Map<String, String> indexedVariableNames = new HashMap<String, String>();
-        Map<String, List<Dimension>> usedDimensions = new HashMap<String, List<Dimension>>();
-        Map<String, List<Attribute>> variableAttributes = new HashMap<String, List<Attribute>>();
-        List<Dimension> unusedDimensions = new LinkedList<Dimension>();
-        Map<String, List<Array>> variableToArray = new HashMap<String, List<Array>>();
+        List<Attribute> attributes = new LinkedList<>();
+        List<String> variableNames = new LinkedList<>();
+        Map<String, String> indexedVariableNames = new HashMap<>();
+        Map<String, List<Dimension>> usedDimensions = new HashMap<>();
+        Map<String, List<Attribute>> variableAttributes = new HashMap<>();
+        List<Dimension> unusedDimensions = new LinkedList<>();
+        Map<String, List<Array>> variableToArray = new HashMap<>();
 
         File outputFolder = tf.newFolder();
         File testCdf = new File(outputFolder, "testWriteRead.maltcms.xml").getAbsoluteFile();
@@ -420,6 +469,11 @@ public class FragmentXMLSerializerTest {
         sl.setLogLevel("cross.io.xml", "INFO");
     }
 
+    /**
+     *
+     * @param d1
+     * @param d2
+     */
     public void dimensionsEqual(Dimension[] d1, Dimension[] d2) {
         Assert.assertEquals(d1.length, d2.length);
         //compare dimensions
@@ -431,9 +485,19 @@ public class FragmentXMLSerializerTest {
         }
     }
 
+    /**
+     *
+     * @param v1
+     * @param v2
+     */
     public void variablesEqual(IVariableFragment v1, IVariableFragment v2) {
     }
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public void arraysEqual(Array a, Array b) {
         Assert.assertEquals(a.getShape().length, b.getShape().length);
         for (int i = 0; i < a.getShape().length; i++) {
@@ -450,6 +514,18 @@ public class FragmentXMLSerializerTest {
         }
     }
 
+    /**
+     *
+     * @param testCdf
+     * @param variableNames
+     * @param indexedVariableNames
+     * @param attributes
+     * @param variableAttributes
+     * @param usedDimensions
+     * @param unusedDimensions
+     * @param variableToArray
+     * @throws ResourceNotAvailableException
+     */
     public void directRead(URI testCdf, List<String> variableNames, Map<String, String> indexedVariableNames, List<Attribute> attributes, Map<String, List<Attribute>> variableAttributes, Map<String, List<Dimension>> usedDimensions, List<Dimension> unusedDimensions, Map<String, List<Array>> variableToArray) throws ResourceNotAvailableException {
         System.out.
             println("###################################################");
@@ -516,6 +592,18 @@ public class FragmentXMLSerializerTest {
         //test direct read
     }
 
+    /**
+     *
+     * @param testCdf
+     * @param variableNames
+     * @param indexedVariableNames
+     * @param attributes
+     * @param variableAttributes
+     * @param usedDimensions
+     * @param unusedDimensions
+     * @param variableToArray
+     * @throws ResourceNotAvailableException
+     */
     public void indirectRead(URI testCdf, List<String> variableNames, Map<String, String> indexedVariableNames, List<Attribute> attributes, Map<String, List<Attribute>> variableAttributes, Map<String, List<Dimension>> usedDimensions, List<Dimension> unusedDimensions, Map<String, List<Array>> variableToArray) throws ResourceNotAvailableException {
         System.out.
             println("###################################################");
@@ -592,7 +680,7 @@ public class FragmentXMLSerializerTest {
         sl.setLogLevel("cross.datastructures.fragments",
             "DEBUG");
         sl.setLogLevel("cross.io.xml", "DEBUG");
-        List<IFileFragment> sources = new LinkedList<IFileFragment>();
+        List<IFileFragment> sources = new LinkedList<>();
         for (File f : getFiles()) {
             IFileFragment ff = new FileFragment(f);
             sources.add(ff);
@@ -641,7 +729,7 @@ public class FragmentXMLSerializerTest {
                     System.out.println("unique-" + j + " = " + a);
                 }
             }
-        } catch (Exception ex) {
+        } catch (IOException | IllegalStateException | ResourceNotAvailableException ex) {
             Logger.getLogger(FragmentXMLSerializerTest.class.getName()).
                 log(Level.SEVERE, null, ex);
             Assert.fail(ex.getLocalizedMessage());
@@ -652,6 +740,9 @@ public class FragmentXMLSerializerTest {
         sl.setLogLevel("cross.io.xml", "INFO");
     }
 
+    /**
+     *
+     */
     @Test
     public void testVariableFragmentEquality() {
         IFileFragment f = createTestFragment();
@@ -673,6 +764,9 @@ public class FragmentXMLSerializerTest {
         Assert.assertNull(f.getChild("indexVar1").getIndex());
     }
 
+    /**
+     *
+     */
     @Test
     public void testSavedVariableFragmentEquality() {
         IFileFragment f = createTestFragment();
@@ -700,6 +794,9 @@ public class FragmentXMLSerializerTest {
         Assert.assertFalse(f.getChild("variable1").getIndexedArray().isEmpty());
     }
 
+    /**
+     *
+     */
     @Test
     public void testInvalidIndexFragment() {
         IFileFragment f = createInvalidIndexTestFragment();
@@ -730,18 +827,22 @@ public class FragmentXMLSerializerTest {
         Assert.assertFalse(f.getChild("variable2").getIndexedArray().isEmpty());
     }
 
+    /**
+     *
+     * @return
+     */
     public IFileFragment createInvalidIndexTestFragment() {
         try {
             File folder = tf.newFolder();
             IFileFragment f = new FileFragment(new File(folder, "invalidIndexTestFrag.maltcms.xml"));
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
-            List<Array> l1 = new ArrayList<Array>();
+            List<Array> l1 = new ArrayList<>();
             l1.add(Array.factory(new double[]{1.2, 1.5}));
             l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
             l1.add(Array.factory(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.addChild("indexVar2"));
-            List<Array> l2 = new ArrayList<Array>();
+            List<Array> l2 = new ArrayList<>();
             l2.add(Array.factory(new int[]{1, 1}));
             l2.add(Array.factory(new int[]{2, 2, 2}));
             l2.add(Array.factory(new int[]{3}));
@@ -755,6 +856,10 @@ public class FragmentXMLSerializerTest {
         }
     }
 
+    /**
+     *
+     * @param f
+     */
     public void writeFragment(IFileFragment f) {
         try {
             final Element maltcms = new Element("maltcms");
@@ -769,18 +874,22 @@ public class FragmentXMLSerializerTest {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public IFileFragment createTestFragment() {
         try {
             File folder = tf.newFolder();
             IFileFragment f = new FileFragment(new File(folder, "testFrag.maltcms.xml"));
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
-            List<Array> l1 = new ArrayList<Array>();
+            List<Array> l1 = new ArrayList<>();
             l1.add(Array.factory(new double[]{1.2, 1.5}));
             l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
             l1.add(Array.factory(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.getChild("indexVar1"));
-            List<Array> l2 = new ArrayList<Array>();
+            List<Array> l2 = new ArrayList<>();
             l2.add(Array.factory(new int[]{1, 1}));
             l2.add(Array.factory(new int[]{2, 2, 2}));
             l2.add(Array.factory(new int[]{3}));

@@ -55,7 +55,7 @@ public class ArrayTools {
 
     private static Logger log = LoggerFactory.getLogger(ArrayTools.class);
     private static int cnt = 0;
-    private static HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+    private static HashMap<Integer, Integer> hm = new HashMap<>();
     private static Random random;
 
     /**
@@ -186,10 +186,10 @@ public class ArrayTools {
     public static Collection<String> getStringsFromArray(final Array a) {
         ArrayTools.log.debug("Retrieved Array: {}", a);
         EvalTools.notNull(a, FragmentTools.class);
-        ArrayList<String> s = new ArrayList<String>();
+        ArrayList<String> s = new ArrayList<>();
         if (a instanceof ArrayChar) {
             final ArrayChar d = ((ArrayChar) a);
-            s = new ArrayList<String>();
+            s = new ArrayList<>();
             final StringIterator si = d.getStringIterator();
             while (si.hasNext()) {
                 final String str = si.next();
@@ -247,10 +247,7 @@ public class ArrayTools {
                 try {
                     MAMath.copyDouble(target.section(new int[]{offset},
                         new int[]{len}), a);
-                } catch (final IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (final InvalidRangeException e) {
+                } catch (final IllegalArgumentException | InvalidRangeException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }

@@ -113,7 +113,7 @@ public class CacheFactory {
     public static <K, V> ICacheDelegate<K, V> createDefaultCache(String cacheName, int megaBytesLocalHeap, int megaBytesLocalDisk) {
         CacheManager cacheManager = getDefault();
         if (cacheManager.cacheExists(cacheName)) {
-            return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+            return new EhcacheDelegate<>(cacheManager.getCache(cacheName));
         }
         CacheConfiguration cacheConfig = new CacheConfiguration()
             .name(cacheName)
@@ -125,7 +125,7 @@ public class CacheFactory {
             .diskSpoolBufferSizeMB(256);
         Cache cache = new Cache(cacheConfig);
         cacheManager.addCache(cache);
-        EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
+        EhcacheDelegate<K, V> ed = new EhcacheDelegate<>(cache);
         return ed;
     }
 
@@ -143,7 +143,7 @@ public class CacheFactory {
     public static <K, V> ICacheDelegate<K, V> createDefaultCache(File cacheDir, String cacheName, int maxElementsInMemory) {
         CacheManager cacheManager = getDefault();
         if (cacheManager.cacheExists(cacheName)) {
-            return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+            return new EhcacheDelegate<>(cacheManager.getCache(cacheName));
         }
         CacheConfiguration cacheConfig = new CacheConfiguration()
             .name(cacheName)
@@ -155,7 +155,7 @@ public class CacheFactory {
             .diskSpoolBufferSizeMB(256);
         Cache cache = new Cache(cacheConfig);
         cacheManager.addCache(cache);
-        EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
+        EhcacheDelegate<K, V> ed = new EhcacheDelegate<>(cache);
         return ed;
     }
 
@@ -257,7 +257,7 @@ public class CacheFactory {
     public static <K, V> ICacheDelegate<K, V> createVolatileCache(String cacheName, long timeToIdle, long timeToLive, int maxElementsInMemory, CacheEventListener... cacheEventListener) {
         CacheManager cacheManager = getDefault();
         if (cacheManager.cacheExists(cacheName)) {
-            return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+            return new EhcacheDelegate<>(cacheManager.getCache(cacheName));
         }
         CacheConfiguration cacheConfig = new CacheConfiguration()
             .name(cacheName)
@@ -270,7 +270,7 @@ public class CacheFactory {
             .transactionalMode(CacheConfiguration.TransactionalMode.OFF);
         Cache cache = new Cache(cacheConfig);
         cacheManager.addCache(cache);
-        EhcacheDelegate<K, V> ed = new EhcacheDelegate<K, V>(cache);
+        EhcacheDelegate<K, V> ed = new EhcacheDelegate<>(cache);
         for (CacheEventListener listener : cacheEventListener) {
             cache.getCacheEventNotificationService().registerListener(listener);
         }
@@ -306,7 +306,7 @@ public class CacheFactory {
     public static <K, V> ICacheDelegate<K, V> createVolatileAutoRetrievalCache(String cacheName, ICacheElementProvider<K, V> provider, long timeToIdle, long timeToLive) {
         CacheManager cacheManager = getDefault();
         if (cacheManager.cacheExists(cacheName)) {
-            return new EhcacheDelegate<K, V>(cacheManager.getCache(cacheName));
+            return new EhcacheDelegate<>(cacheManager.getCache(cacheName));
         }
         CacheConfiguration cacheConfig = new CacheConfiguration()
             .name(cacheName)
@@ -319,7 +319,7 @@ public class CacheFactory {
             .transactionalMode(CacheConfiguration.TransactionalMode.OFF);
         Cache cache = new Cache(cacheConfig);
         cacheManager.addCache(cache);
-        AutoRetrievalEhcacheDelegate<K, V> ared = new AutoRetrievalEhcacheDelegate<K, V>(cache, provider);
+        AutoRetrievalEhcacheDelegate<K, V> ared = new AutoRetrievalEhcacheDelegate<>(cache, provider);
         return ared;
     }
 

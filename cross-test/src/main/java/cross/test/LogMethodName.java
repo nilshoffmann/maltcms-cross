@@ -38,6 +38,10 @@ import org.junit.runner.Description;
  */
 public class LogMethodName extends TestWatcher {
 
+    /**
+     *
+     * @param method
+     */
     @Override
     public void starting(Description method) {
         StringBuilder sb = new StringBuilder();

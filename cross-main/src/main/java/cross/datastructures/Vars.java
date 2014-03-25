@@ -35,5 +35,38 @@ package cross.datastructures;
  */
 public enum Vars {
 
-    Mean, Max, Min, Variance, Size, None, Skewness;
+    /**
+     *
+     */
+    Mean,
+
+    /**
+     *
+     */
+    Max,
+
+    /**
+     *
+     */
+    Min,
+
+    /**
+     *
+     */
+    Variance,
+
+    /**
+     *
+     */
+    Size,
+
+    /**
+     *
+     */
+    None,
+
+    /**
+     *
+     */
+    Skewness;
 }

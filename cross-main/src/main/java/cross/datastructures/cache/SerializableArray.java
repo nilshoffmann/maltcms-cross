@@ -49,9 +49,16 @@ public class SerializableArray implements Externalizable {
     @Setter(AccessLevel.NONE)
     private Array array;
 
+    /**
+     *
+     */
     public SerializableArray() {
     }
 
+    /**
+     *
+     * @param array
+     */
     public SerializableArray(Array array) {
         this.array = array;
     }

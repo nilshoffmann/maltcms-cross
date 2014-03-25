@@ -89,8 +89,13 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
 
     private PropertiesConfiguration hashes;
 
+    /**
+     *
+     * @param inputFiles
+     * @return
+     */
     protected Collection<File> getInputFiles(TupleND<IFileFragment> inputFiles) {
-        List<File> inputFileList = new ArrayList<File>();
+        List<File> inputFileList = new ArrayList<>();
         for (IFileFragment f : inputFiles) {
             try {
                 inputFileList.add(FileTools.getFile(f));
@@ -101,6 +106,11 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         return inputFileList;
     }
 
+    /**
+     *
+     * @param workflow
+     * @return
+     */
     protected PropertiesConfiguration getHashes(IWorkflow workflow) {
         File hashesFile = getHashesFile(workflow);
         if (hashes == null) {
@@ -119,10 +129,20 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         }
     }
 
+    /**
+     *
+     * @param workflow
+     * @return
+     */
     protected File getHashesFile(IWorkflow workflow) {
         return new File(workflow.getOutputDirectory(), ".hashes");
     }
 
+    /**
+     *
+     * @param inputFiles
+     * @param cmd
+     */
     protected void updateHashes(TupleND<IFileFragment> inputFiles, IFragmentCommand cmd) {
         PropertiesConfiguration pc = getHashes(cmd.getWorkflow());
         Collection<File> files = getInputFiles(inputFiles);
@@ -133,18 +153,34 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         pc.setProperty(getParametersHashKey(cmd), parametersHash);
     }
 
+    /**
+     *
+     * @param cmd
+     * @return
+     */
     protected String getFileHashKey(IFragmentCommand cmd) {
         URI fragmentCommandOutputDirectory = cmd.getWorkflow().getOutputDirectory(cmd).getAbsoluteFile().toURI();
         URI relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
         return cmd.getClass().getName() + "-" + relativeFile.getPath() + ".fileHash";
     }
 
+    /**
+     *
+     * @param cmd
+     * @return
+     */
     protected String getParametersHashKey(IFragmentCommand cmd) {
         URI fragmentCommandOutputDirectory = cmd.getWorkflow().getOutputDirectory(cmd).getAbsoluteFile().toURI();
         URI relativeFile = FileTools.getRelativeUri(cmd.getWorkflow().getOutputDirectory().getAbsoluteFile().toURI(), fragmentCommandOutputDirectory);
         return cmd.getClass().getName() + "-" + relativeFile.getPath() + ".parametersHash";
     }
 
+    /**
+     *
+     * @param inputFiles
+     * @param workflow
+     * @return
+     */
     protected boolean isInputUpToDate(TupleND<IFileFragment> inputFiles, IWorkflow workflow) {
         PropertiesConfiguration pc = getHashes(workflow);
         Collection<File> files = getInputFiles(inputFiles);
@@ -153,6 +189,11 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         return oldWorkflowInputFilesHash.equals(workflowInputFilesHash);
     }
 
+    /**
+     *
+     * @param inputFiles
+     * @param workflow
+     */
     protected void updateWorkflowInputHashes(TupleND<IFileFragment> inputFiles, IWorkflow workflow) {
         PropertiesConfiguration pc = getHashes(workflow);
         Collection<File> files = getInputFiles(inputFiles);
@@ -160,6 +201,12 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         pc.setProperty(workflow.getName() + ".inputFiles.fileHash", fileHash);
     }
 
+    /**
+     *
+     * @param inputFiles
+     * @param cmd
+     * @return
+     */
     protected boolean isUpToDate(TupleND<IFileFragment> inputFiles, IFragmentCommand cmd) {
         PropertiesConfiguration pc = getHashes(cmd.getWorkflow());
         String oldOutputDirHash = pc.getString(getFileHashKey(cmd), "");
@@ -180,11 +227,12 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
      * Used to check, whether any files have changed compared to the last
      * invocation.
      *
+     * @param inputFiles
      * @return
      */
     protected String getRecursiveFileHash(Collection<File> inputFiles) {
         //list files below input and output
-        SortedSet<File> files = new TreeSet<File>();
+        SortedSet<File> files = new TreeSet<>();
         for (File file : inputFiles) {
             if (file.isDirectory()) {
                 files.addAll(FileUtils.listFiles(file, new String[]{"*"}, true));
@@ -235,7 +283,7 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
      */
     protected String getParameterHash(IFragmentCommand cmd) {
         Collection<String> fieldNames = AnnotationInspector.getRequiredConfigFieldNames(cmd.getClass());
-        PublicMemberGetters<IFragmentCommand> pmg = new PublicMemberGetters<IFragmentCommand>(cmd);
+        PublicMemberGetters<IFragmentCommand> pmg = new PublicMemberGetters<>(cmd);
         HashCodeBuilder hcb = new HashCodeBuilder();
         for (String fieldName : fieldNames) {
             Method m = pmg.getMethodForFieldName(fieldName);
@@ -244,11 +292,7 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
                     Object o = m.invoke(cmd);
                     hcb.append(o);
                     log.debug("Accessing field {} of {}. Current hash={}", new Object[]{fieldName, cmd.getClass().getName(), hcb.toHashCode()});
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(ResultAwareCommandPipeline.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(ResultAwareCommandPipeline.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     Logger.getLogger(ResultAwareCommandPipeline.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -256,6 +300,11 @@ public class ResultAwareCommandPipeline extends CommandPipeline {
         return hcb.toHashCode() + "";
     }
 
+    /**
+     *
+     * @param workflow
+     * @param cmd
+     */
     @Override
     protected void runFragmentCommand(IWorkflow workflow, IFragmentCommand cmd) {
         try {

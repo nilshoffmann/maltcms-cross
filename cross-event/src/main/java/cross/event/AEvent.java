@@ -36,6 +36,9 @@ package cross.event;
  */
 public class AEvent<V> implements IEvent<V> {
 
+    /**
+     *
+     */
     public static final String DEFAULT_EVENT_NAME = "EVENT_DEFAULT";
 
     private final long ts = System.currentTimeMillis();

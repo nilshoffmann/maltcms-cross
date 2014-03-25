@@ -68,6 +68,9 @@ import ucar.nc2.Dimension;
 @Slf4j
 public class ImmutableVariableFragment2 implements IVariableFragment {
 
+    /**
+     *
+     */
     public static boolean useCachedIndexedAccess = false;
 
     private final Fragment fragment = new Fragment();
@@ -136,6 +139,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
      *
      * @param ff the parent fragment of the new variable fragment, must be distinct from <code>vf.getParent()</code>
      * @param vf the variable fragment to copy in structure
+     * @return 
      */
     public static IVariableFragment createCompatible(IFileFragment ff,
         IVariableFragment vf) {
@@ -252,9 +256,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
             try {
                 return Factory.getInstance().getDataSourceFactory().getDataSourceFor(
                     getParent()).readSingle(this);
-            } catch (IOException ex) {
-                log.warn("", ex);
-            } catch (ResourceNotAvailableException ex) {
+            } catch (IOException | ResourceNotAvailableException ex) {
                 log.warn("", ex);
             }
             return null;
@@ -322,9 +324,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
                     final List<Array> l = Factory.getInstance().getDataSourceFactory().getDataSourceFor(
                         getParent()).readIndexed(this);
                     return l;
-                } catch (final IOException e) {
-                    throw new RuntimeException(e);
-                } catch (final ResourceNotAvailableException e) {
+                } catch (final IOException | ResourceNotAvailableException e) {
                     throw new RuntimeException(e);
                 }
             }

@@ -102,17 +102,17 @@ public class BinaryFileBase64Wrapper {
     public static void gunzip(final File in, final File out)
         throws FileNotFoundException, IOException {
         System.out.println("Unzipping to " + out);
-        final GZIPInputStream gzi = new GZIPInputStream(new FileInputStream(in));
-        final BufferedOutputStream bos = new BufferedOutputStream(
-            new FileOutputStream(out));
-        int b;
-        final byte[] data = new byte[1024];
-        while ((b = gzi.read(data, 0, data.length)) != -1) {
-            bos.write(data, 0, b);
+        try (GZIPInputStream gzi = new GZIPInputStream(new FileInputStream(in))) {
+            final BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(out));
+            int b;
+            final byte[] data = new byte[1024];
+            while ((b = gzi.read(data, 0, data.length)) != -1) {
+                bos.write(data, 0, b);
+            }
+            bos.flush();
+            bos.close();
         }
-        bos.flush();
-        bos.close();
-        gzi.close();
     }
 
     /**
@@ -125,21 +125,24 @@ public class BinaryFileBase64Wrapper {
      */
     public static void gzip(final File in, final File out)
         throws FileNotFoundException, IOException {
-        final GZIPOutputStream gos = new GZIPOutputStream(new FileOutputStream(
-            out));
-        final BufferedInputStream bis = new BufferedInputStream(
-            new FileInputStream(in));
-        int b;
-        final byte[] data = new byte[1024];
-        while ((b = bis.read(data, 0, data.length)) != -1) {
-            gos.write(data, 0, b);
+        try (GZIPOutputStream gos = new GZIPOutputStream(new FileOutputStream(
+                out))) {
+            final BufferedInputStream bis = new BufferedInputStream(
+                    new FileInputStream(in));
+            int b;
+            final byte[] data = new byte[1024];
+            while ((b = bis.read(data, 0, data.length)) != -1) {
+                gos.write(data, 0, b);
+            }
+            bis.close();
+            gos.flush();
         }
-        bis.close();
-        gos.flush();
-        gos.close();
-        // printCompressionRatio(in, out);
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(final String[] args) {
         // if (args[0].equals("-d")) {
         // File input = new File(args[1]);
@@ -292,16 +295,16 @@ public class BinaryFileBase64Wrapper {
      */
     public static void writeBytes(final byte[] bytes, final File out)
         throws FileNotFoundException, IOException {
-        final BufferedOutputStream bos = new BufferedOutputStream(
-            new FileOutputStream(out));
-        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        int b;
-        final byte[] data = new byte[1024];
-        while ((b = bais.read(data, 0, data.length)) != -1) {
-            bos.write(data, 0, b);
+        try (BufferedOutputStream bos = new BufferedOutputStream(
+                new FileOutputStream(out))) {
+            final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            int b;
+            final byte[] data = new byte[1024];
+            while ((b = bais.read(data, 0, data.length)) != -1) {
+                bos.write(data, 0, b);
+            }
+            bais.close();
+            bos.flush();
         }
-        bais.close();
-        bos.flush();
-        bos.close();
     }
 }

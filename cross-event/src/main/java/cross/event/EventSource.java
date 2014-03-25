@@ -58,7 +58,7 @@ public class EventSource<V> implements IEventSource<V> {
      * for event notification.
      */
     public EventSource() {
-        this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
+        this.listenerMap = new LinkedHashSet<>();
     }
 
     @Override

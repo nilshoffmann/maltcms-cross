@@ -122,9 +122,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
                 a = Factory.getInstance().getDataSourceFactory()
                     .getDataSourceFor(this.ivf.getParent()).readSingle(
                         this.ivf);
-            } catch (IOException ex) {
-                Logger.getLogger(ArrayChunkIterator.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ResourceNotAvailableException ex) {
+            } catch (IOException | ResourceNotAvailableException ex) {
                 Logger.getLogger(ArrayChunkIterator.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {

@@ -49,6 +49,7 @@ public interface IInputDataFactory extends IConfigurable {
     /**
      * Preprocess input data (files and variables).
      *
+     * @param input
      * @return the input file fragment tuple
      */
     TupleND<IFileFragment> prepareInputData(String[] input);

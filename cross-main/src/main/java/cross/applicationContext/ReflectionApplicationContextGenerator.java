@@ -34,9 +34,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,8 +46,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -59,6 +63,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import lombok.extern.slf4j.Slf4j;
 import org.openide.util.Lookup;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -86,10 +93,10 @@ public class ReflectionApplicationContextGenerator {
      * Creates a stub application context xml file for the given classes. The
      * default bean scope is 'prototype'.
      *
-     * @param outputFile    the output file for the generated xml file
+     * @param outputFile the output file for the generated xml file
      * @param springVersion the spring version to use for validation
-     * @param defaultScope  the default scope
-     * @param classes       the classes to generate stubs for
+     * @param defaultScope the default scope
+     * @param classes the classes to generate stubs for
      */
     public static void createContextXml(File outputFile, String springVersion, String defaultScope, String... classes) {
         //generate the application context XML
@@ -128,13 +135,13 @@ public class ReflectionApplicationContextGenerator {
     /**
      * Write the given xml document to the outputFile.
      *
-     * @param document   the xml document
+     * @param document the xml document
      * @param outputFile the output file
      */
     public static void writeToFile(Document document, File outputFile) {
         try {
             TransformerFactory transfac = TransformerFactory.newInstance();
-            transfac.setAttribute("indent-number", new Integer(2));
+            transfac.setAttribute("indent-number", 2);
             Transformer trans = transfac.newTransformer();
             trans.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource domSource = new DOMSource(document);
@@ -217,14 +224,15 @@ public class ReflectionApplicationContextGenerator {
      * The XML root element.
      */
     private final Element root;
-    private LinkedHashMap<String, BeanDescriptor> classToElement = new LinkedHashMap<String, BeanDescriptor>();
-    private HashMap<Class<?>, List<Object>> classToObject = new HashMap<Class<?>, List<Object>>();
+    private LinkedHashMap<String, BeanDescriptor> classToElement = new LinkedHashMap<>();
+    private HashMap<Class<?>, List<Object>> classToObject = new HashMap<>();
     private String defaultScope = "prototype";
 
     /**
      * Constructs a new application context generator.
      *
      * @param springVersion the Spring version
+     * @param defaultScope
      */
     public ReflectionApplicationContextGenerator(String springVersion, String defaultScope) {
         //create the XML document
@@ -257,21 +265,20 @@ public class ReflectionApplicationContextGenerator {
      * Adds a bean to the application context using a Java source file. Only
      * public classes are added.
      *
-     * @param reader the input stream to the Java source file (this is closed
-     *               after it is read)
+     * @param className
      * @return this
-     * @throws IOException if there's a problem reading the file
+     * @throws java.lang.ClassNotFoundException
      */
     public ReflectionApplicationContextGenerator addBean(String className) throws ClassNotFoundException {
         Class<?> clazz;
         clazz = Class.forName(className);
-        if (classToObject.containsKey(clazz)) {
-            System.out.println("Class " + clazz.getCanonicalName() + " already known!");
-            return this;
-        }
-        if (!classToObject.containsKey(clazz)) {
-            createElement(clazz);
-        }
+//        if (classToObject.containsKey(clazz)) {
+//            System.out.println("Class " + clazz.getCanonicalName() + " already known!");
+//            return this;
+//        }
+//        if (!classToObject.containsKey(clazz)) {
+        createElement(clazz);
+//        }
 
         return this;
     }
@@ -280,7 +287,7 @@ public class ReflectionApplicationContextGenerator {
      * Returns the known service providers for the given service interface name.
      *
      * @param serviceInterfaceName the fully qualified service interface class
-     *                             name
+     * name
      * @return the list of service providers
      */
     public List<?> getServiceProviders(String serviceInterfaceName) {
@@ -297,7 +304,7 @@ public class ReflectionApplicationContextGenerator {
      *
      * @param clazz the target class
      * @return the bean element or a list of beans for each service provider
-     *         available
+     * available
      */
     public List<?> createElement(Class<?> clazz) {
         if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) {
@@ -313,9 +320,7 @@ public class ReflectionApplicationContextGenerator {
             //build a "bean" element for each class
             buildBeanElement(obj);
             return Arrays.asList(obj);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Collections.emptyList();
@@ -326,15 +331,15 @@ public class ReflectionApplicationContextGenerator {
      * serviceInterface.
      *
      * @param serviceInterface the service interface to look for service
-     *                         providers
+     * providers
      * @return the list of protype beans created by calling each service
-     *         provider
+     * provider
      */
     public List<?> createServiceProviderElements(Class<?> serviceInterface) {
         if (classToObject.containsKey(serviceInterface)) {
             return classToObject.get(serviceInterface);
         }
-        LinkedList<Object> spis = new LinkedList<Object>(Lookup.getDefault().lookupAll(serviceInterface));
+        LinkedList<Object> spis = new LinkedList<>(Lookup.getDefault().lookupAll(serviceInterface));
         for (Object obj : spis) {
             buildBeanElement(obj);
         }
@@ -343,8 +348,8 @@ public class ReflectionApplicationContextGenerator {
     }
 
     /**
-     * Returns a version of
-     * <code>s</code>, with the first character in lower case.
+     * Returns a version of <code>s</code>, with the first character in lower
+     * case.
      *
      * @param s the string
      * @return s with lower-cased first character
@@ -354,8 +359,7 @@ public class ReflectionApplicationContextGenerator {
     }
 
     /**
-     * Creates the
-     * <code>BeanDescriptor</code> element.
+     * Creates the <code>BeanDescriptor</code> element.
      *
      * @param obj the object to create a bean descriptor for
      * @return the bean descriptor
@@ -366,7 +370,7 @@ public class ReflectionApplicationContextGenerator {
             System.out.println("BeanDescriptor with id " + id + " already present!");
         } else {
             BeanDescriptor bd = new BeanDescriptor(this, obj, defaultScope, id);
-            Element beanElement = bd.createElement(document);
+            Element beanElement = createElement(this, document, bd);
             if (beanElement != null) {
                 Comment beanCommentElement = null;
                 if (obj instanceof AFragmentCommand) {
@@ -386,15 +390,56 @@ public class ReflectionApplicationContextGenerator {
     }
 
     /**
+     *
+     * @param clazz
+     * @param packages
+     * @return
+     */
+    public static Set<BeanDefinition> getImplementationsOf(Class<?> clazz, String... packages) {
+        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new AssignableTypeFilter(clazz));
+        Set<BeanDefinition> beanDefinitions = new LinkedHashSet<>();
+        for (String pkg : packages) {
+            String pkgDeclaration = "";
+            if (pkg.contains(".")) {
+                pkgDeclaration = pkg.replaceAll("\\.", "/");
+            }
+            Set<BeanDefinition> components = provider.findCandidateComponents(pkgDeclaration);
+            beanDefinitions.addAll(components);
+        }
+        return beanDefinitions;
+    }
+    
+    /**
+     *
+     * @param field
+     * @return
+     */
+    public static Class<?> getGenericFieldType(Field field) {
+        ParameterizedType fieldType = (ParameterizedType) field.getGenericType();
+        return (Class<?>) fieldType.getActualTypeArguments()[0];
+    }
+    
+    /**
+     *
+     * @param m
+     * @return
+     */
+    public static Class<?> getGenericMethodReturnType(Method m) {
+        ParameterizedType methodReturnType = (ParameterizedType) m.getGenericReturnType();
+        return (Class<?>) methodReturnType.getActualTypeArguments()[0];
+    }
+
+    /**
      * Checks and adds type information for the given method, class and object
      * to the properties list.
      *
-     * @param method     the method to check for a property
-     * @param javaClass  the class to check for settable property
-     * @param obj        the stub / default object of type javaClass
+     * @param method the method to check for a property
+     * @param javaClass the class to check for settable property
+     * @param obj the stub / default object of type javaClass
      * @param properties the properties list
      */
-    public void checkMutableProperties(Method method, Class<?> javaClass, Object obj, List<ObjectProperty> properties) {
+    public static void checkMutableProperties(Method method, Class<?> javaClass, Object obj, List<ObjectProperty> properties) {
         if (method.getName().startsWith("get") || method.getName().startsWith("is")) {
             String methodBaseName = method.getName().startsWith("get") ? method.getName().substring(3) : method.getName().substring(2);
             try {
@@ -409,16 +454,14 @@ public class ReflectionApplicationContextGenerator {
                     } else {
                         p.type = returnType.getCanonicalName();
                     }
+                    Class<?> genericReturnType = getGenericMethodReturnType(method);
+                    p.genericType = genericReturnType.getCanonicalName();
                     p.name = propertyName;
 
                     Object methodObject = null;
                     try {
                         methodObject = method.invoke(obj);
-                    } catch (IllegalAccessException ex) {
-                        log.warn(ex.getLocalizedMessage());
-                    } catch (IllegalArgumentException ex) {
-                        log.warn(ex.getLocalizedMessage());
-                    } catch (InvocationTargetException ex) {
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                         log.warn(ex.getLocalizedMessage());
                     }
                     String value = null;
@@ -461,9 +504,145 @@ public class ReflectionApplicationContextGenerator {
     }
 
     /**
+     * Creates an xml element using the given document for element creation.
+     *
+     * @param generator
+     * @param document the document use for element creation
+     * @param beanDescriptor
+     * @return the modified element
+     */
+    public static Element createElement(ReflectionApplicationContextGenerator generator, Document document, BeanDescriptor beanDescriptor) {
+        Class<?> javaClass = beanDescriptor.clazz;
+        System.out.println("Building bean element for " + javaClass.getName());
+        //get the name of the class
+        String className = javaClass.getSimpleName();
+
+        //get the name of the package
+        String packageName = javaClass.getPackage().getName();
+
+        //create <bean /> element
+        Element beanElement = document.createElement("bean");
+        String classNameLower = toLowerCaseName(className);
+        beanElement.setAttribute("id", classNameLower);
+        String classAttr = (packageName == null) ? className : packageName + "." + className;
+        beanElement.setAttribute("class", classAttr);
+        beanElement.setAttribute("scope", beanDescriptor.scope);
+        //constructors are not supported
+        //get all the class' properties from the public fields and setter methods.
+
+        for (Method method : javaClass.getMethods()) {
+            checkMutableProperties(method, javaClass, beanDescriptor.obj, beanDescriptor.properties);
+        }
+        //sort by name
+        Collections.sort(beanDescriptor.properties, new Comparator<ObjectProperty>() {
+            @Override
+            public int compare(ObjectProperty t, ObjectProperty t1) {
+                return t.name.compareTo(t1.name);
+            }
+        });
+        List<String> blackList = Arrays.asList("workflow", "progress", "cvResolver");
+        //add all properties as <property /> elements
+        for (ObjectProperty p : beanDescriptor.properties) {
+            if (!blackList.contains(p.name)) {
+                Element propertyElement = document.createElement("property");
+                propertyElement.setAttribute("name", p.name);
+                Comment propertyCommentElement = document.createComment(AnnotationInspector.getDescriptionFor(javaClass, p.name));
+                boolean append = true;
+                if (p.type.startsWith("java.lang.")) {
+                    String shortType = p.type.substring("java.lang.".length());
+                    if (primitives.contains(shortType) || wrappers.contains(shortType)) {
+                        propertyElement.setAttribute("value", p.value);
+                    }
+                } else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
+                    propertyElement.setAttribute("value", p.value);
+                } else if ("Array".equals(p.type)
+                        || "List".equals(p.type) || "java.util.List".equals(p.type)) {
+                    Element listElement = document.createElement("list");
+                    String genericType = p.genericType;
+                    propertyElement.appendChild(listElement);
+                } else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
+                    Element listElement = document.createElement("set");
+                    propertyElement.appendChild(listElement);
+                } else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
+                    Element listElement = document.createElement("map");
+                    propertyElement.appendChild(listElement);
+                } else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
+                    Element listElement = document.createElement("props");
+                    propertyElement.appendChild(listElement);
+                } else {
+                    try {
+                        //                    System.err.println("Skipping ref!");
+                        Set<BeanDefinition> beanDefinitions = getImplementationsOf(Class.forName(p.type), "cross", "maltcms", "net.sf.maltcms");
+                        BeanDefinition first = null;
+                        for (BeanDefinition bd : beanDefinitions) {
+                            generator.addBean(bd.getBeanClassName());
+                            if (first == null) {
+                                first = bd;
+                            }
+                        }
+                        if (first != null) {
+                            String simpleName = first.getBeanClassName().substring(first.getBeanClassName().lastIndexOf(".") + 1);
+                            propertyElement.setAttribute("ref", generator.classToElement.get(toLowerCaseName(simpleName)).id);
+                        }
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    append = true;
+//                    try {
+//                        generator.addBean(p.type);
+//                        Class<?> c = Class.forName(p.type);
+//                        List<Object> objects = generator.classToObject.get(c);
+//                        if (objects != null && !objects.isEmpty()) {
+//                            propertyElement.setAttribute("ref", generator.buildBeanElement(objects.get(0)).id);
+//                        } else {
+//                            append = false;
+//                        }
+//                    } catch (ClassNotFoundException ex) {
+//                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+
+                }
+                if (append) {
+                    beanElement.appendChild(propertyCommentElement);
+                    beanElement.appendChild(propertyElement);
+                } else {
+                    beanElement.appendChild(propertyCommentElement);
+                    Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
+                    beanElement.appendChild(comment);
+                }
+            }
+        }
+        return beanElement;
+    }
+
+    /**
+     * Simple holder class for Object related properties.
+     */
+    public static class ObjectProperty {
+
+        /**
+         * The name of the object property
+         */
+        public String name;
+        /**
+         * The class type of the object property
+         */
+        public String type;
+        /**
+         * The value of the object property
+         */
+        public String value;
+        
+        /**
+         * The generic class type of the object property
+         */
+        public String genericType;
+    }
+
+    /**
      * Holder class for bean information.
      */
-    public class BeanDescriptor {
+    public static class BeanDescriptor {
 
         private final ReflectionApplicationContextGenerator generator;
         private final String scope;
@@ -476,7 +655,7 @@ public class ReflectionApplicationContextGenerator {
         /**
          *
          */
-        public List<ObjectProperty> properties = new ArrayList<ObjectProperty>();
+        public List<ObjectProperty> properties = new ArrayList<>();
 
         /**
          * Creates a new bean descriptor from the given information.
@@ -494,115 +673,5 @@ public class ReflectionApplicationContextGenerator {
             this.id = id;
         }
 
-        /**
-         * Creates an xml element using the given document for element creation.
-         *
-         * @param document the document use for element creation
-         * @return the modified element
-         */
-        public Element createElement(Document document) {
-            Class<?> javaClass = clazz;
-            System.out.println("Building bean element for " + javaClass.getName());
-            //get the name of the class
-            String className = javaClass.getSimpleName();
-
-            //get the name of the package
-            String packageName = javaClass.getPackage().getName();
-
-            //create <bean /> element
-            Element beanElement = document.createElement("bean");
-            String classNameLower = toLowerCaseName(className);
-            beanElement.setAttribute("id", classNameLower);
-            String classAttr = (packageName == null) ? className : packageName + "." + className;
-            beanElement.setAttribute("class", classAttr);
-            beanElement.setAttribute("scope", scope);
-            //constructors are not supported
-            //get all the class' properties from the public fields and setter methods.
-
-            for (Method method : javaClass.getMethods()) {
-                checkMutableProperties(method, javaClass, obj, properties);
-            }
-            //sort by name
-            Collections.sort(properties, new Comparator<ObjectProperty>() {
-                public int compare(ObjectProperty t, ObjectProperty t1) {
-                    return t.name.compareTo(t1.name);
-                }
-            });
-            List<String> blackList = Arrays.asList("workflow", "progress", "cvResolver");
-            //add all properties as <property /> elements
-            for (ObjectProperty p : properties) {
-                if (!blackList.contains(p.name)) {
-                    Element propertyElement = document.createElement("property");
-                    propertyElement.setAttribute("name", p.name);
-                    Comment propertyCommentElement = document.createComment(AnnotationInspector.getDescriptionFor(javaClass, p.name));
-                    boolean append = true;
-                    if (p.type.startsWith("java.lang.")) {
-                        String shortType = p.type.substring("java.lang.".length());
-                        if (primitives.contains(shortType) || wrappers.contains(shortType)) {
-                            propertyElement.setAttribute("value", p.value);
-                        }
-                    } else if (primitives.contains(p.type) || wrappers.contains(p.type)) {
-                        propertyElement.setAttribute("value", p.value);
-                    } else if ("Array".equals(p.type)
-                        || "List".equals(p.type) || "java.util.List".equals(p.type)) {
-                        Element listElement = document.createElement("list");
-                        propertyElement.appendChild(listElement);
-                    } else if ("Set".equals(p.type) || "java.util.Set".equals(p.type)) {
-                        Element listElement = document.createElement("set");
-                        propertyElement.appendChild(listElement);
-                    } else if ("Map".equals(p.type) || "java.util.Map".equals(p.type)) {
-                        Element listElement = document.createElement("map");
-                        propertyElement.appendChild(listElement);
-                    } else if ("Properties".equals(p.type) || "java.util.Properties".equals(p.type)) {
-                        Element listElement = document.createElement("props");
-                        propertyElement.appendChild(listElement);
-                    } else {
-//                    System.err.println("Skipping ref!");
-                        append = false;
-//                    try {
-//                        generator.addBean(p.type);
-//                        Class<?> c = Class.forName(p.type);
-//                        List<Object> objects = generator.classToObject.get(c);
-//                        if (objects != null && !objects.isEmpty()) {
-//                            propertyElement.setAttribute("ref", generator.buildBeanElement(objects.get(0)).id);
-//                        } else {
-//                            append = false;
-//                        }
-//                    } catch (ClassNotFoundException ex) {
-//                        Logger.getLogger(ReflectionApplicationContextGenerator.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-
-                    }
-                    if (append) {
-                        beanElement.appendChild(propertyCommentElement);
-                        beanElement.appendChild(propertyElement);
-                    } else {
-                        beanElement.appendChild(propertyCommentElement);
-                        Comment comment = document.createComment("<property name=\"" + p.name + "\" ref=\"\"/>");
-                        beanElement.appendChild(comment);
-                    }
-                }
-            }
-            return beanElement;
-        }
-    }
-
-    /**
-     * Simple holder class for Object related properties.
-     */
-    public class ObjectProperty {
-
-        /**
-         * The name of the object property
-         */
-        public String name;
-        /**
-         * The class type of the object property
-         */
-        public String type;
-        /**
-         * The value of the object property
-         */
-        public String value;
     }
 }

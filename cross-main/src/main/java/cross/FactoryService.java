@@ -40,8 +40,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IFactoryService.class)
 public class FactoryService implements IFactoryService {
 
-    private final ConcurrentHashMap<String, WeakReference<IFactory>> map = new ConcurrentHashMap<String, WeakReference<IFactory>>();
+    private final ConcurrentHashMap<String, WeakReference<IFactory>> map = new ConcurrentHashMap<>();
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     @Override
     public IFactory getInstance(String name) {
         if (map.containsKey(name)) {
@@ -50,13 +55,13 @@ public class FactoryService implements IFactoryService {
             if (factory == null) {
                 factory = new Factory();
                 factory.setName(name);
-                map.put(name, new WeakReference<IFactory>(factory));
+                map.put(name, new WeakReference<>(factory));
             }
             return factory;
         } else {
             IFactory factory = new Factory();
             factory.setName(name);
-            map.put(name, new WeakReference<IFactory>(factory));
+            map.put(name, new WeakReference<>(factory));
             return factory;
         }
 

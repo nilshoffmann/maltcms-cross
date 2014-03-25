@@ -46,16 +46,29 @@ import ucar.ma2.Array;
 public class MockFile {
 
     private final URI uri;
-    private final Map<String, ArrayList<Array>> variableToDataMap = new LinkedHashMap<String, ArrayList<Array>>();
+    private final Map<String, ArrayList<Array>> variableToDataMap = new LinkedHashMap<>();
 
+    /**
+     *
+     * @param uri
+     */
     public MockFile(URI uri) {
         this.uri = uri;
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> keys() {
         return variableToDataMap.keySet();
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Array getChild(String name) {
         if (variableToDataMap.containsKey(name)) {
             return ArrayTools.glue(variableToDataMap.get(name));
@@ -63,6 +76,11 @@ public class MockFile {
         throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public ArrayList<Array> getIndexedChild(String name) {
         if (variableToDataMap.containsKey(name)) {
             return variableToDataMap.get(name);
@@ -70,6 +88,11 @@ public class MockFile {
         throw new ResourceNotAvailableException("Could not find variable " + name + " for file " + uri);
     }
 
+    /**
+     *
+     * @param name
+     * @param c
+     */
     public void addChild(String name, ArrayList<Array> c) {
         variableToDataMap.put(name, c);
     }

@@ -34,6 +34,11 @@ package cross.datastructures.tuple;
  */
 public class Tuple2DI extends Tuple2D<Integer, Integer> {
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public Tuple2DI(final Integer a, final Integer b) {
         super(a, b);
     }

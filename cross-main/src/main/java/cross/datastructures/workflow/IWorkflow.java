@@ -27,8 +27,8 @@
  */
 package cross.datastructures.workflow;
 
-import cross.Factory;
 import cross.IConfigurable;
+import cross.IFactory;
 import cross.commands.fragments.AFragmentCommand;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.pipeline.ICommandSequence;
@@ -275,7 +275,7 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
      * @return the factory
      * @since 1.3.1
      */
-    public abstract Factory getFactory();
+    public abstract IFactory getFactory();
 
     /**
      * Set the factory associated to this workflow.
@@ -283,7 +283,7 @@ public interface IWorkflow extends IEventSource<IWorkflowResult>, IConfigurable,
      * @param factory
      * @since 1.3.1
      */
-    public abstract void setFactory(Factory factory);
+    public abstract void setFactory(IFactory factory);
 
     /**
      * Clear all workflow related results.

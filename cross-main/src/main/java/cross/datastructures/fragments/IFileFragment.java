@@ -226,6 +226,10 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
      */
     public abstract boolean hasChildren(String... s);
 
+    /**
+     *
+     * @return
+     */
     public boolean isModified();
 
     /**
@@ -247,8 +251,6 @@ public interface IFileFragment extends IGroupFragment, IFragment, Externalizable
      * children.
      *
      * @param variableFragment the child to remove
-     * @throws ConstraintViolationException to indicate attempted removal of a
-     *                                      variable that either is an index variable or uses one
      */
     public abstract void removeChild(IVariableFragment variableFragment);
 

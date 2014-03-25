@@ -28,7 +28,6 @@
 package cross.datastructures.fragments;
 
 import cross.io.misc.IArrayChunkIterator;
-import java.io.IOException;
 import java.util.List;
 import org.jdom.Element;
 import ucar.ma2.Array;
@@ -112,7 +111,6 @@ public interface IVariableFragment extends IFragment {
      * stored in a second array as offsets.
      *
      * @return the indexed arrays
-     * @throws IOException
      */
     public abstract List<Array> getIndexedArray();
 
@@ -157,6 +155,10 @@ public interface IVariableFragment extends IFragment {
      */
     public abstract boolean hasArray();
 
+    /**
+     *
+     * @return
+     */
     @Override
     public abstract int hashCode();
 
@@ -224,6 +226,10 @@ public interface IVariableFragment extends IFragment {
      */
     public abstract void setRange(Range... ranges1);
 
+    /**
+     *
+     * @return
+     */
     @Override
     public abstract String toString();
 }

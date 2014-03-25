@@ -46,7 +46,7 @@ public class SetOperations {
      * @return a new typed hash set
      */
     public static <T> Set<T> newSet(Collection<? extends T> c) {
-        return new HashSet<T>(c);
+        return new HashSet<>(c);
     }
 
     /**
@@ -58,7 +58,7 @@ public class SetOperations {
      * @return the union of a and b
      */
     public static <T> Set<T> union(Set<T> a, Set<T> b) {
-        Set<T> union = new HashSet<T>(a);
+        Set<T> union = new HashSet<>(a);
         union.addAll(b);
         return union;
     }
@@ -72,7 +72,7 @@ public class SetOperations {
      * @return the intersection of a and b
      */
     public static <T> Set<T> intersection(Set<T> a, Set<T> b) {
-        Set<T> inters = new HashSet<T>(a);
+        Set<T> inters = new HashSet<>(a);
         inters.retainAll(b);
         return inters;
     }
@@ -86,7 +86,7 @@ public class SetOperations {
      * @return the complement of a and b
      */
     public static <T> Set<T> complement(Set<T> a, Set<T> b) {
-        Set<T> a1 = new HashSet<T>(a);
+        Set<T> a1 = new HashSet<>(a);
         a1.removeAll(b);
         return a1;
     }

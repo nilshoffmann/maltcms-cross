@@ -49,6 +49,8 @@ import net.sf.ehcache.exceptionhandler.CacheExceptionHandler;
  * to disk, should the in-memory cache overflow.
  *
  * @author Nils Hoffmann
+ * @param <K>
+ * @param <V>
  */
 @Slf4j
 public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
@@ -112,6 +114,10 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
         return v;
     }
 
+    /**
+     *
+     * @return
+     */
     public Ehcache getCache() {
         return cache;
     }

@@ -79,7 +79,7 @@ public class CacheFactoryTest {
             for (int j = 0; j < arraySize; j++) {
                 a[j] = Math.random() * 1023890213;
             }
-            indices[i] = Integer.valueOf(i);
+            indices[i] = i;
             delegate.put(indices[i], a);
 
         }

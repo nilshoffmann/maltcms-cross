@@ -87,6 +87,7 @@ public class PropertyFileGenerator {
      * Creates a property object for the given class, containing those fields,
      * which are annotated by {
      *
+     * @return 
      * @Configurable}.
      * @param c
      */
@@ -107,6 +108,10 @@ public class PropertyFileGenerator {
         return new PropertiesConfiguration();
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption("f", true, "base directory for output of files");

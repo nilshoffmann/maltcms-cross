@@ -34,6 +34,7 @@ import java.util.Iterator;
  * object from each parameter combination.
  *
  * @author Nils Hoffmann
+ * @param <T>
  */
 public class CombinationIterator<T> implements Iterator<T> {
 

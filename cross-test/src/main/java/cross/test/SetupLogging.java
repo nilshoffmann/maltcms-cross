@@ -44,6 +44,9 @@ public class SetupLogging extends TestWatcher {
 
     private final Properties config;
 
+    /**
+     *
+     */
     public SetupLogging() {
         this(SetupLogging.class.getResource("/log4j.properties"));
     }

@@ -68,10 +68,22 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         }
     }
 
+    /**
+     *
+     * @param ivf
+     * @return
+     */
     public static CachedList getList(final IVariableFragment ivf) {
         return CachedList.getList(ivf, 0, -1);
     }
 
+    /**
+     *
+     * @param ivf
+     * @param offset
+     * @param length
+     * @return
+     */
     public static CachedList getList(final IVariableFragment ivf,
         final int offset, final int length) {
         final String clclass = Factory.getInstance().getConfiguration().getString("cross.datastructures.fragments.cachedListImpl",
@@ -82,13 +94,13 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         return cl;
     }
     private IVariableFragment ivf = null;
-    private final HashMap<Integer, SRefA> cache = new HashMap<Integer, SRefA>();
+    private final HashMap<Integer, SRefA> cache = new HashMap<>();
     @Configurable
     private int cacheSize = 512;
     @Configurable
     private boolean prefetchOnMiss = false;
-    private final LinkedList<Integer> lru = new LinkedList<Integer>();
-    private final ReferenceQueue<Array> rq = new ReferenceQueue<Array>();
+    private final LinkedList<Integer> lru = new LinkedList<>();
+    private final ReferenceQueue<Array> rq = new ReferenceQueue<>();
     private int size = -1;
     private int offset = 0;
     private int cacheHit = 0;
@@ -168,7 +180,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         if ((arg < 0) || (arg < offset) || (arg > this.size - 1)) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + arg0);
         }
-        final Integer key = Integer.valueOf(arg);
+        final Integer key = arg;
         Array a = null;
         // Lookup SoftReference to array in hashmap
         final SRefA aref = this.cache.get(key);
@@ -194,7 +206,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
                 final List<Array> l = load(arg0, Math.max(arg0, Math.min(
                     arg0 + upperBound - 1, this.size - 1)));
                 for (int i = 0; i < l.size(); i++) {
-                    addToCache(Integer.valueOf(arg0 + i), l.get(i));
+                    addToCache(arg0 + i, l.get(i));
                 }
                 a = l.get(0);
             } else {
@@ -211,6 +223,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         return a;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCacheSize() {
         return this.cacheSize;
     }
@@ -224,9 +240,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         try {
             this.size = Factory.getInstance().getDataSourceFactory().getDataSourceFor(this.ivf.getParent()).readStructure(
                 this.ivf.getIndex()).getDimensions()[0].getLength();
-        } catch (final IOException ex) {
-            log.warn(ex.getLocalizedMessage());
-        } catch (final ResourceNotAvailableException ex) {
+        } catch (final IOException | ResourceNotAvailableException ex) {
             log.warn(ex.getLocalizedMessage());
         }
         if ((offset >= 0 && offset < size) && (size > 0)) {
@@ -243,6 +257,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPrefetchOnMiss() {
         return this.prefetchOnMiss;
     }
@@ -304,11 +322,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
                 this.ivf);
 
             return a;
-        } catch (final IOException ex) {
-            throw new ResourceNotAvailableException(ex);
-        } catch (final ResourceNotAvailableException ex) {
-            throw new ResourceNotAvailableException(ex);
-        } catch (final InvalidRangeException ex) {
+        } catch (final IOException | ResourceNotAvailableException | InvalidRangeException ex) {
             throw new ResourceNotAvailableException(ex);
         } finally {
             //restore original range
@@ -421,9 +435,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
                 this.rq.remove(sv.key); // remove the SoftReference
                 this.cache.remove(sv.key);
                 this.cacheSoftRefRemoved++;
-            } catch (final IllegalArgumentException ex) {
-                log.warn(ex.getLocalizedMessage());
-            } catch (final InterruptedException ex) {
+            } catch (final IllegalArgumentException | InterruptedException ex) {
                 log.warn(ex.getLocalizedMessage());
             }
         }

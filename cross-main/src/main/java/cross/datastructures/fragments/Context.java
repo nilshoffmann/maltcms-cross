@@ -38,11 +38,31 @@ import cross.datastructures.Vars;
  */
 public interface Context {
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public Double get(String s);
 
+    /**
+     *
+     * @param v
+     * @return
+     */
     public String getQualifiedName(Vars v);
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public boolean has(String s);
 
+    /**
+     *
+     * @param s
+     * @param d
+     */
     public void set(String s, Double d);
 }

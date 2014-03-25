@@ -45,7 +45,7 @@ public class Metadata implements Iterable<Attribute> {
     /**
      *
      */
-    protected HashMap<String, Attribute> hm = new HashMap<String, Attribute>();
+    protected HashMap<String, Attribute> hm = new HashMap<>();
 
     /**
      * Create new empty Metadata.

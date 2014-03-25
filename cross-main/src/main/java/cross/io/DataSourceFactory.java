@@ -50,7 +50,7 @@ import org.apache.commons.configuration.Configuration;
 @Slf4j
 public class DataSourceFactory implements IDataSourceFactory {
 
-    private final HashMap<String, ArrayList<IDataSource>> formatToIDataSource = new HashMap<String, ArrayList<IDataSource>>();
+    private final HashMap<String, ArrayList<IDataSource>> formatToIDataSource = new HashMap<>();
     @Configurable(name = "cross.io.IDataSource")
     private List<String> dataSources = null;
 
@@ -76,7 +76,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     private void addToHashMap(final IDataSource ids) {
         EvalTools.notNull(ids, this);
         for (final String s : ids.supportedFormats()) {
-            ArrayList<IDataSource> al = new ArrayList<IDataSource>(1);
+            ArrayList<IDataSource> al = new ArrayList<>(1);
             if (this.formatToIDataSource.containsKey(s.toLowerCase())) {
                 al = this.formatToIDataSource.get(s.toLowerCase());
             }
@@ -155,7 +155,7 @@ public class DataSourceFactory implements IDataSourceFactory {
      */
     @Override
     public List<String> getSupportedFormats() {
-        final List<String> l = new ArrayList<String>(this.formatToIDataSource.
+        final List<String> l = new ArrayList<>(this.formatToIDataSource.
             keySet());
         return l;
     }

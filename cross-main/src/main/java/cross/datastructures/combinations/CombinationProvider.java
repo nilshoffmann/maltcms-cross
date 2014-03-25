@@ -46,6 +46,11 @@ public class CombinationProvider implements IElementProvider<Object[]> {
     private List<Object[]> data;
     private long lastIdx = -1;
 
+    /**
+     *
+     * @param ci
+     * @param data
+     */
     public CombinationProvider(CombinationIterator ci, List<Object[]> data) {
         this.ci = ci;
         this.data = data;
@@ -54,6 +59,12 @@ public class CombinationProvider implements IElementProvider<Object[]> {
     /* (non-Javadoc)
      * @see net.sf.maltcms.datastructures.IElementProvider#size()
      */
+
+    /**
+     *
+     * @return
+     */
+    
     @Override
     public int size() {
         return (int) ci.size();
@@ -62,6 +73,13 @@ public class CombinationProvider implements IElementProvider<Object[]> {
     /* (non-Javadoc)
      * @see net.sf.maltcms.datastructures.IElementProvider#get(int)
      */
+
+    /**
+     *
+     * @param idx
+     * @return
+     */
+    
     @Override
     public Object[] get(int idx) {
         return get((long) idx);
@@ -70,22 +88,42 @@ public class CombinationProvider implements IElementProvider<Object[]> {
     /* (non-Javadoc)
      * @see net.sf.maltcms.datastructures.IElementProvider#get(int, int)
      */
+
+    /**
+     *
+     * @param start
+     * @param stop
+     * @return
+     */
+    
     @Override
     public List<Object[]> get(int start, int stop) {
         return get((int) start, (int) stop);
     }
 
+    /**
+     *
+     */
     @Override
     public void reset() {
         lastIdx = -1;
         ci.reset();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public long sizeLong() {
         return ci.size();
     }
 
+    /**
+     *
+     * @param idx
+     * @return
+     */
     @Override
     public Object[] get(long idx) {
         if (idx > size()) {
@@ -109,9 +147,15 @@ public class CombinationProvider implements IElementProvider<Object[]> {
         return s;
     }
 
+    /**
+     *
+     * @param start
+     * @param stop
+     * @return
+     */
     @Override
     public List<Object[]> get(long start, long stop) {
-        List<Object[]> l = new ArrayList<Object[]>();
+        List<Object[]> l = new ArrayList<>();
         for (long i = start; i <= stop; i++) {
             l.add(get(i));
         }

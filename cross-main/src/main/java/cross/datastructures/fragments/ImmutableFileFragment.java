@@ -213,7 +213,7 @@ public final class ImmutableFileFragment implements IFileFragment {
     @Override
     public Collection<IFileFragment> getSourceFiles() {
         final Collection<IFileFragment> c = this.frag.getSourceFiles();
-        final ArrayList<IFileFragment> cret = new ArrayList<IFileFragment>();
+        final ArrayList<IFileFragment> cret = new ArrayList<>();
         for (final IFileFragment ifrg : c) {
             cret.add(new ImmutableFileFragment(ifrg));
         }
@@ -255,6 +255,10 @@ public final class ImmutableFileFragment implements IFileFragment {
         return this.frag.hasChildren(s);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isModified() {
         return false;
@@ -262,7 +266,7 @@ public final class ImmutableFileFragment implements IFileFragment {
 
     @Override
     public Iterator<IVariableFragment> iterator() {
-        final ArrayList<IVariableFragment> al = new ArrayList<IVariableFragment>();
+        final ArrayList<IVariableFragment> al = new ArrayList<>();
         final Iterator<IVariableFragment> iter = this.frag.iterator();
         while (iter.hasNext()) {
             al.add(new ImmutableVariableFragment(iter.next()));
@@ -285,7 +289,7 @@ public final class ImmutableFileFragment implements IFileFragment {
         ClassNotFoundException {
         Object o = in.readObject();
         if (o instanceof Long) {
-            setID(((Long) o).longValue());
+            setID(((Long) o));
         }
         o = in.readObject();
         if (o instanceof String) {
@@ -362,7 +366,7 @@ public final class ImmutableFileFragment implements IFileFragment {
     @Override
     public synchronized void writeExternal(final ObjectOutput out) throws IOException {
         // store id
-        out.writeObject(Long.valueOf(getID()));
+        out.writeObject(getID());
         // store path to storage
         out.writeObject(getUri().toString());
         out.flush();

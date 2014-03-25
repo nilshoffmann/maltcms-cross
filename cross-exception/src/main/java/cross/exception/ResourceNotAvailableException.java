@@ -27,6 +27,10 @@
  */
 package cross.exception;
 
+/**
+ *
+ * @author hoffmann
+ */
 public class ResourceNotAvailableException extends RuntimeException {
 
     /**

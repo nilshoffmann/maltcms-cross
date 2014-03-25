@@ -49,11 +49,15 @@ import ucar.ma2.IndexIterator;
 @Slf4j
 public class SerializableArrayTest {
 
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
 
     /**
      * Test of readWriteExternal method, of class SerializableArray.
+     * @throws java.lang.Exception
      */
     @Test
     public void testReadWriteExternal() throws Exception {
@@ -72,11 +76,17 @@ public class SerializableArrayTest {
         }
     }
 
+    /**
+     *
+     * @param sa
+     * @return
+     * @throws Exception
+     */
     public SerializableArray writeAndRestore(SerializableArray sa) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        sa.writeExternal(oos);
-        oos.close();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            sa.writeExternal(oos);
+        }
         byte[] bytes = baos.toByteArray();
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         ObjectInputStream ois = new ObjectInputStream(bais);
@@ -84,6 +94,12 @@ public class SerializableArrayTest {
         return sa;
     }
 
+    /**
+     *
+     * @param dt
+     * @param shape
+     * @return
+     */
     public Array createArray(DataType dt, int[] shape) {
         Array a = Array.factory(dt, shape);
         IndexIterator ii = a.getIndexIterator();
@@ -123,6 +139,11 @@ public class SerializableArrayTest {
         return a;
     }
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public void checkArraysEqual(Array a, Array b) {
         Assert.assertEquals(a.getShape()[0], b.getShape()[0]);
         Assert.assertEquals(a.getElementType(), b.getElementType());

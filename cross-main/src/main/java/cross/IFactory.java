@@ -64,8 +64,13 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
      * @deprecated please use {@link #setConfiguration(Configuration)} instead
      */
     @Deprecated
+    @Override
     void configure(final Configuration config);
 
+    /**
+     *
+     * @param config
+     */
     void setConfiguration(final Configuration config);
 
     /**
@@ -92,6 +97,7 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
     /**
      * Build the command sequence, aka pipeline for command execution.
      *
+     * @param t
      * @return a command sequence initialized according to current configuration
      */
     ICommandSequence createCommandSequence(final TupleND<IFileFragment> t);

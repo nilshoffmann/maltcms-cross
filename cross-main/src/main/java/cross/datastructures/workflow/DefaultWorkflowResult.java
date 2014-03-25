@@ -52,9 +52,19 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
     private IWorkflowElement workflowElement = null;
     private URI[] resources = null;
 
+    /**
+     *
+     */
     public DefaultWorkflowResult() {
     }
 
+    /**
+     *
+     * @param f1
+     * @param iwe1
+     * @param ws1
+     * @param resources
+     */
     public DefaultWorkflowResult(final URI f1, final IWorkflowElement iwe1,
         final WorkflowSlot ws1, IFileFragment... resources) {
         EvalTools.notNull(new Object[]{f1, iwe1, ws1, resources}, this);
@@ -64,6 +74,13 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
         this.resources = toUri(resources);
     }
 
+    /**
+     *
+     * @param f1
+     * @param iwe1
+     * @param ws1
+     * @param resources
+     */
     public DefaultWorkflowResult(final URI f1, final IWorkflowElement iwe1,
         final WorkflowSlot ws1, URI... resources) {
         EvalTools.notNull(new Object[]{f1, iwe1, ws1, resources}, this);
@@ -73,6 +90,11 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
         this.resources = resources;
     }
 
+    /**
+     *
+     * @param resources
+     * @return
+     */
     protected final URI[] toUri(IFileFragment... resources) {
         URI[] res = new URI[resources.length];
         for (int i = 0; i < res.length; i++) {
@@ -81,6 +103,11 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
         return res;
     }
 
+    /**
+     *
+     * @param resources
+     * @return
+     */
     protected final IFileFragment[] toFileFragment(URI... resources) {
         IFileFragment[] res = new IFileFragment[resources.length];
         for (int i = 0; i < res.length; i++) {
@@ -89,6 +116,13 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
         return res;
     }
 
+    /**
+     *
+     * @param f1
+     * @param iwe1
+     * @param ws1
+     * @param resources
+     */
     public DefaultWorkflowResult(final File f1, final IWorkflowElement iwe1,
         final WorkflowSlot ws1, IFileFragment... resources) {
         this(f1.toURI(), iwe1, ws1, resources);

@@ -42,8 +42,11 @@ public class SwingEventSource<V> implements IEventSource<V> {
 
     private final LinkedHashSet<IListener<IEvent<V>>> listenerMap;
 
+    /**
+     *
+     */
     public SwingEventSource() {
-        this.listenerMap = new LinkedHashSet<IListener<IEvent<V>>>();
+        this.listenerMap = new LinkedHashSet<>();
     }
 
     @Override

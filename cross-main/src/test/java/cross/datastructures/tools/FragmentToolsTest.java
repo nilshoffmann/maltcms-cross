@@ -29,10 +29,21 @@ import ucar.ma2.ArrayChar;
 @Slf4j
 public class FragmentToolsTest {
 
+    /**
+     *
+     */
     @Rule
     public LogMethodName logMethodName = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
+
+    /**
+     *
+     */
     @Rule
     public TemporaryFolder tf = new TemporaryFolder();
 
@@ -45,6 +56,9 @@ public class FragmentToolsTest {
         Fragments.setDefaultFragmentCacheType(CacheType.NONE);
     }
 
+    /**
+     *
+     */
     @Test
     public void testCreateSourceFilesArray() {
         try {

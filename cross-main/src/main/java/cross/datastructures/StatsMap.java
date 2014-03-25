@@ -55,6 +55,10 @@ public class StatsMap extends HashMap<String, Double> {
         super();
     }
 
+    /**
+     *
+     * @param association1
+     */
     public StatsMap(final IFragment association1) {
         this();
         this.association = association1;
@@ -82,10 +86,18 @@ public class StatsMap extends HashMap<String, Double> {
         super(arg0);
     }
 
+    /**
+     *
+     * @return
+     */
     public IFragment getAssociation() {
         return this.association;
     }
 
+    /**
+     *
+     * @param f
+     */
     public void setAssociation(IFileFragment f) {
         this.association = f;
     }
@@ -98,6 +110,7 @@ public class StatsMap extends HashMap<String, Double> {
     }
 
     /**
+     * @param label1
      * @param label the label to set
      */
     public void setLabel(final String label1) {

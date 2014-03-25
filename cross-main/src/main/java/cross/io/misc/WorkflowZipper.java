@@ -82,17 +82,18 @@ public class WorkflowZipper implements IConfigurable {
 
             // Create a buffered input stream from the file stream.
             final FileInputStream in = new FileInputStream(file);
-            final BufferedInputStream source = new BufferedInputStream(in,
-                bufsize);
-
             // Read from source into buffer and write, thereby compressing
             // on the fly
-            int len = 0;
-            while ((len = source.read(input_buffer, 0, bufsize)) != -1) {
-                zos.write(input_buffer, 0, len);
+            try (BufferedInputStream source = new BufferedInputStream(in,
+                    bufsize)) {
+                // Read from source into buffer and write, thereby compressing
+                // on the fly
+                int len = 0;
+                while ((len = source.read(input_buffer, 0, bufsize)) != -1) {
+                    zos.write(input_buffer, 0, len);
+                }
+                zos.flush();
             }
-            zos.flush();
-            source.close();
             zos.closeEntry();
         } else {
             log.warn("Skipping nonexistant file or directory {}", file);
@@ -115,17 +116,18 @@ public class WorkflowZipper implements IConfigurable {
 
             // Create a buffered input stream from the file stream.
             final FileInputStream in = new FileInputStream(file);
-            final BufferedInputStream source = new BufferedInputStream(in,
-                bufsize);
-
             // Read from source into buffer and write, thereby compressing
             // on the fly
-            int len = 0;
-            while ((len = source.read(input_buffer, 0, bufsize)) != -1) {
-                zos.write(input_buffer, 0, len);
+            try (BufferedInputStream source = new BufferedInputStream(in,
+                    bufsize)) {
+                // Read from source into buffer and write, thereby compressing
+                // on the fly
+                int len = 0;
+                while ((len = source.read(input_buffer, 0, bufsize)) != -1) {
+                    zos.write(input_buffer, 0, len);
+                }
+                zos.flush();
             }
-            zos.flush();
-            source.close();
             zos.closeEntry();
         } else {
             log.warn("Skipping nonexistant file or directory {}", file);
@@ -172,7 +174,7 @@ public class WorkflowZipper implements IConfigurable {
      */
     public boolean save(final File f) {
         if (this.zipWorkflow) {
-            HashSet<String> zipEntries = new HashSet<String>();
+            HashSet<String> zipEntries = new HashSet<>();
             final int bufsize = 1024;
             final File zipFile = f;
             ZipOutputStream zos;
@@ -234,7 +236,7 @@ public class WorkflowZipper implements IConfigurable {
 
                     }
                 } else {
-                    LinkedList<File> files = new LinkedList<File>(Arrays.asList(basedir.listFiles(ff)));
+                    LinkedList<File> files = new LinkedList<>(Arrays.asList(basedir.listFiles(ff)));
                     File archiveBase = basedir.getParentFile();
                     while (!files.isEmpty()) {
                         File currentFile = files.removeFirst();

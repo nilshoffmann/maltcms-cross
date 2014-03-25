@@ -280,9 +280,7 @@ public class FragmentStringParser {
             } else {
                 irnge = new Range(Integer.parseInt(beginEnd[0]), Integer.parseInt(beginEnd[1]));
             }
-        } catch (final NumberFormatException e) {
-            log.error(e.getLocalizedMessage());
-        } catch (final InvalidRangeException e) {
+        } catch (final NumberFormatException | InvalidRangeException e) {
             log.error(e.getLocalizedMessage());
         }
         return irnge;

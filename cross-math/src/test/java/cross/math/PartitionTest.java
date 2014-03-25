@@ -37,6 +37,9 @@ import org.junit.Test;
  */
 public class PartitionTest {
 
+    /**
+     *
+     */
     public PartitionTest() {
     }
 

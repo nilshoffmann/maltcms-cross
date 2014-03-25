@@ -56,7 +56,7 @@ public class NoCache<K, V> implements ICacheDelegate<K, V> {
      */
     public NoCache(String name) {
         this.name = name;
-        this.map = new ConcurrentHashMap<K, V>();
+        this.map = new ConcurrentHashMap<>();
     }
 
     @Override

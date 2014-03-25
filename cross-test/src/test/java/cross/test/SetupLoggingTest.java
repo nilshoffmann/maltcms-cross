@@ -39,12 +39,21 @@ import org.junit.Test;
 @Slf4j
 public class SetupLoggingTest {
 
+    /**
+     *
+     */
     @Rule
     public SetupLogging sl = new SetupLogging();
 
+    /**
+     *
+     */
     public SetupLoggingTest() {
     }
 
+    /**
+     *
+     */
     @Test
     public void testSomeMethod() {
         System.out.println("Logging configuration: ");

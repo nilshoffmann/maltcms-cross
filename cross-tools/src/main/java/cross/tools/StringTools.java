@@ -111,7 +111,7 @@ public class StringTools {
      *                                  string
      */
     public static ArrayList<String> toStringList(final List<?> list) {
-        final ArrayList<String> al = new ArrayList<String>();
+        final ArrayList<String> al = new ArrayList<>();
         for (final Object o : list) {
             if (o instanceof String) {
                 al.add((String) o);

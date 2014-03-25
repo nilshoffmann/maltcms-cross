@@ -50,8 +50,11 @@ import org.openide.util.lookup.ServiceProvider;
 @Data
 public class CvResolver implements ICvResolver {
 
-    private Map<String, IControlledVocabularyProvider> providers = new ConcurrentHashMap<String, IControlledVocabularyProvider>();
+    private Map<String, IControlledVocabularyProvider> providers = new ConcurrentHashMap<>();
 
+    /**
+     *
+     */
     public CvResolver() {
         for (IControlledVocabularyProvider provider : Lookup.getDefault().lookupAll(IControlledVocabularyProvider.class)) {
             String namespace = provider.getNamespace();
@@ -71,6 +74,11 @@ public class CvResolver implements ICvResolver {
         throw new MappingNotAvailableException("No provider known for namespace " + ns + " and variable " + variable);
     }
 
+    /**
+     *
+     * @param variable
+     * @return
+     */
     protected String getNamespacePrefix(String variable) {
         if (variable.contains(".")) {
             String[] s = variable.split("\\.");

@@ -28,6 +28,7 @@
 package cross.datastructures.workflow;
 
 import cross.Factory;
+import cross.IFactory;
 import cross.annotations.Configurable;
 import cross.commands.fragments.AFragmentCommand;
 import cross.commands.fragments.IFragmentCommand;
@@ -99,8 +100,8 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
      *
      */
     private static final long serialVersionUID = 1781229121330043626L;
-    private Collection<IWorkflowResult> al = new ArrayList<IWorkflowResult>();
-    private transient IEventSource<IWorkflowResult> iwres = new EventSource<IWorkflowResult>();
+    private Collection<IWorkflowResult> al = new ArrayList<>();
+    private transient IEventSource<IWorkflowResult> iwres = new EventSource<>();
     private ICommandSequence commandSequence = null;
     private String name = "workflow";
     private IFragmentCommand activeCommand = null;
@@ -116,8 +117,8 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     private Configuration cfg = new PropertiesConfiguration();
     private boolean executeLocal = true;
     private File outputDirectory = new File(System.getProperty("user.dir"));
-    private List<IWorkflowPostProcessor> workflowPostProcessors = new ArrayList<IWorkflowPostProcessor>();
-    private transient Factory factory;
+    private List<IWorkflowPostProcessor> workflowPostProcessors = new ArrayList<>();
+    private transient IFactory factory;
 
     @Override
     public void addListener(final IListener<IEvent<IWorkflowResult>> l) {
@@ -127,7 +128,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     @Override
     public void append(final IWorkflowResult iwr) {
         if (this.al == null) {
-            this.al = new LinkedHashSet<IWorkflowResult>();
+            this.al = new LinkedHashSet<>();
         }
         if (iwr instanceof IWorkflowProgressResult) {
             final IWorkflowProgressResult iwpr = (IWorkflowProgressResult) iwr;
@@ -137,7 +138,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         } else {
             this.al.add(iwr);
         }
-        fireEvent(new AEvent<IWorkflowResult>(iwr, DefaultWorkflow.this.iwres));
+        fireEvent(new AEvent<>(iwr, DefaultWorkflow.this.iwres));
     }
 
     @Override
@@ -248,7 +249,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             setName(workflowname);
         }
 
-        TupleND<IFileFragment> inputFragments = new TupleND<IFileFragment>();
+        TupleND<IFileFragment> inputFragments = new TupleND<>();
         Element workflowInputs = e.getChild("workflowInputs");
         for (Object child : workflowInputs.getChildren("workflowInput")) {
             Element workflowInput = (Element) child;
@@ -300,7 +301,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
                     fileResult.setFile(new File(file));
                     Element resources = e.getChild("resources");
                     if (resources != null) {
-                        List<IFileFragment> fragments = new ArrayList<IFileFragment>();
+                        List<IFileFragment> fragments = new ArrayList<>();
                         for (Object o : resources.getChildren("resource")) {
                             Element resource = (Element) o;
                             URI uri = URI.create(resource.getAttributeValue("resource"));
@@ -339,9 +340,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (JDOMException ex) {
-                Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (JDOMException | IOException ex) {
                 Logger.getLogger(DefaultWorkflow.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
@@ -407,10 +406,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         } catch (final TransformerConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (final FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final TransformerException e) {
+        } catch (final FileNotFoundException | TransformerException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -440,10 +436,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         } catch (final TransformerConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (final FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final TransformerException e) {
+        } catch (final FileNotFoundException | TransformerException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -451,7 +444,6 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     }
 
     /**
-     * @param commandSequence the ICommandSequence to set
      */
     @Override
     public void setCommandSequence(final ICommandSequence ics) {
@@ -595,7 +587,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
      */
     @Override
     public List<IWorkflowResult> getResultsFor(IFileFragment iff) {
-        List<IWorkflowResult> l = new ArrayList<IWorkflowResult>();
+        List<IWorkflowResult> l = new ArrayList<>();
         Iterator<IWorkflowResult> iter = getResults();
         while (iter.hasNext()) {
             IWorkflowResult iwr = iter.next();
@@ -622,7 +614,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
      */
     @Override
     public List<IWorkflowResult> getResultsFor(IWorkflowElement afc) {
-        List<IWorkflowResult> l = new ArrayList<IWorkflowResult>();
+        List<IWorkflowResult> l = new ArrayList<>();
         Iterator<IWorkflowResult> iter = getResults();
         while (iter.hasNext()) {
             IWorkflowResult iwr = iter.next();
@@ -645,7 +637,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     public List<IWorkflowResult> getResultsFor(IWorkflowElement afc,
         IFileFragment iff) {
         List<IWorkflowResult> afcl = getResultsFor(afc);
-        List<IWorkflowResult> l = new ArrayList<IWorkflowResult>();
+        List<IWorkflowResult> l = new ArrayList<>();
         for (IWorkflowResult iwr : afcl) {
             if (iwr instanceof IWorkflowFileResult) {
                 IWorkflowFileResult iwfr = (IWorkflowFileResult) iwr;
@@ -670,7 +662,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
      */
     @Override
     public List<IWorkflowResult> getResultsOfType(String fileExtension) {
-        List<IWorkflowResult> l = new ArrayList<IWorkflowResult>();
+        List<IWorkflowResult> l = new ArrayList<>();
         Iterator<IWorkflowResult> iter = getResults();
         while (iter.hasNext()) {
             IWorkflowResult iwr = iter.next();
@@ -694,7 +686,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     @Override
     public List<IWorkflowResult> getResultsOfType(IWorkflowElement afc,
         String fileExtension) {
-        List<IWorkflowResult> l = new ArrayList<IWorkflowResult>();
+        List<IWorkflowResult> l = new ArrayList<>();
         Iterator<IWorkflowResult> iter = getResults();
         while (iter.hasNext()) {
             IWorkflowResult iwr = iter.next();
@@ -714,7 +706,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     @Override
     public <T> List<IWorkflowObjectResult> getResultsOfType(IWorkflowElement afc,
         Class<? extends T> c) {
-        List<IWorkflowObjectResult> l = new ArrayList<IWorkflowObjectResult>();
+        List<IWorkflowObjectResult> l = new ArrayList<>();
         Iterator<IWorkflowResult> iter = getResults();
         while (iter.hasNext()) {
             IWorkflowResult iwr = iter.next();
@@ -840,12 +832,12 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     }
 
     @Override
-    public Factory getFactory() {
+    public IFactory getFactory() {
         return factory;
     }
 
     @Override
-    public void setFactory(Factory factory) {
+    public void setFactory(IFactory factory) {
         if (this.factory != null) {
             throw new IllegalStateException("Factory was already initialized!");
         }

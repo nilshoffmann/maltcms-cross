@@ -42,8 +42,15 @@ import org.junit.Test;
  */
 public class MathToolsTest {
 
+    /**
+     *
+     */
     @Rule
     public LogMethodName logMethodName = new LogMethodName();
+
+    /**
+     *
+     */
     @Rule
     public SetupLogging logging = new SetupLogging();
 
