@@ -1,3 +1,7 @@
+## Concepts of Cross
+The following sections give a brief synopsis of the concepts used in Cross. An 
+overview of Cross' maven modules can be found [here](./index.html).
+
 ## The Factory
 
 The main point of access within Cross is the `cross.IFactory` interface and its default implementation `cross.Factory`. It provides centralized 

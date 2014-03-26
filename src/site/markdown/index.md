@@ -1,3 +1,15 @@
+## Getting Started
+
+Cross is a library providing a core of functionality involving dependency injection, workflow definition, validation, and execution, as well as 
+efficient data structures for sequential and parallel data processing. It is used by [Maltcms and Maui](http://maltcms.sf.net) for the specific application domain of chromatography-mass spectrometry
+data from analytical chemistry, metabolomics, and proteomics.
+
+Cross is implemented in the platform-independent JAVA programming language. 
+The individual modules of Cross are managed and built using [Maven](http://maven.apache.org).
+
+If you want to use Cross in your own projects, please see the [Getting Started](./gettingStarted.html) page for more details.
+Cross is dual-licensed under either the Lesser General Public License (L-GPL v3), or, at the licensees discretion, under the terms of the Eclipse Public License (EPL v1).
+
 ## Sequential Assembly
 
 A workflow in Cross is made up of a sequence of _fragment command_
@@ -64,4 +76,3 @@ Scaling up and down with the required amount of parallelization can be managed
 automatically by Mpaxs for example using its OpenGridEngine (OracleGridEngine) compliant 
 compute host launcher implementation. Mpaxs uses a round-robin scheduling 
 method to utilize all available hosts as fair as possible.
-

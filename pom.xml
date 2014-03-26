@@ -329,7 +329,7 @@
                     <version>3.9</version>
                     <extensions>true</extensions>
                 </plugin>
-                <!-- plugin execution is currently broken with java 1.7
+                <!--plugin execution is currently broken with java 1.7-->
                 <plugin>
                     <groupId>org.projectlombok</groupId>
                     <artifactId>lombok-maven-plugin</artifactId>
@@ -347,7 +347,16 @@
                         <addOutputDirectory>false</addOutputDirectory>
                         <sourceDirectory>src/main/java</sourceDirectory>
                     </configuration>
-                </plugin>-->
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>clirr-maven-plugin</artifactId>
+                    <version>2.6.1</version>
+                    <configuration>
+                        <!-- Compare the current code against version 1.2 -->
+                        <comparisonVersion>${version.cross.base}</comparisonVersion>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -403,6 +412,10 @@
                                 <report>license</report>
                                 <report>scm</report>
                             </reports>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>clirr-maven-plugin</artifactId>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -539,9 +552,9 @@
         <profile>
             <id>lombok-needs-tools-jar</id>
             <activation>
-                <!--                <file>
+                <file>
                     <exists>${java.home}/../lib/tools.jar</exists>
-                </file>-->
+                </file>
                 <property>
                     <name>delombok</name>
                 </property>
@@ -834,5 +847,6 @@
         <version.netbeans>721RELEASE</version.netbeans>
         <version.lombok>1.12.4</version.lombok>
         <version.lombok.maven>1.12.4.0</version.lombok.maven>
+        <version.cross.base>1.3.1</version.cross.base>
     </properties>
 </project>

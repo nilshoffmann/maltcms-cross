@@ -1,4 +1,4 @@
-## Using Cross as a library
+## Developing with Cross
 
 ### Requirements
 
