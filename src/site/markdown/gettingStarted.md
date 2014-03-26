@@ -59,3 +59,49 @@ in your _pom.xml_
 
 Please note that you can only retrieve artifacts from this repository without authentication that have 
 already been deployed. You can not use the artifactory as a proxy to other repositories.
+
+In order to use the Cross artifacts in your code, include them in the dependencies section of your pom (a):
+
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>net.sf.maltcms</groupId>
+            <artifactId>cross-test</artifactId>
+            <scope>test</scope>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.maltcms</groupId>
+            <artifactId>cross-main</artifactId>
+            <scope>test</scope>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+or in the dependency management section of your pom if you want to specify the version explicitly in a multi-module project parent pom (b):
+
+    <dependencyManagement>
+        <dependencies>
+            ...
+            <dependency>
+            <groupId>net.sf.maltcms</groupId>
+            <artifactId>cross-test</artifactId>
+            <scope>test</scope>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.maltcms</groupId>
+            <artifactId>cross-main</artifactId>
+            <scope>test</scope>
+            <version>${project.version}</version>
+        </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+With the latter approach, you still need to define the dependencies in your module's pom like in variant (a), but can omit the ``<version>...</version>`` tags.
+
+#### Profiles
+
+Cross defines two separate profiles in order to keep unnecessary build goals out of the default build cycle. You can activate these profiles explicitly on the command 
+line using ``mvn -P src,javadoc``. This will activate the generation and attachment of source and javadoc jar artifacts. The third profile is automatically activated during 
+the build in order to generate complete sourcecode for those classes that use the [Lombok](http://projectlombok.org) annotations library.
