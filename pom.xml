@@ -90,11 +90,6 @@
             <url>scp://shell.sourceforge.net/home/project-web/maltcms/htdocs/maven/cross/${project.version}</url>
         </site>
 
-        <repository>
-            <id>bintray-nilshoffmann-maven</id>
-            <name>nilshoffmann-maven-Cross</name>
-            <url>https://api.bintray.com/maven/nilshoffmann/maven/Cross</url>
-        </repository>
     </distributionManagement>
     
     <licenses>
