@@ -616,7 +616,7 @@ public final class FileFragment implements IFileFragment {
      */
     @Override
     public boolean isModified() {
-        for (final IVariableFragment ivf : this) {
+        for (final IVariableFragment ivf : getImmediateChildren()) {
             if (ivf.isModified()) {
                 return true;
             }
