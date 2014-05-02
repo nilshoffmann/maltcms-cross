@@ -194,8 +194,12 @@ public final class Factory implements IFactory {
      */
     @Deprecated
     public static IFactory getInstance() {
-        LoggerFactory.getLogger(Factory.class).warn("Access to factory via getInstance() is deprecated, returning default instance!\nPlease use FactoryService to create new factory instances!");
-        return Factory.factory;
+        LoggerFactory.getLogger(Factory.class).warn("Access to factory via getInstance() is deprecated, returning default instance!\nPlease use Factory.getInstance(String name) to create or retrieve factory instances!");
+        return getInstance("default");
+    }
+    
+    public static IFactory getInstance(String name) {
+        return Lookup.getDefault().lookup(IFactoryService.class).getInstance(name);
     }
 
     /**

@@ -36,10 +36,21 @@ package cross;
 public interface IFactoryService {
 
     /**
+     * Returns the named factory instance or creates a new instance if the named
+     * instance is not known.
      *
-     * @param name
-     * @return
+     * @param name the name of the factory
+     * @return the factory
      */
     IFactory getInstance(String name);
+    
+    /**
+     * Removes the named factory instance if it exists and returns it.
+     * Returns null if no factory is known for the given name.
+     *
+     * @param name the name of the factory
+     * @return the factory or null
+     */
+    IFactory remove(String name);
 
 }

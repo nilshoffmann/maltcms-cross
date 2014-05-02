@@ -31,40 +31,25 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
 import org.openide.util.lookup.ServiceProvider;
 
-/**
- * Service to retrieve instances of IFactory.
- *
- * @author Nils Hoffmann
- * @since 1.3.1
- */
 @ServiceProvider(service = IFactoryService.class)
 public class FactoryService implements IFactoryService {
 
-    private final ConcurrentHashMap<String, WeakReference<IFactory>> map = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, IFactory> map = new ConcurrentHashMap<>();
 
-    /**
-     *
-     * @param name
-     * @return
-     */
     @Override
     public IFactory getInstance(String name) {
-        if (map.containsKey(name)) {
-            WeakReference<IFactory> ref = map.get(name);
-            IFactory factory = ref.get();
-            if (factory == null) {
-                factory = new Factory();
-                factory.setName(name);
-                map.put(name, new WeakReference<>(factory));
-            }
-            return factory;
-        } else {
-            IFactory factory = new Factory();
+        IFactory factory = map.get(name);
+        if (factory == null) {
+            factory = new Factory();
             factory.setName(name);
-            map.put(name, new WeakReference<>(factory));
-            return factory;
+            map.put(name, factory);
         }
+        return factory;
+    }
 
+    @Override
+    public IFactory remove(String name) {
+        return map.remove(name);
     }
 
 }

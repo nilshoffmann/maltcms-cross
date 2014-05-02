@@ -30,6 +30,8 @@ package cross;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IFileFragmentFactory;
 import cross.datastructures.pipeline.ICommandSequence;
+import cross.datastructures.tools.FileTools;
+import cross.datastructures.tools.FragmentTools;
 import cross.datastructures.tuple.TupleND;
 import cross.io.IDataSourceFactory;
 import cross.io.IInputDataFactory;
