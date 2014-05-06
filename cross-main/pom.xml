@@ -4,7 +4,7 @@
     <parent>
         <artifactId>cross</artifactId>
         <groupId>net.sf.maltcms</groupId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.3.2</version>
     </parent>
     <artifactId>cross-main</artifactId>
     <packaging>jar</packaging>

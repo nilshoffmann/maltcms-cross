@@ -1,5 +1,23 @@
 Release Notes
 
+Changes for version 1.3.2:
+---------------------------
+
+New Features
+
+* Added a new method to Factory to allow retrieval of a named factory instance.
+* Moved vmstats generation from DefaultWorkflow to Maltcms.
+
+Updates
+
+* Updated source code to java 7. Reformatted to consistently use 4 spaces as indentation depth. 
+
+Bug fixes
+
+* Fixed accidental loading of variable data when only structure should be loaded.
+* Fixed wrong lifecycle phase attachment for nbm artifacts.
+* Fixed missing / wrong params in javadoc.
+
 Changes for version 1.3.1:
 ---------------------------
 
