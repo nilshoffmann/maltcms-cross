@@ -749,7 +749,6 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             commandSequence.after();
             // Save configuration
             Factory.dumpConfig("runtime.properties", getStartupDate());
-            addVmStats(getOutputDirectory());
         }
         //only run workflow post processors if we have not experienced any exceptions
         for (IWorkflowPostProcessor pp : workflowPostProcessors) {
@@ -778,57 +777,6 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     @Override
     public void setWorkflowPostProcessors(List<IWorkflowPostProcessor> workflowPostProcessors) {
         this.workflowPostProcessors = workflowPostProcessors;
-    }
-
-    private void addVmStats(File outputDirectory) {
-        List<MemoryPoolMXBean> mbeans = ManagementFactory.getMemoryPoolMXBeans();
-        long maxUsedHeap = 0L;
-        long maxUsedNonHeap = 0L;
-        for (MemoryPoolMXBean mbean : mbeans) {
-            log.debug("Peak memory initial: " + mbean.getType().name() + ": " + String.format("%.2f", (mbean.getPeakUsage().getInit() / (1024.0f * 1024.0f))) + " MB");
-            log.debug("Peak memory used: " + mbean.getType().name() + ": " + String.format("%.2f", (mbean.getPeakUsage().getUsed() / (1024.0f * 1024.0f))) + " MB");
-            log.debug("Peak memory comitted: " + mbean.getType().name() + ": " + String.format("%.2f", (mbean.getPeakUsage().getCommitted() / (1024.0f * 1024.0f))) + " MB");
-            log.debug("Peak memory max: " + mbean.getType().name() + ": " + String.format("%.2f", (mbean.getPeakUsage().getMax() / (1024.0f * 1024.0f))) + " MB");
-            if (mbean.getType() == MemoryType.HEAP) {
-                maxUsedHeap += mbean.getPeakUsage().getUsed();
-            } else {
-                maxUsedNonHeap += mbean.getPeakUsage().getUsed();
-            }
-        }
-        log.info("Total memory used: " + String.format("%.2f", ((maxUsedHeap + maxUsedNonHeap) / (1024f * 1024f))) + " MB");
-        log.info("Heap memory used: " + String.format("%.2f", ((maxUsedHeap) / (1024f * 1024f))) + " MB");
-        log.info("Non-Heap memory used: " + String.format("%.2f", ((maxUsedNonHeap) / (1024f * 1024f))) + " MB");
-        int nmemoryPools = mbeans.size();
-
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        long[] allThreadIds = threadMXBean.getAllThreadIds();
-        long time = 0L;
-        long userTime = 0L;
-        long systemTime = 0L;
-        for (long id : allThreadIds) {
-            time += threadMXBean.getThreadCpuTime(id);
-            userTime += threadMXBean.getThreadUserTime(id);
-            systemTime += (threadMXBean.getThreadCpuTime(id) - threadMXBean.getThreadUserTime(id));
-        }
-
-        log.info("Total cpu time: {} sec, ", String.format("%.2f", (time / 1E9f)));
-        log.info("Total user time: {} sec, ", String.format("%.2f", (userTime / 1E9f)));
-        log.info("Total system time: {} sec, ", String.format("%.2f", (systemTime / 1E9f)));
-        File workflowStats = new File(new File(outputDirectory, "Factory"), "workflowStats.properties");
-
-        PropertiesConfiguration pc;
-        try {
-            pc = new PropertiesConfiguration(workflowStats);
-            pc.setProperty("usertime_nanoseconds", userTime);
-            pc.setProperty("systemtime_nanoseconds", systemTime);
-            pc.setProperty("cputime_nanoseconds", time);
-            pc.setProperty("memory_pools", nmemoryPools);
-            pc.setProperty("maxUsedMemory_bytes", maxUsedHeap + maxUsedNonHeap);
-            pc.save();
-        } catch (ConfigurationException ex) {
-            log.error("{}", ex);
-        }
-
     }
 
     @Override
