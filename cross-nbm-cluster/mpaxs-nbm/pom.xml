@@ -110,6 +110,8 @@
                     <cluster>maltcms</cluster>
                     <publicPackages>
                         <publicPackage>net.sf.mpaxs.*</publicPackage>
+                        <publicPackage>com.sun.grid.drmaa.*</publicPackage>
+                        <publicPackage>org.ggf.drmaa.*</publicPackage>
                     </publicPackages>
                     <defaultCluster>maltcms</defaultCluster>
                 </configuration>

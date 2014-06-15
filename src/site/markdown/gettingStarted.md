@@ -68,13 +68,12 @@ In order to use the Cross artifacts in your code, include them in the dependenci
             <groupId>net.sf.maltcms</groupId>
             <artifactId>cross-test</artifactId>
             <scope>test</scope>
-            <version>${project.version}</version>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>net.sf.maltcms</groupId>
             <artifactId>cross-main</artifactId>
-            <scope>test</scope>
-            <version>${project.version}</version>
+            <version>1.3.2</version>
         </dependency>
     </dependencies>
 
@@ -87,13 +86,12 @@ or in the dependency management section of your pom if you want to specify the v
             <groupId>net.sf.maltcms</groupId>
             <artifactId>cross-test</artifactId>
             <scope>test</scope>
-            <version>${project.version}</version>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
             <groupId>net.sf.maltcms</groupId>
             <artifactId>cross-main</artifactId>
-            <scope>test</scope>
-            <version>${project.version}</version>
+            <version>1.3.2</version>
         </dependency>
         </dependencies>
     </dependencyManagement>

@@ -426,7 +426,7 @@
                                 <show>public</show>
                                 <links>
                                     <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://www.unidata.ucar.edu/software/netcdf-java/v4.2/javadoc/</link>
+                                    <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
                                 </links>
                                 <!--                                <sourcepath>${basedir}/src/main/java</sourcepath>
                                 <sourcepath>target/generated-sources/delombok</sourcepath>-->
@@ -491,7 +491,7 @@
                     <dependency>
                         <groupId>lt.velykis.maven.skins</groupId>
                         <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.0.0</version>
+                        <version>1.1.0</version>
                     </dependency>
                     <!-- Reflow skin requires Velocity >= 1.7  -->
                     <dependency>
