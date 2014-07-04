@@ -247,7 +247,7 @@
                         <show>public</show>
                         <links>
                             <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            <link>http://www.unidata.ucar.edu/software/netcdf-java/v4.2/javadoc/</link>
+                            <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
                         </links>
                         <!--<sourcepath>target/generated-sources/delombok</sourcepath>-->
                         <archive>
@@ -846,8 +846,8 @@
         <version.slf4j>1.7.2</version.slf4j>
         <version.junit>4.11</version.junit>
         <version.netbeans>721RELEASE</version.netbeans>
-        <version.lombok>1.12.4</version.lombok>
-        <version.lombok.maven>1.12.4.0</version.lombok.maven>
+        <version.lombok>1.14.2</version.lombok>
+        <version.lombok.maven>1.14.2.0</version.lombok.maven>
         <version.cross.base>1.3.1</version.cross.base>
     </properties>
 </project>
