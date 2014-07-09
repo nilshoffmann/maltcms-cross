@@ -39,6 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -416,8 +417,14 @@ public class ReflectionApplicationContextGenerator {
      * @return
      */
     public static Class<?> getGenericFieldType(Field field) {
-        ParameterizedType fieldType = (ParameterizedType) field.getGenericType();
-        return (Class<?>) fieldType.getActualTypeArguments()[0];
+        Type fieldType = field.getGenericType();
+        if(fieldType instanceof ParameterizedType) {
+            Type[] t = ((ParameterizedType)fieldType).getActualTypeArguments();
+            if(t!=null) {
+                return (Class<?>) t[0];
+            }
+        }
+        return field.getType();
     }
     
     /**
@@ -426,8 +433,14 @@ public class ReflectionApplicationContextGenerator {
      * @return
      */
     public static Class<?> getGenericMethodReturnType(Method m) {
-        ParameterizedType methodReturnType = (ParameterizedType) m.getGenericReturnType();
-        return (Class<?>) methodReturnType.getActualTypeArguments()[0];
+        Type methodReturnType = m.getGenericReturnType();
+        if(methodReturnType instanceof ParameterizedType) {
+            Type[] t = ((ParameterizedType)methodReturnType).getActualTypeArguments();
+            if(t!=null) {
+                return (Class<?>) t[0];
+            }
+        }
+        return m.getReturnType();
     }
 
     /**
