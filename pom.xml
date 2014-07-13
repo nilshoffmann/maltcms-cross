@@ -249,7 +249,7 @@
                             <link>http://docs.oracle.com/javase/7/docs/api/</link>
                             <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
                         </links>
-                        <!--<sourcepath>target/generated-sources/delombok</sourcepath>-->
+                        <sourcepath>target/generated-sources/delombok</sourcepath>
                         <archive>
                             <manifestEntries>
                                 <Built-By>${user.name}</Built-By>
@@ -428,8 +428,8 @@
                                     <link>http://docs.oracle.com/javase/7/docs/api/</link>
                                     <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
                                 </links>
-                                <!--                                <sourcepath>${basedir}/src/main/java</sourcepath>
-                                <sourcepath>target/generated-sources/delombok</sourcepath>-->
+                                <sourcepath>${basedir}/src/main/java</sourcepath>
+                                <sourcepath>target/generated-sources/delombok</sourcepath>
                                 <groups>
                                     <group>
                                         <title>Cross Annotations</title>

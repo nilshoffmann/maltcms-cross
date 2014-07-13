@@ -46,6 +46,11 @@ import ucar.ma2.DataType;
 @Data
 public class SerializableArray implements Externalizable {
 
+    /**
+     * The Array that is serialized by this instance.
+     * 
+     * @return the original unserializable array
+     */
     @Setter(AccessLevel.NONE)
     private Array array;
 

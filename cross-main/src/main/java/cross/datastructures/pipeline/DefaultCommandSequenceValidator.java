@@ -41,6 +41,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -56,7 +58,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultCommandSequenceValidator implements ICommandSequenceValidator {
 
+    /**
+     * Determines, whether inherited variables from ancestor file fragments
+     * should be checked, when immediate variables are not available. 
+     * -- SETTER-- 
+     * Set whether inherited variables should be checked.
+     * 
+     * @param true if inherited variables should be checked, false otherwise
+     * @return whether inherited variables should be checked
+     */
     private boolean checkInheritedVariables = true;
+    /**
+     * The {@link CvResolver} to use for controlled vocabulary term resolution.
+     * -- SETTER -- 
+     * Set the cv resolver.
+     * 
+     * @param the cv resolver to set
+     * @return the current cv resolver
+     */
     private ICvResolver resolver = new CvResolver();
 
     @Override
@@ -74,11 +93,11 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
      * Check the command dependencies of the given input fragments and commands.
      *
      * @param inputFragments the input fragments to check
-     * @param commands       the commands to check
+     * @param commands the commands to check
      */
     public void checkCommandDependencies(
-        TupleND<IFileFragment> inputFragments,
-        List<IFragmentCommand> commands) {
+            TupleND<IFileFragment> inputFragments,
+            List<IFragmentCommand> commands) {
         final HashSet<String> providedVariables = new HashSet<>();
         for (IFragmentCommand cmd : commands) {
             if (this.checkInheritedVariables) {
@@ -88,9 +107,9 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
                 final Collection<String> optionalVars = AnnotationInspector.getOptionalRequiredVariables(cmd);
                 // get variables provided from the past
                 getPersistentVariables(inputFragments, requiredVars,
-                    providedVariables);
+                        providedVariables);
                 getPersistentVariables(inputFragments, optionalVars,
-                    providedVariables);
+                        providedVariables);
                 // check dependencies
                 // The following method throws a RuntimeException, when its
                 // constraints are not met, e.g. requiredVariables are not
@@ -104,12 +123,12 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
             for (final String var : createdVars) {
                 if (!var.isEmpty() && !providedVariables.contains(var)) {
                     log.debug("Adding new variable {}, provided by {}",
-                        var, cmd.getClass().getName());
+                            var, cmd.getClass().getName());
                     providedVariables.add(var);
                 } else {
                     log.debug(
-                        "Variable {} is shadowed!",
-                        var);
+                            "Variable {} is shadowed!",
+                            var);
                 }
             }
         }
@@ -119,14 +138,14 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
      * Check required optional variables against provided variables for given
      * cmd.
      *
-     * @param cmd               the command to check
-     * @param optionalVars      the optional variables
+     * @param cmd the command to check
+     * @param optionalVars the optional variables
      * @param providedVariables the provided variables
      * @return the collection of optional variables
      */
     protected Collection<String> checkOptionalVariables(
-        final IFragmentCommand cmd, final Collection<String> optionalVars,
-        final HashSet<String> providedVariables) {
+            final IFragmentCommand cmd, final Collection<String> optionalVars,
+            final HashSet<String> providedVariables) {
         if (optionalVars.isEmpty()) {
             log.debug("No optional variables declared!");
             return optionalVars;
@@ -135,16 +154,16 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
         for (final String var : optionalVars) {
             if (!var.isEmpty() && !providedVariables.contains(var)) {
                 log.debug(
-                    "Variable {} requested as optional by {} not declared as created by previous commands!",
-                    var, cmd.getClass().getName());
+                        "Variable {} requested as optional by {} not declared as created by previous commands!",
+                        var, cmd.getClass().getName());
                 checkOpt = false;
             }
 
         }
         if (checkOpt && (optionalVars.size() > 0)) {
             log.debug(
-                "Command {} has access to all optional requested variables!",
-                cmd.getClass().getName());
+                    "Command {} has access to all optional requested variables!",
+                    cmd.getClass().getName());
         }
         return optionalVars;
     }
@@ -152,16 +171,16 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
     /**
      * Check required variables against provided variables against given cmd.
      *
-     * @param cmd               the command to check
-     * @param requiredVars      the required variables
+     * @param cmd the command to check
+     * @param requiredVars the required variables
      * @param providedVariables the provided variables
      * @return the collection of required variables
      * @throws ConstraintViolationException
      */
     protected Collection<String> checkRequiredVariables(
-        final IFragmentCommand cmd, final Collection<String> requiredVars,
-        final HashSet<String> providedVariables)
-        throws ConstraintViolationException {
+            final IFragmentCommand cmd, final Collection<String> requiredVars,
+            final HashSet<String> providedVariables)
+            throws ConstraintViolationException {
         if (requiredVars.isEmpty()) {
             log.debug("No required variables declared!");
             return requiredVars;
@@ -172,8 +191,8 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
             log.debug("Checking variable {}", var);
             if (!var.isEmpty() && !providedVariables.contains(var)) {
                 log.warn(
-                    "Variable {} requested by {} not declared as created by previous commands!",
-                    var, cmd.getClass().getName());
+                        "Variable {} requested by {} not declared as created by previous commands!",
+                        var, cmd.getClass().getName());
                 check = false;
                 failedVars.add(var);
             }
@@ -181,14 +200,14 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
         if (check) {
             if (requiredVars.size() > 0) {
                 log.debug(
-                    "Command {} has access to all required variables!", cmd.getClass().getName());
+                        "Command {} has access to all required variables!", cmd.getClass().getName());
             }
             return requiredVars;
         } else {
             throw new ConstraintViolationException("Command "
-                + cmd.getClass().getName()
-                + " requires non-existing variables: "
-                + failedVars.toString());
+                    + cmd.getClass().getName()
+                    + " requires non-existing variables: "
+                    + failedVars.toString());
         }
     }
 
@@ -196,14 +215,16 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
      * Retrieve persistent variables, stored in previous pipeline result file
      * fragments.
      *
-     * @param inputFragments    the input fragments to check
-     * @param requiredVariables the required variables to check the fragments for
-     * @param providedVariables the provided variables to add the available variables to
+     * @param inputFragments the input fragments to check
+     * @param requiredVariables the required variables to check the fragments
+     * for
+     * @param providedVariables the provided variables to add the available
+     * variables to
      */
     private void getPersistentVariables(
-        final TupleND<IFileFragment> inputFragments,
-        final Collection<String> requiredVariables,
-        final HashSet<String> providedVariables) {
+            final TupleND<IFileFragment> inputFragments,
+            final Collection<String> requiredVariables,
+            final HashSet<String> providedVariables) {
         for (final IFileFragment ff : inputFragments) {
             for (final String s : requiredVariables) {
                 // resolve the variables name
@@ -217,8 +238,8 @@ public class DefaultCommandSequenceValidator implements ICommandSequenceValidato
                         }
                     } catch (final ResourceNotAvailableException rnae) {
                         log.debug(
-                            "Could not find variable {} as child of {}",
-                            vname, ff.getUri());
+                                "Could not find variable {} as child of {}",
+                                vname, ff.getUri());
                     }
                 } else {
                     throw new ConstraintViolationException("Variable name of required variable must not be null!");
