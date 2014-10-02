@@ -2,7 +2,7 @@
 ${licenseFirst}
 </#if>
 ${licensePrefix}Cross, common runtime object support system. 
-${licensePrefix}Copyright (C) 2008-2012, The authors of Cross. All rights reserved.
+${licensePrefix}Copyright (C) 2008-2014, The authors of Cross. All rights reserved.
 ${licensePrefix?replace(" +$", "", "r")}
 ${licensePrefix}Project website: http://maltcms.sf.net
 ${licensePrefix?replace(" +$", "", "r")}
