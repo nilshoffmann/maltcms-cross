@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE721</version>
+            <version>${version.netbeans}</version>
         </dependency>
         <dependency>
             <groupId>org.apache</groupId>

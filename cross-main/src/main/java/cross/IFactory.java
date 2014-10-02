@@ -27,6 +27,7 @@ package cross;
  * for details.
  */
 
+import static cross.Factory.DEFAULT;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IFileFragmentFactory;
 import cross.datastructures.pipeline.ICommandSequence;
@@ -36,12 +37,26 @@ import cross.datastructures.tuple.TupleND;
 import cross.io.IDataSourceFactory;
 import cross.io.IInputDataFactory;
 import cross.vocabulary.ICvResolver;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.ConfigurationUtils;
+import org.apache.commons.configuration.FileConfiguration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.event.ConfigurationListener;
+import org.apache.commons.io.FileUtils;
+import org.openide.util.Lookup;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -76,7 +91,8 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
     void setConfiguration(final Configuration config);
 
     /**
-     * Returns the name of this factory instance or 'default' if none was assigned.
+     * Returns the name of this factory instance or 'default' if none was
+     * assigned.
      *
      * @return the name
      */
@@ -140,8 +156,8 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
     IObjectFactory getObjectFactory();
 
     /**
-     * Return the current file fragment factory, responsible for creating
-     * file fragments.
+     * Return the current file fragment factory, responsible for creating file
+     * fragments.
      *
      * @return the file fragment factory
      * @see cross.datastructures.fragments.IFileFragmentFactory
@@ -171,8 +187,7 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
     /**
      * Attempts to shutdown all executing threads immediately, and returns a
      * list of all {@link Runnable} instances that were executing or were
-     * waiting to be executed when
-     * <code>shutdownNow</code> was called.
+     * waiting to be executed when <code>shutdownNow</code> was called.
      *
      * @return the list of runnables that have not yet finished execution
      */
@@ -182,7 +197,7 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
      * Waits for termination of executors for at most the given time.
      *
      * @param time the time to wait for
-     * @param u    the time unit
+     * @param u the time unit
      */
     void awaitTermination(final long time, final TimeUnit u);
 
@@ -200,5 +215,21 @@ public interface IFactory extends ConfigurationListener, IConfigurable {
      * @param r the Runnable to submit
      */
     void submitJob(final Runnable r);
+
+    /**
+     * Write current configuration to file.
+     *
+     * @param filename the filename to use
+     * @param d the date stamp to use
+     */
+    public void dumpConfig(final String filename, final Date d);
+
+    /**
+     * Save the current configuration to file.
+     *
+     * @param cfg the configuration to save
+     * @param location the file to write to
+     */
+    public void saveConfiguration(final Configuration cfg, final File location);
 
 }

@@ -26,6 +26,6 @@
  * for details.
  */
 /**
- * Cache implementation backed by a simple {@link HashMap}.
+ * Cache implementation backed by a simple {@link java.util.HashMap}.
  */
 package cross.cache.none;

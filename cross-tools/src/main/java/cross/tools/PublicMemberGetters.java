@@ -33,9 +33,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
+ * Utility class to retrieve public getter members.
  *
  * @author Nils Hoffmann
- * @param <T>
+ * @param <T> the bean type to inspect
  */
 public class PublicMemberGetters<T> {
 
@@ -45,17 +46,19 @@ public class PublicMemberGetters<T> {
     protected HashMap<String, Method> hm;
 
     /**
+     * Creates a new instance.
      *
-     * @param c
+     * @param c the bean's class
      */
     public PublicMemberGetters(Class<?> c) {
         this(c, new String[]{});
     }
 
     /**
+     * Creates a new instance with excuded public method names.
      *
-     * @param c
-     * @param suffixesToExclude
+     * @param c the bean's class
+     * @param suffixesToExclude the public method names to exclude
      */
     public PublicMemberGetters(Class<?> c, String... suffixesToExclude) {
         hm = new HashMap<>();
@@ -63,10 +66,10 @@ public class PublicMemberGetters<T> {
         for (Method method : m) {
             if (!method.isAnnotationPresent(NoFeature.class)) {
                 if (method.getName().startsWith("get")
-                    && !method.getName().equals("getClass")) {
+                        && !method.getName().equals("getClass")) {
                     // look for method name (after get) in suffixes to exclude
                     int idx = Arrays.binarySearch(suffixesToExclude, method.
-                        getName().substring(3));
+                            getName().substring(3));
                     // if idx < 0, suffix is not contained, so add method to
                     // pool
                     if (idx < 0) {
@@ -78,20 +81,26 @@ public class PublicMemberGetters<T> {
     }
 
     /**
+     * Creates a new instance.
      *
-     * @param t
+     * @param t the bean
      */
     public PublicMemberGetters(T t) {
         this(t.getClass());
     }
 
     /**
+     * Returns the corresponding {@link Method} object for the given name. The
+     * name may be prefixed with 'get', following the standard JAVA Beans
+     * convention, or it can correspond to the bean's property name with a
+     * capital first letter.
      *
-     * @param s
-     * @return
+     * @param methodName the method name
+     * @return the method object, or null if no method with the given name
+     * exists
      */
-    public Method getMethodForGetterName(String s) {
-        String name = s;
+    public Method getMethodForGetterName(String methodName) {
+        String name = methodName;
         if (name.startsWith("get")) {
             name = name.substring(3);
         }
@@ -103,12 +112,14 @@ public class PublicMemberGetters<T> {
     }
 
     /**
+     * Returns the corresponding {@link Method} object for the given field name.
      *
-     * @param s
-     * @return
+     * @param fieldName the field name
+     * @return the method object, or null if no method with the given name
+     * exists
      */
-    public Method getMethodForFieldName(String s) {
-        String name = s;
+    public Method getMethodForFieldName(String fieldName) {
+        String name = fieldName;
         if (name.startsWith("get")) {
             name = name.substring(3);
         }
@@ -123,13 +134,14 @@ public class PublicMemberGetters<T> {
     }
 
     /**
+     * Returns an array of valid method / property names (without 'get').
      *
-     * @param s
-     * @return
+     * @param methodNames the requested method names
+     * @return the corresponding valid getter names
      */
-    public String[] getGetterNames(String[] s) {
-        ArrayList<String> al = new ArrayList<>(s.length);
-        for (String method : s) {
+    public String[] getGetterNames(String[] methodNames) {
+        ArrayList<String> al = new ArrayList<>(methodNames.length);
+        for (String method : methodNames) {
             if (getMethodForGetterName(method) != null) {
                 al.add(method);
             }
@@ -138,8 +150,9 @@ public class PublicMemberGetters<T> {
     }
 
     /**
+     * Returns an array of valid method / property names (without 'get').
      *
-     * @return
+     * @return the valid getter names
      */
     public String[] getGetterNames() {
         String[] names = new String[hm.size()];

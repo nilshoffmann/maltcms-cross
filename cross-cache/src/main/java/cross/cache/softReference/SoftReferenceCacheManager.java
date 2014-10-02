@@ -50,7 +50,7 @@ public class SoftReferenceCacheManager {
      * Returns the <code>SoftReferenceCacheManager</code> instance. Creates a new one if none
      * has yet been created.
      *
-     * @return
+     * @return the singleton instance
      */
     public static SoftReferenceCacheManager getInstance() {
         if (SoftReferenceCacheManager.instance == null) {

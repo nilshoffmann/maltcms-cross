@@ -27,6 +27,7 @@
  */
 package cross.datastructures.fragments;
 
+import cross.Factory;
 import cross.annotations.Configurable;
 import cross.datastructures.tools.EvalTools;
 import cross.datastructures.tools.FileTools;
@@ -213,6 +214,6 @@ public class FileFragmentFactory implements IFileFragmentFactory {
         if (this.fsp == null) {
             this.fsp = new FragmentStringParser();
         }
-        return this.fsp.parse(dataInfo);
+        return this.fsp.parse(Factory.DEFAULT, dataInfo);
     }
 }

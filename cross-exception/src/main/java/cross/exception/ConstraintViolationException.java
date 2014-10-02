@@ -28,8 +28,7 @@
 package cross.exception;
 
 /**
- * ConstraintViolationException is thrown, if constraints are not met, as
- * checked within {@link cross.tools.EvalTools}.
+ * ConstraintViolationException is thrown, if constraints are not met.
  *
  * @author Nils Hoffmann
  *

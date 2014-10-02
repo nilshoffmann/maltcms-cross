@@ -118,7 +118,7 @@ public class ArrayChunkIteratorTest {
         IFileFragment f = new FileFragment();
         IVariableFragment testVar = f.addChild("testVar");
         testVar.setArray(ref);
-        ArrayChunkIterator aci = new ArrayChunkIterator(testVar, chunksize);//21 chunks, 20 of size 10 and one of size 5
+        ArrayChunkIterator aci = new ArrayChunkIterator(Factory.getInstance(), testVar, chunksize);//21 chunks, 20 of size 10 and one of size 5
         int idx = 0;
         Array reconstructedRef = Array.factory(DataType.getType(ref.getElementType()), ref.getShape());
         List<Array> arrayChunks = new ArrayList<>();

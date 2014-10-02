@@ -32,15 +32,15 @@ package cross.cache;
  * to keys in a custom cache implementation.
  *
  * @author Nils Hoffmann
- * @param <K>
- * @param <V>
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public interface ICacheElementProvider<K, V> {
 
     /**
-     *
-     * @param key
-     * @return
+     * Provide the value mapped to <code>key</code>.
+     * @param key the cache element's key
+     * @return the mapped value
      */
     V provide(K key);
 }

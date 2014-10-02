@@ -34,15 +34,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A mock cache using a typed HashMap for key->value mappings.
+ * A mock cache using a typed HashMap for key-value mappings.
  *
  * Adding a <code>null</code> value for a key will remove the key
  * from the map, thereby freeing resources associated to both,
  * key and value.
  *
  * @author Nils Hoffmann
- * @param <K>
- * @param <V>
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public class NoCache<K, V> implements ICacheDelegate<K, V> {
 
@@ -50,7 +50,7 @@ public class NoCache<K, V> implements ICacheDelegate<K, V> {
     private final String name;
 
     /**
-     * Creates a new instance.
+     * Creates a new instance of a cache mapped by a {@link ConcurrentHashMap}.
      *
      * @param name the cache name
      */

@@ -28,6 +28,7 @@
 package cross.io;
 
 import cross.Factory;
+import cross.IFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,13 +49,14 @@ public class DataSourceServiceLoader {
      *
      * Elements are sorted according to lexical order on their classnames.
      *
+     * @param factory the factory to use
      * @return a list of available implementations
      */
-    public List<IDataSource> getAvailableCommands() {
+    public List<IDataSource> getAvailableCommands(IFactory factory) {
         ServiceLoader<IDataSource> sl = ServiceLoader.load(IDataSource.class);
         HashSet<IDataSource> s = new HashSet<>();
         for (IDataSource ifc : sl) {
-            Factory.getInstance().getObjectFactory().configureType(ifc);
+            factory.getObjectFactory().configureType(ifc);
             s.add(ifc);
         }
         ArrayList<IDataSource> al = new ArrayList<>();

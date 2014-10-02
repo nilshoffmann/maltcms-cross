@@ -29,6 +29,7 @@ package cross.datastructures.fragments;
 
 import cross.Factory;
 import cross.IConfigurable;
+import cross.IFactory;
 import cross.annotations.Configurable;
 import cross.datastructures.tools.EvalTools;
 import cross.exception.ResourceNotAvailableException;
@@ -62,7 +63,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         private final Integer key;
 
         private SRefA(final Integer key, final Array value,
-            final ReferenceQueue<Array> rq) {
+                final ReferenceQueue<Array> rq) {
             super(value, rq);
             this.key = key;
         }
@@ -70,30 +71,34 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
 
     /**
      *
+     * @param factory
      * @param ivf
      * @return
      */
-    public static CachedList getList(final IVariableFragment ivf) {
-        return CachedList.getList(ivf, 0, -1);
+    public static CachedList getList(IFactory factory, final IVariableFragment ivf) {
+        return CachedList.getList(factory, ivf, 0, -1);
     }
 
     /**
      *
+     * @param factory
      * @param ivf
      * @param offset
      * @param length
      * @return
      */
-    public static CachedList getList(final IVariableFragment ivf,
-        final int offset, final int length) {
-        final String clclass = Factory.getInstance().getConfiguration().getString("cross.datastructures.fragments.cachedListImpl",
-            "cross.datastructures.fragments.CachedList");
-        final CachedList cl = Factory.getInstance().getObjectFactory().instantiate(clclass, CachedList.class);
+    public static CachedList getList(IFactory factory, final IVariableFragment ivf,
+            final int offset, final int length) {
+        final String clclass = factory.getConfiguration().getString("cross.datastructures.fragments.cachedListImpl",
+                "cross.datastructures.fragments.CachedList");
+        final CachedList cl = factory.getObjectFactory().instantiate(clclass, CachedList.class);
+        cl.setFactory(factory);
         cl.setVariableFragment(ivf);
         cl.init(offset, length);
         return cl;
     }
     private IVariableFragment ivf = null;
+    private IFactory factory = null;
     private final HashMap<Integer, SRefA> cache = new HashMap<>();
     @Configurable
     private int cacheSize = 512;
@@ -109,6 +114,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
     private int cacheLRU = 0;
     private int cacheLRUPURGELAST = 0;
     private int cacheSoftRefRemoved = 0;
+
+    public void setFactory(IFactory factory) {
+        this.factory = factory;
+    }
 
     @Override
     public boolean add(final Array arg0) {
@@ -146,7 +155,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
             this.cache.remove(keyr);
         }
         log.debug("Number of referenced Elements: {}",
-            this.cache.size());
+                this.cache.size());
     }
 
     @Override
@@ -159,9 +168,9 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
     @Override
     public void configure(final Configuration cfg) {
         this.prefetchOnMiss = cfg.getBoolean(this.getClass().getName()
-            + ".prefetchOnMiss", false);
+                + ".prefetchOnMiss", false);
         this.cacheSize = cfg.getInt(this.getClass().getName() + ".cacheSize",
-            1024);
+                1024);
     }
 
     @Override
@@ -202,9 +211,9 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
             if (this.prefetchOnMiss) {
                 final int upperBound = Math.min(this.size, this.cacheSize);
                 log.info("Prefetching: from {} to {}",
-                    arg0, arg0 + upperBound);
+                        arg0, arg0 + upperBound);
                 final List<Array> l = load(arg0, Math.max(arg0, Math.min(
-                    arg0 + upperBound - 1, this.size - 1)));
+                        arg0 + upperBound - 1, this.size - 1)));
                 for (int i = 0; i < l.size(); i++) {
                     addToCache(arg0 + i, l.get(i));
                 }
@@ -216,10 +225,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         }
         updateQueue();
         log.debug(
-            "CACHE ACCESS: HITS=" + this.cacheHit + " MISSES="
-            + this.cacheMiss + " GCED=" + this.cacheGCed
-            + " LRUED=" + this.cacheLRU + " LRUPURGED="
-            + this.cacheLRUPURGELAST);
+                "CACHE ACCESS: HITS=" + this.cacheHit + " MISSES="
+                + this.cacheMiss + " GCED=" + this.cacheGCed
+                + " LRUED=" + this.cacheLRU + " LRUPURGED="
+                + this.cacheLRUPURGELAST);
         return a;
     }
 
@@ -239,7 +248,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
     private void init(final int offset, final int size) {
         try {
             this.size = Factory.getInstance().getDataSourceFactory().getDataSourceFor(this.ivf.getParent()).readStructure(
-                this.ivf.getIndex()).getDimensions()[0].getLength();
+                    this.ivf.getIndex()).getDimensions()[0].getLength();
         } catch (final IOException | ResourceNotAvailableException ex) {
             log.warn(ex.getLocalizedMessage());
         }
@@ -308,7 +317,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
     }
 
     private List<Array> load(final int from, final int to)
-        throws ResourceNotAvailableException {
+            throws ResourceNotAvailableException {
         Range[] originalRange = this.ivf.getIndex().getRange();
         EvalTools.geq(from, to, this);
         try {
@@ -319,7 +328,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
             index.setRange(r);
             // read array
             final List<Array> a = Factory.getInstance().getDataSourceFactory().getDataSourceFor(this.ivf.getParent()).readIndexed(
-                this.ivf);
+                    this.ivf);
 
             return a;
         } catch (final IOException | ResourceNotAvailableException | InvalidRangeException ex) {
@@ -406,7 +415,7 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
 
     @Override
     public List<Array> subList(final int arg0, final int arg1) {
-        return CachedList.getList(this.ivf, arg0, arg1 - arg0);
+        return CachedList.getList(this.factory, this.ivf, arg0, arg1 - arg0);
     }
 
     @Override

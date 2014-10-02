@@ -45,8 +45,8 @@ import net.sf.ehcache.Element;
  * to disk, should the in-memory cache overflow.
  *
  * @author Nils Hoffmann
- * @param <K>
- * @param <V>
+ * @param <K> the key type
+ * @param <V> the value type
  */
 @Slf4j
 public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
@@ -105,8 +105,9 @@ public class EhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
     }
 
     /**
+     * Returns the Ehcache instance backing this cache instance.
      *
-     * @return
+     * @return the Ehcache instance
      */
     public Ehcache getCache() {
         return cache;

@@ -27,7 +27,7 @@
  */
 package cross.io.misc;
 
-import cross.Factory;
+import cross.IFactory;
 import cross.datastructures.fragments.IVariableFragment;
 import cross.exception.NotImplementedException;
 import cross.exception.ResourceNotAvailableException;
@@ -50,6 +50,7 @@ import ucar.nc2.Dimension;
 public class ArrayChunkIterator implements IArrayChunkIterator {
 
     private final IVariableFragment ivf;
+    private final IFactory factory;
     private int chunksize = 1024;
     private int chunk = 0;
     private int offset = 0;
@@ -60,15 +61,17 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
     /**
      * Creates a new chunked iterator for the given variable fragment, using the defined chunksize.
      *
+     * @param factory the factory to use 
      * @param ivf1       the variable fragment
      * @param chunksize1 the chunksize
      */
-    public ArrayChunkIterator(final IVariableFragment ivf1, final int chunksize1) {
+    public ArrayChunkIterator(final IFactory factory, final IVariableFragment ivf1, final int chunksize1) {
         this.chunksize = chunksize1;
         this.ivf = ivf1;
+        this.factory = factory;
         if (!this.ivf.hasArray()) {
             try {
-                Factory.getInstance().getDataSourceFactory().getDataSourceFor(
+                factory.getDataSourceFactory().getDataSourceFor(
                     this.ivf.getParent()).readStructure(ivf1);
                 loadFromFile = true;
             } catch (final IOException iex) {
@@ -119,7 +122,7 @@ public class ArrayChunkIterator implements IArrayChunkIterator {
         if (loadFromFile) {
             ivf.setRange(r);
             try {
-                a = Factory.getInstance().getDataSourceFactory()
+                a = factory.getDataSourceFactory()
                     .getDataSourceFor(this.ivf.getParent()).readSingle(
                         this.ivf);
             } catch (IOException | ResourceNotAvailableException ex) {

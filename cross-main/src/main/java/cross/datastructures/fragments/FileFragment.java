@@ -28,6 +28,7 @@
 package cross.datastructures.fragments;
 
 import cross.Factory;
+import cross.IFactory;
 import cross.cache.ICacheDelegate;
 import cross.datastructures.StatsMap;
 import cross.datastructures.tools.EvalTools;

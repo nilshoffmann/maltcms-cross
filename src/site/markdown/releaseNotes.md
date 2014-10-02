@@ -1,5 +1,27 @@
 Release Notes
 
+Changes for version 1.4:
+---------------------------
+This will be the first stable release for Cross/Maltcms 1.4.
+
+New Features
+
+Updates
+
+* Reenabled javadoc generation for lombok annotated classes.
+* Updated variable annotations.
+* Updated dependencies for javadoc and lombok.
+* Updated documentation. Fixed some dependency regressions.
+* Updated dependencies.
+
+Bug Fixes
+
+* Fixed class cast exception in ReflectionApplicationContextGenerator.
+
+Removed
+
+* Removed `cross.exceptions.NotInitializedException`
+
 Changes for version 1.3.2:
 ---------------------------
 

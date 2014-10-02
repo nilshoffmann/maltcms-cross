@@ -58,16 +58,16 @@ public class CacheFactory {
     /**
      * Set the cache location for all NEWLY created caches.
      *
-     * @param f
+     * @param cacheDirectory the cache directory
      */
-    public static void setCacheDirectory(File f) {
-        CacheFactory.cacheDirectory = f;
+    public static void setCacheDirectory(File cacheDirectory) {
+        CacheFactory.cacheDirectory = cacheDirectory;
     }
 
     /**
      * Remove the cache from the ehcache cache manager.
      *
-     * @param cacheName
+     * @param cacheName the name of the cache to remove
      */
     public static void removeCache(String cacheName) {
         try {

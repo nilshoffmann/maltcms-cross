@@ -32,7 +32,6 @@ package cross.exception;
  * resolved name is not available.
  *
  * @author Nils Hoffmann
- * @see {cross.vocabulary.IControlledVocabularyProvider}
  */
 public class MappingNotAvailableException extends RuntimeException {
 

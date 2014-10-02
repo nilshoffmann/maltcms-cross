@@ -30,9 +30,7 @@ package cross.cache.softReference;
 import cross.cache.ICacheElementProvider;
 
 /**
- * Values are referenced using {
- *
- * @see java.lang.ref.SoftReference}. These may be
+ * Values are referenced using {@link java.lang.ref.SoftReference}. These may be
  * reclaimed by the garbage collector as soon as the virtual machine requires
  * additional free memory. The keys are strongly referenced.
  *
@@ -45,7 +43,7 @@ public class AutoRetrievalSoftReferenceCache<K, V> extends SoftReferenceCache<K,
     private final ICacheElementProvider<K, V> provider;
 
     /**
-     * Creates a new instance
+     * Creates a new instance.
      *
      * @param name            the name of the cache
      * @param elementProvider the element provider

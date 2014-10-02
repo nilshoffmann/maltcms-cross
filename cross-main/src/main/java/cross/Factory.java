@@ -61,6 +61,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -99,7 +100,7 @@ import org.slf4j.LoggerFactory;
 @Slf4j
 public final class Factory implements IFactory {
 
-    private static final IFactory factory = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
+    public static final IFactory DEFAULT = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
 
     /**
      *
@@ -108,39 +109,14 @@ public final class Factory implements IFactory {
     }
 
     /**
-     * NEVER SYNCHRONIZE THIS METHOD, IT WILL BLOCK EVERYHTING WITHIN THE QUEUE!
-     *
-     * @param factory the factory instance to use
-     * @param time to wait until termination objectFactory each ThreadPool
-     * @param u the unit objectFactory time
-     * @throws InterruptedException thrown if interruption objectFactory waiting
-     * on termination occurs
-     */
-    public static void awaitTermination(final IFactory factory, final long time, final TimeUnit u)
-            throws InterruptedException {
-        factory.awaitTermination(time, u);
-    }
-
-    /**
      * Write current configuration to file.
      *
      * @param filename the filename to use
      * @param d the date stamp to use
      */
-    public static void dumpConfig(final String filename, final Date d) {
-        dumpConfig(Factory.getInstance(), filename, d);
-    }
-
-    /**
-     * Write current configuration to file.
-     *
-     * @param factory the factory instance to use
-     * @param filename the filename to use
-     * @param d the date stamp to use
-     */
-    public static void dumpConfig(final IFactory factory, final String filename, final Date d) {
+    public void dumpConfig(final String filename, final Date d) {
         //retrieve global, joint configuration
-        final Configuration cfg = factory.getConfiguration();
+        final Configuration cfg = getConfiguration();
         //retrieve pipeline.properties location
         String configFile = cfg.getString("pipeline.properties");
         if (configFile != null) {
@@ -174,7 +150,7 @@ public final class Factory implements IFactory {
                 }
                 LoggerFactory.getLogger(Factory.class).error("Saving configuration to: ");
                 LoggerFactory.getLogger(Factory.class).error("{}", location.getAbsolutePath());
-                Factory.saveConfiguration(factory, cfg, location);
+                saveConfiguration(cfg, location);
             } catch (IOException | ConfigurationException ex) {
                 LoggerFactory.getLogger(Factory.class).error("{}", ex);
 //            } catch (URISyntaxException ex) {
@@ -186,18 +162,20 @@ public final class Factory implements IFactory {
     }
 
     /**
-     * Return an instance objectFactory the factory.
-     *
-     * @deprecated injection of the factory into components requiring access to
-     * it should be preferred.
-     * @return the factory
+     * Return the {@link DEFAULT} factory instance.
+     * @return the default factory instance
      */
-    @Deprecated
     public static IFactory getInstance() {
-        LoggerFactory.getLogger(Factory.class).warn("Access to factory via getInstance() is deprecated, returning default instance!\nPlease use Factory.getInstance(String name) to create or retrieve factory instances!");
-        return getInstance("default");
+        Logger.getLogger(Factory.class.getName()).fine("Returning default factory instance!");
+        return DEFAULT;
     }
     
+    /**
+     * Returns a named factory instance.
+     * Use {@link DEFAULT} to obtain the default factory instance.
+     * @param name the name of the factory instance
+     * @return the named factory instance
+     */
     public static IFactory getInstance(String name) {
         return Lookup.getDefault().lookup(IFactoryService.class).getInstance(name);
     }
@@ -208,19 +186,7 @@ public final class Factory implements IFactory {
      * @param cfg the configuration to save
      * @param location the file to write to
      */
-    public static void saveConfiguration(final Configuration cfg,
-            final File location) {
-        saveConfiguration(Factory.getInstance(), cfg, location);
-    }
-
-    /**
-     * Save the current configuration to file.
-     *
-     * @param factory the factory instance to use
-     * @param cfg the configuration to save
-     * @param location the file to write to
-     */
-    public static void saveConfiguration(final IFactory factory, final Configuration cfg,
+    public void saveConfiguration(final Configuration cfg,
             final File location) {
         if (cfg instanceof FileConfiguration) {
             try {

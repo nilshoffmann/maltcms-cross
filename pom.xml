@@ -247,9 +247,10 @@
                         <show>public</show>
                         <links>
                             <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
+                            <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/</link>
                         </links>
-                        <sourcepath>target/generated-sources/delombok</sourcepath>
+                        <sourcepath>${basedir}/src/main/java</sourcepath>
+                        <sourcepath>${basedir}/target/generated-sources/delombok</sourcepath>
                         <archive>
                             <manifestEntries>
                                 <Built-By>${user.name}</Built-By>
@@ -393,7 +394,6 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <!--                        <templateFile>src/site/siteTemplate.vm</templateFile>-->
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -426,10 +426,10 @@
                                 <show>public</show>
                                 <links>
                                     <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/index.html</link>
+                                    <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/</link>
                                 </links>
                                 <sourcepath>${basedir}/src/main/java</sourcepath>
-                                <sourcepath>target/generated-sources/delombok</sourcepath>
+                                <sourcepath>${basedir}/target/generated-sources/delombok</sourcepath>
                                 <groups>
                                     <group>
                                         <title>Cross Annotations</title>
@@ -644,7 +644,7 @@
             <dependency>
                 <groupId>org.netbeans.api</groupId>
                 <artifactId>org-openide-util-lookup-osgi</artifactId>
-                <version>7.1.0</version>
+                <version>8.0.1</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -652,16 +652,16 @@
                 <version>${version.junit}</version>
                 <scope>test</scope>
             </dependency>
-            <!--            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>com.springsource.org.apache.commons.io</artifactId>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.osgi.compendium</artifactId>
                 <version>1.4.0</version>
-            </dependency>-->
+                <scope>provided</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.osgi.core</artifactId>
-                <version>1.0.0</version>
-                <!-- osgi.core is provided by the runtime container -->
+                <version>1.4.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -841,13 +841,14 @@
         <project.build.sourceLevel>1.7</project.build.sourceLevel>
         <project.build.targetLevel>1.7</project.build.targetLevel>
         <netbeans.hint.license>cross</netbeans.hint.license>
-        <version.spring>3.2.1.RELEASE</version.spring>
+        <version.spring>3.2.4.RELEASE</version.spring>
         <version.mpaxs>1.7.0</version.mpaxs>
-        <version.slf4j>1.7.2</version.slf4j>
+        <version.slf4j>1.7.7</version.slf4j>
         <version.junit>4.11</version.junit>
-        <version.netbeans>721RELEASE</version.netbeans>
+        <version.netbeans>RELEASE80</version.netbeans>
         <version.lombok>1.14.2</version.lombok>
         <version.lombok.maven>1.14.2.0</version.lombok.maven>
         <version.cross.base>1.3.1</version.cross.base>
+        <version.apache.commons.math>2.2</version.apache.commons.math>
     </properties>
 </project>

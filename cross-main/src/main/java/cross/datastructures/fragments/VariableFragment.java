@@ -27,6 +27,7 @@
  */
 package cross.datastructures.fragments;
 
+import cross.Factory;
 import cross.datastructures.StatsMap;
 import cross.datastructures.tools.ArrayTools;
 import cross.datastructures.tools.EvalTools;
@@ -276,7 +277,7 @@ public final class VariableFragment implements IVariableFragment {
 
     @Override
     public ArrayChunkIterator getChunkIterator(final int chunksize) {
-        return new ArrayChunkIterator(this, chunksize);
+        return new ArrayChunkIterator(Factory.getInstance(), this, chunksize);
     }
 
     @Override

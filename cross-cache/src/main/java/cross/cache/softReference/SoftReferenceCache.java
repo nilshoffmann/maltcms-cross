@@ -40,8 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * additional free memory. The keys are strongly referenced.
  *
  * @author Nils Hoffmann
- * @param <K>
- * @param <V>
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public class SoftReferenceCache<K, V> implements ICacheDelegate<K, V> {
 

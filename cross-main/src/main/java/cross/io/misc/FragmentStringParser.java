@@ -27,7 +27,7 @@
  */
 package cross.io.misc;
 
-import cross.Factory;
+import cross.IFactory;
 import cross.datastructures.fragments.FileFragment;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IVariableFragment;
@@ -195,10 +195,11 @@ public class FragmentStringParser {
      * Parses a String describing the structures of an IFileFragment Object-Tree
      * (document). Initializes all declared variables.
      *
+     * @param factory the factory instance to use
      * @param s the file fragment string
      * @return the file fragment
      */
-    public IFileFragment parse(final String s) {
+    public IFileFragment parse(IFactory factory, final String s) {
         EvalTools.notNull(s, this);
         if (!s.contains(">")) {
             final IFileFragment ff = new FileFragment(URI.create(FileTools.escapeUri(s)));
@@ -217,7 +218,7 @@ public class FragmentStringParser {
         // varnames
 
         String filename = fileNameVarNameRest[0];
-        File dir = new File(Factory.getInstance().getConfiguration().getString(
+        File dir = new File(factory.getConfiguration().getString(
             "input.basedir", ""));
         final File ff = new File(filename);
         if (ff.isAbsolute()) {
@@ -230,7 +231,7 @@ public class FragmentStringParser {
         if (vars.length == 0) {
             log.info("Vars not given explicitly, loading all!");
             try {
-                Factory.getInstance().getDataSourceFactory().getDataSourceFor(
+                factory.getDataSourceFactory().getDataSourceFor(
                     parent).readStructure(parent);
             } catch (final IOException e) {
                 log.error(e.getLocalizedMessage());

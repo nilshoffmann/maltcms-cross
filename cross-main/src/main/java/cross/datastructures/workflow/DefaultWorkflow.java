@@ -748,7 +748,7 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             //ensure that any resources are cleaned up
             commandSequence.after();
             // Save configuration
-            Factory.dumpConfig("runtime.properties", getStartupDate());
+            getFactory().dumpConfig("runtime.properties", getStartupDate());
         }
         //only run workflow post processors if we have not experienced any exceptions
         for (IWorkflowPostProcessor pp : workflowPostProcessors) {

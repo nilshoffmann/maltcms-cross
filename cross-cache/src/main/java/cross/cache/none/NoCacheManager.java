@@ -49,7 +49,7 @@ public class NoCacheManager {
      * Returns the <code>NoCacheManager</code> instance. Creates a new one if none
      * has yet been created.
      *
-     * @return
+     * @return the singleton instance of this cache manager
      */
     public static NoCacheManager getInstance() {
         if (NoCacheManager.instance == null) {

@@ -28,6 +28,7 @@
 package cross.io;
 
 import cross.Factory;
+import cross.IFactory;
 import cross.annotations.Configurable;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.tools.EvalTools;
@@ -38,9 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.Configuration;
 
 /**
- * Factory managing objects of type
- * <code>IDataSource</code>. Objects can be registered within cfg/io.properties,
- * key "cross.io.IDataSource". Or by defining them as service implementations of {@link cross.io.IDataSource} in a
+ * Factory managing objects of type <code>IDataSource</code>. Objects can be
+ * registered within cfg/io.properties, key "cross.io.IDataSource". Or by
+ * defining them as service implementations of {@link cross.io.IDataSource} in a
  * jar files manifest under META-INF/services/cross.io.IDataSource.
  *
  * @author Nils Hoffmann
@@ -60,7 +61,7 @@ public class DataSourceFactory implements IDataSourceFactory {
      */
     public DataSourceFactory() {
         DataSourceServiceLoader ids = new DataSourceServiceLoader();
-        List<IDataSource> l = ids.getAvailableCommands();
+        List<IDataSource> l = ids.getAvailableCommands(Factory.getInstance());
         for (IDataSource source : l) {
             log.debug("Adding datasource provider {} for formats {}", source, source.supportedFormats());
             Factory.getInstance().getObjectFactory().configureType(source);
@@ -92,13 +93,14 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     /**
-     * Returns a compatible {@link IDataSource} for given {@link IFileFragment}. First hit wins,
-     * if multiple DataSource implementations are registered for the same file
-     * type.
+     * Returns a compatible {@link IDataSource} for given {@link IFileFragment}.
+     * First hit wins, if multiple DataSource implementations are registered for
+     * the same file type.
      *
      * @param ff the file fragment
      * @return the data source for the given file fragment
-     * @throws IllegalArgumentException if no data source could be found for the given file fragment
+     * @throws IllegalArgumentException if no data source could be found for the
+     * given file fragment
      */
     @Override
     public IDataSource getDataSourceFor(final IFileFragment ff) {
@@ -111,13 +113,13 @@ public class DataSourceFactory implements IDataSourceFactory {
             while (cnt >= 0) {
                 if (hasDataSourceFor(tmp)) {
                     for (final IDataSource ids : this.formatToIDataSource.get(tmp.
-                        toLowerCase())) {
+                            toLowerCase())) {
                         try {
                             if (ids.canRead(ff) == 1) {
                                 return ids;
                             }
                         } catch (Exception e) {
-                            log.warn("Caught exception while querying IDataSource " + ids.getClass().getName() + "! IDataSource.canRead should not throw Exceptions: Please fix!");
+                            log.warn("Caught exception while querying IDataSource " + ids.getClass().getName() + "! IDataSource.canRead should not throw Exceptions: Please fix!", e);
                         }
                     }
                 }
@@ -131,11 +133,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     }
 
     private boolean hasDataSourceFor(String fileExtension) {
-        if (this.formatToIDataSource.containsKey(fileExtension.toLowerCase())) {
-            return true;
-
-        }
-        return false;
+        return this.formatToIDataSource.containsKey(fileExtension.toLowerCase());
     }
 
     /**
@@ -156,7 +154,7 @@ public class DataSourceFactory implements IDataSourceFactory {
     @Override
     public List<String> getSupportedFormats() {
         final List<String> l = new ArrayList<>(this.formatToIDataSource.
-            keySet());
+                keySet());
         return l;
     }
 
@@ -170,10 +168,10 @@ public class DataSourceFactory implements IDataSourceFactory {
         this.dataSources = dataSources;
         for (final String s : this.dataSources) {
             log.debug(
-                "Trying to load IDataSource {}", s);
+                    "Trying to load IDataSource {}", s);
             EvalTools.notNull(s, this);
             final IDataSource ids = Factory.getInstance().getObjectFactory().
-                instantiate(s, IDataSource.class);
+                    instantiate(s, IDataSource.class);
             addToHashMap(ids);
         }
     }

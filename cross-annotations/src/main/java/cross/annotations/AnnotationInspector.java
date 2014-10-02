@@ -191,7 +191,7 @@ public final class AnnotationInspector {
 
     /**
      * Returns the default value for field with given name on class, based
-     * on {@link Configurable.value}.
+     * on {@link cross.annotations.Configurable#value() }.
      *
      * @param c    the class to check
      * @param name the field name

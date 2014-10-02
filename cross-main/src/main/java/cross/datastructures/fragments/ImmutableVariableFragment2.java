@@ -293,7 +293,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
 
     @Override
     public ArrayChunkIterator getChunkIterator(final int chunksize) {
-        return new ArrayChunkIterator(this, chunksize);
+        return new ArrayChunkIterator(Factory.getInstance(), this, chunksize);
     }
 
     @Override
@@ -318,7 +318,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         } else {
             if (this.useCachedList) {
                 log.info("Using cached list");
-                return CachedList.getList(this);
+                return CachedList.getList(Factory.getInstance(), this);
             } else {
                 try {
                     final List<Array> l = Factory.getInstance().getDataSourceFactory().getDataSourceFor(

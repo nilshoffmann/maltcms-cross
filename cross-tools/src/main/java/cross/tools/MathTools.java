@@ -132,7 +132,7 @@ public class MathTools {
 //		return diffs;
 //	}
     /**
-     * Returns exact faculty for n<=170.
+     * Returns exact faculty for n smaller or equal to 170.
      * Throws an illegal argument exception if n is smaller than 0 or larger
      * than 170.
      * @param n the value
@@ -143,7 +143,7 @@ public class MathTools {
     }
 
     /**
-     * Returns exact factorial for n<=170.
+     * Returns exact factorial for n smaller or equal to 170.
      * Throws an illegal argument exception if n is smaller than 0 or larger
      * than 170.
      * @param n the value

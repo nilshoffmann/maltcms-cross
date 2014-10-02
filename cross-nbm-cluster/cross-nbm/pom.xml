@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE721</version>
+            <version>${version.netbeans}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.maltcms</groupId>
@@ -107,17 +107,17 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE721</version>
+            <version>${version.netbeans}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-modules</artifactId>
-            <version>RELEASE721</version>
+            <version>${version.netbeans}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE721</version>
+            <version>${version.netbeans}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

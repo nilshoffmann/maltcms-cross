@@ -42,15 +42,15 @@ import net.sf.ehcache.exceptionhandler.CacheExceptionHandler;
  * Transparent cache, which also knows how to create objects of the given type
  * via the
  *
- * {@link cross.datastructures.ehcache.ICacheElementProvider}, if their key is
- * not present in the in-memory cache.
+ * {@link cross.cache.ICacheElementProvider}, if their key is not present in the
+ * in-memory cache.
  *
  * Please note that Ehcache only allows Serializable objects to be externalized
  * to disk, should the in-memory cache overflow.
  *
  * @author Nils Hoffmann
- * @param <K>
- * @param <V>
+ * @param <K> the key type
+ * @param <V> the value type
  */
 @Slf4j
 public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> {
@@ -62,11 +62,11 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
     /**
      * Creates a new instance.
      *
-     * @param cache    the backing cache to use
-     * @param provider the provider for key -> value
+     * @param cache the backing cache to use
+     * @param provider the provider for values, given a specific key
      */
     public AutoRetrievalEhcacheDelegate(Ehcache cache,
-        ICacheElementProvider<K, V> provider) {
+            ICacheElementProvider<K, V> provider) {
         this.provider = provider;
         this.cache = cache;
         cache.setCacheExceptionHandler(new CacheExceptionHandler() {
@@ -74,8 +74,7 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
             @Override
             public void onException(Ehcache ehcache, Object key, Exception exception) {
                 if (exception instanceof java.io.NotSerializableException) {
-                    //ignore
-//					log.error("Exception occured on cache " + ehcache.getName() + ": ", exception);
+                    log.debug("Exception occured on cache " + ehcache.getName() + ": ", exception);
                 } else {
                     throw new RuntimeException("Exception occured on cache " + ehcache.getName() + ": ", exception);
                 }
@@ -115,8 +114,9 @@ public class AutoRetrievalEhcacheDelegate<K, V> implements ICacheDelegate<K, V> 
     }
 
     /**
+     * Returns the Ehcache instance backing this cache instance.
      *
-     * @return
+     * @return the Ehcache instance
      */
     public Ehcache getCache() {
         return cache;
