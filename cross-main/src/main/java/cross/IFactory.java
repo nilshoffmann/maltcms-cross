@@ -27,36 +27,21 @@ package cross;
  * for details.
  */
 
-import static cross.Factory.DEFAULT;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.fragments.IFileFragmentFactory;
 import cross.datastructures.pipeline.ICommandSequence;
-import cross.datastructures.tools.FileTools;
-import cross.datastructures.tools.FragmentTools;
 import cross.datastructures.tuple.TupleND;
 import cross.io.IDataSourceFactory;
 import cross.io.IInputDataFactory;
 import cross.vocabulary.ICvResolver;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.ConfigurationUtils;
-import org.apache.commons.configuration.FileConfiguration;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.event.ConfigurationListener;
-import org.apache.commons.io.FileUtils;
-import org.openide.util.Lookup;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>

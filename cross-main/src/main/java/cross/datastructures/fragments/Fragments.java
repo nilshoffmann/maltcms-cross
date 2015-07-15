@@ -79,7 +79,7 @@ public final class Fragments {
                 memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU);
             Configuration config = new Configuration();
             config.setDynamicConfig(true);
-            config.setMaxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4));
+            config.setMaxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(32), Runtime.getRuntime().maxMemory() / 4));
             config.setMaxBytesLocalDisk(MemoryUnit.parseSizeInBytes("100G"));
             config.setDefaultCacheConfiguration(cc);
             config.setName("maltcms-fragments-manager");

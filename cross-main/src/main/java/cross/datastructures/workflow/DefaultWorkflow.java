@@ -27,7 +27,6 @@
  */
 package cross.datastructures.workflow;
 
-import cross.Factory;
 import cross.IFactory;
 import cross.annotations.Configurable;
 import cross.commands.fragments.AFragmentCommand;
@@ -52,10 +51,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.MemoryType;
-import java.lang.management.ThreadMXBean;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +68,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jdom.Document;
 import org.jdom.Element;

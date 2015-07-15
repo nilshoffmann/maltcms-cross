@@ -114,6 +114,7 @@ public final class Factory implements IFactory {
      * @param filename the filename to use
      * @param d the date stamp to use
      */
+    @Override
     public void dumpConfig(final String filename, final Date d) {
         //retrieve global, joint configuration
         final Configuration cfg = getConfiguration();
@@ -186,6 +187,7 @@ public final class Factory implements IFactory {
      * @param cfg the configuration to save
      * @param location the file to write to
      */
+    @Override
     public void saveConfiguration(final Configuration cfg,
             final File location) {
         if (cfg instanceof FileConfiguration) {

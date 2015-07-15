@@ -105,6 +105,7 @@ public class InputDataFactory implements IInputDataFactory {
      * @param input the string resource paths
      * @return a collection of files
      */
+    @Override
     public Collection<File> getInputFiles(String[] input) {
         LinkedHashSet<File> files = new LinkedHashSet<>();
         for (String inputString : input) {
@@ -140,9 +141,6 @@ public class InputDataFactory implements IInputDataFactory {
                 if (!f.exists()) {
                     throw new ExitVmException("Input file '" + f + "' does not exist!");
                 }
-//				if (!f.isFile()) {
-//					throw new ExitVmException("Input file '" + f + "' is not a file!");
-//				}
                 files.add(f);
             }
         }

@@ -30,6 +30,8 @@ package cross.io;
 import cross.IConfigurable;
 import cross.datastructures.fragments.IFileFragment;
 import cross.datastructures.tuple.TupleND;
+import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -53,4 +55,11 @@ public interface IInputDataFactory extends IConfigurable {
      * @return the input file fragment tuple
      */
     TupleND<IFileFragment> prepareInputData(String[] input);
+    
+    /**
+     * Preprocess input data (files).
+     * @param input
+     * @return the input files
+     */
+    public Collection<File> getInputFiles(String[] input);
 }
