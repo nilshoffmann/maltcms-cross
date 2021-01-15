@@ -844,7 +844,7 @@
         <version.spring>3.2.4.RELEASE</version.spring>
         <version.mpaxs>1.7.0</version.mpaxs>
         <version.slf4j>1.7.7</version.slf4j>
-        <version.junit>4.11</version.junit>
+        <version.junit>4.13.1</version.junit>
         <version.netbeans>RELEASE80</version.netbeans>
         <version.lombok>1.14.2</version.lombok>
         <version.lombok.maven>1.14.2.0</version.lombok.maven>
