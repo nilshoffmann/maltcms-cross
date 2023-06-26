@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>cross</artifactId>
-        <groupId>net.sf.maltcms</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <groupId>com.github.nilshoffmann</groupId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>cross-main</artifactId>
     <packaging>jar</packaging>
@@ -36,30 +36,30 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId> 
-            <artifactId>org.springframework.aop</artifactId> 
+            <artifactId>spring-aop</artifactId> 
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>org.springframework.beans</artifactId>
+            <artifactId>spring-beans</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>org.springframework.context</artifactId>
+            <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>org.springframework.core</artifactId>
+            <artifactId>spring-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>org.springframework.expression</artifactId>
+            <artifactId>spring-expression</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.sf.mpaxs</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mpaxs-spi</artifactId>
             <exclusions>
                 <exclusion>
@@ -69,7 +69,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>net.sf.mpaxs</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mpaxs-server</artifactId>
             <exclusions>
                 <exclusion>
@@ -83,12 +83,12 @@
             <artifactId>commons-configuration</artifactId>
         </dependency>
         <dependency>
-            <groupId>edu.ucar.unidata</groupId>
-            <artifactId>netcdf-osgi</artifactId>
+            <groupId>edu.ucar</groupId>
+            <artifactId>netcdf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
-            <artifactId>com.springsource.org.jdom</artifactId>
+            <artifactId>jdom</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -124,7 +124,7 @@
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-lookup-osgi</artifactId>
+            <artifactId>org-openide-util-lookup</artifactId>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>

@@ -32,7 +32,7 @@ import cross.datastructures.tools.EvalTools;
 import cross.io.misc.ArrayChunkIterator;
 import java.util.Collections;
 import java.util.List;
-import org.jdom.Element;
+import org.jdom2.Element;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
 import ucar.ma2.Range;

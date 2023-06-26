@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.sf.maltcms</groupId>
+    <groupId>com.github.nilshoffmann</groupId>
     <artifactId>cross</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <name>Cross</name>
-    <url>http://maltcms.sourceforge.net/maven/cross/${project.version}</url>
-    <issueManagement>
+    <!--<url>http://maltcms.sourceforge.net/maven/cross/${project.version}</url>-->
+    <!--    <issueManagement>
         <system>Sourceforge Issue Tracker</system>
         <url>https://sourceforge.net/tracker/?group_id=251287&amp;atid=1126545</url>
-    </issueManagement>
-    <mailingLists>
+    </issueManagement>-->
+    <!--    <mailingLists>
         <mailingList>
             <name>maltcms-user</name>
             <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=maltcms-user</archive>
@@ -19,7 +19,7 @@
             <unsubscribe>https://lists.sourceforge.net/lists/listinfo/maltcms-user</unsubscribe>
             <post>maltcms-user@lists.sourceforge.net</post>
         </mailingList>
-    </mailingLists>
+    </mailingLists>-->
     <developers>
         <developer>
             <id>nilshoffmann</id>
@@ -61,17 +61,17 @@
         </developer>
     </developers>
     <inceptionYear>2007</inceptionYear>
-    <ciManagement>
+    <!--    <ciManagement>
         <system>hudson</system>
         <url>https://maltcms.de/jenkins/job/Cross/</url>
-    </ciManagement>
+    </ciManagement>-->
     <scm>
-        <developerConnection>scm:git:https://git.code.sf.net/p/maltcmscross/code</developerConnection>
-        <connection>scm:git:git://git.code.sf.net/p/maltcmscross/code</connection>
-        <url>https://git.code.sf.net/p/maltcmscross/code</url>
+        <developerConnection>scm:git:git@github.com:nilshoffmann/maltcms-cross.git</developerConnection>
+        <connection>scm:git:https://github.com/nilshoffmann/maltcms-cross.git</connection>
+        <url>https://github.com/nilshoffmann/maltcms-cross.git</url>
         <tag>HEAD</tag>
     </scm>
-    <distributionManagement>
+    <!--    <distributionManagement>
         <repository>
             <id>maltcms-release</id>
             <name>maltcms-artifactory-releases</name>
@@ -90,7 +90,7 @@
             <url>scp://shell.sourceforge.net/home/project-web/maltcms/htdocs/maven/cross/${project.version}</url>
         </site>
 
-    </distributionManagement>
+    </distributionManagement>-->
     
     <licenses>
         <license>
@@ -105,6 +105,13 @@
     
     <repositories>
         <repository>
+            <id>unidata-all</id>
+            <name>Unidata All</name>
+            <url>https://artifacts.unidata.ucar.edu/repository/unidata-all/</url>
+        </repository>
+    </repositories>
+    <!--    <repositories>
+        <repository>
             <id>maltcms-artifactory</id>
             <layout>default</layout>
             <releases>
@@ -116,7 +123,7 @@
             </snapshots>
             <url>http://maltcms.de/artifactory/repo</url>
         </repository>
-    </repositories>
+    </repositories>-->
 
     <build>
         <defaultGoal>install</defaultGoal>
@@ -160,7 +167,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
+                    <version>3.11.0</version>
                     <configuration>
                         <compilerVersion>${project.build.sourceLevel}</compilerVersion>
                         <source>${project.build.sourceLevel}</source>
@@ -171,22 +178,26 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.3.0</version>
                     <configuration>
-                        <archive>  
+                        <!--                        <archive>  
                             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                             <manifestEntries>
                                 <Built-By>${user.name}</Built-By>
                             </manifestEntries>
-                        </archive> 
+                        </archive> -->
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.10</version>
+                    <version>3.1.2</version>
                     <configuration>
-                        <argLine>-Xmx2G</argLine>
+                        <argLine>
+                            -Xmx2G
+                            --add-opens java.base/java.lang=ALL-UNNAMED
+                            --add-opens java.base/java.util=ALL-UNNAMED
+                        </argLine>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
                         <trimStackTrace>false</trimStackTrace>
                     </configuration>
@@ -194,7 +205,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.7</version>
+                    <version>3.1.1</version>
                     <configuration>
                         <retryFailedDeploymentCount>3</retryFailedDeploymentCount>
                     </configuration>
@@ -202,7 +213,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>2.0.1</version>
                     <configuration>
                         <connectionType>developerConnection</connectionType>
                     </configuration>
@@ -210,7 +221,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>3.3.1</version>
                     <configuration>
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <nonFilteredFileExtensions>
@@ -226,7 +237,7 @@
                     <inherited>true</inherited>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
+                    <version>3.3.0</version>
                     <configuration>
                         <archive>
                             <manifestEntries>
@@ -241,16 +252,16 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9</version>
+                    <version>3.5.0</version>
                     <configuration>
                         <!-- Default configuration for all reports -->
                         <show>public</show>
                         <links>
-                            <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            <link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/</link>
+                            <!--<link>http://docs.oracle.com/javase/7/docs/api/</link>-->
+                            <!--<link>http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.2/javadoc/</link>-->
                         </links>
                         <sourcepath>${basedir}/src/main/java</sourcepath>
-                        <sourcepath>${basedir}/target/generated-sources/delombok</sourcepath>
+                        <!--<sourcepath>${basedir}/target/generated-sources/delombok</sourcepath>-->
                         <archive>
                             <manifestEntries>
                                 <Built-By>${user.name}</Built-By>
@@ -299,7 +310,7 @@
                         </groups>
                     </configuration>
                 </plugin>
-                <plugin>
+                <!--                <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>2.3.7</version>
@@ -324,15 +335,15 @@
                     <groupId>org.ops4j</groupId>
                     <artifactId>maven-pax-plugin</artifactId>
                     <version>1.5</version>
-                </plugin>
-                <plugin>
+                </plugin>-->
+                <!--                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
                     <version>4.1</version>
                     <extensions>true</extensions>
-                </plugin>
+                </plugin>-->
                 <!--plugin execution is currently broken with java 1.7-->
-                <plugin>
+                <!--                <plugin>
                     <groupId>org.projectlombok</groupId>
                     <artifactId>lombok-maven-plugin</artifactId>
                     <version>${version.lombok.maven}</version>
@@ -349,7 +360,7 @@
                         <addOutputDirectory>false</addOutputDirectory>
                         <sourceDirectory>src/main/java</sourceDirectory>
                     </configuration>
-                </plugin>
+                </plugin>-->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>clirr-maven-plugin</artifactId>
@@ -365,14 +376,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <descriptors>
                         <descriptor>src/assemble/bin.xml</descriptor>
                     </descriptors>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.3.1</version>
@@ -388,8 +399,8 @@
                         <version>1.8.1</version> 
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
+            </plugin>-->
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.3</version>
@@ -403,7 +414,7 @@
                                 <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                                 <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                             </configuration>
-                            <!-- simpler configuration without reportSets available for usual cases -->
+                             simpler configuration without reportSets available for usual cases 
                             <reports>
                                 <report>dependencies</report>
                                 <report>dependency-convergence</report>
@@ -493,19 +504,19 @@
                         <artifactId>reflow-velocity-tools</artifactId>
                         <version>1.1.0</version>
                     </dependency>
-                    <!-- Reflow skin requires Velocity >= 1.7  -->
+                     Reflow skin requires Velocity >= 1.7  
                     <dependency>
                         <groupId>org.apache.velocity</groupId>
                         <artifactId>velocity</artifactId>
                         <version>1.7</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin>-->
             <!-- felix plugin needs to be present to be executed during install -->
-            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
     
@@ -550,7 +561,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
+        <!--        <profile>
             <id>lombok-needs-tools-jar</id>
             <activation>
                 <file>
@@ -577,10 +588,11 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
+        </profile>-->
     </profiles>
 
     <modules>
+        <module>mpaxs</module>
         <module>cross-annotations</module>
         <module>cross-cache</module>
         <module>cross-main</module>
@@ -589,8 +601,8 @@
         <module>cross-tools</module>
         <module>cross-math</module>
         <module>cross-test</module>
-        <module>cross-osgi</module>
-        <module>cross-nbm-cluster</module>
+        <!--        <module>cross-osgi</module>
+        <module>cross-nbm-cluster</module>-->
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -643,8 +655,8 @@
             </dependency>
             <dependency>
                 <groupId>org.netbeans.api</groupId>
-                <artifactId>org-openide-util-lookup-osgi</artifactId>
-                <version>8.0.1</version>
+                <artifactId>org-openide-util-lookup</artifactId>
+                <version>RELEASE180</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -652,7 +664,7 @@
                 <version>${version.junit}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
+            <!--            <dependency>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.osgi.compendium</artifactId>
                 <version>1.4.0</version>
@@ -663,17 +675,22 @@
                 <artifactId>org.osgi.core</artifactId>
                 <version>1.4.0</version>
                 <scope>provided</scope>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
-                <version>2.7.2</version>
+                <version>2.10.8</version>
             </dependency>
             <dependency>
-                <artifactId>com.springsource.org.jdom</artifactId>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>4.0.2</version>
+            </dependency>
+            <dependency>
+                <artifactId>jdom</artifactId>
                 <groupId>org.jdom</groupId>
                 <type>jar</type>
-                <version>1.1.0</version>
+                <version>2.0.2</version>
             </dependency>
             <dependency>
                 <artifactId>commons-lang</artifactId>
@@ -713,29 +730,34 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+<!--            <dependency>
+                <groupId>edu.ucar</groupId>
+                <artifactId>cdm-core</artifactId>
+                <version>5.3.3</version>
+            </dependency>-->
             <dependency>
-                <groupId>edu.ucar.unidata</groupId>
-                <artifactId>netcdf-osgi</artifactId>
-                <version>4.2.35</version>
+                <groupId>edu.ucar</groupId>
+                <artifactId>netcdf</artifactId>
+                <version>4.3.23</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId> 
-                <artifactId>org.springframework.aop</artifactId> 
+                <artifactId>spring-aop</artifactId> 
                 <version>${version.spring}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.beans</artifactId>
+                <artifactId>spring-beans</artifactId>
                 <version>${version.spring}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.context</artifactId>
+                <artifactId>spring-context</artifactId>
                 <version>${version.spring}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.core</artifactId>
+                <artifactId>spring-core</artifactId>
                 <version>${version.spring}</version>
                 <exclusions>
                     <exclusion>
@@ -746,7 +768,7 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.expression</artifactId>
+                <artifactId>spring-expression</artifactId>
                 <version>${version.spring}</version>
             </dependency>
             <dependency>
@@ -768,7 +790,7 @@
                 <version>1.7.1</version>
             </dependency>
             <dependency>
-                <groupId>net.sf.mpaxs</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>mpaxs-api</artifactId>
                 <version>${version.mpaxs}</version>
                 <exclusions>
@@ -779,7 +801,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>net.sf.mpaxs</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>mpaxs-computeHost</artifactId>
                 <version>${version.mpaxs}</version>
                 <exclusions>
@@ -789,7 +811,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
+            <!--            <dependency>
                 <groupId>net.sf.mpaxs</groupId>
                 <artifactId>mpaxs-drmaa-spi</artifactId>
                 <version>${version.mpaxs}</version>
@@ -799,9 +821,9 @@
                         <groupId>org.slf4j</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
+            </dependency>-->
             <dependency>
-                <groupId>net.sf.mpaxs</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>mpaxs-spi</artifactId>
                 <version>${version.mpaxs}</version>
                 <exclusions>
@@ -812,7 +834,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>net.sf.mpaxs</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>mpaxs-server</artifactId>
                 <version>${version.mpaxs}</version>
                 <exclusions>
@@ -838,16 +860,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.sourceLevel>1.7</project.build.sourceLevel>
-        <project.build.targetLevel>1.7</project.build.targetLevel>
+        <project.build.sourceLevel>20</project.build.sourceLevel>
+        <project.build.targetLevel>20</project.build.targetLevel>
         <netbeans.hint.license>cross</netbeans.hint.license>
-        <version.spring>3.2.4.RELEASE</version.spring>
-        <version.mpaxs>1.7.0</version.mpaxs>
-        <version.slf4j>1.7.7</version.slf4j>
+        <version.spring>6.0.10</version.spring>
+        <version.mpaxs>${project.version}</version.mpaxs>
+        <version.slf4j>2.0.7</version.slf4j>
         <version.junit>4.13.1</version.junit>
         <version.netbeans>RELEASE80</version.netbeans>
-        <version.lombok>1.14.2</version.lombok>
-        <version.lombok.maven>1.14.2.0</version.lombok.maven>
+        <version.lombok>1.18.28</version.lombok>
+        <!--<version.lombok.maven>1.14.2.0</version.lombok.maven>-->
         <version.cross.base>1.3.1</version.cross.base>
         <version.apache.commons.math>2.2</version.apache.commons.math>
     </properties>

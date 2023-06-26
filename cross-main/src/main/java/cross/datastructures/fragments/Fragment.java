@@ -32,7 +32,7 @@ import cross.datastructures.tools.EvalTools;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.jdom.Element;
+import org.jdom2.Element;
 import ucar.nc2.Attribute;
 
 /**

@@ -89,13 +89,14 @@ public class CacheFactory {
         if (defaultCacheManager == null) {
             cacheDirectory.mkdirs();
             Configuration cacheManagerConfig = new Configuration()
+                .name("maltcms-default")
                 .diskStore(new DiskStoreConfiguration()
                     .path(cacheDirectory.getAbsolutePath()));
             cacheManagerConfig.sizeOfPolicy(new SizeOfPolicyConfiguration().maxDepth(10000).maxDepthExceededBehavior(SizeOfPolicyConfiguration.MaxDepthExceededBehavior.ABORT));
 //			cacheManagerConfig.setMaxBytesLocalHeap(Math.max(MemoryUnit.MEGABYTES.toBytes(128), Runtime.getRuntime().maxMemory() / 4));
 //			cacheManagerConfig.setMaxBytesLocalDisk(Long.MAX_VALUE);
             defaultCacheManager = CacheManager.newInstance(cacheManagerConfig);
-            defaultCacheManager.setName("maltcms-default");
+//            defaultCacheManager.setName("maltcms-default");
         }
         return defaultCacheManager;
     }
@@ -331,6 +332,9 @@ public class CacheFactory {
      * @return the ehcache instance
      */
     public static Ehcache getCacheFor(String cacheName) {
-        return CacheManager.getInstance().getEhcache(cacheName);
+        if (CacheManager.getInstance().cacheExists(cacheName)) {
+            return CacheManager.getInstance().getEhcache(cacheName);
+        }
+        return CacheManager.getInstance().addCacheIfAbsent(cacheName);
     }
 }

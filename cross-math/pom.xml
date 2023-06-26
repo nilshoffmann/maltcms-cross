@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>cross</artifactId>
-        <groupId>net.sf.maltcms</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <groupId>com.github.nilshoffmann</groupId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>cross-math</artifactId>
     <name>Cross Math</name>

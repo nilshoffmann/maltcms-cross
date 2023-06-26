@@ -30,7 +30,7 @@ package cross.datastructures.fragments;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Represents a VariableFragment group with a given (unique) name.

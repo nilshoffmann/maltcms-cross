@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom.Element;
+import org.jdom2.Element;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
 import ucar.ma2.IndexIterator;
@@ -182,7 +182,7 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         final Element var = new Element(vname);
         this.fragment.appendXML(var);
         var.setAttribute("name", getName());
-        var.setAttribute("dataType", getDataType().getClassType().getName());
+        var.setAttribute("dataType", getDataType().getPrimitiveClassType().getName());
 
         final Dimension[] dims1 = getDimensions();
         if ((dims1 != null) && (dims1.length > 0)) {

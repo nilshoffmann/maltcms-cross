@@ -61,7 +61,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.mpaxs.api.ICompletionService;
 import net.sf.mpaxs.spi.concurrent.CompletionServiceFactory;
 import org.apache.commons.configuration.Configuration;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * A class providing a default implementation for configuration and a concrete

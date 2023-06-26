@@ -56,13 +56,13 @@ import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.event.ConfigurationEvent;
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
 import static ucar.ma2.DataType.INT;
@@ -588,7 +588,7 @@ public class FragmentXMLSerializer implements IDataSource {
             data_end = Math.min(data_dim.getLength() - 1, data_end);
             if (data_start > data_end) {
                 log.warn("scan_index contains an invalid last scan offset. Inserting terminating array with length 0!");
-                al.add(Array.factory(data_array.getElementType(), new int[0]));
+                al.add(Array.factory(DataType.getType(data_array.getElementType()), new int[0]));
             } else {
                 try {
                     log.debug("Reading array {}, from {} to {}", new Object[]{

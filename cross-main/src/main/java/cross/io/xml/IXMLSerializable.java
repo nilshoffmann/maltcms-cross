@@ -27,7 +27,7 @@
  */
 package cross.io.xml;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Interface allowing a Visitor like request to implementing objects to decorate

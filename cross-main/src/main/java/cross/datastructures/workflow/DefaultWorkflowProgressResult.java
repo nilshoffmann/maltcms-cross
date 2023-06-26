@@ -28,7 +28,7 @@
 package cross.datastructures.workflow;
 
 import cross.datastructures.tools.EvalTools;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * To avoid numerous instances of this object, you should only instantiate it
@@ -178,7 +178,7 @@ public class DefaultWorkflowProgressResult implements IWorkflowProgressResult {
     /*
      * (non-Javadoc)
      *
-     * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom.Element)
+     * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom2.Element)
      */
     @Override
     public void appendXML(Element e) {

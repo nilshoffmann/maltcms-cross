@@ -30,7 +30,7 @@ package cross.datastructures.workflow;
 import java.util.Arrays;
 import java.util.Map;
 import lombok.Data;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Deprecated. Please store statistics in file fragments and add them as

@@ -32,7 +32,7 @@ import cross.datastructures.tools.EvalTools;
 import cross.io.xml.IXMLSerializable;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Deprecated. Please store objects in file fragments and add them as

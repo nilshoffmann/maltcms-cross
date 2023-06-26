@@ -2,8 +2,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>cross</artifactId>
-        <groupId>net.sf.maltcms</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <groupId>com.github.nilshoffmann</groupId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>cross-cache</artifactId>
     <packaging>jar</packaging>
@@ -20,6 +20,11 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

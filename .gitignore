@@ -14,3 +14,9 @@
 /cross-nbm-cluster/mpaxs-nbm/target/
 /cross-nbm-cluster/netcdf-nbm/target/
 /cross-nbm-cluster/cross-nbm/target/
+/mpaxs/mpaxs-api/target/
+/mpaxs/mpaxs-computeHost/target/
+/mpaxs/mpaxs-distribution/target/
+/mpaxs/mpaxs-server/target/
+/mpaxs/mpaxs-spi/target/
+/mpaxs/mpaxs-test/target/

@@ -60,7 +60,7 @@ import net.sf.mpaxs.spi.concurrent.ComputeServerFactory;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.jdom.Element;
+import org.jdom2.Element;
 import org.openide.util.lookup.ServiceProvider;
 
 /**

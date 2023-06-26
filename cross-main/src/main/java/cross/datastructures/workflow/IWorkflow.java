@@ -42,7 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import org.apache.commons.configuration.Configuration;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Workflow models a sequence of produced IWorkflowResults, which usually are

@@ -40,6 +40,7 @@ import ucar.ma2.Array;
 import ucar.ma2.ArrayChar;
 import ucar.ma2.ArrayChar.StringIterator;
 import ucar.ma2.ArrayDouble;
+import ucar.ma2.DataType;
 import ucar.ma2.IndexIterator;
 import ucar.ma2.InvalidRangeException;
 import ucar.ma2.MAMath;
@@ -286,7 +287,7 @@ public class ArrayTools {
      * @return the random array
      */
     public static Array random(Random random, double offset, double scale, Class<?> elementType, int[] shape) {
-        Array a = Array.factory(elementType, shape);
+        Array a = Array.factory(DataType.getType(elementType.getName()), shape);
         IndexIterator iter = a.getIndexIterator();
         while (iter.hasNext()) {
             iter.setDoubleNext((random.nextDouble() * scale) - offset);

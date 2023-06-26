@@ -35,7 +35,7 @@ import cross.exception.ResourceNotAvailableException;
 import java.io.File;
 import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Default implementation of an
@@ -194,7 +194,7 @@ public class DefaultWorkflowResult implements IWorkflowFileResult {
     /*
      * (non-Javadoc)
      *
-     * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom.Element)
+     * @see cross.io.xml.IXMLSerializable#appendXML(org.jdom2.Element)
      */
     @Override
     public void appendXML(Element e) {
