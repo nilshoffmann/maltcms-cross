@@ -336,12 +336,12 @@
                     <artifactId>maven-pax-plugin</artifactId>
                     <version>1.5</version>
                 </plugin>-->
-                <!--                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                <plugin>
+                    <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>4.1</version>
+                    <version>4.8</version>
                     <extensions>true</extensions>
-                </plugin>-->
+                </plugin>
                 <!--plugin execution is currently broken with java 1.7-->
                 <!--                <plugin>
                     <groupId>org.projectlombok</groupId>
@@ -603,6 +603,7 @@
         <module>cross-test</module>
         <!--        <module>cross-osgi</module>
         <module>cross-nbm-cluster</module>-->
+        <module>cross-nbm-cluster</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -730,7 +731,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-<!--            <dependency>
+            <!--            <dependency>
                 <groupId>edu.ucar</groupId>
                 <artifactId>cdm-core</artifactId>
                 <version>5.3.3</version>
@@ -867,7 +868,7 @@
         <version.mpaxs>${project.version}</version.mpaxs>
         <version.slf4j>2.0.7</version.slf4j>
         <version.junit>4.13.1</version.junit>
-        <version.netbeans>RELEASE80</version.netbeans>
+        <version.netbeans>RELEASE180</version.netbeans>
         <version.lombok>1.18.28</version.lombok>
         <!--<version.lombok.maven>1.14.2.0</version.lombok.maven>-->
         <version.cross.base>1.3.1</version.cross.base>
