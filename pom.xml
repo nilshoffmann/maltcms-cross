@@ -688,10 +688,10 @@
                 <version>4.0.2</version>
             </dependency>
             <dependency>
-                <artifactId>jdom</artifactId>
+                <artifactId>jdom2</artifactId>
                 <groupId>org.jdom</groupId>
                 <type>jar</type>
-                <version>2.0.2</version>
+                <version>2.0.4</version>
             </dependency>
             <dependency>
                 <artifactId>commons-lang</artifactId>
