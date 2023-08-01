@@ -861,8 +861,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.sourceLevel>20</project.build.sourceLevel>
-        <project.build.targetLevel>20</project.build.targetLevel>
+        <project.build.sourceLevel>17</project.build.sourceLevel>
+        <project.build.targetLevel>17</project.build.targetLevel>
         <netbeans.hint.license>cross</netbeans.hint.license>
         <version.spring>6.0.10</version.spring>
         <version.mpaxs>${project.version}</version.mpaxs>

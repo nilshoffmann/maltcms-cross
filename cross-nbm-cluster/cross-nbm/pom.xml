@@ -145,7 +145,7 @@
                         <publicPackage>cross.*</publicPackage>
                         <publicPackage>net.sf.ehcache.*</publicPackage>
                         <publicPackage>org.springframework.*</publicPackage>
-                        <publicPackage>org.jdom.*</publicPackage>
+                        <publicPackage>org.jdom2.*</publicPackage>
                     </publicPackages>
                     <defaultCluster>maltcms</defaultCluster>
                 </configuration>
