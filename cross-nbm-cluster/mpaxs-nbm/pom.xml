@@ -21,7 +21,7 @@
             <version>${version.netbeans}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache</groupId>
+            <groupId>io.github.nilshoffmann</groupId>
             <artifactId>apache-commons-nbm</artifactId>
             <version>${project.version}</version>
             <exclusions>
