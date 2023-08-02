@@ -15,7 +15,7 @@ integration and infrastructure for worfklow-based processing of data.
 
 - https://github.com/nilshoffmann/maltcms-cross[This project]
 - https://github.com/nilshoffmann/maltcms[Maltcms Framework for Mass Spectrometry]
-- https://github.com/nilshoffmann/maui[Maltcms Graphical User Interface]
+- https://github.com/nilshoffmann/maui[MAUI - the Maltcms Graphical User Interface]
 
 == Table of contents
 toc::[]
