@@ -231,7 +231,7 @@
                             </manifestEntries>
                         </archive>
                         <detectJavaApiLink>false</detectJavaApiLink>
-                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <doclint>none</doclint>
                         <docfilessubdirs>true</docfilessubdirs>
                         <excludes>
                             <exclude>**/site.xml</exclude>
