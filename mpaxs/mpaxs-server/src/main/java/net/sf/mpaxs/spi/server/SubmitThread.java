@@ -66,7 +66,10 @@ public class SubmitThread implements Runnable {
 		this.host = host;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		reporter.report("Placing job in running");
 		master.getRunningJobs().put(job.getId(), job);

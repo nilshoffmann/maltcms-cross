@@ -80,25 +80,46 @@ public final class ComputeHostImpl extends UnicastRemoteObject implements ICompu
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @param host
+     */
+    @Override
 	public void setHost(UUID authToken, IRemoteHost host) {
 		this.host = host;
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @param job
+     * @throws RemoteException
+     */
+    @Override
 	public void runJob(UUID authToken, IJob job) throws RemoteException {
 		authenticate(authToken);
 		JobExecutor executor = new JobExecutor(job, host, settings.getRemoteReference(), jobLocation);
 		executor.start();
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @throws RemoteException
+     */
+    @Override
 	public void terminateHost(UUID authToken) throws RemoteException {
 		authenticate(authToken);
 		System.exit(1);
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @throws RemoteException
+     */
+    @Override
 	public void masterServerShuttingDown(UUID authToken) throws RemoteException {
 		authenticate(authToken);
 		if (!settings.getSilentMode()) {
@@ -107,13 +128,26 @@ public final class ComputeHostImpl extends UnicastRemoteObject implements ICompu
 		host.shutdown(this);
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @return
+     * @throws RemoteException
+     */
+    @Override
 	public boolean stillAlive(UUID authToken) throws RemoteException {
 		authenticate(authToken);
 		return true;
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @param jobID
+     * @return
+     * @throws RemoteException
+     */
+    @Override
 	public Progress getJobProgress(UUID authToken, UUID jobID) throws RemoteException {
 		authenticate(authToken);
 		if (jobLocation.containsKey(jobID)) {
@@ -123,7 +157,14 @@ public final class ComputeHostImpl extends UnicastRemoteObject implements ICompu
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     * @param jobID
+     * @return
+     * @throws RemoteException
+     */
+    @Override
 	public boolean cancelJob(UUID authToken, UUID jobID) throws RemoteException {
 		authenticate(authToken);
 		if (jobLocation.containsKey(jobID)) {

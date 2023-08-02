@@ -69,13 +69,21 @@ public class ConfigurableCallable<V> implements ConfigurableRunnable<V>, Callabl
 		cr.configure(pathToConfig);
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    @Override
 	public V call() throws Exception {
 		run();
 		return get();
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		cr.run();
 	}

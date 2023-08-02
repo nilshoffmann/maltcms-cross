@@ -55,7 +55,10 @@ public class MpaxsImpl implements Impaxs {
 
 	MasterServer master;
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void startMasterServer() {
 		if (master != null) {
 			throw new IllegalStateException("Master server was already started!");
@@ -63,7 +66,11 @@ public class MpaxsImpl implements Impaxs {
 		master = StartUp.start();
 	}
 
-	@Override
+    /**
+     *
+     * @param configFile
+     */
+    @Override
 	public void startMasterServer(String configFile) {
 		if (master != null) {
 			throw new IllegalStateException("Master server was already started!");
@@ -71,7 +78,12 @@ public class MpaxsImpl implements Impaxs {
 		master = StartUp.start(configFile, null);
 	}
 
-	@Override
+    /**
+     *
+     * @param configFile
+     * @param c
+     */
+    @Override
 	public void startMasterServer(String configFile, Container c) {
 		if (master != null) {
 			throw new IllegalStateException("Master server was already started!");
@@ -79,7 +91,11 @@ public class MpaxsImpl implements Impaxs {
 		master = StartUp.start(configFile, c);
 	}
 
-	@Override
+    /**
+     *
+     * @param c
+     */
+    @Override
 	public void startMasterServer(Container c) {
 		if (master != null) {
 			throw new IllegalStateException("Master server was already started!");
@@ -87,7 +103,12 @@ public class MpaxsImpl implements Impaxs {
 		master = StartUp.start(null, c);
 	}
 
-	@Override
+    /**
+     *
+     * @param config
+     * @param c
+     */
+    @Override
 	public void startMasterServer(Configuration config, Container c) {
 		if (master != null) {
 			throw new IllegalStateException("Master server was already started!");
@@ -118,64 +139,118 @@ public class MpaxsImpl implements Impaxs {
 
 	}
 
-	@Override
+    /**
+     *
+     * @param config
+     */
+    @Override
 	public void startMasterServer(Configuration config) {
 		startMasterServer(config, null);
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     */
+    @Override
 	public void submitJob(IJob job) {
 		master.submitJob(job);
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     * @param timeUntilStart
+     * @param scheduleAt
+     * @param timeUnit
+     */
+    @Override
 	public void submitScheduledJob(IJob job, long timeUntilStart, long scheduleAt, TimeUnit timeUnit) {
 		master.submitJob(job, timeUntilStart, scheduleAt, timeUnit);
 	}
 
-	@Override
+    /**
+     *
+     * @param jobId
+     * @return
+     */
+    @Override
 	public Progress getJobProgress(UUID jobId) {
 		return master.getJobProgress(jobId);
 	}
 
-	@Override
+    /**
+     *
+     * @param listener
+     */
+    @Override
 	public void addJobEventListener(IJobEventListener listener) {
 		master.addListener(listener);
 	}
 
-	@Override
+    /**
+     *
+     * @param listener
+     */
+    @Override
 	public void removeJobEventListener(IJobEventListener listener) {
 		master.removeListener(listener);
 	}
 
-	@Override
+    /**
+     *
+     * @param listener
+     * @param jobId
+     */
+    @Override
 	public void addJobEventListener(IJobEventListener listener, UUID jobId) {
 		master.addListener(listener, jobId);
 	}
 
-	@Override
+    /**
+     *
+     * @param listener
+     * @param jobId
+     */
+    @Override
 	public void removeJobEventListener(IJobEventListener listener, UUID jobId) {
 		master.removeListener(listener, jobId);
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void stopMasterServer() {
 		master.shutdown();
 		master = null;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public UUID getAuthenticationToken() {
 		return UUID.fromString(Settings.getInstance().getString(
 			ConfigurationKeys.KEY_AUTH_TOKEN));
 	}
 
-	@Override
+    /**
+     *
+     * @param jobId
+     * @return
+     */
+    @Override
 	public boolean cancelJob(UUID jobId) {
 		return master.cancelJob(jobId);
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     */
+    @Override
 	public void resubmitJob(IJob job) {
 		master.cancelJob(job.getId());
 		job.setStatus(Status.UNKNOWN);

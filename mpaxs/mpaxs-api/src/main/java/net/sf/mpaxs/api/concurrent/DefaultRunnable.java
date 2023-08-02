@@ -74,7 +74,10 @@ public class DefaultRunnable<V> implements ConfigurableRunnable<V> {
 		return p;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		p.setMessage("Starting execution of " + r.getClass().getName());
 		p.setProgress(0);

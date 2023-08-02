@@ -47,7 +47,12 @@ public final class ExceptionSafeThreadFactory implements ThreadFactory {
 		this.handler = handler;
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     * @return
+     */
+    @Override
 	public Thread newThread(Runnable r) {
 		Thread t = threadFactory.newThread(r);
 		t.setUncaughtExceptionHandler(handler);

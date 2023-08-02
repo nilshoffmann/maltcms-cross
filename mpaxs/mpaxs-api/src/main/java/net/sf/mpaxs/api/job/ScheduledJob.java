@@ -100,7 +100,10 @@ public class ScheduledJob<T> implements IScheduledJob<T> {
 		return timeUnit;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void errorOccurred() {
 		delegate.errorOccurred();
 	}
@@ -175,7 +178,11 @@ public class ScheduledJob<T> implements IScheduledJob<T> {
 		delegate.setPriority(priority);
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public int hashCode() {
 		int hash = 7;
 		hash = 11 * hash + (int) (this.initialDelay ^ (this.initialDelay >>> 32));
@@ -185,7 +192,12 @@ public class ScheduledJob<T> implements IScheduledJob<T> {
 		return hash;
 	}
 
-	@Override
+    /**
+     *
+     * @param obj
+     * @return
+     */
+    @Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -206,7 +218,11 @@ public class ScheduledJob<T> implements IScheduledJob<T> {
 		return this.delegate == other.delegate || (this.delegate != null && this.delegate.equals(other.delegate));
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public String toString() {
 		return "ScheduledJob{" + "initialDelay=" + initialDelay + ", period=" + period + ", timeUnit=" + timeUnit + ", delegate=" + delegate + '}';
 	}

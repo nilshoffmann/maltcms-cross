@@ -69,7 +69,10 @@ public class JobExecutor extends Thread implements Thread.UncaughtExceptionHandl
 		this.jobLocation = jobLocation;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		try {
 			Logger.getLogger(JobExecutor.class.getName()).log(Level.INFO, "Running job {0}", job);
@@ -107,7 +110,10 @@ public class JobExecutor extends Thread implements Thread.UncaughtExceptionHandl
 		}
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void interrupt() {
 		super.interrupt();
 		if (executor != null) {
@@ -123,7 +129,12 @@ public class JobExecutor extends Thread implements Thread.UncaughtExceptionHandl
 		return job.getClassToExecute().getProgress();
 	}
 
-	@Override
+    /**
+     *
+     * @param t
+     * @param e
+     */
+    @Override
 	public void uncaughtException(Thread t, Throwable e) {
 		jobFailed = true;
 		job.setThrowable(e);

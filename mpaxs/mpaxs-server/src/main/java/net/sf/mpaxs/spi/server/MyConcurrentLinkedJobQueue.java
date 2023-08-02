@@ -92,7 +92,12 @@ public class MyConcurrentLinkedJobQueue extends PriorityBlockingQueue<IJob> {
 
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     * @return
+     */
+    @Override
 	public boolean offer(IJob job) {
 		if (super.offer(job)) {
 			queueBack.put(job.getId(), job);
@@ -102,13 +107,22 @@ public class MyConcurrentLinkedJobQueue extends PriorityBlockingQueue<IJob> {
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     * @return
+     */
+    @Override
 	public boolean add(IJob job) {
 		queueBack.put(job.getId(), job);
 		return super.offer(job);
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public IJob poll() {
 		IJob ret = super.poll();
 		if (ret != null) {

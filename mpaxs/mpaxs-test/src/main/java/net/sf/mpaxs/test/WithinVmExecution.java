@@ -57,6 +57,11 @@ public class WithinVmExecution implements Callable<Double>, Serializable {
         this.maxThreads = maxThreads;
     }
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     @Override
     public Double call() throws Exception {
         CompletionServiceFactory<Double> csf = new CompletionServiceFactory<Double>();

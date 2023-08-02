@@ -262,7 +262,10 @@ public class Job<T> implements IJob<T> {
 		return errorCounter;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public synchronized void errorOccurred() {
 		errorCounter++;
 	}
@@ -296,7 +299,12 @@ public class Job<T> implements IJob<T> {
 		this.classToExecute = cr;
 	}
 
-	@Override
+    /**
+     *
+     * @param obj
+     * @return
+     */
+    @Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -308,7 +316,11 @@ public class Job<T> implements IJob<T> {
 		return this.id == other.id || (this.id != null && this.id.equals(other.id));
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public int hashCode() {
 		int hash = 3;
 		hash = 83 * hash + (this.id != null ? this.id.hashCode() : 0);
@@ -335,7 +347,11 @@ public class Job<T> implements IJob<T> {
 		this.priority = priority;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public String toString() {
 		return "Job{classToExecute=" + classToExecute + ", id=" + id + ", jobConfigFile=" + jobConfigFile + ", status=" + status + ", errorCounter=" + errorCounter + ", priority=" + priority + ", throwable=" + throwable + '}';
 	}

@@ -630,7 +630,12 @@ public class MasterServer implements Thread.UncaughtExceptionHandler {
 		}
 	}
 
-	public Host getHostJobIsRunningOn(UUID jobID) {
+    /**
+     *
+     * @param jobID
+     * @return
+     */
+    public Host getHostJobIsRunningOn(UUID jobID) {
 		if (!isShutdown) {
 			return jobRunningOnHost.get(jobID);
 		} else {
@@ -726,7 +731,12 @@ public class MasterServer implements Thread.UncaughtExceptionHandler {
 		return b;
 	}
 
-	@Override
+    /**
+     *
+     * @param t
+     * @param e
+     */
+    @Override
 	public void uncaughtException(Thread t, Throwable e) {
 		//reporter.report("Error: " + e.getLocalizedMessage());
 		EventLogger.getInstance().getLogger().log(Level.SEVERE, "Uncaught exception!", e);

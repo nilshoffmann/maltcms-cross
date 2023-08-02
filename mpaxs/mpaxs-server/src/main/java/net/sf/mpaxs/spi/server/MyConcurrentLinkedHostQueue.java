@@ -86,13 +86,26 @@ public class MyConcurrentLinkedHostQueue extends LinkedBlockingQueue<Host> {
 
 	}
 
-	@Override
+    /**
+     *
+     * @param e
+     * @throws InterruptedException
+     */
+    @Override
 	public void put(Host e) throws InterruptedException {
 		super.put(e);
 		queueBack.put(e.getId(), e);
 	}
 
-	@Override
+    /**
+     *
+     * @param e
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
 	public boolean offer(Host e, long timeout, TimeUnit unit) throws InterruptedException {
 		if (super.offer(e, timeout, unit)) {
 			queueBack.put(e.getId(), e);
@@ -101,26 +114,47 @@ public class MyConcurrentLinkedHostQueue extends LinkedBlockingQueue<Host> {
 		return false;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
 	public Host take() throws InterruptedException {
 		Host host = super.take();
 		queueBack.remove(host.getId());
 		return host;
 	}
 
-	@Override
+    /**
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
 	public Host poll(long timeout, TimeUnit unit) throws InterruptedException {
 		Host host = super.poll(timeout, unit);
 		queueBack.remove(host.getId());
 		return host;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public Host peek() {
 		return super.peek();
 	}
 
-	@Override
+    /**
+     *
+     * @param host
+     * @return
+     */
+    @Override
 	public boolean offer(Host host) {
 		if (super.offer(host)) {
 			queueBack.put(host.getId(), host);
@@ -130,13 +164,22 @@ public class MyConcurrentLinkedHostQueue extends LinkedBlockingQueue<Host> {
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @param host
+     * @return
+     */
+    @Override
 	public boolean add(Host host) {
 		queueBack.put(host.getId(), host);
 		return super.offer(host);
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public Host poll() {
 		Host ret = super.poll();
 		if (ret != null) {

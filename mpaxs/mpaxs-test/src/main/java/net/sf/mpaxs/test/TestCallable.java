@@ -38,6 +38,11 @@ import java.util.concurrent.Callable;
  */
 public class TestCallable implements Callable<Double>, Serializable {
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     @Override
     public Double call() throws Exception {
         long sum = 0;

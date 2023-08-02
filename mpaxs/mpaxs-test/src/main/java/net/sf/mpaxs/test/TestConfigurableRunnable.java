@@ -40,21 +40,36 @@ public class TestConfigurableRunnable implements ConfigurableRunnable<Long>{
     private Progress progress = new Progress();
     private long finished = -1l;
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Long get() {
         return finished;
     }
 
+    /**
+     *
+     * @param pathToConfig
+     */
     @Override
     public void configure(File pathToConfig) {
 
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Progress getProgress() {
         return progress;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         progress.setMessage("Starting computation");

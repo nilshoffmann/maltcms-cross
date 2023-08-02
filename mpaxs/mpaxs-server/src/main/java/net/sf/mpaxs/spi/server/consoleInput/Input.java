@@ -120,6 +120,10 @@ public class Input implements Runnable, IReceiver, IJobEventListener, IComputeHo
         print(message);
     }
 
+    /**
+     *
+     * @param job
+     */
     @Override
     public void jobChanged(IJob job) {
         print("Job "+job.getId()+" changed status to: "+job.getStatus());
@@ -151,6 +155,9 @@ public class Input implements Runnable, IReceiver, IJobEventListener, IComputeHo
         //throw new InterruptedException();
     }
 
+    /**
+     *
+     */
     public void run() {
         System.out.println("-- MasterServer ready! --");
         System.out.println("IP address used: " + net.sf.mpaxs.spi.server.settings.Settings.getInstance().getLocalIP());

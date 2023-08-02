@@ -92,7 +92,10 @@ public class JobScheduler implements Runnable, IComputeHostEventListener {
 		}
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		if (current == null) {
 			MyConcurrentLinkedJobQueue queue = master.getPendingJobs();

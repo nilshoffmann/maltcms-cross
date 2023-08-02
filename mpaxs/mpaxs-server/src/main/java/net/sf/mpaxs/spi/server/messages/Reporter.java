@@ -60,6 +60,11 @@ public class Reporter extends Handler{
         return listener.add(receiver);
     }
 
+    /**
+     *
+     * @param receiver
+     * @return
+     */
     public boolean removeListener(IReceiver receiver){
         return listener.remove(receiver);
     }
@@ -78,6 +83,10 @@ public class Reporter extends Handler{
         }
     }
 
+    /**
+     *
+     * @param record
+     */
     @Override
     public void publish(LogRecord record) {
         String errorMessage = "Error in class: "+ record.getSourceClassName() + ". "
@@ -85,10 +94,17 @@ public class Reporter extends Handler{
         report(errorMessage);
     }
 
+    /**
+     *
+     */
     @Override
     public void flush() {
     }
 
+    /**
+     *
+     * @throws SecurityException
+     */
     @Override
     public void close() throws SecurityException {
     }

@@ -72,45 +72,85 @@ public class MpaxsExecutorService extends AbstractExecutorService {
 		this.computeServer = executionServer;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void shutdown() {
 		es.shutdown();
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Runnable> shutdownNow() {
 		return es.shutdownNow();
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public boolean isShutdown() {
 		return es.isShutdown();
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public boolean isTerminated() {
 		return es.isTerminated();
 	}
 
-	@Override
+    /**
+     *
+     * @param <T>
+     * @param runnable
+     * @param value
+     * @return
+     */
+    @Override
 	protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T value) {
 		return new MpaxsFutureTask<T>(computeServer, runnable, value);
 	}
 
-	@Override
+    /**
+     *
+     * @param <T>
+     * @param callable
+     * @return
+     */
+    @Override
 	protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
 		Logger.getLogger(MpaxsExecutorService.class.getName()).log(Level.FINER,
 			"Creating new FutureTask for {}", callable.getClass());
 		return new MpaxsFutureTask<T>(computeServer, callable);
 	}
 
-	@Override
+    /**
+     *
+     * @param l
+     * @param tu
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
 	public boolean awaitTermination(long l, TimeUnit tu)
 		throws InterruptedException {
 		return es.awaitTermination(l, tu);
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     * @return
+     */
+    @Override
 	public Future<?> submit(Runnable r) {
 		if (!(r instanceof Serializable)) {
 			throw new IllegalArgumentException(
@@ -119,7 +159,14 @@ public class MpaxsExecutorService extends AbstractExecutorService {
 		return super.submit(r);
 	}
 
-	@Override
+    /**
+     *
+     * @param <T>
+     * @param r
+     * @param t
+     * @return
+     */
+    @Override
 	public <T> Future<T> submit(Runnable r, T t) {
 		if (!(r instanceof Serializable)) {
 			throw new IllegalArgumentException(
@@ -128,7 +175,13 @@ public class MpaxsExecutorService extends AbstractExecutorService {
 		return super.submit(r, t);
 	}
 
-	@Override
+    /**
+     *
+     * @param <T>
+     * @param clbl
+     * @return
+     */
+    @Override
 	public <T> Future<T> submit(Callable<T> clbl) {
 		if (!(clbl instanceof Serializable)) {
 			throw new IllegalArgumentException(
@@ -137,7 +190,11 @@ public class MpaxsExecutorService extends AbstractExecutorService {
 		return super.submit(clbl);
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     */
+    @Override
 	public void execute(Runnable r) {
 		Logger.getLogger(MpaxsExecutorService.class.getName()).log(Level.FINER,
 			"Running {}", r);

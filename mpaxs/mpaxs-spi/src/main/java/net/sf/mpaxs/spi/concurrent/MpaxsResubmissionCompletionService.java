@@ -149,24 +149,43 @@ public class MpaxsResubmissionCompletionService<T extends Serializable>
 	}
 	private boolean submissionClosed = false;
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getFailedTasks() {
 		return new ArrayList<Callable<T>>(failedJobs);
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getCancelledTasks() {
 		return mcs.getCancelledTasks();
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getFailedOrCancelledTasks() {
 		ArrayList<Callable<T>> al = new ArrayList<Callable<T>>(failedJobs);
 		al.addAll(mcs.getCancelledTasks());
 		return al;
 	}
 
-	@Override
+    /**
+     *
+     * @param c
+     * @return
+     * @throws RejectedExecutionException
+     * @throws NullPointerException
+     */
+    @Override
 	public Future<T> submit(Callable<T> c) throws RejectedExecutionException,
 		NullPointerException {
 		if (submissionClosed) {
@@ -178,7 +197,15 @@ public class MpaxsResubmissionCompletionService<T extends Serializable>
 		return mcs.submit(c);
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     * @param t
+     * @return
+     * @throws RejectedExecutionException
+     * @throws NullPointerException
+     */
+    @Override
 	public Future<T> submit(Runnable r, T t) throws RejectedExecutionException,
 		NullPointerException {
 		if (submissionClosed) {

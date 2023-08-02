@@ -39,7 +39,10 @@ public class TestScheduledRunnable implements Runnable, Serializable {
 
 	private int invocations = 0;
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		invocations++;
 		if (invocations > 1) {

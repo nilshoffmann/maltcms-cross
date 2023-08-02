@@ -65,30 +65,64 @@ public class ServerImpl extends UnicastRemoteObject implements IRemoteServer {
         this.authToken = authToken;
     }
 
+    /**
+     *
+     * @param authToken
+     * @param name
+     * @param ip
+     * @param cores
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public UUID addHost(UUID authToken, String name, String ip, int cores) throws RemoteException {
         authenticate(authToken);
         return register.newHost(name, ip, cores);
     }
 
+    /**
+     *
+     * @param authToken
+     * @param id
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public boolean delHost(UUID authToken, UUID id) throws RemoteException {
         authenticate(authToken);
         return register.removeHost(id);
     }
 
+    /**
+     *
+     * @param authToken
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public boolean stillAlive(UUID authToken) throws RemoteException {
         authenticate(authToken);
         return true;
     }
 
+    /**
+     *
+     * @param authToken
+     * @param job
+     * @throws RemoteException
+     */
     @Override
     public void addDoneJob(UUID authToken, IJob job) throws RemoteException {
         authenticate(authToken);
         master.addDoneJob(job);
     }
 
+    /**
+     *
+     * @param authToken
+     * @param job
+     * @throws RemoteException
+     */
     @Override
     public void addFailedJob(UUID authToken, IJob job) throws RemoteException {
         authenticate(authToken);

@@ -64,7 +64,12 @@ public class DistributedRmiExecution implements Callable<Double>, Serializable {
 		this.maxJobs = maxJobs;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    @Override
 	public Double call() throws Exception {
 		/*
 		 * Compute Server is only required for VM external execution

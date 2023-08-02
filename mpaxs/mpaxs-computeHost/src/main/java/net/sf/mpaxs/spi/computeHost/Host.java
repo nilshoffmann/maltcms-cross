@@ -64,7 +64,11 @@ public class Host implements IRemoteHost {
 	private Settings settings = null;
 	private UUID authToken = null;
 
-	@Override
+    /**
+     *
+     * @param cfg
+     */
+    @Override
 	public void configure(Configuration cfg) {
 		settings = new Settings(cfg);
 		Logger.getLogger(Host.class.getName()).log(Level.INFO, "Running ComputeHost at IP {0}", settings.getLocalIp());
@@ -86,7 +90,11 @@ public class Host implements IRemoteHost {
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     */
+    @Override
 	public void sendDoneJob(IJob job) {
 		IRemoteServer remRef = settings.getRemoteReference();
 		try {
@@ -251,20 +259,32 @@ public class Host implements IRemoteHost {
 		}.start();
 	}
 
-	@Override
+    /**
+     *
+     * @param t
+     * @param e
+     */
+    @Override
 	public void uncaughtException(Thread t, Throwable e) {
 		Logger.getLogger(Host.class.getName()).log(Level.SEVERE, "Unknown error:", e);
 		System.exit(1);
 	}
 
-	@Override
+    /**
+     *
+     * @param authToken
+     */
+    @Override
 	public void setAuthenticationToken(UUID authToken) {
 		this.authToken = authToken;
 		Logger.getLogger(Host.class.getName()).log(Level.FINE,
 			"AuthToken for Host is: " + authToken);
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void startComputeHost() {
 		getReadyForClients();
 		connectToMasterServer();
@@ -274,12 +294,20 @@ public class Host implements IRemoteHost {
 		}
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public UUID getAuthenticationToken() {
 		return this.authToken;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public UUID getHostId() {
 		return settings.getHostID();
 	}

@@ -41,12 +41,20 @@ import org.apache.commons.configuration.ConfigurationUtils;
  */
 public class LocalComputeHostLauncher implements IComputeHostLauncher {
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public ExecutionType getExecutionType() {
 		return ExecutionType.LOCAL;
 	}
 
-	@Override
+    /**
+     *
+     * @param cfg
+     */
+    @Override
 	public void startComputeHost(Configuration cfg) {
 		Logger.getLogger(getClass().getName()).log(Level.INFO, "Starting local compute host with configuration: {0}", ConfigurationUtils.toString(cfg));
 		StartUp su = new StartUp(cfg);

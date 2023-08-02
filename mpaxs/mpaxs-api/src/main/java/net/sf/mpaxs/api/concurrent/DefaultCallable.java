@@ -76,7 +76,10 @@ public class DefaultCallable<V> implements ConfigurableRunnable<V> {
 		return p;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		p.setMessage("Starting execution of " + this.name);
 		p.setProgress(0);
