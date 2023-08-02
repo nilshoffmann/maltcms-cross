@@ -230,6 +230,9 @@
                                 <Built-By>${user.name}</Built-By>
                             </manifestEntries>
                         </archive>
+                        <detectJavaApiLink>false</detectJavaApiLink>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <docfilessubdirs>true</docfilessubdirs>
                         <excludes>
                             <exclude>**/site.xml</exclude>
                         </excludes>
@@ -538,6 +541,11 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <detectJavaApiLink>false</detectJavaApiLink>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                    <docfilessubdirs>true</docfilessubdirs>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
