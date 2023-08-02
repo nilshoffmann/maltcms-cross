@@ -270,6 +270,26 @@
                                 <title>Cross OSGI</title>
                                 <packages>cross.osgi.*</packages>
                             </group>
+                            <group>
+                                <title>Cross MPAXS API</title>
+                                <packages>net.sf.mpaxs.api.*</packages>
+                            </group>
+                            <group>
+                                <title>Cross MPAXS SPI Compute Host</title>
+                                <packages>net.sf.mpaxs.spi.computeHost.*</packages>
+                            </group>
+                            <group>
+                                <title>Cross MPAXS SPI Server</title>
+                                <packages>net.sf.mpaxs.spi.server.*</packages>
+                            </group>
+                            <group>
+                                <title>Cross MPAXS SPI Concurrency</title>
+                                <packages>net.sf.mpaxs.spi.concurrent.*</packages>
+                            </group>
+                            <group>
+                                <title>Cross MPAXS Test</title>
+                                <packages>net.sf.mpaxs.test.*</packages>
+                            </group>
                         </groups>
                     </configuration>
                 </plugin>

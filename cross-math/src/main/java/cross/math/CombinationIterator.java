@@ -53,6 +53,10 @@ public final class CombinationIterator implements Iterator<int[]> {
         this.size = size();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasNext() {
         if (cnt < size) {
@@ -61,6 +65,10 @@ public final class CombinationIterator implements Iterator<int[]> {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int[] next() {
         int[] ret = new int[this.partitions.length];

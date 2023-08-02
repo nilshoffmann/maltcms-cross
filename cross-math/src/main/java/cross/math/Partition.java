@@ -67,11 +67,19 @@ public class Partition implements Iterator<Integer> {
         this.neighbor = neighbor;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasNext() {
         return this.count < max;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Integer next() {
         //overflow/carry to next neighbor
@@ -96,6 +104,9 @@ public class Partition implements Iterator<Integer> {
         return this.count;
     }
 
+    /**
+     *
+     */
     @Override
     public void remove() {
         throw new UnsupportedOperationException("Not supported yet.");
