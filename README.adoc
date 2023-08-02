@@ -4,6 +4,7 @@ Nils Hoffmann <nils.hoffmann@cebitec-uni-bielefeld.de>
 
 image:https://img.shields.io/github/release/nilshoffmann/maltcms-cross.svg["Latest Release", link="https://github.com/nilshoffmann/maltcms-cross/releases/latest"] 
 image:https://github.com/nilshoffmann/maltcms-cross/actions/workflows/maven.yml/badge.svg["Build Status", link="https://github.com/nilshoffmann/maltcms-cross/actions/workflows/maven.yml"]
+image:https://img.shields.io/maven-central/v/io.github.nilshoffmann/cross[Maven Central]
 
 //NOTE: If you use the jGoslin library or the web application, please cite the following paper: +
 //https://pubs.acs.org/doi/10.1021/acs.analchem.9b01987[ et al., Analytical Chemistry 2019; Oct 15;91(20):12615-12618..] https://www.ncbi.nlm.nih.gov/pubmed/31525911[PubMed record].
