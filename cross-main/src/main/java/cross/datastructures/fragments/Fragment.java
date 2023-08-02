@@ -223,6 +223,10 @@ public class Fragment implements IFragment {
         this.attributes.add(a);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -230,6 +234,11 @@ public class Fragment implements IFragment {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

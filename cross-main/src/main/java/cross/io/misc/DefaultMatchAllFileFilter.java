@@ -45,6 +45,13 @@ public class DefaultMatchAllFileFilter implements FileFilter, IConfigurable {
      * 
      * @see java.io.FileFilter#accept(java.io.File)
      */
+
+    /**
+     *
+     * @param pathname
+     * @return
+     */
+
     @Override
     public boolean accept(final File pathname) {
         return true;

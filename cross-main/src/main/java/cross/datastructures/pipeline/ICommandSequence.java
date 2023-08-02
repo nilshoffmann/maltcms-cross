@@ -88,6 +88,9 @@ public interface ICommandSequence extends Iterator<TupleND<IFileFragment>>,
     @Override
     public abstract TupleND<IFileFragment> next();
 
+    /**
+     *
+     */
     @Override
     public abstract void remove();
 

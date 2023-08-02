@@ -36,6 +36,11 @@ import java.util.concurrent.Callable;
  */
 public class TestCallable2 implements Callable<String>, Serializable {
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     @Override
     public String call() throws Exception {
         return "abc";

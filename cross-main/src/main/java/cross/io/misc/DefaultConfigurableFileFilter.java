@@ -53,6 +53,11 @@ public class DefaultConfigurableFileFilter implements FileFilter, IConfigurable 
     private List<String> suffixesToMatch = StringTools.toStringList(Arrays
         .asList(new String[]{"ChromatogramWarp", "PathWarp"}));
 
+    /**
+     *
+     * @param f
+     * @return
+     */
     @Override
     public boolean accept(final File f) {
         // First match path suffixes

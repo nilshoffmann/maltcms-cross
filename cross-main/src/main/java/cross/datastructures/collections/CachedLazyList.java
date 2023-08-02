@@ -116,21 +116,42 @@ public class CachedLazyList<T> implements List<T> {
         this.ivf = iep;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean add(final T arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     */
     @Override
     public void add(final int arg0, final T arg1) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean addAll(final Collection<? extends T> arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public boolean addAll(final int arg0, final Collection<? extends T> arg1) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
@@ -153,6 +174,9 @@ public class CachedLazyList<T> implements List<T> {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void clear() {
         this.lru.clear();
@@ -160,16 +184,31 @@ public class CachedLazyList<T> implements List<T> {
         this.cache.clear();
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean contains(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean containsAll(final Collection<?> arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public T get(final int arg0) {
         final int arg = arg0;
@@ -230,6 +269,11 @@ public class CachedLazyList<T> implements List<T> {
         return this.cacheSize;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public int indexOf(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -247,6 +291,10 @@ public class CachedLazyList<T> implements List<T> {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         return this.ivf.size() == 0;
@@ -260,6 +308,10 @@ public class CachedLazyList<T> implements List<T> {
         return this.prefetchOnMiss;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
@@ -283,41 +335,81 @@ public class CachedLazyList<T> implements List<T> {
         };
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public int lastIndexOf(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ListIterator<T> listIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public ListIterator<T> listIterator(final int arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public T remove(final int arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean remove(final Object arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean removeAll(final Collection<?> arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean retainAll(final Collection<?> arg0) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public T set(final int arg0, final T arg1) {
         throw new UnsupportedOperationException("Can not modify read-only list!");
@@ -339,16 +431,30 @@ public class CachedLazyList<T> implements List<T> {
         this.prefetchOnMiss = prefetchOnMiss;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int size() {
         return this.size;
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public List<T> subList(final int arg0, final int arg1) {
         return CachedLazyList.getList(this.ivf, arg0, arg1 - arg0);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object[] toArray() {
 //        Object[] o = new Object[];
@@ -359,6 +465,12 @@ public class CachedLazyList<T> implements List<T> {
         return result;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param a
+     * @return
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {

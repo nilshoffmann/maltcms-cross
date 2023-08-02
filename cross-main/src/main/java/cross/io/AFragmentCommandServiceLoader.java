@@ -60,6 +60,12 @@ public class AFragmentCommandServiceLoader implements IConfigurable {
     public static class ClassNameLexicalComparator implements
         Comparator<AFragmentCommand> {
 
+        /**
+         *
+         * @param o1
+         * @param o2
+         * @return
+         */
         @Override
         public int compare(AFragmentCommand o1, AFragmentCommand o2) {
             return o1.getClass().getName().compareTo(o2.getClass().getName());

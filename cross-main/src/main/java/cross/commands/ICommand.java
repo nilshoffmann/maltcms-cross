@@ -46,6 +46,7 @@ public interface ICommand<IN, OUT> extends IConfigurable {
      * <code>IN</code>, returning an object of type
      * <code>OUT</code>.
      *
+     * @param in
      * @return
      */
     public OUT apply(IN in);

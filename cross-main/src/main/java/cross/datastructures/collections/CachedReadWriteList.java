@@ -121,11 +121,19 @@ public class CachedReadWriteList<T> implements List<T> {
         return (Serializable) cacheDelegate.get(index);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int size() {
         return cacheDelegate.keys().size();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         return cacheDelegate.keys().isEmpty();
@@ -148,22 +156,43 @@ public class CachedReadWriteList<T> implements List<T> {
         cacheDelegate.put(index, null);
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     @Override
     public T get(int index) {
         return reverseConvert(cacheDelegate.get(index));
     }
 
+    /**
+     *
+     * @param index
+     * @param element
+     * @return
+     */
     @Override
     public T set(int index, T element) {
         cacheDelegate.put(index, convert(element));
         return element;
     }
 
+    /**
+     *
+     * @param index
+     * @param element
+     */
     @Override
     public void add(int index, T element) {
         cacheDelegate.put(index, convert(element));
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean contains(Object o) {
         if (o instanceof Integer) {
@@ -204,27 +233,51 @@ public class CachedReadWriteList<T> implements List<T> {
 
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<T> iterator() {
         return new CachedReadWriteListIterator(this);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object[] toArray() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param <T>
+     * @param a
+     * @return
+     */
     @Override
     public <T> T[] toArray(T[] a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param e
+     * @return
+     */
     @Override
     public boolean add(T e) {
         add(size(), e);
         return true;
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean remove(Object o) {
         if (o instanceof Integer) {
@@ -233,31 +286,60 @@ public class CachedReadWriteList<T> implements List<T> {
         return false;
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     @Override
     public boolean containsAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     @Override
     public boolean addAll(Collection<? extends T> c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param index
+     * @param c
+     * @return
+     */
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     */
     @Override
     public void clear() {
         int size = cacheDelegate.keys().size();
@@ -266,6 +348,11 @@ public class CachedReadWriteList<T> implements List<T> {
         }
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     @Override
     public T remove(int index) {
         T t = get(index);
@@ -273,26 +360,51 @@ public class CachedReadWriteList<T> implements List<T> {
         return t;
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int indexOf(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ListIterator<T> listIterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     @Override
     public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @param fromIndex
+     * @param toIndex
+     * @return
+     */
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

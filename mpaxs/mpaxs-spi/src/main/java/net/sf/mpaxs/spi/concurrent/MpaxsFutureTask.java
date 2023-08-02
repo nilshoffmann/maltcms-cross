@@ -81,7 +81,12 @@ public class MpaxsFutureTask<T> extends FutureTask<T> implements
 		job = new Job<T>(new DefaultRunnable<T>(runnable, result));
 	}
 
-	@Override
+    /**
+     *
+     * @param bln
+     * @return
+     */
+    @Override
 	public boolean cancel(boolean bln) {
 		boolean superCancelled = super.cancel(bln);
 		if (job.getStatus() != Status.CANCELED) {
@@ -91,7 +96,10 @@ public class MpaxsFutureTask<T> extends FutureTask<T> implements
 		return superCancelled;
 	}
 
-	@Override
+    /**
+     *
+     */
+    @Override
 	public void run() {
 		phaser = new Phaser(1);
 		computeServer.addJobEventListener(this, job.getId());
@@ -101,7 +109,11 @@ public class MpaxsFutureTask<T> extends FutureTask<T> implements
 		phaser.awaitAdvance(0);
 	}
 
-	@Override
+    /**
+     *
+     * @param job
+     */
+    @Override
 	public void jobChanged(final IJob job) {
 		if (job.getId().equals(this.job.getId())) {
 			if (job.getStatus() == Status.DONE) {

@@ -68,6 +68,11 @@ public class SerializableArray implements Externalizable {
         this.array = array;
     }
 
+    /**
+     *
+     * @param oo
+     * @throws IOException
+     */
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
         if (array != null) {
@@ -77,6 +82,12 @@ public class SerializableArray implements Externalizable {
         }
     }
 
+    /**
+     *
+     * @param oi
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @Override
     public void readExternal(ObjectInput oi) throws IOException, ClassNotFoundException {
         this.array = Array.factory((DataType) oi.readObject(), (int[]) oi.readObject(), oi.readObject());

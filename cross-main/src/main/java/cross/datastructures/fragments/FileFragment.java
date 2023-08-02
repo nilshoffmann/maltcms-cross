@@ -667,6 +667,12 @@ public final class FileFragment implements IFileFragment {
         }
     }
 
+    /**
+     *
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @Override
     public synchronized void readExternal(final ObjectInput in) throws IOException,
         ClassNotFoundException {
@@ -923,6 +929,11 @@ public final class FileFragment implements IFileFragment {
         return structureToString();
     }
 
+    /**
+     *
+     * @param out
+     * @throws IOException
+     */
     @Override
     public synchronized void writeExternal(final ObjectOutput out) throws IOException {
         if (isModified()) {
@@ -942,6 +953,10 @@ public final class FileFragment implements IFileFragment {
         return Collections.unmodifiableSet(new LinkedHashSet<>(this.dims.values()));
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -949,6 +964,11 @@ public final class FileFragment implements IFileFragment {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

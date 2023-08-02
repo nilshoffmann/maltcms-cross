@@ -114,6 +114,10 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
     private List<IWorkflowPostProcessor> workflowPostProcessors = new ArrayList<>();
     private transient IFactory factory;
 
+    /**
+     *
+     * @param l
+     */
     @Override
     public void addListener(final IListener<IEvent<IWorkflowResult>> l) {
         this.iwres.addListener(l);
@@ -164,6 +168,10 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
             getName());
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void fireEvent(final IEvent<IWorkflowResult> e) {
         this.iwres.fireEvent(e);
@@ -317,6 +325,10 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         }
     }
 
+    /**
+     *
+     * @param l
+     */
     @Override
     public void removeListener(final IListener<IEvent<IWorkflowResult>> l) {
         this.iwres.removeListener(l);
@@ -727,6 +739,11 @@ public class DefaultWorkflow implements IWorkflow, IXMLSerializable {
         this.executeLocal = executeLocal;
     }
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     @Override
     public TupleND<IFileFragment> call() throws Exception {
         TupleND<IFileFragment> results = null;

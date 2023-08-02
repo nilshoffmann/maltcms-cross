@@ -148,6 +148,10 @@ public abstract class AFragmentCommand implements IFragmentCommand {
         return ret;
     }
 
+    /**
+     *
+     * @param l
+     */
     @Override
     public void addListener(final IListener<IEvent<IWorkflowResult>> l) {
         this.eventSource.addListener(l);
@@ -170,6 +174,10 @@ public abstract class AFragmentCommand implements IFragmentCommand {
     public void configure(final Configuration cfg) {
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void fireEvent(final IEvent<IWorkflowResult> e) {
         this.eventSource.fireEvent(e);
@@ -429,6 +437,10 @@ public abstract class AFragmentCommand implements IFragmentCommand {
                 size, this, getWorkflowSlot()));
     }
 
+    /**
+     *
+     * @param l
+     */
     @Override
     public void removeListener(final IListener<IEvent<IWorkflowResult>> l) {
         this.eventSource.removeListener(l);

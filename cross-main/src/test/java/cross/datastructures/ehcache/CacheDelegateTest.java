@@ -105,7 +105,6 @@ public class CacheDelegateTest {
     /**
      *
      * @throws java.io.IOException
-     * @throws IOException
      */
     @Test
     public void cachedVariableFragment() throws IOException {

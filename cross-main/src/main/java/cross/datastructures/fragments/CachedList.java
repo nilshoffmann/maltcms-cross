@@ -115,25 +115,50 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
     private int cacheLRUPURGELAST = 0;
     private int cacheSoftRefRemoved = 0;
 
+    /**
+     *
+     * @param factory
+     */
     public void setFactory(IFactory factory) {
         this.factory = factory;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean add(final Array arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     */
     @Override
     public void add(final int arg0, final Array arg1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean addAll(final Collection<? extends Array> arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public boolean addAll(final int arg0, final Collection<? extends Array> arg1) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -158,6 +183,9 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
                 this.cache.size());
     }
 
+    /**
+     *
+     */
     @Override
     public void clear() {
         this.lru.clear();
@@ -173,16 +201,31 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
                 1024);
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean contains(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean containsAll(final Collection<?> arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public Array get(final int arg0) {
         final int arg = arg0;
@@ -240,6 +283,11 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         return this.cacheSize;
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public int indexOf(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -258,6 +306,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         if (this.size < 1) {
@@ -274,6 +326,10 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         return this.prefetchOnMiss;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<Array> iterator() {
         return new Iterator<Array>() {
@@ -297,16 +353,30 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         };
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public int lastIndexOf(final Object arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ListIterator<Array> listIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public ListIterator<Array> listIterator(final int arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -369,11 +439,22 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @return
+     */
     @Override
     public boolean retainAll(final Collection<?> arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public Array set(final int arg0, final Array arg1) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -408,21 +489,41 @@ public class CachedList implements List<ucar.ma2.Array>, IConfigurable {
         clear();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int size() {
         return this.size;
     }
 
+    /**
+     *
+     * @param arg0
+     * @param arg1
+     * @return
+     */
     @Override
     public List<Array> subList(final int arg0, final int arg1) {
         return CachedList.getList(this.factory, this.ivf, arg0, arg1 - arg0);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object[] toArray() {
         return toArray(new Array[size()]);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param arg0
+     * @return
+     */
     @Override
     public <T> T[] toArray(final T[] arg0) {
         Array[] arrays = null;

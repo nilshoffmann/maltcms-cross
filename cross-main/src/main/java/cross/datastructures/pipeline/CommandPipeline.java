@@ -146,6 +146,10 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
         return true;
     }
 
+    /**
+     *
+     * @param v
+     */
     @Override
     public void listen(final IEvent<IWorkflowResult> v) {
         this.workflow.append(v.get());
@@ -246,6 +250,9 @@ public class CommandPipeline implements ICommandSequence, IConfigurable {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void remove() {
         throw new UnsupportedOperationException();

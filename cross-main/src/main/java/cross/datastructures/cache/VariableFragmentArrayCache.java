@@ -73,11 +73,20 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
         this.keys = new HashMap<>();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Set<IVariableFragment> keys() {
         return this.keys.keySet();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     @Override
     public void put(final IVariableFragment key, final List<Array> value) {
         if (key instanceof Serializable) {
@@ -118,6 +127,11 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
         return key.getParent().getName() + ">" + key.getName();
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     public List<Array> get(final IVariableFragment key) {
         List<Array> values = keys.get(key);
@@ -145,6 +159,9 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void close() {
         for (IVariableFragment key : keys.keySet()) {
@@ -167,11 +184,19 @@ public class VariableFragmentArrayCache implements ICacheDelegate<IVariableFragm
         return cache;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getName() {
         return cacheName;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public CacheType getCacheType() {
         return CacheType.EHCACHE;

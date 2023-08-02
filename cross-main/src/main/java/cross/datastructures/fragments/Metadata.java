@@ -104,6 +104,10 @@ public class Metadata implements Iterable<Attribute> {
         return this.hm.containsKey(name);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<Attribute> iterator() {
         return this.hm.values().iterator();

@@ -449,6 +449,10 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         this.useCachedList = b;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         // if (this.rep == null) {
@@ -476,6 +480,10 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return this.varname;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -485,6 +493,11 @@ public class ImmutableVariableFragment2 implements IVariableFragment {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

@@ -80,26 +80,49 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         }
     }
 
+    /**
+     *
+     * @param e
+     * @return
+     */
     @Override
     public synchronized boolean add(final T e) {
         return this.c.add(e);
     }
 
+    /**
+     *
+     * @param c1
+     * @return
+     */
     @Override
     public synchronized boolean addAll(final Collection<? extends T> c1) {
         return this.c.addAll(c1);
     }
 
+    /**
+     *
+     */
     @Override
     public void clear() {
         this.c.clear();
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean contains(final Object o) {
         return this.c.contains(o);
     }
 
+    /**
+     *
+     * @param c1
+     * @return
+     */
     @Override
     public boolean containsAll(final Collection<?> c1) {
         return this.c.containsAll(c1);
@@ -215,11 +238,19 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return this.c.size();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isEmpty() {
         return this.c.isEmpty();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<T> iterator() {
         return getIterator();
@@ -234,16 +265,31 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         return this.c.remove(n);
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean remove(final Object o) {
         return this.c.remove(o);
     }
 
+    /**
+     *
+     * @param c1
+     * @return
+     */
     @Override
     public boolean removeAll(final Collection<?> c1) {
         return this.c.removeAll(c1);
     }
 
+    /**
+     *
+     * @param c1
+     * @return
+     */
     @Override
     public boolean retainAll(final Collection<?> c1) {
         return this.c.retainAll(c1);
@@ -275,21 +321,39 @@ public class TupleND<T extends Serializable> implements Collection<T>,
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int size() {
         return this.getSize();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object[] toArray() {
         return this.c.toArray();
     }
 
+    /**
+     *
+     * @param <T1>
+     * @param a
+     * @return
+     */
     @Override
     public <T1> T1[] toArray(final T1[] a) {
         return this.c.toArray(a);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

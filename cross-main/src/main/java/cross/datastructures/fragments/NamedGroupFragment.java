@@ -119,6 +119,10 @@ public class NamedGroupFragment extends Fragment implements IGroupFragment {
         return this.children.containsKey(varname);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Iterator<IVariableFragment> iterator() {
         return this.children.values().iterator();
@@ -136,6 +140,10 @@ public class NamedGroupFragment extends Fragment implements IGroupFragment {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();

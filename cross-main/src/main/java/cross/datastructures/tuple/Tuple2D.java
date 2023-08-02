@@ -35,7 +35,6 @@ import java.io.Serializable;
  * @author Nils Hoffmann
  * @param <T>
  * @param <U>
- * @param U the right hand side type
  *
  */
 public class Tuple2D<T, U> implements Serializable {
@@ -44,7 +43,15 @@ public class Tuple2D<T, U> implements Serializable {
      *
      */
     private static final long serialVersionUID = 5350596008036216528L;
+
+    /**
+     *
+     */
     protected T first;
+
+    /**
+     *
+     */
     protected U second;
 
     /**
@@ -89,6 +96,10 @@ public class Tuple2D<T, U> implements Serializable {
         this.second = u;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "( " + this.first.toString() + "; " + this.second.toString()

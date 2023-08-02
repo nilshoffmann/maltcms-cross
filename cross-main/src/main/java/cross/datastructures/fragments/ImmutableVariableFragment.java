@@ -78,6 +78,11 @@ public final class ImmutableVariableFragment implements IVariableFragment {
         return this.vf.compareTo(o);
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(final Object obj) {
         return this.vf.equals(obj);
@@ -163,6 +168,10 @@ public final class ImmutableVariableFragment implements IVariableFragment {
         return this.vf.hasAttribute(name);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return this.vf.hashCode();
@@ -223,6 +232,10 @@ public final class ImmutableVariableFragment implements IVariableFragment {
         this.vf.setStats(stats1);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return this.vf.toString();

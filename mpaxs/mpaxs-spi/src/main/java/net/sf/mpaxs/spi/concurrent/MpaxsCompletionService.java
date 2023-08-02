@@ -250,20 +250,32 @@ public class MpaxsCompletionService<T extends Serializable> implements
 		es = null;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getFailedTasks() {
 		ArrayList<Callable<T>> al = new ArrayList<Callable<T>>(failedTasks);
 		return al;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getFailedOrCancelledTasks() {
 		ArrayList<Callable<T>> al = new ArrayList<Callable<T>>(failedTasks);
 		al.addAll(cancelledTasks);
 		return al;
 	}
 
-	@Override
+    /**
+     *
+     * @return
+     */
+    @Override
 	public List<Callable<T>> getCancelledTasks() {
 		ArrayList<Callable<T>> al = new ArrayList<Callable<T>>(cancelledTasks);
 		return al;
@@ -355,7 +367,14 @@ public class MpaxsCompletionService<T extends Serializable> implements
 		return null;
 	}
 
-	@Override
+    /**
+     *
+     * @param c
+     * @return
+     * @throws RejectedExecutionException
+     * @throws NullPointerException
+     */
+    @Override
 	public Future<T> submit(Callable<T> c) throws RejectedExecutionException,
 		NullPointerException {
 		if (e instanceof MpaxsExecutorService && !(c instanceof Serializable)) {
@@ -368,7 +387,15 @@ public class MpaxsCompletionService<T extends Serializable> implements
 		return f;
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     * @param t
+     * @return
+     * @throws RejectedExecutionException
+     * @throws NullPointerException
+     */
+    @Override
 	public Future<T> submit(Runnable r, T t) throws RejectedExecutionException,
 		NullPointerException {
 		if (e instanceof MpaxsExecutorService && !(r instanceof Serializable)) {

@@ -54,16 +54,27 @@ public class CombinationIterator<T> implements Iterator<T> {
         this.factory = factory;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean hasNext() {
         return element < provider.size();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public T next() {
         return factory.create(provider.get(element++));
     }
 
+    /**
+     *
+     */
     @Override
     public void remove() {
         throw new UnsupportedOperationException("Not supported yet.");

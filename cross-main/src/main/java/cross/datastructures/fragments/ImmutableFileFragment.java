@@ -142,6 +142,11 @@ public final class ImmutableFileFragment implements IFileFragment {
         return this.frag.compareTo(arg0);
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(final Object obj) {
         return this.frag.equals(obj);
@@ -284,6 +289,12 @@ public final class ImmutableFileFragment implements IFileFragment {
         this.frag.readStructure();
     }
 
+    /**
+     *
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     @Override
     public synchronized void readExternal(final ObjectInput in) throws IOException,
         ClassNotFoundException {
@@ -363,6 +374,11 @@ public final class ImmutableFileFragment implements IFileFragment {
         return this.frag.toString();
     }
 
+    /**
+     *
+     * @param out
+     * @throws IOException
+     */
     @Override
     public synchronized void writeExternal(final ObjectOutput out) throws IOException {
         // store id

@@ -111,7 +111,6 @@ public class StatsMap extends HashMap<String, Double> {
 
     /**
      * @param label1
-     * @param label the label to set
      */
     public void setLabel(final String label1) {
         this.label = label1;

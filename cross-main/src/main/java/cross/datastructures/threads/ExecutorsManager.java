@@ -96,17 +96,35 @@ public class ExecutorsManager implements ExecutorService {
         this.es = Executors.newFixedThreadPool(this.maxThreads);
     }
 
+    /**
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
     @Override
     public boolean awaitTermination(final long timeout, final TimeUnit unit)
         throws InterruptedException {
         return this.es.awaitTermination(timeout, unit);
     }
 
+    /**
+     *
+     * @param command
+     */
     @Override
     public void execute(final Runnable command) {
         this.es.execute(command);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param tasks
+     * @return
+     * @throws InterruptedException
+     */
     @Override
     public <T> List<Future<T>> invokeAll(
         final Collection<? extends Callable<T>> tasks)
@@ -114,6 +132,15 @@ public class ExecutorsManager implements ExecutorService {
         return this.es.invokeAll(tasks);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param tasks
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
     @Override
     public <T> List<Future<T>> invokeAll(
         final Collection<? extends Callable<T>> tasks, final long timeout,
@@ -121,12 +148,31 @@ public class ExecutorsManager implements ExecutorService {
         return this.es.invokeAll(tasks, timeout, unit);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param tasks
+     * @return
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     @Override
     public <T> T invokeAny(final Collection<? extends Callable<T>> tasks)
         throws InterruptedException, ExecutionException {
         return this.es.invokeAny(tasks);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param tasks
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws TimeoutException
+     */
     @Override
     public <T> T invokeAny(final Collection<? extends Callable<T>> tasks,
         final long timeout, final TimeUnit unit)
@@ -134,36 +180,69 @@ public class ExecutorsManager implements ExecutorService {
         return this.es.invokeAny(tasks, timeout, unit);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isShutdown() {
         return this.es.isShutdown();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isTerminated() {
         return this.es.isTerminated();
     }
 
+    /**
+     *
+     */
     @Override
     public void shutdown() {
         this.es.shutdown();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Runnable> shutdownNow() {
         return this.es.shutdownNow();
     }
 
+    /**
+     *
+     * @param <T>
+     * @param task
+     * @return
+     */
     @Override
     public <T> Future<T> submit(final Callable<T> task) {
         return this.es.submit(task);
     }
 
+    /**
+     *
+     * @param task
+     * @return
+     */
     @Override
     public Future<?> submit(final Runnable task) {
         return this.es.submit(task);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param task
+     * @param result
+     * @return
+     */
     @Override
     public <T> Future<T> submit(final Runnable task, final T result) {
         return this.es.submit(task, result);

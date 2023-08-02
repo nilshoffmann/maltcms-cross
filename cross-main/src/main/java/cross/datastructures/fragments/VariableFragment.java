@@ -474,6 +474,10 @@ public final class VariableFragment implements IVariableFragment {
         this.useCachedList = b;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         // if (this.rep == null) {
@@ -501,6 +505,10 @@ public final class VariableFragment implements IVariableFragment {
         return this.varname;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -510,6 +518,11 @@ public final class VariableFragment implements IVariableFragment {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

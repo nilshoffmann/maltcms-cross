@@ -100,6 +100,9 @@ import org.slf4j.LoggerFactory;
 @Slf4j
 public final class Factory implements IFactory {
 
+    /**
+     *
+     */
     public static final IFactory DEFAULT = Lookup.getDefault().lookup(IFactoryService.class).getInstance("default");
 
     /**

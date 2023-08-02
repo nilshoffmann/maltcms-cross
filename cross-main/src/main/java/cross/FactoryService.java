@@ -31,6 +31,10 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;
 import org.openide.util.lookup.ServiceProvider;
 
+/**
+ *
+ * @author nilshoffmann
+ */
 @ServiceProvider(service = IFactoryService.class)
 public class FactoryService implements IFactoryService {
 

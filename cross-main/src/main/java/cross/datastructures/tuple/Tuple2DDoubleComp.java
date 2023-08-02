@@ -39,6 +39,12 @@ import java.util.Comparator;
  */
 public class Tuple2DDoubleComp implements Comparator<Tuple2D<Double, Double>> {
 
+    /**
+     *
+     * @param o1
+     * @param o2
+     * @return
+     */
     @Override
     public int compare(final Tuple2D<Double, Double> o1,
         final Tuple2D<Double, Double> o2) {
