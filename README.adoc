@@ -1,0 +1,60 @@
+= Common Runtime Object Support System
+Nils Hoffmann <nils.hoffmann@cebitec-uni-bielefeld.de>
+:toc: macro
+
+image:https://img.shields.io/github/release/nilshoffmann/maltcms-cross.svg["Latest Release", link="https://github.com/nilshoffmann/maltcms-cross/releases/latest"] 
+image:https://github.com/nilshoffmann/maltcms-cross/actions/workflows/maven.yml/badge.svg["Build Status", link="https://github.com/nilshoffmann/maltcms-cross/actions/workflows/maven.yml"]
+
+//NOTE: If you use the jGoslin library or the web application, please cite the following paper: +
+//https://pubs.acs.org/doi/10.1021/acs.analchem.9b01987[ et al., Analytical Chemistry 2019; Oct 15;91(20):12615-12618..] https://www.ncbi.nlm.nih.gov/pubmed/31525911[PubMed record].
+
+This is the Cross maven3 project. Cross provides Spring framework 
+integration and infrastructure for worfklow-based processing of data.
+
+== Related Projects
+
+- https://github.com/nilshoffmann/maltcms-cross[This project]
+- https://github.com/nilshoffmann/maltcms[Maltcms Framework for Mass Spectrometry]
+- https://github.com/nilshoffmann/maui[Maltcms Graphical User Interface]
+
+== Table of contents
+toc::[]
+
+== Requirements
+
+Prerequisites for Cross:
+- Java JDK 17 (NOT JRE)
+  https://www.oracle.com/technetwork/java/javase/downloads/index.html
+- Maven 3
+  https://maven.apache.org/download.html
+
+Recommended:
+- Any IDE supporting maven 3 integration and Git support
+  NetBeans
+  	https://netbeans.org/
+  Eclipse
+  	https://eclipse.org/
+  IntelliJ Idea
+  	https://www.jetbrains.com/idea/
+
+== Building the project from the command-line
+
+maltcms-cross uses the latest Long Term Support Java release version (17). 
+In order to build the client code and run the unit tests, execute the following command from a terminal:
+
+	./mvnw install
+
+This generates the necessary domain specific code for Java. Please note that maltcms-cross is a library!
+
+Within this directory, you will find all the submodules, which 
+make up Cross. General configuration for all modules can be found within the 
+file pom.xml in the same directory as this README. Module-specific
+configuration can be found below each module's directory in the 
+corresponding pom.xml file. 
+
+## OSGI
+
+Cross OSGI functionality is currently disabled in version 2.0.0.
+Cross is osgi-compatible since version 1.2.11. The cross-osgi module
+lists all required dependencies in its pom. So if you want to use cross 
+from osgi, start there. Otherwise, you can use the cross-main module directly.
