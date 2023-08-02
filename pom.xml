@@ -6,6 +6,8 @@
     <packaging>pom</packaging>
     <version>2.0.0</version>
     <name>Cross</name>
+    <description>This is the Cross maven3 project. Cross provides Spring framework 
+        integration and infrastructure for worfklow-based processing of data.</description>
     <url>https://github.com/nilshoffmann/maltcms-cross</url>
     <issueManagement>
         <system>GitHub</system>
