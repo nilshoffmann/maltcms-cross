@@ -65,6 +65,7 @@
                     <cluster>maltcms</cluster>
                     <publicPackages>
                         <publicPackage>org.apache.log4j.*</publicPackage>
+                        <publicPackage>org.apache.logging.log4j.*</publicPackage>
                         <publicPackage>org.slf4j.*</publicPackage>
                         <publicPackage>org.slf4j.impl.*</publicPackage>
                     </publicPackages>
