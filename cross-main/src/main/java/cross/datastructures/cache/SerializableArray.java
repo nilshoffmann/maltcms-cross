@@ -76,7 +76,7 @@ public class SerializableArray implements Externalizable {
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
         if (array != null) {
-            oo.writeObject(DataType.getType(array.getElementType()));
+            oo.writeObject(DataType.getType(array));
             oo.writeObject(array.getShape());
             oo.writeObject(array.getStorage());
         }

@@ -121,7 +121,7 @@ public class CacheDelegateTest {
             VariableFragment vf1 = new VariableFragment(ff, "a" + j);
             vf1.setArray(new ArrayDouble.D2(10, 39));
             VariableFragment vfIndex = new VariableFragment(ff, "index" + j);
-            vfIndex.setArray(new ArrayInt.D1(20));
+            vfIndex.setArray(new ArrayInt.D1(20, false));
             VariableFragment vf2 = new VariableFragment(ff, "b" + j, vfIndex);
             List<Array> l = new ArrayList<>();
             Array indexArray = vfIndex.getArray();
@@ -175,7 +175,7 @@ public class CacheDelegateTest {
             VariableFragment vf1 = new VariableFragment(ff, "a" + j);
             vf1.setArray(new ArrayDouble.D2(10, 39));
             VariableFragment vfIndex = new VariableFragment(ff, "index" + j);
-            vfIndex.setArray(new ArrayInt.D1(20));
+            vfIndex.setArray(new ArrayInt.D1(20, false));
             VariableFragment vf2 = new VariableFragment(ff, "b" + j, vfIndex);
             List<Array> l = new ArrayList<>();
             Array indexArray = vfIndex.getArray();

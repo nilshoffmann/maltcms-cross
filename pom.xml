@@ -4,7 +4,7 @@
     <groupId>io.github.nilshoffmann</groupId>
     <artifactId>cross</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.1</version>
+    <version>2.0.2-SNAPSHOT</version>
     <name>Cross</name>
     <description>This is the Cross maven3 project. Cross provides Spring framework 
         integration and infrastructure for worfklow-based processing of data.</description>
@@ -867,10 +867,22 @@
                 <artifactId>cdm-core</artifactId>
                 <version>5.3.3</version>
             </dependency>-->
-            <dependency>
+            <!--            <dependency>
                 <groupId>edu.ucar</groupId>
                 <artifactId>netcdfAll</artifactId>
                 <version>4.6.21</version>
+            </dependency>-->
+            <dependency>
+                <groupId>edu.ucar</groupId>
+                <artifactId>cdm-core</artifactId>
+                <version>${version.netcdf}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>edu.ucar</groupId>
+                <artifactId>netcdf4</artifactId>
+                <version>${version.netcdf}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId> 
@@ -996,11 +1008,12 @@
         <project.build.targetLevel>17</project.build.targetLevel>
         <netbeans.hint.license>cross</netbeans.hint.license>
         <version.spring>6.0.10</version.spring>
+        <version.netcdf>5.5.3</version.netcdf>
         <version.mpaxs>${project.version}</version.mpaxs>
         <version.slf4j>2.0.7</version.slf4j>
         <version.junit>4.13.1</version.junit>
         <version.netbeans>RELEASE180</version.netbeans>
-        <version.lombok>1.18.28</version.lombok>
+        <version.lombok>1.18.32</version.lombok>
         <!--<version.lombok.maven>1.14.2.0</version.lombok.maven>-->
         <version.cross.base>1.3.1</version.cross.base>
         <version.apache.commons.math>2.2</version.apache.commons.math>

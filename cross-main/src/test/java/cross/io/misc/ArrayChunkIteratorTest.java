@@ -120,7 +120,7 @@ public class ArrayChunkIteratorTest {
         testVar.setArray(ref);
         ArrayChunkIterator aci = new ArrayChunkIterator(Factory.getInstance(), testVar, chunksize);//21 chunks, 20 of size 10 and one of size 5
         int idx = 0;
-        Array reconstructedRef = Array.factory(DataType.getType(ref.getElementType()), ref.getShape());
+        Array reconstructedRef = Array.factory(ref.getDataType(), ref.getShape());
         List<Array> arrayChunks = new ArrayList<>();
         while (aci.hasNext()) {
             Array chunk = aci.next();

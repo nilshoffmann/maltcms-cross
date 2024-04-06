@@ -158,7 +158,7 @@ public class FragmentTools {
         } else {
             vf = new VariableFragment(parent, varname);
         }
-        final ArrayInt.D1 a = new ArrayInt.D1(size);
+        final ArrayInt.D1 a = new ArrayInt.D1(size, false);
         vf.setArray(a);
         return vf;
     }

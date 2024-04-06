@@ -506,7 +506,7 @@ public class FragmentXMLSerializer implements IDataSource {
         // read in the full index_array
         log.debug("Reading index array {}", index);
         Array index_array = readSingle(index);
-        switch (DataType.getType(index_array.getElementType())) {
+        switch (DataType.getType(index_array)) {
             case LONG:
                 log.warn("Index array contains long values, this is currently only supported up to Integer.MAX_VALUE");
                 break;
@@ -588,7 +588,7 @@ public class FragmentXMLSerializer implements IDataSource {
             data_end = Math.min(data_dim.getLength() - 1, data_end);
             if (data_start > data_end) {
                 log.warn("scan_index contains an invalid last scan offset. Inserting terminating array with length 0!");
-                al.add(Array.factory(DataType.getType(data_array.getElementType()), new int[0]));
+                al.add(Array.factory(DataType.getType(data_array), new int[0]));
             } else {
                 try {
                     log.debug("Reading array {}, from {} to {}", new Object[]{

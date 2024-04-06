@@ -259,11 +259,11 @@ public class FileFragmentTest {
         //create two Filefragments at the same level with equally named variables
         File pathLocal1 = new File(outBaseDir, "local1.cdf");
         FileFragment local1 = new FileFragment(pathLocal1);
-        local1.addChild("testVar1").setArray(Array.factory(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local1.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         File pathLocal2 = new File(outBaseDir, "local2.cdf");
         FileFragment local2 = new FileFragment(pathLocal2);
-        local2.addChild("testVar1").setArray(Array.factory(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local2.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         File pathLocal3 = new File(new File(outBaseDir, "subdir"), "local3.cdf");
         FileFragment local3 = new FileFragment(pathLocal3);
@@ -290,7 +290,7 @@ public class FileFragmentTest {
 
         File pathLocal0 = new File(outBaseDir, "local0.cdf");
         FileFragment local0 = new FileFragment(pathLocal0);
-        local0.addChild("testVar1").setArray(Array.factory(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local0.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         //create two Filefragments at the same level with equally named variables
         File pathLocal1 = new File(outBaseDir, "local1.cdf");
@@ -299,7 +299,7 @@ public class FileFragmentTest {
 
         File pathLocal2 = new File(outBaseDir, "local2.cdf");
         FileFragment local2 = new FileFragment(pathLocal2);
-        local2.addChild("testVar1").setArray(Array.factory(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local2.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         File pathLocal3 = new File(new File(outBaseDir, "subdir"), "local3.cdf");
         FileFragment local3 = new FileFragment(pathLocal3);
@@ -326,7 +326,7 @@ public class FileFragmentTest {
 
         File pathLocal0 = new File(outBaseDir, "local0.cdf");
         FileFragment local0 = new FileFragment(pathLocal0);
-        local0.addChild("testVar1").setArray(Array.factory(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local0.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{876, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         //create two Filefragments at the same level with equally named variables
         File pathLocal1 = new File(outBaseDir, "local1.cdf");
@@ -336,7 +336,7 @@ public class FileFragmentTest {
         File pathLocal2 = new File(outBaseDir, "local2.cdf");
         FileFragment local2 = new FileFragment(pathLocal2);
         local2.addSourceFile(local1);
-        local2.addChild("testVar1").setArray(Array.factory(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
+        local2.addChild("testVar1").setArray(Array.makeFromJavaArray(new double[]{7889, 986123.8, 21986.856, 79006.8613, 897123.123}));
 
         File pathLocal3 = new File(new File(outBaseDir, "subdir"), "local3.cdf");
         FileFragment local3 = new FileFragment(pathLocal3);
@@ -403,18 +403,18 @@ public class FileFragmentTest {
         IFileFragment f = new FileFragment(folder, "testFragment.cdf");
         f.addChild("variable1").setIndex(f.addChild("indexVar1"));
         List<Array> l1 = new ArrayList<>();
-        l1.add(Array.factory(new double[]{1.2, 1.5}));
-        l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
-        l1.add(Array.factory(new double[]{3.67}));
+        l1.add(Array.makeFromJavaArray(new double[]{1.2, 1.5}));
+        l1.add(Array.makeFromJavaArray(new double[]{2.2, 2.6, 2.87}));
+        l1.add(Array.makeFromJavaArray(new double[]{3.67}));
         f.getChild("variable1").setIndexedArray(l1);
         f.addChild("variable2").setIndex(f.getChild("indexVar1"));
         List<Array> l2 = new ArrayList<>();
-        l2.add(Array.factory(new int[]{1, 1}));
-        l2.add(Array.factory(new int[]{2, 2, 2}));
-        l2.add(Array.factory(new int[]{3}));
+        l2.add(Array.makeFromJavaArray(new int[]{1, 1}));
+        l2.add(Array.makeFromJavaArray(new int[]{2, 2, 2}));
+        l2.add(Array.makeFromJavaArray(new int[]{3}));
         f.getChild("variable2").setIndexedArray(l2);
-        f.addChild("variable3").setArray(Array.factory(new double[]{2, 3.3, 235.32, 352.3}));
-        f.getChild("indexVar1").setArray(Array.factory(new int[]{2, 3, 1}));
+        f.addChild("variable3").setArray(Array.makeFromJavaArray(new double[]{2, 3.3, 235.32, 352.3}));
+        f.getChild("indexVar1").setArray(Array.makeFromJavaArray(new int[]{2, 3, 1}));
         return f;
     }
 

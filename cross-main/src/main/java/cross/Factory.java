@@ -152,8 +152,8 @@ public final class Factory implements IFactory {
                     File configLocationNew = new File(location.getParentFile(), configLocation.getName());
                     FileUtils.copyFile(configLocation, configLocationNew);
                 }
-                LoggerFactory.getLogger(Factory.class).error("Saving configuration to: ");
-                LoggerFactory.getLogger(Factory.class).error("{}", location.getAbsolutePath());
+                LoggerFactory.getLogger(Factory.class).info("Saving configuration to: ");
+                LoggerFactory.getLogger(Factory.class).info("{}", location.getAbsolutePath());
                 saveConfiguration(cfg, location);
             } catch (IOException | ConfigurationException ex) {
                 LoggerFactory.getLogger(Factory.class).error("{}", ex);

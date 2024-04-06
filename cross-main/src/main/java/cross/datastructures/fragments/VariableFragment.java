@@ -376,7 +376,7 @@ public final class VariableFragment implements IVariableFragment {
             ArrayList<Array> list = new ArrayList<>(1);
             list.add(a1);
             parent.getCache().put(this, list);
-            setDataType(DataType.getType(a1.getElementType()));
+            setDataType(DataType.getType(a1));
             if (getDimensions() == null) {
                 setDimensions(cross.datastructures.tools.ArrayTools.getDefaultDimensions(a1));
             }
@@ -437,7 +437,7 @@ public final class VariableFragment implements IVariableFragment {
         if (al1 != null && !al1.isEmpty()) {
             this.isModified = true;
             parent.getCache().put(this, al1);
-            setDataType(DataType.getType(al1.get(0).getElementType()));
+            setDataType(DataType.getType(al1.get(0)));
         } else {
             clear();
         }

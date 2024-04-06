@@ -128,18 +128,18 @@ public class FragmentXMLSerializerTest {
             IFileFragment f = new FileFragment(tf.newFolder(), "testFragment.maltcms.xml");
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
             List<Array> l1 = new ArrayList<>();
-            l1.add(Array.factory(new double[]{1.2, 1.5}));
-            l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
-            l1.add(Array.factory(new double[]{3.67}));
+            l1.add(Array.makeFromJavaArray(new double[]{1.2, 1.5}));
+            l1.add(Array.makeFromJavaArray(new double[]{2.2, 2.6, 2.87}));
+            l1.add(Array.makeFromJavaArray(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.getChild("indexVar1"));
             List<Array> l2 = new ArrayList<>();
-            l2.add(Array.factory(new int[]{1, 1}));
-            l2.add(Array.factory(new int[]{2, 2, 2}));
-            l2.add(Array.factory(new int[]{3}));
+            l2.add(Array.makeFromJavaArray(new int[]{1, 1}));
+            l2.add(Array.makeFromJavaArray(new int[]{2, 2, 2}));
+            l2.add(Array.makeFromJavaArray(new int[]{3}));
             f.getChild("variable2").setIndexedArray(l2);
-            f.addChild("variable3").setArray(Array.factory(new double[]{2, 3.3, 235.32, 352.3}));
-            f.getChild("indexVar1").setArray(Array.factory(new int[]{2, 3, 1}));
+            f.addChild("variable3").setArray(Array.makeFromJavaArray(new double[]{2, 3.3, 235.32, 352.3}));
+            f.getChild("indexVar1").setArray(Array.makeFromJavaArray(new int[]{2, 3, 1}));
 
             final Element maltcms = new Element("maltcms");
             final Document doc = new Document(maltcms);
@@ -360,7 +360,7 @@ public class FragmentXMLSerializerTest {
         //variable2
         VariableFragment ivf2 = new VariableFragment(ff, "variable2");
         ivf2.setDimensions(new Dimension[]{dim3});
-        ArrayInt.D1 arr2 = new ArrayInt.D1(dim3.getLength());
+        ArrayInt.D1 arr2 = new ArrayInt.D1(dim3.getLength(), false);
         ivf2.setArray(arr2);
         usedDimensions.put("variable2", copyDims(dim3));
         variableNames.add("variable2");
@@ -372,7 +372,7 @@ public class FragmentXMLSerializerTest {
 
         //variable3 - no explicit dimension
         VariableFragment ivf3 = new VariableFragment(ff, "variable3");
-        ArrayInt.D2 arr3 = new ArrayInt.D2(25, 17);
+        ArrayInt.D2 arr3 = new ArrayInt.D2(25, 17, false);
         ivf3.setArray(arr3);
         variableNames.add("variable3");
 
@@ -380,7 +380,7 @@ public class FragmentXMLSerializerTest {
         VariableFragment ivf4 = new VariableFragment(ff, "variable4");
         ivf4.setDimensions(new Dimension[]{dim5});
         List<Array> arrays = new ArrayList<>();
-        ArrayInt.D1 index = new ArrayInt.D1(24);
+        ArrayInt.D1 index = new ArrayInt.D1(24, false);
         int offset = 0;
         for (int i = 0; i < 24; i++) {
             index.set(i, offset);
@@ -701,11 +701,11 @@ public class FragmentXMLSerializerTest {
                     //create a shadowing variable
                     IVariableFragment shadow = new VariableFragment(work,
                         "shadow-" + i);
-                    shadow.setArray(Array.factory(new int[]{j}));
+                    shadow.setArray(Array.makeFromJavaArray(new int[]{j}));
                     //create unique variable
                     IVariableFragment unique = new VariableFragment(work,
                         "unique-" + j);
-                    unique.setArray(Array.factory(new int[]{i, j}));
+                    unique.setArray(Array.makeFromJavaArray(new int[]{i, j}));
                     System.out.println(work.toString());
                     getDataSource().write(work);
                     work.clearArrays();
@@ -837,19 +837,19 @@ public class FragmentXMLSerializerTest {
             IFileFragment f = new FileFragment(new File(folder, "invalidIndexTestFrag.maltcms.xml"));
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
             List<Array> l1 = new ArrayList<>();
-            l1.add(Array.factory(new double[]{1.2, 1.5}));
-            l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
-            l1.add(Array.factory(new double[]{3.67}));
+            l1.add(Array.makeFromJavaArray(new double[]{1.2, 1.5}));
+            l1.add(Array.makeFromJavaArray(new double[]{2.2, 2.6, 2.87}));
+            l1.add(Array.makeFromJavaArray(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.addChild("indexVar2"));
             List<Array> l2 = new ArrayList<>();
-            l2.add(Array.factory(new int[]{1, 1}));
-            l2.add(Array.factory(new int[]{2, 2, 2}));
-            l2.add(Array.factory(new int[]{3}));
+            l2.add(Array.makeFromJavaArray(new int[]{1, 1}));
+            l2.add(Array.makeFromJavaArray(new int[]{2, 2, 2}));
+            l2.add(Array.makeFromJavaArray(new int[]{3}));
             f.getChild("variable2").setIndexedArray(l2);
-            f.addChild("variable3").setArray(Array.factory(new double[]{2, 3.3, 235.32, 352.3}));
-            f.getChild("indexVar1").setArray(Array.factory(new int[]{2, 3, 1, 4}));
-            f.getChild("indexVar2").setArray(Array.factory(new int[]{2, 3}));
+            f.addChild("variable3").setArray(Array.makeFromJavaArray(new double[]{2, 3.3, 235.32, 352.3}));
+            f.getChild("indexVar1").setArray(Array.makeFromJavaArray(new int[]{2, 3, 1, 4}));
+            f.getChild("indexVar2").setArray(Array.makeFromJavaArray(new int[]{2, 3}));
             return f;
         } catch (IOException ioex) {
             throw new RuntimeException(ioex);
@@ -884,18 +884,18 @@ public class FragmentXMLSerializerTest {
             IFileFragment f = new FileFragment(new File(folder, "testFrag.maltcms.xml"));
             f.addChild("variable1").setIndex(f.addChild("indexVar1"));
             List<Array> l1 = new ArrayList<>();
-            l1.add(Array.factory(new double[]{1.2, 1.5}));
-            l1.add(Array.factory(new double[]{2.2, 2.6, 2.87}));
-            l1.add(Array.factory(new double[]{3.67}));
+            l1.add(Array.makeFromJavaArray(new double[]{1.2, 1.5}));
+            l1.add(Array.makeFromJavaArray(new double[]{2.2, 2.6, 2.87}));
+            l1.add(Array.makeFromJavaArray(new double[]{3.67}));
             f.getChild("variable1").setIndexedArray(l1);
             f.addChild("variable2").setIndex(f.getChild("indexVar1"));
             List<Array> l2 = new ArrayList<>();
-            l2.add(Array.factory(new int[]{1, 1}));
-            l2.add(Array.factory(new int[]{2, 2, 2}));
-            l2.add(Array.factory(new int[]{3}));
+            l2.add(Array.makeFromJavaArray(new int[]{1, 1}));
+            l2.add(Array.makeFromJavaArray(new int[]{2, 2, 2}));
+            l2.add(Array.makeFromJavaArray(new int[]{3}));
             f.getChild("variable2").setIndexedArray(l2);
-            f.addChild("variable3").setArray(Array.factory(new double[]{2, 3.3, 235.32, 352.3}));
-            f.getChild("indexVar1").setArray(Array.factory(new int[]{2, 3, 1}));
+            f.addChild("variable3").setArray(Array.makeFromJavaArray(new double[]{2, 3.3, 235.32, 352.3}));
+            f.getChild("indexVar1").setArray(Array.makeFromJavaArray(new int[]{2, 3, 1}));
             return f;
         } catch (IOException ioex) {
             throw new RuntimeException(ioex);
