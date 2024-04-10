@@ -4,7 +4,7 @@
     <groupId>io.github.nilshoffmann</groupId>
     <artifactId>cross</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.0.2</version>
     <name>Cross</name>
     <description>This is the Cross maven3 project. Cross provides Spring framework 
         integration and infrastructure for worfklow-based processing of data.</description>
