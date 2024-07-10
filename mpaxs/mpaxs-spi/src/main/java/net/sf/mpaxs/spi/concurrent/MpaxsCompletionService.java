@@ -77,7 +77,7 @@ public class MpaxsCompletionService<T extends Serializable> implements
 	public MpaxsCompletionService() {
 		super();
 		init();
-		this.e = Executors.newCachedThreadPool();
+		this.e = Executors.newVirtualThreadPerTaskExecutor();
 		this.es = new ExecutorCompletionService<T>(e);
 	}
 
